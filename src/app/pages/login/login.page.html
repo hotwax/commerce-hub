@@ -1,0 +1,22 @@
+<ion-content>
+  <div>
+    <form  #form="ngForm" (ngSubmit)="login(form.value.username, form.value.password)">
+      <ion-list>
+        <image src ="assets/imgs/hc.png"></image>
+        <ion-item lines="full">
+          <ion-label position="floating"> {{ 'Username' | translate }} </ion-label>
+          <ion-input [(ngModel)] = "username" name="username" type="text" required></ion-input>
+        </ion-item>
+        <ion-item lines="full">
+          <ion-label position="floating">{{ 'Password' | translate }}</ion-label>
+          <ion-input [(ngModel)] = "password" name="password" type="password" required></ion-input>
+        </ion-item>
+      </ion-list>
+      <div class="ion-padding">
+        <ion-button type="submit" color="primary" fill="outline" expand="block" class="ion-no-margin">
+          {{ 'Login' | translate }}
+        </ion-button>
+      </div>
+    </form>
+  </div>
+</ion-content>

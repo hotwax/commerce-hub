@@ -1,0 +1,18 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>
+      {{ 'Settings' | translate }}
+    </ion-title>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <div>
+    <ion-item (click)="logout()" lines="inset">
+      <ion-label>{{userProfile.partyName}}</ion-label>
+      <ion-button fill="outline" slot="end">{{ 'Logout' | translate }}</ion-button>
+    </ion-item>
+  </div>
+</ion-content>
