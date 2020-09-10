@@ -24,3 +24,16 @@
 @import "~@ionic/angular/css/text-alignment.css";
 @import "~@ionic/angular/css/text-transformation.css";
 @import "~@ionic/angular/css/flex-utils.css";
+img {
+  mix-blend-mode: multiply;
+  object-fit: contain;
+}
+/* Earlier the screen is fully filled with the UI components.
+But we can set the content with certain standard width and margin so that UI looks properly on desktop.
+HotWax Commerce sets the standard width for desktop as 1110px.
+*/
+ion-content > div {
+  max-width: 1110px;
+  margin-right: auto;
+  margin-left: auto;
+}
