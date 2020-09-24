@@ -16,7 +16,7 @@ export class HomePage {
   }
 
   ionViewWillEnter() {
-    // Further we will call required API and dismiss the loader after getting the response
+    // This loader is present from login page after getting token, Further we will call required API and dismiss the loader after getting the response
     this.widgetProvider.dismissLoader();
   }
 

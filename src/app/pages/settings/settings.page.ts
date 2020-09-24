@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
-import { StorageProvider } from '../../providers/storage.provider';
-import { AlertController, MenuController } from '@ionic/angular';
-import { AuthProvider } from '../../providers/auth.provider';
+import { AlertController } from '@ionic/angular';
+import { Logout } from 'src/shared/actions/auth.actions';
+import { Store } from '@ngxs/store';
 
 @Component({
   selector: 'app-settings',
@@ -12,17 +11,11 @@ import { AuthProvider } from '../../providers/auth.provider';
 })
 export class SettingsPage implements OnInit {
 
-  userProfile:any;
   constructor(
     public translate: TranslateService,
-    private storageProvider: StorageProvider,
-    public authProvider: AuthProvider,
     private alertCtrl: AlertController,
-    public menu: MenuController,
-    public router: Router
-  ) {
-    this.userProfile = JSON.parse(this.storageProvider.getLocalStorageItem('userProfile'))
-  }
+    public store: Store
+  ) {}
 
   ngOnInit() {
   }
@@ -37,9 +30,7 @@ export class SettingsPage implements OnInit {
       {
         text: this.translate.instant('Yes'),
         handler: () => {
-          this.authProvider.logout();
-          this.router.navigate(['/']);
-          this.menu.enable(this.authProvider.isAuthenticated(), 'menu');
+          this.store.dispatch(new Logout());
         }
       }]
     });

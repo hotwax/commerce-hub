@@ -1,16 +1,17 @@
 import { Injectable } from '@angular/core';
 import { CanLoad, Route, UrlSegment } from '@angular/router';
 import { Observable } from 'rxjs';
-import { AuthProvider } from '../../providers/auth.provider';
+import { Store } from '@ngxs/store';
+import { AuthState } from '../../../shared/state/auth.state'
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthGuard implements CanLoad {
 
-  constructor(public authProvider: AuthProvider) {}
+  constructor(private store: Store) {}
 
   canLoad(route: Route, segments: UrlSegment[]): Observable<boolean>|Promise<boolean>|boolean {
-    return this.authProvider.isAuthenticated();
+    return this.store.selectSnapshot(AuthState.isAuthenticated);
   }
 }

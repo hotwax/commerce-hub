@@ -13,6 +13,10 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { TokenInterceptor } from '../app/interceptors/token.interceptor';
+import { NgxsModule } from '@ngxs/store';
+import { NgxsStoragePluginModule } from '@ngxs/storage-plugin';
+import { AuthState } from '../shared/state/auth.state';
+import { AuthProvider } from '../app/providers/auth.provider';
 
 export function createTranslateLoader(httpClient: HttpClient) {
   return new TranslateHttpLoader(httpClient, './assets/i18n/', '.json');
@@ -25,6 +29,10 @@ export function createTranslateLoader(httpClient: HttpClient) {
     IonicModule.forRoot(),
     AppRoutingModule,
     HttpClientModule,
+    NgxsModule.forRoot([AuthState]),
+    NgxsStoragePluginModule.forRoot({
+      key: ['auth.token'],
+    }),
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,
@@ -41,7 +49,8 @@ export function createTranslateLoader(httpClient: HttpClient) {
       provide: HTTP_INTERCEPTORS,
       useClass: TokenInterceptor,
       multi: true
-    }
+    },
+    AuthProvider
   ],
   bootstrap: [AppComponent]
 })

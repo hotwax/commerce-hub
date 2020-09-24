@@ -26,6 +26,8 @@
     "@ionic/angular": "^5.0.0",
     "@ngx-translate/core": "^13.0.0",
     "@ngx-translate/http-loader": "^6.0.0",
+    "@ngxs/storage-plugin": "^3.7.0",
+    "@ngxs/store": "^3.7.0",
     "http-status-codes": "^2.1.2",
     "rxjs": "~6.5.5",
     "tslib": "^2.0.0",

@@ -6,6 +6,10 @@ import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { TranslateService } from '@ngx-translate/core';
 import { AuthProvider } from '../app/providers/auth.provider';
 import { Router } from '@angular/router';
+import { Select } from '@ngxs/store';
+import { AuthState } from '../shared/state/auth.state';
+import { Observable } from 'rxjs';
+import { MenuController } from '@ionic/angular';
 
 @Component({
   selector: 'app-root',
@@ -13,6 +17,7 @@ import { Router } from '@angular/router';
   styleUrls: ['app.component.scss']
 })
 export class AppComponent {
+  @Select(AuthState.isAuthenticated) isAuthenticated$: Observable<any>;
   constructor(
     private platform: Platform,
     private splashScreen: SplashScreen,
@@ -20,6 +25,7 @@ export class AppComponent {
     public translate: TranslateService,
     public authProvider: AuthProvider,
     public router: Router,
+    public menu: MenuController
   ) {
     this.initializeApp();
     this.localizeApplication();
@@ -29,11 +35,10 @@ export class AppComponent {
     this.platform.ready().then(() => {
       this.statusBar.styleDefault();
       this.splashScreen.hide();
-      if (this.authProvider.isAuthenticated()) {
-        this.router.navigate(['home']);
-      } else {
-        this.router.navigate(['login']);
-      }
+      this.isAuthenticated$.subscribe(isAuthenticated => {
+        isAuthenticated ? this.router.navigate(['home']) : this.router.navigate(['login']);
+        this.menu.enable(isAuthenticated, 'menu');
+      });
     });
   }
 
