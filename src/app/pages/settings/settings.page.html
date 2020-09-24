@@ -10,9 +10,8 @@
 </ion-header>
 <ion-content>
   <div>
-    <ion-item (click)="logout()" lines="inset">
-      <ion-label>{{userProfile.partyName}}</ion-label>
-      <ion-button fill="outline" slot="end">{{ 'Logout' | translate }}</ion-button>
+    <ion-item (click)="logout()" lines="none">
+      <ion-button fill="outline">{{ 'Logout' | translate }}</ion-button>
     </ion-item>
   </div>
 </ion-content>
