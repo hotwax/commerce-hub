@@ -1,7 +1,5 @@
 {
   "name": "ionicSDK",
-  "integrations": {
-    "capacitor": {}
-  },
-  "type": "angular"
+  "integrations": {},
+  "type": "vue"
 }
