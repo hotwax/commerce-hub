@@ -1,9 +1,9 @@
 {
-  "appId": "io.ionic.starter",
-  "appName": "ionicSDK",
+  "appId": "co.hotwax.ionic.sdk",
+  "appName": "ionic-sdk",
   "bundledWebRuntime": false,
   "npmClient": "npm",
-  "webDir": "www",
+  "webDir": "dist",
   "plugins": {
     "SplashScreen": {
       "launchShowDuration": 0
