@@ -15,6 +15,8 @@
     "@capacitor/core": "3.0.0",
     "@ionic/vue": "^5.4.0",
     "@ionic/vue-router": "^5.4.0",
+    "axios": "^0.21.1",
+    "axios-cache-adapter": "^2.7.3",
     "core-js": "^3.6.5",
     "vue": "^3.0.0-0",
     "vue-i18n": "^9.0.0",
