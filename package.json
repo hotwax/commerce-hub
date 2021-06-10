@@ -1,13 +1,15 @@
 {
-  "name": "ionicSDK",
+  "name": "ionic-sdk",
   "version": "0.0.1",
   "private": true,
+  "description": "An Ionic project",
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "test:unit": "vue-cli-service test:unit",
     "test:e2e": "vue-cli-service test:e2e",
-    "lint": "vue-cli-service lint"
+    "lint": "vue-cli-service lint",
+    "i18n:report": "vue-cli-service i18n:report --src \"./src/**/*.?(js|vue)\" --locales \"./src/locales/**/*.json\""
   },
   "dependencies": {
     "@capacitor/android": "^2.4.7",
@@ -16,10 +18,12 @@
     "@ionic/vue-router": "^5.4.0",
     "core-js": "^3.6.5",
     "vue": "^3.0.0-0",
+    "vue-i18n": "^9.0.0",
     "vue-router": "^4.0.0-0"
   },
   "devDependencies": {
     "@capacitor/cli": "^2.4.7",
+    "@intlify/vue-i18n-loader": "^2.1.0",
     "@types/jest": "^24.0.19",
     "@typescript-eslint/eslint-plugin": "^2.33.0",
     "@typescript-eslint/parser": "^2.33.0",
@@ -36,7 +40,7 @@
     "eslint": "^6.7.2",
     "eslint-plugin-vue": "^7.0.0-0",
     "typescript": "~3.9.3",
+    "vue-cli-plugin-i18n": "^1.0.1",
     "vue-jest": "^5.0.0-0"
-  },
-  "description": "An Ionic project"
+  }
 }
