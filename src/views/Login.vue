@@ -60,8 +60,6 @@ export default defineComponent({
           this.password = ''
           this.$router.push('/')
         }
-      }).catch((error: any) => {
-        console.error("error", error);
       })
     }
   },
