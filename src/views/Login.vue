@@ -33,7 +33,7 @@ import {
   IonPage } from "@ionic/vue";
 import { defineComponent } from "vue";
 import { useRouter } from "vue-router";
-import { useStore } from "./../store";
+import { useStore } from "@/store";
 
 export default defineComponent({
   name: "Login",

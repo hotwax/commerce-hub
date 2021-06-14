@@ -22,6 +22,11 @@ axios.interceptors.response.use(function (response) {
     // Do something with response data
     return response;
   }, function (error) {
+    // TODO Handle it in a better way
+    // Currently when the app gets offline, the time between adding a loader and removing it is fractional due to which loader dismiss is called before loader present
+    // which cause loader to run indefinitely
+    // Following gives dismiss loader a delay of 100 microseconds to get both the actions in sync
+    setTimeout(() => emitter.emit("dismissLoader"), 100);
     if (error.response) {
         // TODO Handle case for failed queue request
         const { status } = error.response;
