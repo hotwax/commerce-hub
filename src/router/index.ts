@@ -2,7 +2,10 @@ import { createRouter, createWebHistory } from '@ionic/vue-router';
 import { RouteRecordRaw } from 'vue-router';
 import Home from '@/views/Home.vue'
 import Login from '@/views/Login.vue'
+import Settings from "@/views/Settings.vue"
 import store from '@/store'
+
+
 
 const authGuard = (to: any, from: any, next: any) => {
   if (store.getters['user/isAuthenticated']) {
@@ -37,6 +40,12 @@ const routes: Array<RouteRecordRaw> = [
     component: Login,
     beforeEnter: loginGuard
   },
+  {
+  path: "/settings",
+  name: "Settings",
+  component: Settings,
+  beforeEnter: authGuard
+}
 ]
 
 const router = createRouter({
