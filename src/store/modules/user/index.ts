@@ -9,7 +9,8 @@ const userModule: Module<UserState, RootState> = {
     namespaced: true,
     state: {
       token: '',
-      current: null
+      current: null,
+      currentFacility: {}
     },
     getters,
     actions,
@@ -17,6 +18,3 @@ const userModule: Module<UserState, RootState> = {
 }
 
 export default userModule;
-
-// TODO
-// store.registerModule('user', userModule);

@@ -9,6 +9,7 @@ const mutations: MutationTree <UserState> = {
     [types.USER_END_SESSION] (state) {
       state.token = ''
       state.current = null
+      state.currentFacility = {}
     },
     [types.USER_INFO_UPDATED] (state, payload) {
         state.current = payload
