@@ -51,7 +51,6 @@ export default defineComponent({
     ...mapGetters({
       userProfile: 'user/getUserProfile',
       currentFacility: 'user/getCurrentFacility',
-      uploadProducts: 'product/getUploadProducts'
     })
   },
   methods: {
@@ -88,13 +87,9 @@ export default defineComponent({
       await alert.present();
     },
     logout () {
-      if (Object.keys(this.uploadProducts).length > 0) {
-        this.presentAlert();
-      } else {
-        this.store.dispatch('user/logout').then(() => {
-          this.router.push('/login');
-        })
-      }
+      this.store.dispatch('user/logout').then(() => {
+        this.router.push('/login');
+      })
     }
   },
   setup(){
