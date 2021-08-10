@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from '@ionic/vue-router';
 import { RouteRecordRaw } from 'vue-router';
 import Home from '@/views/Home.vue'
 import Login from '@/views/Login.vue'
+import Search from '@/views/Search.vue'
 import store from '@/store'
 
 const authGuard = (to: any, from: any, next: any) => {
@@ -37,6 +38,11 @@ const routes: Array<RouteRecordRaw> = [
     component: Login,
     beforeEnter: loginGuard
   },
+  {
+    path: '/Search',
+    name: 'Search',
+    component: Search
+  }
 ]
 
 const router = createRouter({
