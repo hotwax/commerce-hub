@@ -8,7 +8,6 @@ import RootState from '../../RootState'
 const productModule: Module<ProductState, RootState> = {
     namespaced: true,
     state: {
-      current: {},
       uploadProducts: {},
       products: {
         list: {},
@@ -21,6 +20,3 @@ const productModule: Module<ProductState, RootState> = {
 }
 
 export default productModule;
-
-// TODO
-// store.registerModule('product', productModule);

@@ -46,49 +46,6 @@ const actions: ActionTree<ProductState, RootState> = {
     // TODO Handle specific error
     return resp;
   },
-
-  async removeItemFromUploadProducts( {commit}, payload) {
-    commit(types.PRODUCT_REMOVE_FROM_UPLD_PRDTS, {sku: payload});
-  },
-
-  async clearUploadProducts ({ commit }) {
-    commit(types.PRODUCT_CLEAR_UPLD_PRDTS);
-  },
-
-  async uploadInventoryCount({ commit }, payload) {
-    emitter.emit("presentLoader");
-    let resp;
-    try {
-      resp = await ProductService.importInventoryCount({
-        inventoryCountRegister: payload.inventoryCountRegister,
-        facilityId: payload.facilityId
-      });
-
-      if (resp.status == 200 && !hasError(resp)) {
-        commit(types.PRODUCT_CLEAR_UPLD_PRDTS);
-        showToast(translate("Products inventory updated"))
-      } else {
-        showToast(translate("Something went wrong"))
-      }
-
-      emitter.emit("dismissLoader");
-    } catch (error) {
-      console.log(error);
-      showToast(translate("Something went wrong"));
-    }
-
-    return resp;
-  },
-  
-  async updateInventoryCount ({ commit }, payload) {
-    commit(types.PRODUCT_ADD_TO_UPLD_PRDTS, { product: payload })
-  },
-
-  updateCurrentProduct ({ commit, state }, payload) {
-    // search in uploadProducts that if the clicked product is already in the upload list and set it as current product
-    const currentProduct = state.uploadProducts[payload.product.sku]
-    commit(types.PRODUCT_CURRENT_UPDATED, { product: currentProduct ? currentProduct : payload.product })
-  }
 }
 
 export default actions;

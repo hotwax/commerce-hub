@@ -2,6 +2,7 @@ import api from '@/api';
 
 const fetchProducts = async (query: any): Promise <any>  => {
   return api({
+   // TODO: We can replace this with any API
     url: "searchProducts", 
     method: "post",
     data: query,
@@ -9,15 +10,6 @@ const fetchProducts = async (query: any): Promise <any>  => {
   });
 }
 
-const importInventoryCount = async (query: any): Promise <any> => {
-  return api({
-    url: "importInventoryCount",
-    method: "post",
-    data: query
-  })
-}
-
 export const ProductService = {
-  fetchProducts,
-  importInventoryCount
+  fetchProducts
 }
