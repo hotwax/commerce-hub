@@ -15,22 +15,22 @@
       </ion-item>
 
       <!-- Select store -->
-      <ion-item>
+       <ion-item>
         <ion-icon :icon="storefrontOutline" slot="start" />
         <ion-label>{{ currentFacility.facilityId ? currentFacility.facilityId : '' }}</ion-label>
-        <ion-button fill="clear" color="medium" @click="selectStore">
-          <ion-icon slot="icon-only" :icon="ellipsisVertical" />
-        </ion-button>
+      <ion-select interface="popover" :placeholder="$t('store name')" :selected-text="currentFacility.facilityId" @ionChange="setFacility($event)">
+        <ion-select-option v-for="facility in userProfile.facilities" :key="facility.facilityId" :value="facility.facilityId" >{{ facility.facilityId }}</ion-select-option>
+      </ion-select>
       </ion-item>
+
     </ion-content>
   </ion-page>
 </template>
 
 <script lang="ts">
-import { alertController, IonButton, IonContent, IonHeader,IonIcon, IonItem, IonLabel, IonPage, IonTitle, IonToolbar, popoverController } from '@ionic/vue';
+import { alertController, IonButton, IonContent, IonHeader,IonIcon, IonItem, IonLabel, IonPage, IonSelect, IonSelectOption, IonTitle, IonToolbar, popoverController } from '@ionic/vue';
 import { defineComponent } from 'vue';
 import { ellipsisVertical, personCircleOutline, storefrontOutline} from 'ionicons/icons'
-import StorePopover from "@/views/Store-Popover.vue";
 import { mapGetters, useStore } from 'vuex';
 import { useRouter } from 'vue-router';
 
@@ -44,6 +44,8 @@ export default defineComponent({
     IonItem, 
     IonLabel, 
     IonPage, 
+    IonSelect, 
+    IonSelectOption,
     IonTitle, 
     IonToolbar
   },
@@ -54,18 +56,13 @@ export default defineComponent({
     })
   },
   methods: {
-    async selectStore(ev: Event) {
-      const popover = await popoverController
-        .create({
-          component: StorePopover,
-          componentProps: {
-            'facilities': this.userProfile.facilities
-          },
-          event: ev,
-          showBackdrop: false,
-          translucent: true
-        })
-      await popover.present();
+    setFacility (facility: any) {
+      this.userProfile.facilities.map((fac: any) => {
+        if (fac.facilityId == facility['detail'].value) {
+          this.store.dispatch('user/setFacility', {'facility': fac});
+          console.log(fac);
+        }
+      })
     },
     async presentAlert () {
       const alert = await alertController.create({
