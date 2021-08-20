@@ -32,12 +32,12 @@ const actions: ActionTree<UserState, RootState> = {
         console.error("error", resp.data._ERROR_MESSAGE_);
         return Promise.reject(new Error(resp.data._ERROR_MESSAGE_));
       }
-    } 
-    catch (err) {
+    } catch (err) {
       showToast(translate('Something went wrong'));
       console.error("error", err);
       return Promise.reject(new Error(err))
     }
+    // return resp
   },
 
   /**
@@ -80,7 +80,8 @@ const actions: ActionTree<UserState, RootState> = {
       current.userTimeZone = payload.tzId;
       commit(types.USER_INFO_UPDATED, current);
       showToast(translate("Time zone updated successfully"));
-      }
-    }}
+    }
+  }
+}
 
 export default actions;
