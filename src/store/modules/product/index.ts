@@ -8,7 +8,6 @@ import RootState from '../../RootState'
 const productModule: Module<ProductState, RootState> = {
     namespaced: true,
     state: {
-      uploadProducts: {},
       products: {
         list: {},
         total: 0
