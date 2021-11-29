@@ -13,7 +13,7 @@
 `git fetch ionicSDK`
 
 - Merge IonicSDK master to your branch with [--allow-unrelated-histories](https://git-scm.com/docs/git-merge#Documentation/git-merge.txt---allow-unrelated-histories) flag  
-`git merge ionicSDK/master --allow-unrelated-histories`
+`git merge ionicSDK/main --allow-unrelated-histories`
 
 - Resolve conflicts  
 - Push your branch and create a PR
