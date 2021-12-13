@@ -3,9 +3,9 @@
     <ion-header :translucent="true">
       <ion-toolbar>
         <ion-back-button default-href="/" slot="start"></ion-back-button>
-        <ion-title>Orders</ion-title>
+        <ion-title>{{ $t("Orders") }}</ion-title>
         <ion-label color="secondary" slot="end">
-          <ion-button fill="clear">Download orders</ion-button>
+          <ion-button fill="clear">{{ $t("Download orders") }}</ion-button>
         </ion-label>
       </ion-toolbar>
     </ion-header>
@@ -41,29 +41,29 @@
           </div>
         </div>
         <div class="order-items">
-          <ion-card v-for="index in 10" :key="index">
+          <ion-card>
             <ion-item>
               <ion-thumbnail slot="start">
                 <Image />
               </ion-thumbnail>
               <ion-label>
-                <p>Brand {{ index }}</p>
+                <p>Brand</p>
                 <h1>Virtual Name</h1>
-                <p>Color: color</p>
-                <p>Size: size</p>
+                <p>{{ $t("Color") }} : color</p>
+                <p>{{ $t("Size") }}: size</p>
               </ion-label>
-              <ion-note slot="end" color="success">15 in Stock</ion-note>
+              <ion-note slot="end" color="success"> {{ $t("In Stock", { count: 15 }) }}</ion-note>
             </ion-item>
             <ion-item>
-              <ion-label> Promise date </ion-label>
+              <ion-label> {{ $t("Promise date") }} </ion-label>
               <p slot="end">14 Jan 2021</p>
             </ion-item>
             <ion-item>
-              <ion-label> PO arrival date </ion-label>
+              <ion-label> {{ $t("PO arrival date") }} </ion-label>
               <p slot="end">14 Jan 2021</p>
             </ion-item>
             <ion-item>
-              <ion-label> Last brokered </ion-label>
+              <ion-label> {{ $t("Last brokered") }} </ion-label>
               <p slot="end">California Warehouse</p>
             </ion-item>
           </ion-card>

@@ -1,11 +1,21 @@
 {
   "Blank": "Blank",
   "Click the backdrop to dismiss.": "Click the backdrop to dismiss.",
+  "Color":"Color",
+  "Download orders":"Download orders",
+  "In Stock": "{count} In Stock",
+  "Last brokered":"Last brokered",
   "Logout":"Logout",
+  "Orders":"Orders",
+  "PO arrival date":"PO arrival date",
+  "Promise date":"Promise date",
   "Ready to create an app?": "Ready to create an app?",
   "Settings":"Settings",
+  "Size":"Size",
   "Start with Ionic": "Start with Ionic",
   "Store":"Store",
   "store name":"store name",
-  "UI Components": "UI Components"
+  "UI Components":"UI Components"
+
+  
 }
