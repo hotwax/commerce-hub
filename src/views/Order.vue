@@ -10,9 +10,88 @@
       </ion-toolbar>
     </ion-header>
     <ion-content>
-      <ion-searchbar />
-      <hr />
       <div class="order">
+    <div class="search">
+      <ion-searchbar />
+     </div>
+     <div class="order-filter">
+       <ion-list>
+         <ion-list-header>Date</ion-list-header>
+         <ion-item>
+           <ion-label>order created</ion-label>
+           <ion-select value="any">
+             <ion-select-option value="any">any</ion-select-option>
+           </ion-select>
+         </ion-item>
+         <ion-item>
+           <ion-label>order created</ion-label>
+           <ion-select value="any">
+             <ion-select-option value="any">any</ion-select-option>
+           </ion-select>
+         </ion-item>
+         <ion-item>
+           <ion-label>order created</ion-label>
+           <ion-select value="any">
+             <ion-select-option value="any">any</ion-select-option>
+           </ion-select>
+         </ion-item>
+       </ion-list>
+        <ion-list>
+         <ion-list-header>Type</ion-list-header>
+         <ion-item>
+           <ion-label>order created</ion-label>
+           <ion-checkbox></ion-checkbox>
+         </ion-item>
+          <ion-item>
+           <ion-label>order created</ion-label>
+           <ion-checkbox></ion-checkbox>
+         </ion-item>
+          <ion-item>
+           <ion-label>order created</ion-label>
+           <ion-checkbox></ion-checkbox>
+         </ion-item>
+       </ion-list>
+       <ion-list>
+         <ion-list-header>Date</ion-list-header>
+         <ion-item>
+           <ion-label>order created</ion-label>
+           <ion-select value="any">
+             <ion-select-option value="any">any</ion-select-option>
+           </ion-select>
+         </ion-item>
+         <ion-item>
+           <ion-label>order created</ion-label>
+           <ion-select value="any">
+             <ion-select-option value="any">any</ion-select-option>
+           </ion-select>
+         </ion-item>
+         <ion-item>
+           <ion-label>order created</ion-label>
+           <ion-select value="any">
+             <ion-select-option value="any">any</ion-select-option>
+           </ion-select>
+         </ion-item>
+       </ion-list>
+       <ion-card>
+       
+           <ion-toolbar>
+           <ion-title>Purchase date</ion-title>
+
+           </ion-toolbar>
+      
+         <ion-card-content>
+           <ion-chip>
+             <ion-label>bhdb</ion-label>
+           </ion-chip>
+             <ion-chip>
+             <ion-label>bhdb</ion-label>
+           </ion-chip>
+         </ion-card-content>
+       </ion-card>
+     </div>
+     <div class="order-detail">
+      
+     
         <div class="order-header">
           <div class="order-id">
             <ion-item lines="none">
@@ -69,6 +148,8 @@
           </ion-card>
         </div>
       </div>
+      </div>
+     
     </ion-content>
   </ion-page>
 </template>
@@ -80,38 +161,48 @@ import {
   IonBadge,
   IonButton,
   IonCard,
+  IonCardContent,
+  IonCheckbox,
   IonChip,
   IonContent,
   IonHeader,
   IonIcon,
   IonItem,
   IonLabel,
+  IonList,
+  IonListHeader,
   IonNote,
   IonPage,
   IonSearchbar,
+  IonSelect,
   IonThumbnail,
   IonTitle,
-  IonToolbar,
+  IonToolbar,IonSelectOption,
 } from "@ionic/vue";
 import { pricetag, ribbon } from "ionicons/icons";
 import { setup } from "axios-cache-adapter";
 export default {
   name: "Order",
   components: {
-    Image,
+    Image,IonSelectOption,
     IonBackButton,
     IonBadge,
     IonButton,
     IonCard,
+    IonCardContent,
+    IonCheckbox,
     IonChip,
     IonContent,
     IonHeader,
     IonIcon,
     IonItem,
     IonLabel,
+    IonList,
+    IonListHeader,
     IonNote,
     IonPage,
     IonSearchbar,
+    IonSelect,
     IonThumbnail,
     IonTitle,
     IonToolbar,
@@ -154,6 +245,11 @@ export default {
   display: flex;
   justify-content: flex-end;
 }
+.order-filter{
+  display: none;
+}
+
+
 
 @media (min-width: 900px) {
   .order-header {
@@ -167,5 +263,21 @@ export default {
   .order-tags {
     justify-content: center;
   }
+  .order{
+  display: grid;
+ grid-template-areas:
+    "search details"
+    "filter details";      
+}
+.order-filter{
+  grid-area: filter;
+  display: unset;
+}
+.order-detail{
+  grid-area: details;
+}
+.search{
+  grid-area: search;
+}
 }
 </style>
