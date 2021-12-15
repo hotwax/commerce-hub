@@ -128,8 +128,8 @@
                   <p>{{ $t("Size") }}: size</p>
                 </ion-label>
                 <ion-note slot="end" color="success">
-                  {{ $t("In Stock", { count: 15 }) }}</ion-note
-                >
+                  {{ $t("In Stock", { count: 15 }) }}
+                </ion-note>
               </ion-item>
               <ion-item>
                 <ion-label> {{ $t("Promise date") }} </ion-label>
