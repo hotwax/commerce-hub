@@ -30,7 +30,7 @@
             </ion-item>
             <ion-card>
               <ion-card-header>
-                <ion-title>{{ $t("Purchase date") }}</ion-title>
+                <ion-card-title>{{ $t("Purchase date") }}</ion-card-title>
               </ion-card-header>
 
               <ion-card-content>
@@ -56,7 +56,7 @@
             </ion-item>
             <ion-card>
               <ion-card-header>
-                <ion-title>{{ $t("Purchase date") }}</ion-title>
+                <ion-card-title>{{ $t("Purchase date") }}</ion-card-title>
               </ion-card-header>
 
               <ion-card-content>
@@ -82,7 +82,7 @@
             </ion-item>
             <ion-card>
               <ion-card-header>
-                <ion-title>{{ $t("Purchase date") }}</ion-title>
+                <ion-card-title>{{ $t("Purchase date") }}</ion-card-title>
               </ion-card-header>
 
               <ion-card-content>
@@ -250,9 +250,13 @@ export default {
     IonTitle,
     IonToolbar,
   },
-
-  setup() {
-    return { folderOutline, swapVerticalOutline, downloadOutline, sync };
+  setup () {
+    return {
+      downloadOutline,
+      folderOutline,
+      swapVerticalOutline,
+      sync
+    };
   },
 };
 </script>
