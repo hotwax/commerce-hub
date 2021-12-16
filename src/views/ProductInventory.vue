@@ -4,10 +4,14 @@
       <ion-toolbar>
         <ion-back-button default-href="/" slot="start" />
         <ion-title>{{ $t("Product inventory") }}</ion-title>
-        <ion-item slot="end" lines="none">
-          <ion-icon slot="end" :icon="sync" />
-          <ion-icon slot="end" :icon="downloadOutline" />
-        </ion-item>
+        <ion-buttons slot="end">
+          <ion-button>
+            <ion-icon :icon="sync" slot="icon-only" />
+          </ion-button>
+          <ion-button>
+            <ion-icon :icon="downloadOutline" slot="icon-only" />
+          </ion-button>
+        </ion-buttons>
       </ion-toolbar>
     </ion-header>
     <ion-content>
@@ -25,9 +29,9 @@
               </ion-select>
             </ion-item>
             <ion-card>
-              <ion-toolbar>
+              <ion-card-header>
                 <ion-title>{{ $t("Purchase date") }}</ion-title>
-              </ion-toolbar>
+              </ion-card-header>
 
               <ion-card-content>
                 <ion-chip>
@@ -51,9 +55,9 @@
               </ion-select>
             </ion-item>
             <ion-card>
-              <ion-toolbar>
+              <ion-card-header>
                 <ion-title>{{ $t("Purchase date") }}</ion-title>
-              </ion-toolbar>
+              </ion-card-header>
 
               <ion-card-content>
                 <ion-chip>
@@ -77,9 +81,9 @@
               <ion-checkbox />
             </ion-item>
             <ion-card>
-              <ion-toolbar>
+              <ion-card-header>
                 <ion-title>{{ $t("Purchase date") }}</ion-title>
-              </ion-toolbar>
+              </ion-card-header>
 
               <ion-card-content>
                 <ion-chip>
@@ -119,25 +123,25 @@
             <ion-icon slot="start" :icon="swapVerticalOutline" />
             <ion-label>{{ $t("Sort") }}</ion-label>
             <ion-select value="any">
-              <ion-select-option value="any">{{$t("Product name")}}</ion-select-option>
+              <ion-select-option value="any">{{ $t("Product name") }}</ion-select-option>
             </ion-select>
           </ion-item>
         </div>
         <div class="products">
           <div class="product">
             <div class="product-image">
-              <Image/>
+              <Image />
             </div>
             <div class="mobileonly">
               <div class="product-detail">
                 <div class="product-virtual">
                   <ion-item>
                     <ion-thumbnail slot="start" class="mobileonly-image">
-                      <Image/>
+                      <Image />
                     </ion-thumbnail>
                     <ion-label>
                       <p>Brand</p>
-                      <h1>Virtual Name</h1>
+                      Virtual Name
                       <p>{{ $t("Color") }} : color</p>
                       <p>{{ $t("Size") }}: size</p>
                     </ion-label>
@@ -145,7 +149,7 @@
                 </div>
                 <div class="product-tags">
                   <ion-chip>
-                    <ion-icon/>
+                    <ion-icon />
                     <ion-label>Shopify ID</ion-label>
                   </ion-chip>
                 </div>
@@ -159,11 +163,11 @@
                 <ion-list>
                   <ion-list-header>Variants</ion-list-header>
 
-                  <div class="product-detail"> 
+                  <div class="product-detail">
                     <div class="product-virtual">
                       <ion-item lines="none">
                         <ion-label>
-                          <ion-label>SKU</ion-label>
+                          SKU
                           <p>{{ $t("Color") }} : color</p>
                           <p>{{ $t("Size") }}: size</p>
                         </ion-label>
@@ -171,13 +175,13 @@
                     </div>
                     <div class="product-tags">
                       <ion-chip>
-                        <ion-icon/>
+                        <ion-icon />
                         <ion-label>{{ $t("Shopify ID") }}</ion-label>
                       </ion-chip>
                     </div>
                     <div class="product-metadata">
                       <ion-item lines="none" detail>
-                        <ion-note slot="end" class="metatags">3 variants</ion-note >
+                        <ion-note slot="end" class="metatags">3 variants</ion-note>
                       </ion-item>
                     </div>
                   </div>
