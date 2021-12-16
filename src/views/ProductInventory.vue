@@ -198,8 +198,12 @@
 import Image from "../components/Image.vue";
 import {
   IonBackButton,
+  IonButton,
+  IonButtons,
   IonCard,
   IonCardContent,
+  IonCardHeader,
+  IonCardTitle,
   IonCheckbox,
   IonChip,
   IonContent,
@@ -230,8 +234,12 @@ export default {
   components: {
     Image,
     IonBackButton,
+    IonButton,
+    IonButtons,
     IonCard,
     IonCardContent,
+    IonCardHeader,
+    IonCardTitle,
     IonCheckbox,
     IonChip,
     IonContent,
@@ -271,6 +279,9 @@ export default {
 .product-search {
   grid-area: search;
 }
+.desktop-only {
+  display: none;
+}
 .product-filter {
   grid-area: filter;
   display: none;
@@ -303,9 +314,7 @@ export default {
   grid-area: metadata;
   justify-content: center;
 }
-.desktop-only {
-  display: none;
-}
+
 
 @media (min-width: 900px) {
   .product-find {
