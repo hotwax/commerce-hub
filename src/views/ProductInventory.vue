@@ -4,7 +4,10 @@
       <ion-toolbar>
         <ion-back-button default-href="/" slot="start" />
         <ion-title>{{ $t("Product inventory") }}</ion-title>
-        <ion-label color="secondary" slot="end"> </ion-label>
+        <ion-item slot="end" lines="none">
+          <ion-icon slot="end" :icon="sync" />
+          <ion-icon slot="end" :icon="downloadOutline" />
+        </ion-item>
       </ion-toolbar>
     </ion-header>
     <ion-content>
@@ -99,7 +102,9 @@
             <ion-item>
               <ion-label>{{ $t("Facility") }}</ion-label>
               <ion-select value="any">
-                <ion-select-option value="any">California Warehouse</ion-select-option>
+                <ion-select-option value="any"
+                  >California Warehouse</ion-select-option
+                >
               </ion-select>
             </ion-item>
           </ion-list>
@@ -107,7 +112,7 @@
         <div class="product-sort">
           <ion-item lines="none" class="border-sort">
             <ion-icon slot="start" :icon="folderOutline" />
-            <ion-label>{{ ("Group by") }}</ion-label>
+            <ion-label>{{ "Group by" }}</ion-label>
             <ion-select value="any">
               <ion-select-option value="any">Partent</ion-select-option>
             </ion-select>
@@ -116,7 +121,9 @@
             <ion-icon slot="start" :icon="swapVerticalOutline" />
             <ion-label>{{ $t("Sort") }}</ion-label>
             <ion-select value="any">
-              <ion-select-option value="any">{{ $t("Product name") }}</ion-select-option>
+              <ion-select-option value="any">{{
+                $t("Product name")
+              }}</ion-select-option>
             </ion-select>
           </ion-item>
         </div>
@@ -174,7 +181,9 @@
                     </div>
                     <div class="product-metadata">
                       <ion-item lines="none" detail>
-                        <ion-note slot="end" class="metatags">3 variants</ion-note>
+                        <ion-note slot="end" class="metatags"
+                          >3 variants</ion-note
+                        >
                       </ion-item>
                     </div>
                   </div>
@@ -211,7 +220,12 @@ import {
   IonTitle,
   IonToolbar,
 } from "@ionic/vue";
-import { folderOutline, swapVerticalOutline } from "ionicons/icons";
+import {
+  folderOutline,
+  swapVerticalOutline,
+  downloadOutline,
+  sync,
+} from "ionicons/icons";
 
 export default {
   name: "ProductInventory",
@@ -240,7 +254,7 @@ export default {
   },
 
   setup() {
-    return { folderOutline, swapVerticalOutline };
+    return { folderOutline, swapVerticalOutline, downloadOutline, sync };
   },
 };
 </script>
