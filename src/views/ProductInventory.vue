@@ -102,9 +102,7 @@
             <ion-item>
               <ion-label>{{ $t("Facility") }}</ion-label>
               <ion-select value="any">
-                <ion-select-option value="any"
-                  >California Warehouse</ion-select-option
-                >
+                <ion-select-option value="any">California Warehouse</ion-select-option>
               </ion-select>
             </ion-item>
           </ion-list>
@@ -121,23 +119,21 @@
             <ion-icon slot="start" :icon="swapVerticalOutline" />
             <ion-label>{{ $t("Sort") }}</ion-label>
             <ion-select value="any">
-              <ion-select-option value="any">{{
-                $t("Product name")
-              }}</ion-select-option>
+              <ion-select-option value="any">{{$t("Product name")}}</ion-select-option>
             </ion-select>
           </ion-item>
         </div>
         <div class="products">
           <div class="product">
             <div class="product-image">
-              <Image />
+              <Image/>
             </div>
             <div class="mobileonly">
               <div class="product-detail">
                 <div class="product-virtual">
                   <ion-item>
                     <ion-thumbnail slot="start" class="mobileonly-image">
-                      <Image />
+                      <Image/>
                     </ion-thumbnail>
                     <ion-label>
                       <p>Brand</p>
@@ -149,7 +145,7 @@
                 </div>
                 <div class="product-tags">
                   <ion-chip>
-                    <ion-icon />
+                    <ion-icon/>
                     <ion-label>Shopify ID</ion-label>
                   </ion-chip>
                 </div>
@@ -163,7 +159,7 @@
                 <ion-list>
                   <ion-list-header>Variants</ion-list-header>
 
-                  <div class="product-detail" v-for="index in 10" :key="index">
+                  <div class="product-detail"> 
                     <div class="product-virtual">
                       <ion-item lines="none">
                         <ion-label>
@@ -175,15 +171,13 @@
                     </div>
                     <div class="product-tags">
                       <ion-chip>
-                        <ion-icon />
+                        <ion-icon/>
                         <ion-label>{{ $t("Shopify ID") }}</ion-label>
                       </ion-chip>
                     </div>
                     <div class="product-metadata">
                       <ion-item lines="none" detail>
-                        <ion-note slot="end" class="metatags"
-                          >3 variants</ion-note
-                        >
+                        <ion-note slot="end" class="metatags">3 variants</ion-note >
                       </ion-item>
                     </div>
                   </div>
