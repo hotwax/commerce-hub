@@ -86,7 +86,9 @@
             </ion-card-content>
           </ion-card>
         </div>
-        <OrderCard v-for="order in orders" :key="order.orderId" :order="order" />
+        <div class="order-card">
+          <OrderCard v-for="(order, index) in orders" :key="index" :order="order" />
+        </div>
       </div>
     </ion-content>
   </ion-page>
@@ -150,19 +152,22 @@ export default  defineComponent({
   },
 
   methods: {
-    async getOrders(){
+    async getOrders(vSize, vIndex){
+      const viewSize = vSize ? vSize : process.env.VUE_APP_VIEW_SIZE;
+      const viewIndex = vIndex ? vIndex : 0;
       const payload = {
-        facilityId: this.currentFacilityId.facilityId,
-        sortBy: "orderDate",
-        sortOrder: "Desc",
-        viewIndex: 0,
-        viewSize: process.env.VUE_APP_VIEW_SIZE
+        viewIndex: viewIndex,
+        viewSize: viewSize,
+        queryString: '* *',
+        groupLimit: 10000,
+        groupByField: 'orderId',
+        filters: JSON.parse(process.env.VUE_APP_ORDER_FILTERS)
       }
-      await this.store.dispatch("order/findOrder", payload)
+      await this.store.dispatch("order/findOrders", payload)
     }
   },
   mounted() {
-    this.getOrders();
+    this.getOrders(10, 0);
   },
 
   setup() {
@@ -193,6 +198,9 @@ export default  defineComponent({
   }
   .search {
     grid-area: search;
+  }
+  .order-card{
+    grid-area: details;
   }
 }
 </style>

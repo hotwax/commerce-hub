@@ -5,20 +5,19 @@ import OrderState from './OrderState'
 import * as types from './mutation-types'
 import { hasError, showToast } from '@/utils'
 import { translate } from '@/i18n'
-import emitter from '@/event-bus'
 
 const actions: ActionTree<OrderState, RootState> = {
   
   // Find Orders
-  async findOrder ( { commit, state }, payload) {
+  async findOrders ( { commit }, payload) {
     let resp;
     try {
       resp = await OrderService.findOrder(payload)
       if (resp && resp.status === 200 && !hasError(resp)) {
-        const orders = resp.data.docs
+        const orders = resp.data.grouped.orderId;
 
         commit(types.ORDER_LIST_UPDATED, {
-          items: orders
+          items: orders.groups,
         });
       } else {
         showToast(translate("Something went wrong"));

@@ -1,36 +1,38 @@
 <template>
-  <div class="order-detail">
     <div class="order-header">
       <div class="order-id">
         <ion-item lines="none">
           <ion-label>
-            <h1>{{ order.orderId }}</h1>
-            <p>{{ order.customerName }}</p>
+            <h1>{{ order.doclist.docs[0].orderId }}</h1>
+            <p>{{ order.doclist.docs[0].customerPartyName }}</p>
           </ion-label>
         </ion-item>
       </div>
       <div class="order-tags">
-        <ion-chip>
+        <ion-chip outline v-if="$filters.getOrderIdentificationId(order.doclist.docs[0].orderIdentifications, orderIdentificationTypeId)">
           <ion-icon :icon="pricetag" />
-					<!-- NOTE :- Here should be Shopify Id which was not available in API -->
-          <ion-label>{{ order.customerId }}</ion-label>
+          <!-- NOTE:- Here we needed to print Shopify Id but not got from api so taken reference from preOrder app -->
+          <ion-label>{{ $filters.getOrderIdentificationId(order.doclist.docs[0].orderIdentifications, orderIdentificationTypeId) }}</ion-label>
         </ion-chip>
-        <ion-chip>
-          <ion-icon :icon="pricetag" />
-          <ion-label>Customer Loyalty Status</ion-label>
+        <ion-chip outline v-if="$filters.getCustomerLoyalty(order.doclist.docs[0].orderNotes, cusotmerLoyaltyOptions)">
+          <ion-icon :icon="ribbon" />          
+          <!-- NOTE:- Here we needed to print Shopify Id but not got from api so taken reference from preOrder app -->
+          <ion-label>{{ $filters.getCustomerLoyalty(order.doclist.docs[0].orderNotes, cusotmerLoyaltyOptions) }}</ion-label>
         </ion-chip>
       </div>
       <div class="order-metatags">
-        <ion-note class="metatags">{{ $t('Ordered on') }} {{ order.orderDate ? $filters.formatDate(order.orderDate, undefined, "DD-MM-YYYY") : '-' }}</ion-note>
+        <div class="metatags">
+          <ion-note>{{ $t("Order placed on") }} {{ $filters.formatUtcDate(order.doclist.docs[0].orderDate, 'YYYY-MM-DDTHH:mm:ssZ') }}</ion-note>
+        </div>
         <div class="tags">
-          <ion-badge color="primary" slot="end">{{ order.statusId }}</ion-badge>
+          <!-- Specific order status property in not available in api-->
+          <ion-badge color="primary" slot="end">{{ order.doclist.docs[0].orderStatusDesc }}</ion-badge>
         </div>
       </div>
     </div>
     <div class="order-items">
-      <OpenItemCard v-for="item in order.items" :key="item.itemId" :item="item" />
+      <OpenItemCard v-for="(item, index) in order.doclist.docs" :key="index" :item="item" />
     </div>
-  </div>
 </template>
 <script>
 import {
@@ -43,7 +45,7 @@ import {
 } from "@ionic/vue";
 import { defineComponent } from "vue";
 import OpenItemCard from "@/components/OrderItemCard.vue";
-import { pricetag } from "ionicons/icons";
+import { pricetag, ribbon } from "ionicons/icons";
 
 export default defineComponent({
   name: "OrderCard",
@@ -59,7 +61,7 @@ export default defineComponent({
 	props: ['order'],
 
   setup() {
-    return { pricetag };
+    return { pricetag, ribbon };
   },
 });
 </script>
@@ -109,10 +111,5 @@ export default defineComponent({
   .order-tags {
     justify-content: center;
   }
-  .order-detail {
-    grid-area: details;
-  }
-
 }
-
 </style>
