@@ -8,10 +8,12 @@ import RootState from '../../RootState'
 const productModule: Module<ProductState, RootState> = {
     namespaced: true,
     state: {
+      cached: {},
       products: {
         list: {},
         total: 0
-      }
+      },
+      productsInformation: {}
     },
     getters,
     actions,
