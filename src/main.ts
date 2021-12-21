@@ -57,7 +57,7 @@ app.config.globalProperties.$filters = {
       externalId = externalIdentificationSplit[1] ? externalIdentificationSplit[1] : '';
     }
     return externalId;
-  }, 
+  },
   getFeature(featureHierarchy: any, featureKey: string) {
     let  featureValue = ''
     if (featureHierarchy) {

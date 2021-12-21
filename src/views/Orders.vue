@@ -167,7 +167,7 @@
   </ion-page>
 </template>
 
-<script>
+<script lang="ts">
 import {
   IonBackButton,
   IonBadge,
@@ -192,6 +192,7 @@ import {
   IonToolbar,
   IonSelectOption,
 } from "@ionic/vue";
+import { defineComponent } from "vue";
 import { pricetag, ribbon } from "ionicons/icons";
 import { useStore } from "@/store";
 import { mapGetters } from "vuex";
@@ -201,32 +202,32 @@ import Image from '@/components/Image.vue';
 
 const { Clipboard } = Plugins;
 
-export default {
+export default defineComponent({
   name: "Order",
   components: {
-    IonBadge,
+    Image,
     IonBackButton,
+    IonBadge,
     IonButton,
     IonCard,
     IonCardContent,
-    IonChip,
     IonCheckbox,
+    IonChip,
     IonContent,
     IonHeader,
-    IonItem,
     IonIcon,
+    IonItem,
     IonLabel,
     IonList,
     IonListHeader,
     IonNote,
     IonPage,
+    IonSearchbar,
     IonSelect,
     IonSelectOption,
-    IonSearchbar,
     IonThumbnail,
     IonTitle,
     IonToolbar,
-    Image
   },
   computed: {
     ...mapGetters({
@@ -236,7 +237,7 @@ export default {
     })
   },
   methods: {
-    async getOrders(vSize, vIndex){
+    async getOrders(vSize?: any, vIndex?: any){
       const viewSize = vSize ? vSize : process.env.VUE_APP_VIEW_SIZE;
       const viewIndex = vIndex ? vIndex : 0;
       const payload = {
@@ -249,7 +250,7 @@ export default {
       }
       await this.store.dispatch("order/findOrders", payload)
     },
-    async copyToClipboard(text) {
+    async copyToClipboard(text: any) {
       await Clipboard.write({
         string: text
       }).then(() => {
@@ -258,7 +259,7 @@ export default {
     },
   },
   mounted() {
-    this.getOrders(10, 0);
+    this.getOrders();
   },
   setup() {
     const store = useStore();
@@ -268,7 +269,7 @@ export default {
       store
     };
   }
-}
+})
 </script>
 <style scoped>
 .order-header {

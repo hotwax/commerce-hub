@@ -70,18 +70,18 @@ const actions: ActionTree<ProductState, RootState> = {
   },
 
   // Get product related information
-  async getProductsInformation  ( context , { products }) {
-    // To remove redundant value Set is used
+  async getProductInformation(context, { orders }){
     let productIds: any = new Set();
-    products.groups.forEach((product: any) => {
-      productIds.add(product.groupValue);
-    });
-    // Converted to list as methods like reduce not supported
+    orders.groups.forEach((order: any) => {
+      order.doclist.docs.forEach((item: any) =>{
+        if(item.productId) productIds.add(item.productId);
+      })
+    })
     productIds = [...productIds]
-    if (productIds.length) {
+    if(productIds.length){
       this.dispatch('product/fetchProducts', { productIds })
     }
-  },
+  }
 }
 
 export default actions;
