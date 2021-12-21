@@ -233,16 +233,92 @@ http://ionicframework.com/docs/theming/ */
 
     --ion-card-background: #1e1e1e;
   }
- 
-  .desktop-only{
+}
+
+.find {
+  display: grid;
+  grid-template-areas: "search"
+                       "main";
+}
+
+.search {
+  grid-area: search;
+}
+
+.filters {
+  grid-area: filters;
+}
+
+.main {
+  grid-area: main;
+}
+
+.section-header {
+  display: grid;
+  grid-template-areas: "info metadata"
+                       "tags tags";
+  align-items: center;                     
+}
+
+.primary-info {
+  grid-area: info;
+}
+
+.tags {
+  grid-area: tags;
+  justify-self: center;
+}
+
+.metadata {
+  grid-area: metadata;
+  justify-self: end;
+}
+
+.section-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(343px, 1fr));
+}
+
+ion-thumbnail > img {
+  object-fit: contain;
+}
+
+ion-select {
+  max-width: 100%;
+}
+
+.desktop-only {
+  display: none;
+}
+
+.mobile-only {
+  display: unset;
+}
+
+@media (min-width: 991px) {
+  .find {
+    grid: "search  main" min-content
+          "filters main" 1fr 
+          / 375px;                    
+  }
+  .section-header {
+    grid: "info tags metadata" / max-content 1fr minmax(min-content, max-content);
+  }
+
+  .sort {
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  .sort > ion-item {
+    width: 308px;
+  }
+
+  .desktop-only {
+    display: unset;
+  }
+
+  .mobile-only {
     display: none;
-  }
-  @media (min-width: 900px) {
-    .mobile-only{
-      display: none;
-    }
-    .desktop-only{
-      display: unset;
-    }
-  }
+  }  
 }
