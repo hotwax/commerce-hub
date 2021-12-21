@@ -78,6 +78,15 @@ app.config.globalProperties.$filters = {
     }
     return customerLoyalty;
   },
+  getShippingFrom(orderRoles: any, shippingOption: any){
+    let shippingFrom = ''
+    if(orderRoles){
+      const role = orderRoles.find((roleItem: any) => roleItem.startsWith(shippingOption));
+      const roleSplit = role ? role.split('/') : [];
+      shippingFrom = roleSplit[2] ? roleSplit[2] : '';
+    }
+    return shippingFrom;
+  }
 }
 
 

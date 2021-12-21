@@ -128,9 +128,9 @@
                   <p> {{ $t("Color") }} : {{ $filters.getFeature(getProduct(item.productId).featureHierarchy, '1/COLOR/') }} </p>
                   <p> {{ $t("Size") }} : {{ $filters.getFeature(getProduct(item.productId).featureHierarchy, '1/SIZE/') }} </p>
                 </ion-label>
-                <ion-badge color="success" slot="end"> {{ order.doclist.docs[0].orderItemStatusId }} </ion-badge>
+                <ion-badge color="success" slot="end"> {{ item.orderItemStatusId }} </ion-badge>
               </ion-item>
-              <div v-if="false">
+              <div v-if="true">
                 <ion-item>
                   <ion-label> {{ $t("Promise date") }} </ion-label>
                   <p slot="end"> {{ item.promisedDatetime ? $filters.formatUtcDate(item.promisedDatetime, 'YYYY-MM-DDTHH:mm:ssZ') : '-'  }} </p>
@@ -150,17 +150,19 @@
                 <ion-item>
                   <ion-label> {{ $t("Shipping method") }} </ion-label>
                   <!-- Need to work on it -->
-                  <p slot="end"> Not available </p>
+                  <p slot="end"> {{ item.shipmentMethodTypeId }} </p>
                 </ion-item>
                 <ion-item>
                   <ion-label> {{ $t("Shipping from") }} </ion-label>
                   <!-- Need to work on it -->
-                  <p slot="end"> Not available </p>
+                  <p slot="end">
+                    {{ $filters.getShippingFrom(item.orderRoles, '1/Ship-From Vendor/') ? $filters.getShippingFrom(item.orderRoles, '1/Ship-From Vendor/') : "-" }}
+                  </p>
                 </ion-item>
                 <ion-item>
                   <ion-label> {{ $t("Location inventory") }} </ion-label>
                   <!-- Need to work on it -->
-                  <p slot="end"> Not available </p>
+                  <p slot="end"> {{item.quantity}} </p>
                 </ion-item>
               </div>
             </ion-card>
@@ -276,7 +278,7 @@ export default {
       ribbon,
       store
     };
-}
+  }
 }
 </script>
 <style scoped>
