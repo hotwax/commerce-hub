@@ -76,7 +76,6 @@
             <ion-toolbar>
               <ion-title>Purchase date</ion-title>
             </ion-toolbar>
-
             <ion-card-content>
               <ion-chip>
                 <ion-label>PO #</ion-label>
@@ -102,13 +101,11 @@
                 <ion-icon :icon="pricetag" />
                 <ion-label>{{ $filters.getOrderIdentificationId(order.doclist.docs[0].orderIdentifications, 'orderIdentificationTypeId') }}</ion-label>
               </ion-chip>
-            
               <ion-chip outline v-if="$filters.getCustomerLoyalty(order.doclist.docs[0].orderNotes, 'cusotmerLoyaltyOptions')">
                 <ion-icon :icon="ribbon" />
                 <ion-label>{{ $filters.getCustomerLoyalty(order.doclist.docs[0].orderNotes, 'cusotmerLoyaltyOptions') }}</ion-label>
               </ion-chip>
             </div>
-
             <div class="order-metatags">
               <ion-note>{{ $t("Ordered on") }} {{ $filters.formatUtcDate(order.doclist.docs[0].orderDate, 'YYYY-MM-DDTHH:mm:ssZ') }}</ion-note>
               <div class="tags">
@@ -149,19 +146,16 @@
               <div v-else>
                 <ion-item>
                   <ion-label> {{ $t("Shipping method") }} </ion-label>
-                  <!-- Need to work on it -->
                   <p slot="end"> {{ item.shipmentMethodTypeId }} </p>
                 </ion-item>
                 <ion-item>
                   <ion-label> {{ $t("Shipping from") }} </ion-label>
-                  <!-- Need to work on it -->
                   <p slot="end">
                     {{ $filters.getShippingFrom(item.orderRoles, '1/Ship-From Vendor/') ? $filters.getShippingFrom(item.orderRoles, '1/Ship-From Vendor/') : "-" }}
                   </p>
                 </ion-item>
                 <ion-item>
                   <ion-label> {{ $t("Location inventory") }} </ion-label>
-                  <!-- Need to work on it -->
                   <p slot="end"> {{item.quantity}} </p>
                 </ion-item>
               </div>
@@ -234,7 +228,6 @@ export default {
     IonToolbar,
     Image
   },
-
   computed: {
     ...mapGetters({
       orders: 'order/getList',
@@ -242,7 +235,6 @@ export default {
       currentFacilityId: 'user/getCurrentFacility'
     })
   },
-
   methods: {
     async getOrders(vSize, vIndex){
       const viewSize = vSize ? vSize : process.env.VUE_APP_VIEW_SIZE;
@@ -257,7 +249,6 @@ export default {
       }
       await this.store.dispatch("order/findOrders", payload)
     },
-
     async copyToClipboard(text) {
       await Clipboard.write({
         string: text
@@ -265,12 +256,10 @@ export default {
         showToast(this.$t('Copied', { text }));
       })
     },
-
   },
   mounted() {
     this.getOrders(10, 0);
   },
-
   setup() {
     const store = useStore();
     return {
@@ -316,7 +305,6 @@ export default {
 .order-filter {
   display: none;
 }
-
 @media (min-width: 900px) {
   .order-header {
     grid: "id tags metadata" / max-content 1fr max-content;
