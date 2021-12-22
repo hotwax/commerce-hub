@@ -92,7 +92,7 @@
               <ion-item lines="none">
                 <ion-label>
                   {{ order.doclist.docs[0].orderId }}
-                  <p> {{ order.doclist.docs[0].customerPartyName }} </p>
+                  <p> {{ order.doclist.docs[0].customerName }} </p>
                 </ion-label>
               </ion-item>
             </div>
@@ -121,13 +121,13 @@
                 </ion-thumbnail>
                 <ion-label>
                   <p>{{ item.parentProductName }}</p>
-                  {{ item.productName }}
+                  {{ item.virtualProductName }}
                   <p> {{ $t("Color") }} : {{ $filters.getFeature(getProduct(item.productId).featureHierarchy, '1/COLOR/') }} </p>
                   <p> {{ $t("Size") }} : {{ $filters.getFeature(getProduct(item.productId).featureHierarchy, '1/SIZE/') }} </p>
                 </ion-label>
                 <ion-badge color="success" slot="end"> {{ item.orderItemStatusId }} </ion-badge>
               </ion-item>
-              <div v-if="true">
+              <div v-if="false">
                 <ion-item>
                   <ion-label> {{ $t("Promise date") }} </ion-label>
                   <p slot="end"> {{ item.promisedDatetime ? $filters.formatUtcDate(item.promisedDatetime, 'YYYY-MM-DDTHH:mm:ssZ') : '-'  }} </p>
@@ -237,18 +237,22 @@ export default defineComponent({
     })
   },
   methods: {
-    async getOrders(vSize?: any, vIndex?: any){
+    async getOrders(vSize?: any){
       const viewSize = vSize ? vSize : process.env.VUE_APP_VIEW_SIZE;
-      const viewIndex = vIndex ? vIndex : 0;
       const payload = {
-        viewIndex: viewIndex,
-        viewSize: viewSize,
-        queryString: '* *',
-        groupLimit: 10000,
-        groupByField: 'orderId',
-        filters: JSON.parse(process.env.VUE_APP_ORDER_FILTERS)
+        "json": {
+          "params": {
+            "rows": `${viewSize}`,
+            "group": true,
+            "group.field": "orderId",
+            "group.limit": 10000,
+          },
+          "query": "docType:OISGIR",
+          "filter": JSON.parse(process.env.VUE_APP_ORDER_FILTERS),
+          "fields": "",
+        }
       }
-      await this.store.dispatch("order/findOrders", payload)
+      await this.store.dispatch("order/findOrders", payload);
     },
     async copyToClipboard(text: any) {
       await Clipboard.write({

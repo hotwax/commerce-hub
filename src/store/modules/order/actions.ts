@@ -15,10 +15,7 @@ const actions: ActionTree<OrderState, RootState> = {
       resp = await OrderService.findOrder(payload)
       if (resp && resp.status === 200 && !hasError(resp)) {
         const orders = resp.data.grouped.orderId;
-        // Add some product data into cache to access it later 
         this.dispatch('product/getProductInformation', { orders });
-
-        if (payload.viewIndex && payload.viewIndex > 0) orders.groups = state.list.items.concat(orders.groups)
         commit(types.ORDER_LIST_UPDATED, {
           items: orders.groups,
         });
@@ -29,7 +26,7 @@ const actions: ActionTree<OrderState, RootState> = {
       showToast(translate("Something went wrong"));
     }
     return resp;
-  }
+  },
 } 
 
 export default actions
