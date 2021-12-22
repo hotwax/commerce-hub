@@ -287,6 +287,11 @@ ion-select {
   max-width: 100%;
 }
 
+hr {
+  border-width: 1px;
+  color: var(--ion-color-medium);
+}
+
 .desktop-only {
   display: none;
 }
