@@ -1,3 +1,4 @@
+import  Order  from '@/view/Order.vue';
 import { createRouter, createWebHistory } from '@ionic/vue-router';
 import { RouteRecordRaw } from 'vue-router';
 import Home from '@/views/Home.vue'
@@ -24,12 +25,18 @@ const loginGuard = (to: any, from: any, next: any) => {
 const routes: Array<RouteRecordRaw> = [
   {
     path: '/',
-    redirect: '/settings'
+    redirect: '/home'
   },
   {
     path: '/home',
     name: 'Home',
     component: Home,
+    beforeEnter: authGuard
+  },
+  {
+    path: '/order',
+    name: 'Order',
+    component: Order,
     beforeEnter: authGuard
   },
   {
