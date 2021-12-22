@@ -40,12 +40,48 @@ const actions: ActionTree<ProductState, RootState> = {
       // Remove added loader only when new query and not the infinite scroll
       if (payload.viewIndex === 0) emitter.emit("dismissLoader");
     } catch(error){
-      console.log(error)
       showToast(translate("Something went wrong"));
     }
     // TODO Handle specific error
     return resp;
   },
+
+  // Will fetch product information
+  async fetchProducts ( { commit, state }, { productIds }) {
+    const cachedProductIds = Object.keys(state.cached);
+    const productIdFilter= productIds.reduce((filter: string, productId: any) => {
+      if (filter !== '') filter += ' OR '
+      if (cachedProductIds.includes(productId)) {
+        return filter;
+      } else {
+        return filter += productId;
+      }
+    }, '');
+
+    if (productIdFilter === '') return;
+    const resp = await ProductService.fetchProducts({
+      "filters": ['productId: (' + productIdFilter + ')']
+    })
+    if (resp.status === 200 && !hasError(resp)) {
+      const products = resp.data.response.docs;
+      if (resp.data) commit(types.PRODUCT_ADD_TO_CACHED_MULTIPLE, { products });
+    }
+    return resp;
+  },
+
+  // Get product related information
+  async getProductInformation(context, { orders }){
+    let productIds: any = new Set();
+    orders.groups.forEach((order: any) => {
+      order.doclist.docs.forEach((item: any) =>{
+        if(item.productId) productIds.add(item.productId);
+      })
+    })
+    productIds = [...productIds]
+    if(productIds.length){
+      this.dispatch('product/fetchProducts', { productIds })
+    }
+  }
 }
 
 export default actions;
