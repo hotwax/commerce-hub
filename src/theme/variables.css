@@ -249,10 +249,6 @@ http://ionicframework.com/docs/theming/ */
   grid-area: filters;
 }
 
-.sort {
-  grid-area: sort;
-}
-
 .main {
   grid-area: main;
 }
@@ -287,6 +283,15 @@ ion-thumbnail > img {
   object-fit: contain;
 }
 
+ion-select {
+  max-width: 100%;
+}
+
+hr {
+  border-width: 1px;
+  color: var(--ion-color-medium);
+}
+
 .desktop-only {
   display: none;
 }
@@ -303,6 +308,15 @@ ion-thumbnail > img {
   }
   .section-header {
     grid: "info tags metadata" / max-content 1fr minmax(min-content, max-content);
+  }
+
+  .sort {
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  .sort > ion-item {
+    width: 308px;
   }
 
   .desktop-only {
