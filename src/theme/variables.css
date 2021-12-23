@@ -240,6 +240,10 @@ http://ionicframework.com/docs/theming/ */
   grid-template-areas: "search"
                        "main";
 }
+.find > .filters{
+  display: none;
+
+}
 
 .search {
   grid-area: search;
@@ -326,4 +330,7 @@ hr {
   .mobile-only {
     display: none;
   }  
+  .find > .filters{
+    display: unset;
+  }
 }

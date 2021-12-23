@@ -1,0 +1,272 @@
+<template>
+  <ion-page>
+    <ion-header :translucent="true">
+      <ion-toolbar>
+        <ion-back-button default-href="/" slot="start" />
+        <ion-title>{{ $t("Purchase orders") }}</ion-title>
+        <ion-buttons slot="end">
+          <ion-button>
+            <ion-icon :icon="sync" slot="icon-only" />
+          </ion-button>
+          <ion-button>
+            <ion-icon :icon="downloadOutline" slot="icon-only" />
+          </ion-button>
+          <ion-button fill="clear" class="mobile-only">
+            <ion-icon slot="icon-only" :icon="filterOutline" />
+          </ion-button>
+        </ion-buttons>
+      </ion-toolbar>
+    </ion-header>
+
+    <ion-content>
+      <div class="find">
+        <section class="search">
+          <ion-searchbar />
+        </section>
+     
+        <aside class="filters">
+          
+            <ion-list>
+              <ion-list-header>{{ $t("Location") }}</ion-list-header>
+              <ion-item>
+                <ion-label>{{ $t("Product Store") }}</ion-label>
+                <ion-select value="any">
+                  <ion-select-option value="any">Australia</ion-select-option>
+                </ion-select>
+              </ion-item>
+              <ion-item>
+                <ion-label>{{ $t("Facility") }}</ion-label>
+                <ion-select value="any">
+                  <ion-select-option value="any">California Warehouse</ion-select-option>
+                </ion-select>
+              </ion-item>
+           </ion-list>
+           <ion-list>
+               <ion-list-header>Date</ion-list-header>
+               <ion-item>
+                <ion-label>{{ $t("Arrival date") }}</ion-label>
+              
+                   <ion-chip>
+                    <ion-icon  :icon="calendarOutline"/>
+                    <ion-datetime value="12/01/2021"/>
+                    <ion-icon :icon="closeCircle"/>
+                  </ion-chip>
+                
+              </ion-item>
+           </ion-list>
+        </aside>
+
+        <main class="main">
+          <section class="sort">
+            <ion-item lines="none" class="border-sort">
+              <ion-icon slot="start" :icon="documentTextOutline" />
+              <ion-label>{{ "Show order items" }}</ion-label>
+              <ion-toggle slot="end"  checked></ion-toggle>
+              
+             
+            </ion-item>
+            <ion-item lines="none">
+              <ion-icon slot="start" :icon="swapVerticalOutline" />
+              <ion-label>{{ $t("Sort by") }}</ion-label>
+              <ion-select value="any">
+                <ion-select-option value="any">{{ $t("Arrival date") }}</ion-select-option>
+              </ion-select>
+            </ion-item>
+          </section>
+
+           <hr />
+
+          <div class="product">
+            <div class="product-detail">
+              <section class="section-header">
+                <div class="primary-info">
+                  <ion-item lines="none">
+                    <ion-label>
+                      <p>Product store</p>
+                      PO external ID
+                      <p>Created date</p>
+                      
+                    </ion-label>
+                  </ion-item>
+                </div>
+                <div class="tags desktop-only">
+                  <ion-chip>
+                    <ion-icon  :icon="calendarOutline"/>
+                    <ion-label>Arrival date</ion-label>
+                  </ion-chip>
+                </div>
+                <div class="metadata">
+                  <ion-item lines="none" detail>
+                    <ion-note slot="end" class="metatags">2 variants</ion-note>
+                  </ion-item>
+                </div>
+              </section>
+
+              <div class="desktop-only">
+                <ion-list>
+                  <ion-list-header>Items</ion-list-header>
+                  <div class="variant-detail">
+                    <div class="variant-info">
+                      <ion-item lines="none">
+                    <ion-thumbnail slot="start">
+                      <Image src="https://cdn.shopify.com/s/files/1/0069/7384/9727/products/test-track.jpg?v=1626255137" />
+                    </ion-thumbnail>
+                        <ion-label>
+                          SKU
+                          <p>{{ $t("Color") }} : color</p>
+                          <p>{{ $t("Size") }}: size</p>
+                        </ion-label>
+                      </ion-item>
+                    </div>
+
+                    <div class="variant-tags">
+                      <ion-chip>
+                        <ion-icon />
+                        <ion-label>{{ $t("Shopify ID") }}</ion-label>
+                      </ion-chip>
+                    </div>
+
+                    <div class="variant-metadata">
+                      <ion-item lines="none" >
+                        <ion-note slot="end" class="metatags">ATP Ordered</ion-note>
+                      </ion-item>
+                    </div>
+                  </div>
+                  <div class="variant-detail">
+                    <div class="virtual-info">
+                      <ion-item lines="none">
+                           <ion-thumbnail slot="start">
+                      <Image src="https://cdn.shopify.com/s/files/1/0069/7384/9727/products/test-track.jpg?v=1626255137" />
+                    </ion-thumbnail>
+                        <ion-label>
+                          SKU
+                          <p>{{ $t("Color") }} : color</p>
+                          <p>{{ $t("Size") }}: size</p>
+                        </ion-label>
+                      </ion-item>
+                    </div>
+                    <div class="variant-tags">
+                      <ion-chip>
+                       <ion-icon />
+                       <ion-label>{{ $t("Shopify ID") }}</ion-label>
+                      </ion-chip>
+                    </div>
+                    <div class="variant-metadata">
+                      <ion-item lines="none">
+                        <ion-note slot="end" class="metatags">ATP Ordered</ion-note>
+                      </ion-item>
+                    </div>
+                  </div>
+                </ion-list>
+              </div>
+            </div>
+          </div>
+        
+          <section class="section-grid"></section>
+        </main>
+      </div>
+    </ion-content>
+  </ion-page>
+</template>
+<script>
+import Image from "../components/Image.vue";
+import {
+  IonBackButton,
+  IonButton,
+  IonButtons,
+  IonChip,
+  IonContent,
+  IonDatetime,
+  IonHeader,
+  IonIcon,
+  IonItem,
+  IonLabel,
+  IonList,
+  IonListHeader,
+  IonNote,
+  IonPage,
+  IonSearchbar,
+  IonSelect,
+  IonSelectOption,
+  IonThumbnail,
+  IonTitle,
+  IonToolbar,
+} from "@ionic/vue";
+import {
+    documentTextOutline,calendarOutline,
+  folderOutline,
+  swapVerticalOutline,
+  downloadOutline,
+  sync,
+  closeCircle,
+  filterOutline,
+} from "ionicons/icons";
+
+export default {
+  name: "PurchaseOrder",
+  components: {
+    Image,
+    IonBackButton,
+    IonButton,
+    IonButtons,
+    IonChip,
+    IonContent,
+    IonDatetime,
+    IonHeader,
+    IonIcon,
+    IonItem,
+    IonLabel,
+    IonList,
+    IonListHeader,
+    IonNote,
+    IonPage,
+    IonSearchbar,
+    IonSelect,
+    IonSelectOption,
+    IonThumbnail,
+    IonTitle,
+    IonToolbar,
+  },
+  setup () {
+    return {
+        closeCircle,
+        documentTextOutline,
+      downloadOutline,
+      calendarOutline,
+      folderOutline,
+      swapVerticalOutline,
+      sync,
+      filterOutline
+    };
+  },
+};
+</script>
+
+<style scoped>
+.variant-detail {
+  display: grid;
+  grid: "vinfo vtags vmetadata" / 1fr max-content 1fr;
+  align-items: center;
+  border-bottom: 1px solid #92949c;
+}
+
+.variant-info {
+  grid-area: vinfo;
+}
+
+.variant-tags {
+  grid-area: vtags;
+  justify-self: center;
+}
+
+.variant-metadata {
+  grid-area: vmetadata;
+}
+
+@media (min-width: 991px) {
+
+  .section-header {
+  grid-template-columns: 1fr max-content 1fr;
+  }
+}
+</style>
