@@ -120,27 +120,28 @@
                   <Image :src="getProduct(item.productId).mainImageUrl" />
                 </ion-thumbnail>
                 <ion-label>
-                  <p>{{ item.parentProductName }}</p>
+                  <p>{{ getProduct(item.productId).brandName ? getProduct(item.productId).brandName : '-' }}</p>
                   {{ item.virtualProductName }}
                   <p> {{ $t("Color") }} : {{ $filters.getFeature(getProduct(item.productId).featureHierarchy, '1/COLOR/') }} </p>
                   <p> {{ $t("Size") }} : {{ $filters.getFeature(getProduct(item.productId).featureHierarchy, '1/SIZE/') }} </p>
                 </ion-label>
                 <ion-badge color="success" slot="end"> {{ item.orderItemStatusId }} </ion-badge>
               </ion-item>
-              <div v-if="false">
+              <!-- TODO: Need to handle this property -->
+              <div v-if="item.preOrderStatus || item.backOrderStatus || item.unFillable">
                 <ion-item>
                   <ion-label> {{ $t("Promise date") }} </ion-label>
                   <p slot="end"> {{ item.promisedDatetime ? $filters.formatUtcDate(item.promisedDatetime, 'YYYY-MM-DDTHH:mm:ssZ') : '-'  }} </p>
                 </ion-item>
                 <ion-item>
                   <ion-label> {{ $t("PO arrival date") }} </ion-label>
-                  <!-- Need to work on it -->
-                  <p slot="end"> Not available </p>
+                  <!-- TODO: Need to handle this property -->
+                  <p slot="end"> {{ item.promiseOrderArrivalDate ? item.promiseOrderArrivalDate : '-' }} </p>
                 </ion-item>
                 <ion-item>
                   <ion-label> {{ $t("Last brokered") }} </ion-label>
-                  <!-- Need to work on it -->
-                  <p slot="end"> Not available </p>
+                  <!-- TODO: Need to handle this property -->
+                  <p slot="end"> {{ item.lastBrokered ? item.lastBrokered : '-' }} </p>
                 </ion-item>
               </div>
               <div v-else>
@@ -156,7 +157,7 @@
                 </ion-item>
                 <ion-item>
                   <ion-label> {{ $t("Location inventory") }} </ion-label>
-                  <p slot="end"> {{item.quantity}} </p>
+                  <p slot="end"> {{item.uniqueOrderItemsCount}} </p>
                 </ion-item>
               </div>
             </ion-card>
@@ -241,17 +242,16 @@ export default defineComponent({
       const viewSize = vSize ? vSize : process.env.VUE_APP_VIEW_SIZE;
       const payload = {
         "json": {
-          "params": {
-            "rows": `${viewSize}`,
-            "group": true,
-            "group.field": "orderId",
-            "group.limit": 10000,
-          },
-          "query": "docType:OISGIR",
-          "filter": JSON.parse(process.env.VUE_APP_ORDER_FILTERS),
-          "fields": "",
-        }
+        "params": {
+          "rows": viewSize,
+          "group": true,
+          "group.field": "orderId",
+          "group.limit": 10000
+        },
+        "query": "docType:OISGIR",
+        "fields": ""
       }
+    }
       await this.store.dispatch("order/findOrders", payload);
     },
     async copyToClipboard(text: any) {
