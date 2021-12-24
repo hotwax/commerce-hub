@@ -199,6 +199,7 @@ import {
 } from "ionicons/icons";
 import {
   IonBackButton,
+  IonBadge,
   IonButton,
   IonButtons,
   IonCard,
@@ -221,6 +222,7 @@ export default {
   components: {
     Image,
     IonBackButton,
+    IonBadge,
     IonButton,
     IonButtons,
     IonCard,
