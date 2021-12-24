@@ -35,7 +35,7 @@ export default defineComponent({
   },
   setup() {
     const router = useRouter();
-    
+
     return {
       router
     }
