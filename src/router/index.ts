@@ -3,6 +3,7 @@ import { RouteRecordRaw } from 'vue-router';
 import Home from '@/views/Home.vue'
 import Orders from '@/views/Orders.vue'
 import OrderFind from '@/views/OrderFind.vue'
+import OrderDetail from "@/views/OrderDetail.vue"
 import Login from '@/views/Login.vue'
 import Settings from "@/views/Settings.vue"
 import store from '@/store'
@@ -38,6 +39,12 @@ const routes: Array<RouteRecordRaw> = [
     path: '/orderfind',
     name: 'OrderFind',
     component: OrderFind,
+    beforeEnter: authGuard
+  },
+  {
+    path: '/orderdetail',
+    name: 'OrderDetail',
+    component: OrderDetail,
     beforeEnter: authGuard
   },
   {
