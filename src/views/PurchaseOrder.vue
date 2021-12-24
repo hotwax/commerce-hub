@@ -42,7 +42,7 @@
               </ion-item>
            </ion-list>
            <ion-list>
-               <ion-list-header>Date</ion-list-header>
+               <ion-list-header>{{ $t("Date") }}</ion-list-header>
                <ion-item>
                 <ion-label>{{ $t("Arrival date") }}</ion-label>
               
@@ -60,7 +60,7 @@
           <section class="sort">
             <ion-item lines="none" class="border-sort">
               <ion-icon slot="start" :icon="documentTextOutline" />
-              <ion-label>{{ "Show order items" }}</ion-label>
+              <ion-label>{{ $t("Show order items") }}</ion-label>
               <ion-toggle slot="end"  checked></ion-toggle>
               
              
@@ -69,7 +69,7 @@
               <ion-icon slot="start" :icon="swapVerticalOutline" />
               <ion-label>{{ $t("Sort by") }}</ion-label>
               <ion-select value="any">
-                <ion-select-option value="any">{{ $t("Arrival date") }}</ion-select-option>
+                <ion-select-option value="any">Arrival date</ion-select-option>
               </ion-select>
             </ion-item>
           </section>
@@ -122,7 +122,7 @@
                     <div class="variant-tags">
                       <ion-chip>
                         <ion-icon />
-                        <ion-label>{{ $t("Shopify ID") }}</ion-label>
+                        <ion-label>Shopify ID</ion-label>
                       </ion-chip>
                     </div>
 
@@ -148,7 +148,7 @@
                     <div class="variant-tags">
                       <ion-chip>
                        <ion-icon />
-                       <ion-label>{{ $t("Shopify ID") }}</ion-label>
+                       <ion-label>Shopify ID</ion-label>
                       </ion-chip>
                     </div>
                     <div class="variant-metadata">
@@ -189,17 +189,19 @@ import {
   IonSelect,
   IonSelectOption,
   IonThumbnail,
+  IonToggle,
   IonTitle,
   IonToolbar,
 } from "@ionic/vue";
 import {
-    documentTextOutline,calendarOutline,
-  folderOutline,
-  swapVerticalOutline,
-  downloadOutline,
-  sync,
-  closeCircle,
-  filterOutline,
+      calendarOutline,
+      closeCircle,
+      documentTextOutline,
+      downloadOutline,
+      filterOutline,
+      folderOutline,
+      swapVerticalOutline,
+      sync
 } from "ionicons/icons";
 
 export default {
@@ -224,19 +226,20 @@ export default {
     IonSelect,
     IonSelectOption,
     IonThumbnail,
+    IonToggle,
     IonTitle,
     IonToolbar,
   },
   setup () {
     return {
-        closeCircle,
-        documentTextOutline,
-      downloadOutline,
       calendarOutline,
+      closeCircle,
+      documentTextOutline,
+      downloadOutline,
+      filterOutline,
       folderOutline,
       swapVerticalOutline,
-      sync,
-      filterOutline
+      sync
     };
   },
 };
