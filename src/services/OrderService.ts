@@ -8,6 +8,14 @@ const findOrder = async (payload: any): Promise<any> => {
   });
 }
 
+const findOrderDetails = async (): Promise<any> => {
+  return api({
+    url:"/orders/NN11253",
+    method: "get",
+  })
+}
+
 export const OrderService = {
-    findOrder
+    findOrder,
+    findOrderDetails
 }
