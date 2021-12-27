@@ -15,7 +15,6 @@ const actions: ActionTree<OrderState, RootState> = {
       resp = await OrderService.findOrder(payload)
       if (resp && resp.status === 200 && !hasError(resp)) {
         const orders = resp.data.grouped.orderId;
-        console.log(orders);
         this.dispatch('product/getProductInformation', { orders });
         commit(types.ORDER_LIST_UPDATED, {
           items: orders.groups,
@@ -28,11 +27,16 @@ const actions: ActionTree<OrderState, RootState> = {
     }
     return resp;
   },
-  async getOrderDetails(){
+  async getOrderDetails({commit}){
     let resp;
     try{
       resp = await OrderService.findOrderDetails();
-      console.log(resp);
+      console.log(resp.data);
+      // const order = resp.data.shipGroup
+      // this.dispatch('product/getProductInformation', { order });
+      commit(types.ORDER_DETAILS_UPDATED, {
+        orderDetails: resp.data
+      })
     } catch(error) {
       console.log(error)
     }

@@ -10,7 +10,7 @@ const findOrder = async (payload: any): Promise<any> => {
 
 const findOrderDetails = async (): Promise<any> => {
   return api({
-    url:"/orders/NN11253",
+    url:"orders/NN11285",
     method: "get",
   })
 }
