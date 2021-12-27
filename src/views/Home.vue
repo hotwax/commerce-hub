@@ -8,24 +8,30 @@
 
       <div class="header">
         <nav class="nav-card">
-          <ion-card>
-            <img src="../assets/images/PreOrder.svg" />
-            <ion-card-header>
-            <ion-card-title>Pre Order Management</ion-card-title>
-          </ion-card-header>
-          </ion-card>
-          <ion-card>
-            <img src="../assets/images/Threshold.svg" />
-            <ion-card-header>
-            <ion-card-title>Threshold Management</ion-card-title>
-          </ion-card-header>
-          </ion-card>
-          <ion-card>
-            <img src="../assets/images/Transfer.svg" />
-            <ion-card-header>
-            <ion-card-title>Stock Transfer</ion-card-title>
-          </ion-card-header>
-          </ion-card>
+          <a href="">
+            <ion-card>
+              <img src="../assets/images/PreOrder.svg" />
+              <ion-card-header>
+                <ion-card-title>Pre Order Management</ion-card-title>
+              </ion-card-header>
+            </ion-card>
+          </a>
+          <a href="">
+            <ion-card>
+              <img src="../assets/images/Threshold.svg" />
+              <ion-card-header>
+                <ion-card-title>Threshold Management</ion-card-title>
+              </ion-card-header>
+            </ion-card>
+          </a>
+          <a href="">
+            <ion-card>
+              <img src="../assets/images/Transfer.svg" />
+              <ion-card-header>
+                <ion-card-title>Stock Transfer</ion-card-title>
+              </ion-card-header>
+            </ion-card>
+          </a>
         </nav>
 
         <section class="pages-card">
@@ -52,456 +58,44 @@
         </section>
       </div>
 
-      <section>
-        <ion-item lines="none">
+      <section class="scroller">
+        <ion-item class="scroller-header" lines="none">
           <ion-label>Stuck orders</ion-label>
             <ion-button slot="end" fill="outline" size="medium">View all</ion-button>
         </ion-item>
-        <div class="product-card">
-          <ion-card>
-            <ion-item lines="none">
-              <ion-label>
-                Customer name
-                <p>Order ID</p>
-              </ion-label>
-              <ion-note slot="end">auto cancel delta</ion-note>
-            </ion-item>
-            <ion-item lines="full">
-              <ion-thumbnail slot="start">
-                <img src="https://cdn.shopify.com/s/files/1/0069/7384/9727/products/test-track.jpg?v=1626255137" />
-              </ion-thumbnail>
-              <ion-label>
-                <p>Brand</p>
-                Virtual name
-                <p>Color: color</p>
-                <p>Size: size</p>
-              </ion-label>
-              <ion-note slot="end" color="success">15 in stock</ion-note>
-            </ion-item>
-            <ion-item>
-              <ion-label>Last brokered</ion-label>
-              <ion-text slot="end">California Warehouse</ion-text>
-            </ion-item>
-            <ion-item>
-              <ion-label>Rebrokered</ion-label>
-              <ion-text slot="end">5 times</ion-text>
-            </ion-item>
-          </ion-card>
-          <ion-card>
-            <ion-item lines="none">
-              <ion-label>
-                Customer name
-                <p>Order ID</p>
-              </ion-label>
-              <ion-note slot="end">auto cancel delta</ion-note>
-            </ion-item>
-            <ion-item lines="full">
-              <ion-thumbnail slot="start">
-                <img src="https://cdn.shopify.com/s/files/1/0069/7384/9727/products/test-track.jpg?v=1626255137" />
-              </ion-thumbnail>
-              <ion-label>
-                <p>Brand</p>
-                Virtual name
-                <p>Color: color</p>
-                <p>Size: size</p>
-              </ion-label>
-              <ion-note slot="end" color="success">15 in stock</ion-note>
-            </ion-item>
-            <ion-item>
-              <ion-label>Last brokered</ion-label>
-              <ion-text slot="end">California Warehouse</ion-text>
-            </ion-item>
-            <ion-item>
-              <ion-label>Rebrokered</ion-label>
-              <ion-text slot="end">5 times</ion-text>
-            </ion-item>
-          </ion-card>
-          <ion-card>
-            <ion-item lines="none">
-              <ion-label>
-                Customer name
-                <p>Order ID</p>
-              </ion-label>
-              <ion-note slot="end">auto cancel delta</ion-note>
-            </ion-item>
-            <ion-item lines="full">
-              <ion-thumbnail slot="start">
-                <img src="https://cdn.shopify.com/s/files/1/0069/7384/9727/products/test-track.jpg?v=1626255137" />
-              </ion-thumbnail>
-              <ion-label>
-                <p>Brand</p>
-                Virtual name
-                <p>Color: color</p>
-                <p>Size: size</p>
-              </ion-label>
-              <ion-note slot="end" color="success">15 in stock</ion-note>
-            </ion-item>
-            <ion-item>
-              <ion-label>Last brokered</ion-label>
-              <ion-text slot="end">California Warehouse</ion-text>
-            </ion-item>
-            <ion-item>
-              <ion-label>Rebrokered</ion-label>
-              <ion-text slot="end">5 times</ion-text>
-            </ion-item>
-          </ion-card>
-          <ion-card>
-            <ion-item lines="none">
-              <ion-label>
-                Customer name
-                <p>Order ID</p>
-              </ion-label>
-              <ion-note slot="end">auto cancel delta</ion-note>
-            </ion-item>
-            <ion-item lines="full">
-              <ion-thumbnail slot="start">
-                <img src="https://cdn.shopify.com/s/files/1/0069/7384/9727/products/test-track.jpg?v=1626255137" />
-              </ion-thumbnail>
-              <ion-label>
-                <p>Brand</p>
-                Virtual name
-                <p>Color: color</p>
-                <p>Size: size</p>
-              </ion-label>
-              <ion-note slot="end" color="success">15 in stock</ion-note>
-            </ion-item>
-            <ion-item>
-              <ion-label>Last brokered</ion-label>
-              <ion-text slot="end">California Warehouse</ion-text>
-            </ion-item>
-            <ion-item>
-              <ion-label>Rebrokered</ion-label>
-              <ion-text slot="end">5 times</ion-text>
-            </ion-item>
-          </ion-card>
-          <ion-card>
-            <ion-item lines="none">
-              <ion-label>
-                Customer name
-                <p>Order ID</p>
-              </ion-label>
-              <ion-note slot="end">auto cancel delta</ion-note>
-            </ion-item>
-            <ion-item lines="full">
-              <ion-thumbnail slot="start">
-                <img src="https://cdn.shopify.com/s/files/1/0069/7384/9727/products/test-track.jpg?v=1626255137" />
-              </ion-thumbnail>
-              <ion-label>
-                <p>Brand</p>
-                Virtual name
-                <p>Color: color</p>
-                <p>Size: size</p>
-              </ion-label>
-              <ion-note slot="end" color="success">15 in stock</ion-note>
-            </ion-item>
-            <ion-item>
-              <ion-label>Last brokered</ion-label>
-              <ion-text slot="end">California Warehouse</ion-text>
-            </ion-item>
-            <ion-item>
-              <ion-label>Rebrokered</ion-label>
-              <ion-text slot="end">5 times</ion-text>
-            </ion-item>
-          </ion-card>
-          <ion-card>
-            <ion-item lines="none">
-              <ion-label>
-                Customer name
-                <p>Order ID</p>
-              </ion-label>
-              <ion-note slot="end">auto cancel delta</ion-note>
-            </ion-item>
-            <ion-item lines="full">
-              <ion-thumbnail slot="start">
-                <img src="https://cdn.shopify.com/s/files/1/0069/7384/9727/products/test-track.jpg?v=1626255137" />
-              </ion-thumbnail>
-              <ion-label>
-                <p>Brand</p>
-                Virtual name
-                <p>Color: color</p>
-                <p>Size: size</p>
-              </ion-label>
-              <ion-note slot="end" color="success">15 in stock</ion-note>
-            </ion-item>
-            <ion-item>
-              <ion-label>Last brokered</ion-label>
-              <ion-text slot="end">California Warehouse</ion-text>
-            </ion-item>
-            <ion-item>
-              <ion-label>Rebrokered</ion-label>
-              <ion-text slot="end">5 times</ion-text>
-            </ion-item>
-          </ion-card>
-        </div>  
-      </section>
-
-      <section>
-        <ion-item lines="none">
-          <ion-label>Old expedited orders</ion-label>
-          <ion-button slot="end" fill="outline" size="medium">View all</ion-button>
-        </ion-item>
-        <div class="product-card">
-          <ion-card>
-            <ion-item lines="none">
-              <ion-label>
-                Customer name
-                <p>Order ID</p>
-              </ion-label>
-              <div class="metadata">
-                <ion-note slot="end">order placed date</ion-note>
-                <ion-badge color="medium">2 days ago</ion-badge>
-              </div>
-            </ion-item>
-            <ion-item lines="full">
-              <ion-thumbnail slot="start">
-                <img src="https://cdn.shopify.com/s/files/1/0069/7384/9727/products/test-track.jpg?v=1626255137" />
-              </ion-thumbnail>
-              <ion-label>
-                <p>Brand</p>
-                Virtual name
-                <p>Color: color</p>
-                <p>Size: size</p>
-              </ion-label>
-              <ion-note slot="end" color="success">15 in stock</ion-note>
-            </ion-item>
-            <ion-item>
-              <ion-label>Last brokered</ion-label>
-              <ion-text slot="end">California Warehouse</ion-text>
-            </ion-item>
-            <ion-item>
-              <ion-label>Rebrokered</ion-label>
-              <ion-text slot="end">5 times</ion-text>
-            </ion-item>
-          </ion-card>
-          <ion-card>
-            <ion-item lines="none">
-              <ion-label>
-                Customer name
-                <p>Order ID</p>
-              </ion-label>
-              <div class="metadata">
-                <ion-note slot="end">order placed date</ion-note>
-                <ion-badge color="medium">2 days ago</ion-badge>
-              </div>
-            </ion-item>
-            <ion-item lines="full">
-              <ion-thumbnail slot="start">
-                <img src="https://cdn.shopify.com/s/files/1/0069/7384/9727/products/test-track.jpg?v=1626255137" />
-              </ion-thumbnail>
-              <ion-label>
-                <p>Brand</p>
-                Virtual name
-                <p>Color: color</p>
-                <p>Size: size</p>
-              </ion-label>
-              <ion-note slot="end" color="success">15 in stock</ion-note>
-            </ion-item>
-            <ion-item>
-              <ion-label>Last brokered</ion-label>
-              <ion-text slot="end">California Warehouse</ion-text>
-            </ion-item>
-            <ion-item>
-              <ion-label>Rebrokered</ion-label>
-              <ion-text slot="end">5 times</ion-text>
-            </ion-item>
-          </ion-card>
-          <ion-card>
-            <ion-item lines="none">
-              <ion-label>
-                Customer name
-                <p>Order ID</p>
-              </ion-label>
-              <div class="metadata">
-                <ion-note slot="end">order placed date</ion-note>
-                <ion-badge color="medium">2 days ago</ion-badge>
-              </div>
-            </ion-item>
-            <ion-item lines="full">
-              <ion-thumbnail slot="start">
-                <img src="https://cdn.shopify.com/s/files/1/0069/7384/9727/products/test-track.jpg?v=1626255137" />
-              </ion-thumbnail>
-              <ion-label>
-                <p>Brand</p>
-                Virtual name
-                <p>Color: color</p>
-                <p>Size: size</p>
-              </ion-label>
-              <ion-note slot="end" color="success">15 in stock</ion-note>
-            </ion-item>
-            <ion-item>
-              <ion-label>Last brokered</ion-label>
-              <ion-text slot="end">California Warehouse</ion-text>
-            </ion-item>
-            <ion-item>
-              <ion-label>Rebrokered</ion-label>
-              <ion-text slot="end">5 times</ion-text>
-            </ion-item>
-          </ion-card>
-          <ion-card>
-            <ion-item lines="none">
-              <ion-label>
-                Customer name
-                <p>Order ID</p>
-              </ion-label>
-              <div class="metadata">
-                <ion-note slot="end">order placed date</ion-note>
-                <ion-badge color="medium">2 days ago</ion-badge>
-              </div>
-            </ion-item>
-            <ion-item lines="full">
-              <ion-thumbnail slot="start">
-                <img src="https://cdn.shopify.com/s/files/1/0069/7384/9727/products/test-track.jpg?v=1626255137" />
-              </ion-thumbnail>
-              <ion-label>
-                <p>Brand</p>
-                Virtual name
-                <p>Color: color</p>
-                <p>Size: size</p>
-              </ion-label>
-              <ion-note slot="end" color="success">15 in stock</ion-note>
-            </ion-item>
-            <ion-item>
-              <ion-label>Last brokered</ion-label>
-              <ion-text slot="end">California Warehouse</ion-text>
-            </ion-item>
-            <ion-item>
-              <ion-label>Rebrokered</ion-label>
-              <ion-text slot="end">5 times</ion-text>
-            </ion-item>
-          </ion-card>
-        </div>  
-      </section>
-
-      <section>
-        <ion-item lines="none">
-          <ion-label>Pre-order ending</ion-label>
-          <ion-button slot="end" fill="outline" size="medium">View all</ion-button>
-        </ion-item>
-        <div class="preorder product-card">
-          <ion-card>
-            <div class="product-image">
-              <img src="https://cdn.shopify.com/s/files/1/0069/7384/9727/products/test-track.jpg?v=1626255137" />
-            </div>
-            <div class="product-detail">
-              <ion-list>
-                <ion-item>
+  
+        <div class="scroller-content">
+          <div class="scroller-item" v-for="i = 1 in 10" :key="i">  
+              <ion-card>
+                <ion-item lines="none">
+                  <ion-label>
+                    Customer name
+                    <p>Order ID</p>
+                  </ion-label>
+                  <ion-note slot="end">auto cancel delta</ion-note>
+                </ion-item>
+                <ion-item lines="full">
+                  <ion-thumbnail slot="start">
+                    <img src="https://cdn.shopify.com/s/files/1/0069/7384/9727/products/test-track.jpg?v=1626255137" />
+                  </ion-thumbnail>
                   <ion-label>
                     <p>Brand</p>
                     Virtual name
+                    <p>Color: color</p>
+                    <p>Size: size</p>
                   </ion-label>
-                  <ion-badge slot="end" color="medium">2 days left</ion-badge>
-                </ion-item>
-
-                <ion-item>
-                  <ion-chip><ion-label>Black | XS</ion-label></ion-chip>
-                  <ion-chip><ion-label>Black | S</ion-label></ion-chip>
-                  <ion-chip><ion-label>Black | M</ion-label></ion-chip>
-                </ion-item>
-
-                <ion-item>
-                  <ion-label>Last PO</ion-label>
-                  <ion-text slot="end">PO ID</ion-text>
+                  <ion-note slot="end" color="success">15 in stock</ion-note>
                 </ion-item>
                 <ion-item>
-                  <ion-label>Last arrival date</ion-label>
-                  <ion-text slot="end">1 Jan 2021</ion-text>
-                </ion-item>
-              </ion-list>
-            </div>
-          </ion-card>
-          <ion-card>
-            <div class="product-image">
-              <img src="https://cdn.shopify.com/s/files/1/0069/7384/9727/products/test-track.jpg?v=1626255137" />
-            </div>
-            <div class="product-detail">
-              <ion-list>
-                <ion-item>
-                  <ion-label>
-                    <p>Brand</p>
-                    Virtual name
-                  </ion-label>
-                  <ion-badge slot="end" color="medium">2 days left</ion-badge>
-                </ion-item>
-
-                <ion-item>
-                  <ion-chip><ion-label>Black | XS</ion-label></ion-chip>
-                  <ion-chip><ion-label>Black | S</ion-label></ion-chip>
-                  <ion-chip><ion-label>Black | M</ion-label></ion-chip>
-                </ion-item>
-
-                <ion-item>
-                  <ion-label>Last PO</ion-label>
-                  <ion-text slot="end">PO ID</ion-text>
+                  <ion-label>Last brokered</ion-label>
+                  <ion-text slot="end">California Warehouse</ion-text>
                 </ion-item>
                 <ion-item>
-                  <ion-label>Last arrival date</ion-label>
-                  <ion-text slot="end">1 Jan 2021</ion-text>
+                  <ion-label>Rebrokered</ion-label>
+                  <ion-text slot="end">5 times</ion-text>
                 </ion-item>
-              </ion-list>
-            </div>
-          </ion-card>
-          <ion-card>
-            <div class="product-image">
-              <img src="https://cdn.shopify.com/s/files/1/0069/7384/9727/products/test-track.jpg?v=1626255137" />
-            </div>
-            <div class="product-detail">
-              <ion-list>
-                <ion-item>
-                  <ion-label>
-                    <p>Brand</p>
-                    Virtual name
-                  </ion-label>
-                  <ion-badge slot="end" color="medium">2 days left</ion-badge>
-                </ion-item>
-
-                <ion-item>
-                  <ion-chip><ion-label>Black | XS</ion-label></ion-chip>
-                  <ion-chip><ion-label>Black | S</ion-label></ion-chip>
-                  <ion-chip><ion-label>Black | M</ion-label></ion-chip>
-                </ion-item>
-
-                <ion-item>
-                  <ion-label>Last PO</ion-label>
-                  <ion-text slot="end">PO ID</ion-text>
-                </ion-item>
-                <ion-item>
-                  <ion-label>Last arrival date</ion-label>
-                  <ion-text slot="end">1 Jan 2021</ion-text>
-                </ion-item>
-              </ion-list>
-            </div>
-          </ion-card>
-          <ion-card>
-            <div class="product-image">
-              <img src="https://cdn.shopify.com/s/files/1/0069/7384/9727/products/test-track.jpg?v=1626255137" />
-            </div>
-            <div class="product-detail">
-              <ion-list>
-                <ion-item>
-                  <ion-label>
-                    <p>Brand</p>
-                    Virtual name
-                  </ion-label>
-                  <ion-badge slot="end" color="medium">2 days left</ion-badge>
-                </ion-item>
-
-                <ion-item>
-                  <ion-chip><ion-label>Black | XS</ion-label></ion-chip>
-                  <ion-chip><ion-label>Black | S</ion-label></ion-chip>
-                  <ion-chip><ion-label>Black | M</ion-label></ion-chip>
-                </ion-item>
-
-                <ion-item>
-                  <ion-label>Last PO</ion-label>
-                  <ion-text slot="end">PO ID</ion-text>
-                </ion-item>
-                <ion-item>
-                  <ion-label>Last arrival date</ion-label>
-                  <ion-text slot="end">1 Jan 2021</ion-text>
-                </ion-item>
-              </ion-list>
-            </div>
-          </ion-card>
+              </ion-card>
+          </div>  
         </div>
       </section>
      </main>
@@ -510,7 +104,7 @@
 </template>
 
 <script lang="ts">
-import { IonContent, IonItem, IonPage } from '@ionic/vue';
+import { IonButton, IonCard, IonContent, IonCardHeader, IonCardTitle, IonIcon, IonItem, IonLabel, IonNote, IonPage, IonThumbnail } from '@ionic/vue';
 import { defineComponent } from 'vue';
 import { useRouter } from 'vue-router';
 import { ticketOutline, shirtOutline, sendOutline, calendarOutline, settingsOutline } from 'ionicons/icons'
@@ -518,9 +112,17 @@ import { ticketOutline, shirtOutline, sendOutline, calendarOutline, settingsOutl
 export default defineComponent({
   name: 'Home',
   components: {
-    IonContent,
-    IonItem,
-    IonPage
+    IonButton, 
+    IonCard, 
+    IonContent, 
+    IonCardHeader, 
+    IonCardTitle, 
+    IonIcon, 
+    IonItem, 
+    IonLabel, 
+    IonNote, 
+    IonPage, 
+    IonThumbnail
   },
   setup() {
     const router = useRouter();
@@ -538,9 +140,6 @@ export default defineComponent({
 </script>
 
 <style scoped>
-main {
-  margin: 0 40px;
-}
 
 figure {
   text-align: center;
@@ -552,13 +151,26 @@ figure > img {
 }
 
 .header {
-  display: flex;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: auto 375px;
   align-items: center;
+  width: var(--page-width);
+  margin: auto;
 }
 
 .nav-card {
   display: flex;
+}
+
+a {
+  text-decoration: none;
+  flex-grow: 1;
+}
+
+a > ion-card > img {
+  object-fit: cover;
+  width: 100%;
+  height: 200px;
 }
 
 ion-card > ion-card-header {
@@ -566,35 +178,31 @@ ion-card > ion-card-header {
 }
 
 .pages-card > ion-item {
-  width: 500px;
   border: 1px solid black;
   border-radius: 15px;
 }
 
-.product-card {
+.scroller > .scroller-header {
+  width: var(--page-width);
+  margin: auto;
+}
+
+.scroller-content {
   display: flex;
-  flex-wrap: nowrap;
   overflow-x: scroll;
 }
 
-.product-card > ion-card {
+.scroller-item{
   flex-shrink: 0;
+  position: relative;
+  transform: translateX(calc(max(var(--page-width), 100vw)/2 - var(--page-width)/2));
 }
 
-.product-image {
-  align-self: center;
+.scroller-content > .scroller-item:last-child ion-card{
+  margin-right: 40px;
 }
 
-.preorder ion-card {
-  display: grid;
-  grid-template-columns: 50px auto;
-}
-
-.metadata {
-  text-align: end;
-}
-
-.metadata > ion-note {
-  display: block;
+main {
+  --page-width: 1024px;
 }
 </style>
