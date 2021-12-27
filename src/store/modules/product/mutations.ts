@@ -6,6 +6,9 @@ const mutations: MutationTree <ProductState> = {
   [types.PRODUCT_SEARCH_UPDATED] (state, payload) {
     state.products.list = payload.products;
     state.products.total = payload.totalProductsCount;
-  }
+  },
+  [types.PINNED_PAGES](state, payload){
+    state.products.pinnedPages = payload;
+  },
 }
 export default mutations;

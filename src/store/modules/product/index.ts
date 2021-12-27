@@ -10,6 +10,7 @@ const productModule: Module<ProductState, RootState> = {
     state: {
       products: {
         list: {},
+        pinnedPages:[],
         total: 0
       }
     },

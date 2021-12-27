@@ -13,11 +13,16 @@
       <ion-item lines="none">  
         <ion-button size="medium" @click="() => router.push('/product')">Product inventory</ion-button>
       </ion-item>
+      <ion-buttons>
+        <ion-button @click="pinnedPage">Pinned page 1</ion-button>
+        <ion-button>Pinned page 2</ion-button>
+      </ion-buttons>
     </ion-content>
   </ion-page>
 </template>
 
 <script lang="ts">
+import { mapGetters} from 'vuex';
 import { IonButton, IonContent, IonHeader, IonItem, IonPage, IonTitle, IonToolbar } from '@ionic/vue';
 import { defineComponent } from 'vue';
 import { useRouter } from 'vue-router';
@@ -33,9 +38,19 @@ export default defineComponent({
     IonTitle,
     IonToolbar
   },
+  computed: {
+    ...mapGetters({
+     pinnedPages: 'product/getPinnedPages'
+    })
+  },
+  methods:{
+    pinnedPage(){
+    console.log(this.pinnedPages[0]);
+    this.$router.push(this.pinnedPages[0]);
+    }
+  },
   setup() {
     const router = useRouter();
-
     return {
       router
     }
