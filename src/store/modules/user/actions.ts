@@ -11,7 +11,7 @@ import "moment-timezone";
 
 const actions: ActionTree<UserState, RootState> = {
 
-  pinnedpages({ commit },payload) {
+  pinnedPages({ commit },payload) {
     commit(types.PINNED_PAGES, payload);
   },
 
