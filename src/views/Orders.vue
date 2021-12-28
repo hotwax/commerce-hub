@@ -264,10 +264,7 @@ export default defineComponent({
     },
     openDetailsPage(orderId: any){
       router.push({
-        name: 'OrderDetail',
-        params:{
-          orderId: orderId
-        }
+        path:`/orderdetail/${orderId}`,
       })
     }
   },

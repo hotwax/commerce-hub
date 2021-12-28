@@ -215,7 +215,7 @@
     </ion-content>
   </ion-page>
 </template>
-<script>
+<script lang="ts">
 import Image from "@/components/Image.vue";
 import {
   callOutline,
@@ -251,8 +251,9 @@ import {
 } from "@ionic/vue";
 import { useStore } from "@/store";
 import { mapGetters } from "vuex";
+import { defineComponent } from "vue";
 
-export default {
+export default defineComponent({
   components: {
     Image,
     IonBackButton,
@@ -279,7 +280,7 @@ export default {
       goodIdentificationTypeId: process.env.VUE_APP_PRDT_IDENT_TYPE_ID
     }
   },
-  props:['orderId'],
+  // props:['orderId'],
   name: "OrderDetail",
   computed: {
     ...mapGetters({
@@ -288,12 +289,13 @@ export default {
     })
   },
   methods:{
-    orderDetails(orderId){
-    this.store.dispatch("order/getOrderDetails", orderId);
+    orderDetails(orderId?: any){
+      // const order = this.store.state.orders
+      this.store.dispatch("order/getOrderDetails", orderId);
     }
   },
   mounted(){
-    this.orderDetails(this.orderId);
+    this.orderDetails(this.$route.params.slug);
   },
   setup() {
     const store = useStore();
@@ -311,7 +313,7 @@ export default {
       ticketOutline,
     };
   },
-};
+});
 </script>
 <style scoped>
 .order-ID {
