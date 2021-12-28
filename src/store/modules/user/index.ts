@@ -10,7 +10,8 @@ const userModule: Module<UserState, RootState> = {
     state: {
       token: '',
       current: null,
-      currentFacility: {}
+      currentFacility: {},
+      pinnedPages:[],
     },
     getters,
     actions,

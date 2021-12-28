@@ -9,11 +9,6 @@ import emitter from '@/event-bus'
 
 
 const actions: ActionTree<ProductState, RootState> = {
-  pinnedpages({commit, state},payload){
-    commit(types.PINNED_PAGES, payload);
-    // return state.products.pinnedPages;
-  },
-
   // Find Product
   async findProduct ({ commit, state }, payload) {
 

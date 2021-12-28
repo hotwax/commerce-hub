@@ -6,9 +6,6 @@ const getters: GetterTree<ProductState, RootState> = {
   getSearchProducts(state) {
     return state.products.list;
   },
-  getPinnedPages(state){
-    return state.products.pinnedPages;
-  },
   isScrollable(state) {
     return (
       state.products.list.length > 0 &&

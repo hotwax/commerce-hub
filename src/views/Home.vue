@@ -40,12 +40,11 @@ export default defineComponent({
   },
   computed: {
     ...mapGetters({
-     pinnedPages: 'product/getPinnedPages'
+     pinnedPages: 'user/getPinnedPages'
     })
   },
   methods:{
     pinnedPage(){
-    console.log(this.pinnedPages[0]);
     this.$router.push(this.pinnedPages[0]);
     }
   },

@@ -301,7 +301,7 @@ export default {
   },
    computed: {
     ...mapGetters({
-     pinnedPages: 'product/getPinnedPages'
+     pinnedPages: 'user/getPinnedPages'
     })
   },
   setup () {
@@ -310,25 +310,24 @@ export default {
       folderOutline,
       swapVerticalOutline,
       sync,
-      filterOutline,
+      filterOutline
     };
   },
-  data(){
-    return{
+  data () {
+    return {
       pagePinned: false,
     }
   },
-   methods:{
-    pinned(){
+   methods: {
+    pinned() {
       this.pagePinned = !this.pagePinned;
-      if(this.pagePinned){
+      if (this.pagePinned) {
         this.pinnedPages.push("/product");
-        console.log(this.pinnedPages)
       }
-      else{
-       this.pinnedPages = "";
+      else {
+       const index = this.pinnedPages.indexOf("/products");
+       this.pinnedPages.splice(index,1);
       }
-      console.log(this.pinnedPages); 
     }
   },
 };
