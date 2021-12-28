@@ -47,31 +47,28 @@
             <ion-list>
               <ion-item lines="none">
                 <ion-label>{{ order.customerName }}</ion-label>
-                <ion-chip slot="end">
+                <ion-chip slot="end" v-if="order.cusotmerLoyaltyOptions">
                   <ion-icon :icon="ribbon" />
                   <!-- TODO: handle this property -->
-                  <ion-label>Loyalty Status</ion-label>
+                  <ion-label>{{ order.cusotmerLoyaltyOptions }}</ion-label>
                 </ion-chip>
               </ion-item>
-              <ion-item lines="full">
+              <ion-item lines="full" v-if="order.billTo?.email?.email">
                 <ion-icon :icon="mailOutline" slot="start" />
-                <!-- TODO: handle this property -->
-                <!-- <ion-label>{{ order.orderContacts.email.email }}</ion-label> -->
+                <ion-label>{{ order.billTo?.email?.email }}</ion-label>
               </ion-item>
-              <ion-item>
+              <ion-item v-if="order.billTo?.phoneNumber?.contactNumber">
                 <ion-icon :icon="callOutline" slot="start" />
-                <!-- TODO: handle this property -->
-                <!-- <ion-label>{{ order.orderContacts.phoneNumber.contactNumber }}</ion-label> -->
+                <ion-label>{{ order.billTo?.phoneNumber?.contactNumber }}</ion-label>
               </ion-item>
-              <ion-item lines="none">
+              <ion-item lines="none" v-if="order.billTo?.postalAddress?.toName || order.billTo?.postalAddress?.address1 || order.billTo?.postalAddress?.address2 || order.billTo?.postalAddress?.city || order.billTo?.postalAddress?.country">
                 <ion-icon :icon="cashOutline" slot="start" />
                 <ion-label>
-                  <!-- TODO: handle this property -->
-                  <!-- <ion-label>{{ order.orderContacts.postalAddress.toName ? order.orderContacts.postalAddress.toName : "-" }}</ion-label> -->
-                  <p>Address line 1</p>
-                  <p>Address line 1</p>
-                  <p>Address line 1</p>
-                  <p>Address line 1</p>
+                  <ion-label>{{ order.billTo?.postalAddress?.toName }}</ion-label>
+                  <p>{{ order.billTo?.postalAddress?.address1 }}</p>
+                  <p>{{ order.billTo?.postalAddress?.address2 }}</p>
+                  <p>{{ order.billTo?.postalAddress?.city }}</p>
+                  <p>{{ order.billTo?.postalAddress?.country }}</p>
                 </ion-label>
               </ion-item>
             </ion-list>
@@ -125,10 +122,9 @@
                 </ion-item>
               </div>
               <div class="product-tags">
-                <ion-chip>
+                <ion-chip v-if="getProduct(item.itemId).goodIdentifications" >
                   <ion-icon />
-                  <!-- TODO: handle this property -->
-                  <ion-label>{{ getProduct(item.productId).shopifyId ? getProduct(item.productId).shopifyId : "-" }}</ion-label>
+                  <ion-label>{{ $filters.getIdentificationId(getProduct(item.itemId).goodIdentifications, goodIdentificationTypeId) }}</ion-label>
                 </ion-chip>
               </div>
               <div class="product-metadata">
@@ -278,6 +274,12 @@ export default {
     IonTitle,
     IonToolbar,
   },
+  data(){
+    return {
+      goodIdentificationTypeId: process.env.VUE_APP_PRDT_IDENT_TYPE_ID
+    }
+  },
+  props:['orderId'],
   name: "OrderDetail",
   computed: {
     ...mapGetters({
@@ -286,12 +288,12 @@ export default {
     })
   },
   methods:{
-    orderDetails(){
-    this.store.dispatch("order/getOrderDetails");
+    orderDetails(orderId){
+    this.store.dispatch("order/getOrderDetails", orderId);
     }
   },
   mounted(){
-    this.orderDetails();
+    this.orderDetails(this.orderId);
   },
   setup() {
     const store = useStore();

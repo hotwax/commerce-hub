@@ -45,6 +45,7 @@ const routes: Array<RouteRecordRaw> = [
     path: '/orderdetail',
     name: 'OrderDetail',
     component: OrderDetail,
+    props: true,
     beforeEnter: authGuard
   },
   {

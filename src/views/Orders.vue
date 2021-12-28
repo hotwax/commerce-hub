@@ -86,7 +86,7 @@
             </ion-card-content>
           </ion-card>
         </div>
-        <div class="order-detail" v-for="(order, index) in orders" :key="index" :order="order">
+        <div class="order-detail" @click="openDetailsPage(order.doclist.docs[0].orderId)" v-for="(order, index) in orders" :key="index" :order="order">
           <div class="order-header">
             <div class="order-id">
               <ion-item lines="none">
@@ -200,6 +200,7 @@ import { mapGetters } from "vuex";
 import { showToast } from '@/utils'
 import { Plugins } from '@capacitor/core';
 import Image from '@/components/Image.vue';
+import router from "../router"
 
 const { Clipboard } = Plugins;
 
@@ -261,6 +262,14 @@ export default defineComponent({
         showToast(this.$t('Copied', { text }));
       })
     },
+    openDetailsPage(orderId: any){
+      router.push({
+        name: 'OrderDetail',
+        params:{
+          orderId: orderId
+        }
+      })
+    }
   },
   mounted() {
     this.getOrders();

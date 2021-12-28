@@ -27,18 +27,15 @@ const actions: ActionTree<OrderState, RootState> = {
     }
     return resp;
   },
-  async getOrderDetails({commit}){
+  async getOrderDetails({commit}, payload){
     let resp;
     try{
-      resp = await OrderService.findOrderDetails();
-      console.log(resp.data);
-      // const order = resp.data.shipGroup
-      // this.dispatch('product/getProductInformation', { order });
+      resp = await OrderService.findOrderDetails(payload);
       commit(types.ORDER_DETAILS_UPDATED, {
         orderDetails: resp.data
       })
     } catch(error) {
-      console.log(error)
+      showToast(translate("Something went wrong"));
     }
   }
 } 
