@@ -17,7 +17,7 @@ const mutations: MutationTree <UserState> = {
     [types.USER_CURRENT_FACILITY_UPDATED] (state, payload) {
         state.currentFacility = payload;
     },
-    [types.PINNED_PAGES](state, payload){
+    [types.USER_PINNED_PAGES](state, payload){
         state.pinnedPages = payload;
     },
 }
