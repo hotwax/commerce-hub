@@ -6,44 +6,44 @@
           <ion-icon :icon="closeOutline" />
         </ion-button>
       </ion-buttons>
-      <ion-title>Edit quantity on hand</ion-title>
+      <ion-title>{{ $t("Edit quantity on hand") }}</ion-title>
     </ion-toolbar>
   </ion-header>
 
  <ion-content>
    <ion-item>
-     <ion-label>Current QOH</ion-label>
-     <ion-label>200 items</ion-label>
+     <ion-label>{{ $t("Current QOH") }}</ion-label>
+     <ion-label>200 {{ $t("items") }}</ion-label>
    </ion-item>
    <ion-list>
      <ion-radio-group value="add">
        <ion-list-header>
-         <ion-label>Options</ion-label>
+         <ion-label>{{ $t("Options") }}</ion-label>
         </ion-list-header>
 
         <ion-item>
           <ion-radio slot="start" value="add"></ion-radio>
-          <ion-label>Add</ion-label>
+          <ion-label>{{ $t("Add") }}</ion-label>
         </ion-item>
 
         <ion-item>
           <ion-radio slot="start" value="remove"></ion-radio> 
-          <ion-label>Remove</ion-label>
+          <ion-label>{{ $t("Remove") }}</ion-label>
         </ion-item>
 
         <ion-item>
           <ion-radio slot="start" value="overwrite"></ion-radio>  
-          <ion-label>Overwrite</ion-label>
+          <ion-label>{{ $t("Overwrite") }}</ion-label>
         </ion-item>
       </ion-radio-group>
     </ion-list>
 
     <ion-item>
-      <ion-label>QTY</ion-label>
-      <ion-input placeholder="reduce inventory"></ion-input>
+      <ion-label>{{ $t("QTY") }}</ion-label>
+      <ion-input :placeholder="$t('reduce inventory')"></ion-input>
     </ion-item>
     <div>
-      <ion-button>Adjust quantity</ion-button>
+      <ion-button>{{ $t("Adjust quantity") }}</ion-button>
     </div>
   </ion-content>
 </template>
@@ -98,7 +98,3 @@ export default defineComponent({
   },
 });
 </script>
-
-<style scoped>
-
-</style>

@@ -24,22 +24,22 @@
           <ion-label>Parent product name</ion-label> 
           <ion-card>
             <ion-card-header>
-              <ion-card-title>General information</ion-card-title>
+              <ion-card-title>{{ $t("General information") }}</ion-card-title>
             </ion-card-header>
             <ion-item>
-              <ion-label>Shopify ID</ion-label>
+              <ion-label>{{ $t("Shopify ID") }}</ion-label>
               <ion-label slot="end">external ID</ion-label>
             </ion-item>
             <ion-item>
-              <ion-label>Internal ID</ion-label>
+              <ion-label>{{ $t("Internal ID") }}</ion-label>
               <ion-label slot="end">internal ID</ion-label>
             </ion-item>
             <ion-item>
-              <ion-label>In stock</ion-label>
+              <ion-label>{{ $t("In stock") }}</ion-label>
               <ion-label slot="end">QOH</ion-label>
             </ion-item>
             <ion-item>
-              <ion-label>On order</ion-label>
+              <ion-label>{{ $t("On order") }}</ion-label>
               <ion-label slot="end">ordered</ion-label>
             </ion-item>
           </ion-card> 
@@ -65,10 +65,10 @@
         <div class="variant-features">
           <ion-item class="desktop-only" lines="none">
             <ion-icon slot="start" :icon="shirtOutline" />  
-            <ion-label>Variant</ion-label>
+            <ion-label>{{ $t("Variant") }}</ion-label>
           </ion-item>
           <ion-list>
-            <ion-list-header>Color</ion-list-header>
+            <ion-list-header>{{ $t("Color") }}</ion-list-header>
             <ion-item lines="none">
               <ion-chip>
                 <ion-label>All</ion-label>
@@ -83,7 +83,7 @@
             </ion-item>
           </ion-list>
           <ion-list>
-            <ion-list-header>Size</ion-list-header>
+            <ion-list-header>{{ $t("Size") }}</ion-list-header>
             <ion-item lines="none">
               <ion-chip>
                 <ion-label>All</ion-label>
@@ -102,18 +102,18 @@
         <div class="variant-info desktop-only">
           <ion-card>
             <ion-card-header>
-              <ion-card-title>Shopify IDs</ion-card-title>
+              <ion-card-title>{{ $t("Shopify IDs") }}</ion-card-title>
             </ion-card-header>
             <ion-item>
-              <ion-label>SKU</ion-label>
+              <ion-label>{{ $t("SKU") }}</ion-label>
               <ion-label slot="end">SKU</ion-label>
             </ion-item>
             <ion-item>
-              <ion-label>UPC</ion-label>
+              <ion-label>{{ $t("UPC") }}</ion-label>
               <ion-label slot="end">order id</ion-label>
             </ion-item>
             <ion-item>
-              <ion-label>Internal ID</ion-label>
+              <ion-label>{{ $t("Internal ID") }}</ion-label>
               <ion-label slot="end">internal id</ion-label>
             </ion-item>
           </ion-card> 
@@ -129,18 +129,18 @@
         <div class="shipping-method">
           <ion-card>
             <ion-card-header>
-              <ion-card-title>Shipping method</ion-card-title>
+              <ion-card-title>{{ $t("Shipping method") }}</ion-card-title>
             </ion-card-header>
             <ion-item detail>
-              <ion-label>Store pickup</ion-label>
+              <ion-label>{{ $t("Store pickup") }}</ion-label>
               <ion-note slot="end">orders</ion-note>
             </ion-item>
             <ion-item detail>
-              <ion-label>Standard</ion-label>
+              <ion-label>{{ $t("Standard") }}</ion-label>
               <ion-note slot="end">orders</ion-note>
             </ion-item>
             <ion-item detail>
-              <ion-label>Expedited</ion-label>
+              <ion-label>{{ $t("Expedited") }}</ion-label>
               <ion-note slot="end">orders</ion-note>
             </ion-item>
           </ion-card> 
@@ -149,20 +149,20 @@
         <div class="open-orders">
           <ion-card>
             <ion-item>
-              <ion-label>Open orders</ion-label>
+              <ion-label>{{ $t("Open orders") }}</ion-label>
               <ion-label>
                 400
-                <p>Total</p> 
+                <p>{{ $t("Total") }}</p> 
               </ion-label>   
               <ion-label>
                 400
-                <p>Without promise date</p>  
+                <p>{{ $t("Without promise date") }}</p>  
               </ion-label> 
              </ion-item>
 
              <ion-item>
                <ion-label>
-                 <p>Pre orders</p>
+                 <p>{{ $t("Pre orders") }}</p>
                </ion-label>
                <ion-label>
                 <p>400</p>
@@ -174,7 +174,7 @@
 
              <ion-item>
                <ion-label>
-                 <p>Back orders</p>
+                 <p>{{ $t("Back orders") }}</p>
                </ion-label>
                <ion-label>
                  <p>400</p>
@@ -186,7 +186,7 @@
 
              <ion-item>
                <ion-label>
-                 <p>Unfillable</p>
+                 <p>{{ $t("Unfillable") }}</p>
                </ion-label>
                <ion-label>
                  <p>400</p>
@@ -204,19 +204,19 @@
         <ion-segment scrollable @ionChange="segmentChanged($event)" v-model="segment">
           <ion-segment-button value="locations" layout="icon-start">
             <ion-icon :icon="locationOutline" />  
-            <ion-label>Locations</ion-label>
+            <ion-label>{{ $t("Locations") }}</ion-label>
           </ion-segment-button>
           <ion-segment-button value="purchase-orders" layout="icon-start">
             <ion-icon :icon="calendarOutline" />  
-            <ion-label>Purchase orders</ion-label>
+            <ion-label>{{ $t("Purchase orders") }}</ion-label>
           </ion-segment-button>
           <ion-segment-button value="fulfillment" layout="icon-start">
             <ion-icon :icon="sendOutline" />  
-            <ion-label>Fulfillment</ion-label>
+            <ion-label>{{ $t("Fulfillment") }}</ion-label>
           </ion-segment-button>
           <ion-segment-button value="logs" layout="icon-start">
             <ion-icon :icon="listOutline" />  
-            <ion-label>Logs</ion-label>
+            <ion-label>{{ $t("Logs") }}</ion-label>
           </ion-segment-button>
         </ion-segment> 
 
@@ -236,8 +236,8 @@
                 </ion-chip>  
             </div>
             <div class="action-buttons desktop-only">
-              <ion-button fill="outline" color="medium">Edit ordered stock</ion-button>
-              <ion-button fill="outline" color="medium">Edit qoh</ion-button>
+              <ion-button fill="outline" color="medium">{{ $t("Edit ordered stock") }}</ion-button>
+              <ion-button fill="outline" color="medium">{{ $t("Edit qoh") }}</ion-button>
             </div>
           </div>  
 
@@ -246,32 +246,32 @@
           <div class="list-item locations">   
             <ion-item lines="none">
               <ion-icon :icon="globeOutline" slot="start" />
-              <ion-label>30 locations</ion-label>
+              <ion-label>30 {{ $t("locations") }}</ion-label>
             </ion-item>
 
             <ion-label>
               600
-              <p>orders</p>
+              <p>{{ $t("orders") }}</p>
             </ion-label>
 
             <ion-label>
               400
-              <p>purchase order ATP</p>
+              <p>{{ $t("purchase order ATP") }}</p>
             </ion-label>
 
             <ion-label>
               400
-              <p>QOH</p>
+              <p>{{ $t("QOH") }}</p>
             </ion-label>
 
             <ion-label>
               400
-              <p>safety stock</p>
+              <p>{{ $t("safety stock") }}</p>
             </ion-label>
 
             <ion-label>
               400
-              <p>ATP</p>
+              <p>{{ $t("ATP") }}</p>
             </ion-label>
 
             <ion-checkbox />
@@ -295,27 +295,27 @@
 
             <ion-label>
               600
-              <p>orders</p>
+              <p>{{ $t("orders") }}</p>
             </ion-label>
 
             <ion-label>
               400
-              <p>purchase order ATP</p>
+              <p>{{ $t("purchase order ATP") }}</p>
             </ion-label>
 
             <ion-label>
               400
-              <p>QOH</p>
+              <p>{{ $t("QOH") }}</p>
             </ion-label>
 
             <ion-label>
               400
-              <p>safety stock</p>
+              <p>{{ $t("safety stock") }}</p>
             </ion-label>
 
             <ion-label>
               400
-              <p>ATP</p>
+              <p>{{ $t("ATP") }}</p>
             </ion-label>
 
             <ion-checkbox />
@@ -339,27 +339,27 @@
 
             <ion-label>
               600
-              <p>orders</p>
+              <p>{{ $t("orders") }}</p>
             </ion-label>
 
             <ion-label>
               400
-              <p>purchase order ATP</p>
+              <p>{{ $t("purchase order ATP") }}</p>
             </ion-label>
 
             <ion-label>
               400
-              <p>QOH</p>
+              <p>{{ $t("QOH") }}</p>
             </ion-label>
 
             <ion-label>
               400
-              <p>safety stock</p>
+              <p>{{ $t("safety stock") }}</p>
             </ion-label>
 
             <ion-label>
               400
-              <p>ATP</p>
+              <p>{{ $t("ATP") }}</p>
             </ion-label>
 
             <ion-checkbox />
@@ -387,8 +387,8 @@
                 </ion-chip>  
             </div>
             <div class="action-buttons desktop-only">
-              <ion-button fill="outline" color="medium" @click="editQuantity()">Edit ordered qty</ion-button>
-              <ion-button fill="outline" color="medium">Edit arrival date</ion-button>
+              <ion-button fill="outline" color="medium" @click="editQuantity()">{{ $t("Edit ordered qty") }}</ion-button>
+              <ion-button fill="outline" color="medium">{{ $t("Edit arrival date") }}</ion-button>
             </div>
           </div>  
 
@@ -401,22 +401,22 @@
 
            <ion-label>
              600
-             <p>orders</p>
+             <p>{{ $t("ordered") }}</p>
            </ion-label>
 
            <ion-label>
              400
-             <p>ATP</p>
+             <p>{{ $t("ATP") }}</p>
            </ion-label>
 
            <ion-label>
              400
-             <p>received</p>
+             <p>{{ $t("received") }}</p>
            </ion-label>
 
            <ion-label>
              6th Dec 2021
-             <p>arrival date</p>
+             <p>{{ $t("arrival date") }}</p>
            </ion-label>
 
            <ion-checkbox />
@@ -444,8 +444,8 @@
                 </ion-chip>  
             </div>
             <div class="action-buttons desktop-only">
-              <ion-button fill="outline" color="medium">Edit safety stock</ion-button>
-              <ion-button fill="outline" color="medium">Edit threshold</ion-button>
+              <ion-button fill="outline" color="medium">{{ $t("Edit safety stock") }}</ion-button>
+              <ion-button fill="outline" color="medium">{{ $t("Edit threshold") }}</ion-button>
             </div>
           </div>  
 
@@ -453,32 +453,32 @@
          <div class="list-item fulfillment">   
            <ion-item lines="none">
              <ion-icon :icon="globeOutline" slot="start" />
-               <ion-label>2 locations</ion-label>
+               <ion-label>2 {{ $t("locations") }}</ion-label>
            </ion-item>
 
            <ion-label>
              8
-             <p>safety stock</p>
+             <p>{{ $t("safety stock") }}</p>
            </ion-label>
 
            <ion-label>
              19 / 20
-             <p>threshold consumed</p>
+             <p>{{ $t("threshold consumed") }}</p>
            </ion-label>
 
            <ion-chip outline>
-             <ion-label>93 ATP</ion-label>
+             <ion-label>93 {{ $t("ATP") }}</ion-label>
              <ion-icon :icon="shareOutline" />
            </ion-chip>
 
            <ion-label class="tablet">
              <ion-toggle />
-             <p>pickup</p>
+             <p>{{ $t("pickup") }}</p>
            </ion-label>
 
            <ion-label class="tablet">
              <ion-toggle />
-             <p>delivery</p>
+             <p>{{ $t("delivery") }}</p>
            </ion-label>
 
            <ion-checkbox />
@@ -501,27 +501,27 @@
 
            <ion-label>
              8
-             <p>safety stock</p>
+             <p>{{ $t("safety stock") }}</p>
            </ion-label>
 
            <ion-label>
              19 / 20
-             <p>threshold consumed</p>
+             <p>{{ $t("threshold consumed") }}</p>
            </ion-label>
 
            <ion-chip outline>
-             <ion-label>93 ATP</ion-label>
+             <ion-label>93 {{ $t("ATP") }}</ion-label>
              <ion-icon :icon="shareOutline" />
            </ion-chip>
 
            <ion-label class="tablet">
              <ion-toggle />
-             <p>pickup</p>
+             <p>{{ $t("pickup") }}</p>
            </ion-label>
 
            <ion-label class="tablet">
              <ion-toggle />
-             <p>delivery</p>
+             <p>{{ $t("delivery") }}</p>
            </ion-label>
 
            <ion-checkbox />
@@ -544,27 +544,27 @@
 
            <ion-label>
              8
-             <p>safety stock</p>
+             <p>{{ $t("safety stock") }}</p>
            </ion-label>
 
            <ion-label>
              19 / 20
-             <p>threshold consumed</p>
+             <p>{{ $t("threshold consumed") }}</p>
            </ion-label>
 
            <ion-chip outline>
-             <ion-label>93 ATP</ion-label>
+             <ion-label>93 {{ $t("ATP") }}</ion-label>
              <ion-icon :icon="shareOutline" />
            </ion-chip>
 
            <ion-label class="tablet">
              <ion-toggle />
-             <p>pickup</p>
+             <p>{{ $t("pickup") }}</p>
            </ion-label>
 
            <ion-label class="tablet">
              <ion-toggle />
-             <p>delivery</p>
+             <p>{{ $t("delivery") }}</p>
            </ion-label>
 
            <ion-checkbox />
