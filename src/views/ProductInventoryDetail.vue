@@ -150,11 +150,11 @@
               <ion-card>
                 <ion-item>
                   <ion-label>{{ $t("Open orders") }}</ion-label>
-                  <ion-label>
+                  <ion-label class="text-center">
                     400
                     <p>{{ $t("Total") }}</p>
                   </ion-label>
-                  <ion-label>
+                  <ion-label class="text-center">
                     400
                     <p>{{ $t("Without promise date") }}</p>
                   </ion-label>
@@ -164,10 +164,10 @@
                   <ion-label>
                     <p>{{ $t("Pre orders") }}</p>
                   </ion-label>
-                  <ion-label>
+                  <ion-label class="text-center">
                     <p>400</p>
                   </ion-label>
-                  <ion-label>
+                  <ion-label class="text-center">
                     <p>400</p>
                   </ion-label>
                 </ion-item>
@@ -176,10 +176,10 @@
                   <ion-label>
                     <p>{{ $t("Back orders") }}</p>
                   </ion-label>
-                  <ion-label>
+                  <ion-label class="text-center">
                     <p>400</p>
                   </ion-label>
-                  <ion-label>
+                  <ion-label class="text-center">
                     <p>400</p>
                   </ion-label>
                 </ion-item>
@@ -188,10 +188,10 @@
                   <ion-label>
                     <p>{{ $t("Unfillable") }}</p>
                   </ion-label>
-                  <ion-label>
+                  <ion-label class="text-center">
                     <p>400</p>
                   </ion-label>
-                  <ion-label>
+                  <ion-label class="text-center">
                     <p>400</p>
                   </ion-label>
                 </ion-item>
@@ -249,7 +249,7 @@
                 <ion-label>30 {{ $t("locations") }}</ion-label>
               </ion-item>
 
-              <ion-label>
+              <ion-label class="tablet">
                 600
                 <p>{{ $t("orders") }}</p>
               </ion-label>
@@ -259,7 +259,7 @@
                 <p>{{ $t("purchase order ATP") }}</p>
               </ion-label>
 
-              <ion-label>
+              <ion-label class="tablet">
                 400
                 <p>{{ $t("QOH") }}</p>
               </ion-label>
@@ -269,7 +269,7 @@
                 <p>{{ $t("safety stock") }}</p>
               </ion-label>
 
-              <ion-label>
+              <ion-label class="tablet">
                 400
                 <p>{{ $t("ATP") }}</p>
               </ion-label>
@@ -293,7 +293,7 @@
                 </ion-label>
               </ion-item>
 
-              <ion-label>
+              <ion-label class="tablet">
                 600
                 <p>{{ $t("orders") }}</p>
               </ion-label>
@@ -303,7 +303,7 @@
                 <p>{{ $t("purchase order ATP") }}</p>
               </ion-label>
 
-              <ion-label>
+              <ion-label class="tablet">
                 400
                 <p>{{ $t("QOH") }}</p>
               </ion-label>
@@ -313,7 +313,7 @@
                 <p>{{ $t("safety stock") }}</p>
               </ion-label>
 
-              <ion-label>
+              <ion-label class="tablet">
                 400
                 <p>{{ $t("ATP") }}</p>
               </ion-label>
@@ -337,7 +337,7 @@
                 </ion-label>
               </ion-item>
 
-              <ion-label>
+              <ion-label class="tablet">
                 600
                 <p>{{ $t("orders") }}</p>
               </ion-label>
@@ -347,7 +347,7 @@
                 <p>{{ $t("purchase order ATP") }}</p>
               </ion-label>
 
-              <ion-label>
+              <ion-label class="tablet">
                 400
                 <p>{{ $t("QOH") }}</p>
               </ion-label>
@@ -357,7 +357,7 @@
                 <p>{{ $t("safety stock") }}</p>
               </ion-label>
 
-              <ion-label>
+              <ion-label class="tablet">
                 400
                 <p>{{ $t("ATP") }}</p>
               </ion-label>
@@ -400,12 +400,12 @@
                 <ion-label>PO ID</ion-label>
               </ion-item>
 
-              <ion-label>
+              <ion-label class="tablet">
                 600
                 <p>{{ $t("ordered") }}</p>
               </ion-label>
 
-              <ion-label>
+              <ion-label class="tablet">
                 400
                 <p>{{ $t("ATP") }}</p>
               </ion-label>
@@ -415,7 +415,7 @@
                 <p>{{ $t("received") }}</p>
               </ion-label>
 
-              <ion-label>
+              <ion-label class="tablet">
                 6th Dec 2021
                 <p>{{ $t("arrival date") }}</p>
               </ion-label>
@@ -469,7 +469,7 @@
                 <p>{{ $t("threshold consumed") }}</p>
               </ion-label>
 
-              <ion-chip outline>
+              <ion-chip class="tablet" outline>
                 <ion-label>93 {{ $t("ATP") }}</ion-label>
                 <ion-icon :icon="shareOutline" />
               </ion-chip>
@@ -512,7 +512,7 @@
                 <p>{{ $t("threshold consumed") }}</p>
               </ion-label>
 
-              <ion-chip outline>
+              <ion-chip class="tablet" outline>
                 <ion-label>93 {{ $t("ATP") }}</ion-label>
                 <ion-icon :icon="shareOutline" />
               </ion-chip>
@@ -555,7 +555,7 @@
                 <p>{{ $t("threshold consumed") }}</p>
               </ion-label>
 
-              <ion-chip outline>
+              <ion-chip class="tablet" outline>
                 <ion-label>93 {{ $t("ATP") }}</ion-label>
                 <ion-icon :icon="shareOutline" />
               </ion-chip>
@@ -753,6 +753,11 @@ export default defineComponent({
   align-items: center;
 }
 
+.text-center {
+  text-align: center;
+}
+
+/*Height of segment is defined now since their are less list items. Will remove it later */
 .segments {
   height: 400px;
 }
@@ -763,10 +768,6 @@ ion-segment {
 
 .purchase-orders {
   --columns-desktop: 7;
-}
-
-.spacer {
-  margin: 0 auto;
 }
 
 @media (min-width: 991px) {
