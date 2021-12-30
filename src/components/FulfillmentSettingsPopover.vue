@@ -3,8 +3,8 @@
     <ion-list>
       <ion-list-header>Fulfillment settings</ion-list-header>
       <ion-item button>{{ $t("Edit threshold") }}</ion-item>
-      <ion-item button> {{ $t("Edit safety stock") }}</ion-item>
-      <ion-item button lines="none"> {{ $t("View location details") }}</ion-item>
+      <ion-item button>{{ $t("Edit safety stock") }}</ion-item>
+      <ion-item button lines="none">{{ $t("View location details") }}</ion-item>
     </ion-list>
   </ion-content>
 </template>
@@ -15,22 +15,22 @@ import {
   IonItem,
   IonList,
   IonListHeader,
-  popoverController,
-} from "@ionic/vue";
-import { defineComponent } from "vue";
+  popoverController
+} from '@ionic/vue';
+import { defineComponent } from 'vue';
 
 export default defineComponent({
-  name: "FulfillmentSettingsPopover",
+  name: 'FulfillmentSettingsPopover',
   methods: {
     closePopover() {
       popoverController.dismiss({ dismissed: true });
     }
   },
-  components: { 
+  components: {
     IonContent,
     IonItem,
     IonList,
-    IonListHeader,
+    IonListHeader
   },
 });
 </script>
