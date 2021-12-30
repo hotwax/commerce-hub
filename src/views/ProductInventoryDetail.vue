@@ -55,9 +55,7 @@
             <p>Shopify ID</p>  
           </ion-label>
           <ion-chip>
-            <ion-avatar>
-              <Image src="https://cdn.shopify.com/s/files/1/0069/7384/9727/products/test-track.jpg?v=1626255137" />     
-            </ion-avatar>  
+            <ion-label>Shopify logo</ion-label>
           </ion-chip>
         </ion-item>
 
@@ -586,7 +584,33 @@
 </template>
 
 <script lang="ts">
-import { IonBackButton, IonButton, IonButtons, IonContent, IonHeader, IonIcon, IonPage, IonSegment, IonSegmentButton, IonTitle, IonToolbar, modalController, popoverController } from '@ionic/vue';
+import { 
+  IonBackButton, 
+  IonButton, 
+  IonButtons, 
+  IonCard, 
+  IonCardHeader, 
+  IonCardTitle, 
+  IonCheckbox, 
+  IonChip, 
+  IonContent, 
+  IonHeader, 
+  IonIcon, 
+  IonItem, 
+  IonLabel, 
+  IonList,
+  IonListHeader,
+  IonNote, 
+  IonPage, 
+  IonSearchbar, 
+  IonSegment, 
+  IonSegmentButton, 
+  IonTitle, 
+  IonThumbnail, 
+  IonToggle, 
+  IonToolbar, 
+  modalController, 
+  popoverController } from '@ionic/vue';
 import { defineComponent, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { checkmarkOutline, syncOutline, globeOutline, shirtOutline , locationOutline, calendarOutline, sendOutline, listOutline, ellipsisVerticalOutline, storefrontOutline, businessOutline, ticketOutline, shareOutline} from 'ionicons/icons'
@@ -599,16 +623,29 @@ import FulfillmentSettingsPopover from '@/components/FulfillmentSettingsPopover.
 export default defineComponent({
   name: 'ProductInventoryDetail',
   components: {
-    IonBackButton,
-    IonButton,
-    IonButtons,
-    IonContent,
-    IonHeader,
-    IonIcon,
-    IonPage,
-    IonSegment,
-    IonSegmentButton,
-    IonTitle,
+    IonBackButton, 
+    IonButton, 
+    IonButtons, 
+    IonCard, 
+    IonCardHeader, 
+    IonCardTitle, 
+    IonCheckbox, 
+    IonChip, 
+    IonContent, 
+    IonHeader, 
+    IonIcon, 
+    IonItem, 
+    IonLabel, 
+    IonList,
+    IonListHeader,
+    IonNote, 
+    IonPage, 
+    IonSearchbar, 
+    IonSegment, 
+    IonSegmentButton, 
+    IonTitle, 
+    IonThumbnail, 
+    IonToggle, 
     IonToolbar,
     Image
   },

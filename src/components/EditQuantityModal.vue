@@ -52,7 +52,6 @@
 import { 
   IonButtons,
   IonButton,
- 
   IonContent,
   IonHeader,
   IonIcon,
@@ -60,7 +59,9 @@ import {
   IonLabel,
   IonList,
   IonListHeader,
-
+  IonInput,
+  IonRadioGroup,
+  IonRadio,
   IonTitle,
   IonToolbar,
   modalController } from "@ionic/vue";
@@ -72,7 +73,6 @@ export default defineComponent({
   components: { 
     IonButtons,
     IonButton,
-  
     IonContent,
     IonHeader,
     IonIcon,
@@ -80,7 +80,9 @@ export default defineComponent({
     IonLabel,
     IonList,
     IonListHeader,
-
+    IonInput,
+    IonRadioGroup,
+    IonRadio,
     IonTitle,
     IonToolbar,
   },
