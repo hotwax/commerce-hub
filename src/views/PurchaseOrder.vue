@@ -17,15 +17,12 @@
         </ion-buttons>
       </ion-toolbar>
     </ion-header>
-
     <ion-content>
       <div class="find">
         <section class="search">
           <ion-searchbar />
-        </section>
-     
-        <aside class="filters">
-          
+        </section>     
+        <aside class="filters">          
             <ion-list>
               <ion-list-header>{{ $t("Location") }}</ion-list-header>
               <ion-item>
@@ -194,14 +191,14 @@ import {
   IonToolbar,
 } from "@ionic/vue";
 import {
-      calendarOutline,
-      closeCircle,
-      documentTextOutline,
-      downloadOutline,
-      filterOutline,
-      folderOutline,
-      swapVerticalOutline,
-      sync
+  calendarOutline,
+  closeCircle,
+  documentTextOutline,
+  downloadOutline,
+  filterOutline,
+  folderOutline,
+  swapVerticalOutline,
+  sync
 } from "ionicons/icons";
 
 export default {
@@ -267,7 +264,6 @@ export default {
 }
 
 @media (min-width: 991px) {
-
   .section-header {
   grid-template-columns: 1fr max-content 1fr;
   }
