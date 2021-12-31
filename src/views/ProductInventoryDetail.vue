@@ -753,8 +753,8 @@ export default defineComponent({
   align-items: center;
 }
 
-.text-center {
-  text-align: center;
+.open-orders > ion-card > ion-item > ion-label:not(:first-child)  {
+   text-align: center;
 }
 
 /*Height of segment is defined now since their are less list items. Will remove it later */
