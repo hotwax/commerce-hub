@@ -120,7 +120,6 @@
             </div>
 
             <div class="product-info">
-
               <hr />
 
               <div class="list-item">
@@ -207,7 +206,9 @@
                     <ion-icon slot="icon-only" :icon="ellipsisVerticalOutline"/>
                   </ion-button>
                 </div>
+
                 <hr align="right" width="90%" />
+
                 <div class="list-item">
                   <ion-item lines="none">
                     <ion-label>
@@ -392,13 +393,12 @@ export default defineComponent({
   .product {
     display: grid;
     grid-template-columns: 250px 1fr;
-    justify-content: space-evenly;
     align-items: center;
   }
 
   .product-image {
     border: 1px solid black;
-    border-radius: 2px;
+    border-radius: 10px;
   }
 }
 </style>
