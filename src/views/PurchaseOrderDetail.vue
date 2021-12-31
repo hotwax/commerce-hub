@@ -1,0 +1,404 @@
+<template>
+  <ion-page>
+    <ion-header :translucent="true">
+      <ion-toolbar>
+        <ion-back-button slot="start" default-href="/" />
+        <ion-title>{{ $t("Purchase order detail") }}</ion-title>
+        <ion-buttons slot="end">
+          <ion-button fill="clear" class="desktop-only">Receive</ion-button>
+          <ion-button fill="clear">
+            <ion-icon :icon="syncOutline" slot="icon-only" />
+          </ion-button>
+        </ion-buttons>
+      </ion-toolbar>
+    </ion-header>
+
+    <ion-content :fullscreen="true">
+      <main>
+        <section class="header">
+          <div class="po-header">
+            <ion-item lines="none">
+              <ion-icon slot="start" :icon="ticketOutline" />
+              <ion-label>External Purchase Order ID</ion-label>
+              <ion-badge slot="end">Approved</ion-badge>
+            </ion-item>
+          </div>
+
+          <div class="po-detail">
+            <div>
+              <ion-card>
+                <ion-card-header>
+                  <ion-card-title>Facility name</ion-card-title>
+                </ion-card-header>
+                <ion-item>
+                  <ion-icon :icon="locationOutline" slot="start" />
+                  <ion-label>
+                    Address1
+                    <p>Address2</p>
+                    <p>City, Zipcode</p>
+                    <p>State, Country</p>
+                  </ion-label>
+                </ion-item>
+              </ion-card>
+            </div>
+
+            <div>
+              <ion-card>
+                <ion-card-header>
+                  <ion-card-title>Allocations</ion-card-title>
+                </ion-card-header>
+                <ion-item>
+                  <ion-label>All orders</ion-label>
+                  <ion-button color="dark" fill="outline">
+                    40 orders
+                    <ion-icon slot="end" :icon="downloadOutline" />
+                  </ion-button>
+                </ion-item>
+                <ion-item>
+                  <ion-label>Pre orders</ion-label>
+                  <ion-button color="dark" fill="outline">
+                    30 orders
+                    <ion-icon slot="end" :icon="downloadOutline" />
+                  </ion-button>
+                </ion-item>
+                <ion-item lines="none">
+                  <ion-label>Back orders</ion-label>
+                  <ion-button color="dark" fill="outline">
+                    10 orders
+                    <ion-icon slot="end" :icon="downloadOutline" />
+                  </ion-button>
+                </ion-item>
+              </ion-card>
+            </div>
+          </div>
+
+          <div class="timeline">
+            <div>
+              <ion-item lines="none" detail>
+                <ion-icon slot="start" :icon="timeOutline" class="mobile-only" />
+                <ion-label>Timeline</ion-label>
+                <ion-note slot="end">1:07pm 6th Dec 2021</ion-note>
+              </ion-item>
+            </div>
+            <div class="desktop-only">
+              <ion-item>
+                <ion-icon slot="start" :icon="ticketOutline" />
+                <ion-label>
+                  <p class="overline">+ 10 minutes</p>
+                  Imported from ERP
+                </ion-label>
+                <ion-icon :icon="informationCircleOutline" />
+              </ion-item>
+              <ion-item>
+                <ion-icon slot="start" :icon="businessOutline" />
+                <ion-label>
+                  <p class="overline">+ 2 hours 15 minutes</p>
+                  4 items received
+                </ion-label>
+                <ion-icon :icon="informationCircleOutline" />
+              </ion-item>
+              <ion-item>
+                <ion-icon slot="start" :icon="shirtOutline" />
+                <ion-label>
+                  <p class="overline">+ 20 minutes</p>
+                  SKU added
+                </ion-label>
+                <ion-icon :icon="informationCircleOutline" />
+              </ion-item>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <ion-item lines="none">
+            <ion-icon slot="start" :icon="shirtOutline" />
+            <ion-label>Products</ion-label>
+          </ion-item>
+          <div class="product">
+            <div class="product-image desktop-only">
+              <Image src="https://cdn.shopify.com/s/files/1/0069/7384/9727/products/test-track.jpg?v=1626255137"/>
+            </div>
+
+            <div class="product-info">
+
+              <hr />
+
+              <div class="list-item">
+                <ion-item lines="none">
+                  <ion-thumbnail slot="start" class="mobile-only">
+                    <Image src="https://cdn.shopify.com/s/files/1/0069/7384/9727/products/test-track.jpg?v=1626255137" />
+                  </ion-thumbnail>
+                  <ion-label>
+                    <p class="overline">Brand</p>
+                    Parent product
+                  </ion-label>
+                </ion-item>
+
+                <ion-chip outline class="tablet">
+                  <ion-label>External ID</ion-label>
+                </ion-chip>
+
+                <ion-label class="tablet">
+                  600
+                  <p>ordered</p>
+                </ion-label>
+
+                <ion-label>
+                  400
+                  <p>ATP</p>
+                </ion-label>
+
+                <ion-label class="tablet">
+                  400
+                  <p>received</p>
+                </ion-label>
+
+                <div></div>
+
+                <ion-checkbox />
+
+                <ion-button fill="clear" color="medium" @click="openProductPopover">
+                  <ion-icon slot="icon-only" :icon="ellipsisVerticalOutline" />
+                </ion-button>
+              </div>
+
+              <ion-list class="desktop-only">
+                <ion-list-header>
+                  Items
+                  <hr align="right" width="90%" />
+                </ion-list-header>
+
+                <div class="list-item">
+                  <ion-item lines="none">
+                    <ion-label>
+                      SKU
+                      <p>Color: Color</p>
+                      <p>Size: Size</p>
+                    </ion-label>
+                  </ion-item>
+
+                  <ion-chip outline>
+                    <ion-label>External ID</ion-label>
+                  </ion-chip>
+
+                  <ion-label>
+                    600
+                    <p>ordered</p>
+                  </ion-label>
+
+                  <ion-label>
+                    400
+                    <p>ATP</p>
+                  </ion-label>
+
+                  <ion-label>
+                    400
+                    <p>received</p>
+                  </ion-label>
+
+                  <ion-label>
+                    6th Dec 2021
+                    <p>arrival date</p>
+                  </ion-label>
+
+                  <ion-checkbox />
+
+                  <ion-button fill="clear" color="medium" @click="openProductPopover">
+                    <ion-icon slot="icon-only" :icon="ellipsisVerticalOutline"/>
+                  </ion-button>
+                </div>
+                <hr align="right" width="90%" />
+                <div class="list-item">
+                  <ion-item lines="none">
+                    <ion-label>
+                      SKU
+                      <p>Color: Color</p>
+                      <p>Size: Size</p>
+                    </ion-label>
+                  </ion-item>
+
+                  <ion-chip outline>
+                    <ion-label>External ID</ion-label>
+                  </ion-chip>
+
+                  <ion-label>
+                    600
+                    <p>ordered</p>
+                  </ion-label>
+
+                  <ion-label>
+                    400
+                    <p>ATP</p>
+                  </ion-label>
+
+                  <ion-label>
+                    400
+                    <p>received</p>
+                  </ion-label>
+
+                  <ion-label>
+                    6th Dec 2021
+                    <p>arrival date</p>
+                  </ion-label>
+
+                  <ion-checkbox />
+
+                  <ion-button fill="clear" color="medium" @click="openProductPopover">
+                    <ion-icon slot="icon-only" :icon="ellipsisVerticalOutline"/>
+                  </ion-button>
+                </div>
+              </ion-list>
+
+              <hr />
+            </div>
+          </div>
+        </section>
+      </main>
+    </ion-content>
+  </ion-page>
+</template>
+
+<script lang="ts">
+import {
+  IonBackButton,
+  IonBadge,
+  IonButton,
+  IonButtons,
+  IonCard,
+  IonCardHeader,
+  IonCardTitle,
+  IonCheckbox,
+  IonChip,
+  IonContent,
+  IonHeader,
+  IonIcon,
+  IonItem,
+  IonLabel,
+  IonList,
+  IonListHeader,
+  IonNote,
+  IonPage,
+  IonThumbnail,
+  IonTitle,
+  IonToolbar,
+  popoverController,
+} from '@ionic/vue';
+import { defineComponent } from 'vue';
+import {
+  businessOutline,
+  downloadOutline,
+  ellipsisVerticalOutline,
+  informationCircleOutline,
+  locationOutline,
+  shirtOutline,
+  syncOutline,
+  ticketOutline,
+  timeOutline,
+} from 'ionicons/icons';
+import Image from '@/components/Image.vue';
+import ProductPopover from '@/components/ProductPopover.vue';
+
+export default defineComponent({
+  name: 'PurchaseOrderDetail',
+  components: {
+    IonBackButton,
+    IonBadge,
+    IonButton,
+    IonButtons,
+    IonCard,
+    IonCardHeader,
+    IonCardTitle,
+    IonCheckbox,
+    IonChip,
+    IonContent,
+    IonHeader,
+    IonIcon,
+    IonItem,
+    IonLabel,
+    IonList,
+    IonListHeader,
+    IonNote,
+    IonPage,
+    IonThumbnail,
+    IonTitle,
+    IonToolbar,
+    Image,
+  },
+  methods: {
+    async openProductPopover(ev: Event) {
+      const popover = await popoverController.create({
+        component: ProductPopover,
+        event: ev,
+        showBackdrop: false,
+        translucent: true,
+      });
+      return popover.present();
+    },
+  },
+  setup() {
+    return {
+      businessOutline,
+      downloadOutline,
+      ellipsisVerticalOutline,
+      informationCircleOutline,
+      locationOutline,
+      shirtOutline,
+      syncOutline,
+      ticketOutline,
+      timeOutline,
+    };
+  },
+});
+</script>
+
+<style scoped>
+.header {
+  display: grid;
+  grid-template-areas: "po"
+                       "timeline"
+                       "podetail";
+  align-items: center;
+}
+
+.po-header {
+  grid-area: po;
+}
+
+.po-detail {
+  grid-area: podetail;
+}
+
+.timeline {
+  grid-area: timeline;
+}
+
+@media (min-width: 991px) {
+  .header {
+    display: grid;
+    grid: "po       timeline"
+          "podetail timeline" 
+          / max-content 400px;
+    justify-content: space-between;  
+  }
+  .po-detail {
+    display: grid;
+    grid-template-columns: repeat(2, 400px);
+  }
+
+  .timeline {
+    border-left: 1px solid var(--ion-color-medium);
+  }
+
+  .product {
+    display: grid;
+    grid-template-columns: 250px 1fr;
+    justify-content: space-evenly;
+    align-items: center;
+  }
+
+  .product-image {
+    border: 1px solid black;
+    border-radius: 2px;
+  }
+}
+</style>

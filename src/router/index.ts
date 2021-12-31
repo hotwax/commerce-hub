@@ -4,6 +4,7 @@ import { RouteRecordRaw } from 'vue-router';
 import Home from '@/views/Home.vue'
 import Order from '@/views/Order.vue'
 import ProductInventory from '@/views/ProductInventory.vue'
+import PurchaseOrderDetail from '@/views/PurchaseOrderDetail.vue'
 import Login from '@/views/Login.vue'
 import Settings from "@/views/Settings.vue"
 import store from '@/store'
@@ -27,7 +28,7 @@ const loginGuard = (to: any, from: any, next: any) => {
 const routes: Array<RouteRecordRaw> = [
   {
     path: '/',
-    redirect: '/home'
+    redirect: '/purchase-order-detail'
   },
   {
     path: '/order',
@@ -39,6 +40,12 @@ const routes: Array<RouteRecordRaw> = [
     path: '/product',
     name: 'ProductInventory',
     component: ProductInventory,
+    beforeEnter: authGuard
+  },
+  {
+    path: '/purchase-order-detail',
+    name: 'PurchaseOrderDetail',
+    component: PurchaseOrderDetail,
     beforeEnter: authGuard
   },
   {
