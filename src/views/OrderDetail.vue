@@ -204,7 +204,6 @@
                       <!-- TODO: work on this functionality -->
                       <ion-button color="primary" fill="clear">Change fulfillment location</ion-button>
                     </ion-buttons>
-                    
                   </ion-list>
                 </ion-card>
               </div>
