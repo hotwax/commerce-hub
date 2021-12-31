@@ -235,6 +235,15 @@ http://ionicframework.com/docs/theming/ */
   }
 }
 
+.overline {
+  font-weight: 500 !important;
+  font-size: 10px !important;
+  line-height: 16px !important;
+  letter-spacing: 1.5px;
+  color: #666;
+  text-transform: uppercase !important;
+}
+
 .find {
   display: grid;
   grid-template-areas: "search"
