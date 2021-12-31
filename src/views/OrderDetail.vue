@@ -280,7 +280,6 @@ export default defineComponent({
       goodIdentificationTypeId: process.env.VUE_APP_PRDT_IDENT_TYPE_ID
     }
   },
-  // props:['orderId'],
   name: "OrderDetail",
   computed: {
     ...mapGetters({
@@ -290,7 +289,6 @@ export default defineComponent({
   },
   methods:{
     orderDetails(orderId?: any){
-      // const order = this.store.state.orders
       this.store.dispatch("order/getOrderDetails", orderId);
     }
   },
