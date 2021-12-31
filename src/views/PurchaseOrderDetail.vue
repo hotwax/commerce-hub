@@ -5,7 +5,7 @@
         <ion-back-button slot="start" default-href="/" />
         <ion-title>{{ $t("Purchase order detail") }}</ion-title>
         <ion-buttons slot="end">
-          <ion-button fill="clear" class="desktop-only">Receive</ion-button>
+          <ion-button fill="clear" class="desktop-only">{{ $t("Receive") }}</ion-button>
           <ion-button fill="clear">
             <ion-icon :icon="syncOutline" slot="icon-only" />
           </ion-button>
@@ -45,26 +45,26 @@
             <div>
               <ion-card>
                 <ion-card-header>
-                  <ion-card-title>Allocations</ion-card-title>
+                  <ion-card-title>{{ $t("Allocations") }}</ion-card-title>
                 </ion-card-header>
                 <ion-item>
-                  <ion-label>All orders</ion-label>
+                  <ion-label>{{ $t("All orders") }}</ion-label>
                   <ion-button color="dark" fill="outline">
-                    40 orders
+                    40 {{ $t("orders") }}
                     <ion-icon slot="end" :icon="downloadOutline" />
                   </ion-button>
                 </ion-item>
                 <ion-item>
-                  <ion-label>Pre orders</ion-label>
+                  <ion-label>{{ $t("Pre orders") }}</ion-label>
                   <ion-button color="dark" fill="outline">
-                    30 orders
+                    30 {{ $t("orders") }}
                     <ion-icon slot="end" :icon="downloadOutline" />
                   </ion-button>
                 </ion-item>
                 <ion-item lines="none">
-                  <ion-label>Back orders</ion-label>
+                  <ion-label>{{ $t("Back orders") }}</ion-label>
                   <ion-button color="dark" fill="outline">
-                    10 orders
+                    10 {{ $t("orders") }}
                     <ion-icon slot="end" :icon="downloadOutline" />
                   </ion-button>
                 </ion-item>
@@ -76,7 +76,7 @@
             <div>
               <ion-item lines="none" detail>
                 <ion-icon slot="start" :icon="timeOutline" class="mobile-only" />
-                <ion-label>Timeline</ion-label>
+                <ion-label>{{ $t("Timeline") }}</ion-label>
                 <ion-note slot="end">1:07pm 6th Dec 2021</ion-note>
               </ion-item>
             </div>
@@ -140,17 +140,17 @@
 
                 <ion-label class="tablet">
                   600
-                  <p>ordered</p>
+                  <p>{{ $t("ordered") }}</p>
                 </ion-label>
 
                 <ion-label>
                   400
-                  <p>ATP</p>
+                  <p>{{ $t("ATP") }}</p>
                 </ion-label>
 
                 <ion-label class="tablet">
                   400
-                  <p>received</p>
+                  <p>{{ $t("received") }}</p>
                 </ion-label>
 
                 <div></div>
@@ -164,7 +164,7 @@
 
               <ion-list class="desktop-only">
                 <ion-list-header>
-                  Items
+                  {{ $t("Items") }}
                   <hr align="right" width="90%" />
                 </ion-list-header>
 
@@ -172,8 +172,8 @@
                   <ion-item lines="none">
                     <ion-label>
                       SKU
-                      <p>Color: Color</p>
-                      <p>Size: Size</p>
+                      <p>{{ $t("Color") }}: Color</p>
+                      <p>{{ $t("Size") }}: Size</p>
                     </ion-label>
                   </ion-item>
 
@@ -183,22 +183,22 @@
 
                   <ion-label>
                     600
-                    <p>ordered</p>
+                    <p>{{ $t("ordered") }}</p>
                   </ion-label>
 
                   <ion-label>
                     400
-                    <p>ATP</p>
+                    <p>{{ $t("ATP") }}</p>
                   </ion-label>
 
                   <ion-label>
                     400
-                    <p>received</p>
+                    <p>{{ $t("received") }}</p>
                   </ion-label>
 
                   <ion-label>
                     6th Dec 2021
-                    <p>arrival date</p>
+                    <p>{{ $t("arrival date") }}</p>
                   </ion-label>
 
                   <ion-checkbox />
@@ -212,8 +212,8 @@
                   <ion-item lines="none">
                     <ion-label>
                       SKU
-                      <p>Color: Color</p>
-                      <p>Size: Size</p>
+                      <p>{{ $t("Color") }}: Color</p>
+                      <p>{{ $t("Size") }}: Size</p>
                     </ion-label>
                   </ion-item>
 
@@ -223,22 +223,22 @@
 
                   <ion-label>
                     600
-                    <p>ordered</p>
+                    <p>{{ $t("ordered") }}</p>
                   </ion-label>
 
                   <ion-label>
                     400
-                    <p>ATP</p>
+                    <p>{{ $t("ATP") }}</p>
                   </ion-label>
 
                   <ion-label>
                     400
-                    <p>received</p>
+                    <p>{{ $t("received") }}</p>
                   </ion-label>
 
                   <ion-label>
                     6th Dec 2021
-                    <p>arrival date</p>
+                    <p>{{ $t("arrival date") }}</p>
                   </ion-label>
 
                   <ion-checkbox />
