@@ -11,6 +11,11 @@ import "moment-timezone";
 
 const actions: ActionTree<UserState, RootState> = {
 
+  pinnedPages({ commit },payload) {
+    commit(types.PINNED_PAGES, payload);
+  },
+
+
   /**
  * Login user and return token
  */

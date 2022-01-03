@@ -19,6 +19,7 @@
     </ion-header>
 
     <ion-content>
+      <ion-button @click="pinned">pin</ion-button>
       <div class="find">
         <section class="search">
           <ion-searchbar />
@@ -233,6 +234,7 @@
   </ion-page>
 </template>
 <script>
+import { mapGetters} from 'vuex';
 import Image from "../components/Image.vue";
 import {
   IonBackButton,
@@ -297,6 +299,11 @@ export default {
     IonTitle,
     IonToolbar,
   },
+   computed: {
+    ...mapGetters({
+     pinnedPages: 'user/getPinnedPages'
+    })
+  },
   setup () {
     return {
       downloadOutline,
@@ -305,6 +312,23 @@ export default {
       sync,
       filterOutline
     };
+  },
+  data () {
+    return {
+      pagePinned: false,
+    }
+  },
+   methods: {
+    pinned() {
+      this.pagePinned = !this.pagePinned;
+      if (this.pagePinned) {
+        this.pinnedPages.push("/product");
+      }
+      else {
+       const index = this.pinnedPages.indexOf("/products");
+       this.pinnedPages.splice(index,1);
+      }
+    }
   },
 };
 </script>

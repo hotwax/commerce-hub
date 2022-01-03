@@ -17,7 +17,10 @@ const getters: GetterTree <UserState, RootState> = {
     },
     getCurrentFacility (state){
         return state.currentFacility
-    }
+    },
+    getPinnedPages(state){
+        return state.pinnedPages;
+    },
 
 }
 export default getters;
