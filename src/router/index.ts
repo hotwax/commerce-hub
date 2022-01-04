@@ -1,14 +1,14 @@
 
 import { createRouter, createWebHistory } from '@ionic/vue-router';
 import { RouteRecordRaw } from 'vue-router';
-import Home from '@/views/Home.vue'
-import Order from '@/views/Order.vue'
-import OrderFind from '@/views/OrderFind.vue'
-import ProductInventory from '@/views/ProductInventory.vue'
-import PurchaseOrder from '@/views/PurchaseOrder.vue'
-import ProductInventoryDetail from '@/views/ProductInventoryDetail.vue'
-import PurchaseOrderDetail from '@/views/PurchaseOrderDetail.vue'
 import Login from '@/views/Login.vue'
+import Home from '@/views/Home.vue'
+import FindOrder from '@/views/FindOrder.vue'
+import Order from '@/views/Order.vue'
+import FindProductInventory from '@/views/FindProductInventory.vue'
+import ProductInventory from '@/views/ProductInventory.vue'
+import FindPurchaseOrder from '@/views/FindPurchaseOrder.vue'
+import PurchaseOrder from '@/views/PurchaseOrder.vue'
 import Settings from "@/views/Settings.vue"
 import store from '@/store'
 
@@ -31,41 +31,13 @@ const loginGuard = (to: any, from: any, next: any) => {
 const routes: Array<RouteRecordRaw> = [
   {
     path: '/',
-    redirect: '/purchase-order-detail'
+    redirect: '/home'
   },
   {
-    path: '/order',
-    name: 'Order',
-    component: Order,
-    beforeEnter: authGuard
-  },
-  {
-    path: '/orderfind',
-    name: 'OrderFind',
-    component: OrderFind,
-    beforeEnter: authGuard
-  },
-  {
-    path: '/product',
-    name: 'ProductInventory',
-    component: ProductInventory,
-    beforeEnter: authGuard
-  },
-  {
-    path: '/purchase-order',
-    name: 'PurchaseOrder',
-    component:PurchaseOrder,
-  },
-  {
-    path: '/product-inventory-detail',
-    name: 'ProductInventoryDetail',
-    component: ProductInventoryDetail,
-  },
-  {  
-    path: '/purchase-order-detail',
-    name: 'PurchaseOrderDetail',
-    component: PurchaseOrderDetail,
-    beforeEnter: authGuard
+    path: '/login',
+    name: 'Login',
+    component: Login,
+    beforeEnter: loginGuard
   },
   {
     path: '/home',
@@ -74,11 +46,39 @@ const routes: Array<RouteRecordRaw> = [
     beforeEnter: authGuard
   },
   {
-    path: '/login',
-    name: 'Login',
-    component: Login,
-    beforeEnter: loginGuard
+    path: '/find-order',
+    name: 'FindOrder',
+    component: FindOrder,
+    beforeEnter: authGuard
   },
+  {
+    path: '/order',
+    name: 'Order',
+    component: Order,
+    beforeEnter: authGuard
+  },
+  {
+    path: '/find-product-inventory',
+    name: 'FindProductInventory',
+    component:FindProductInventory,
+    beforeEnter: authGuard
+  },
+  {
+    path: '/product-inventory',
+    name: 'ProductInventory',
+    component: ProductInventory,
+  },
+  {
+    path: '/find-purchase-order',
+    name: 'FindPurchaseOrder',
+    component:FindPurchaseOrder,
+  },
+  {  
+    path: '/purchase-order',
+    name: 'PurchaseOrder',
+    component: PurchaseOrder,
+    beforeEnter: authGuard
+  },  
   {
     path: "/settings",
     name: "Settings",
