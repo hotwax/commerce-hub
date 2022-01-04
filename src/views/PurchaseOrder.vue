@@ -39,16 +39,15 @@
               </ion-item>
            </ion-list>
            <ion-list>
-               <ion-list-header>{{ $t("Date") }}</ion-list-header>
-               <ion-item>
-                <ion-label>{{ $t("Arrival date") }}</ion-label>
-              
-                   <ion-chip>
-                    <ion-icon  :icon="calendarOutline"/>
-                    <ion-datetime value="12/01/2021"/>
-                    <ion-icon :icon="closeCircle"/>
+              <ion-list-header>{{ $t("Date") }}</ion-list-header>
+              <ion-item>
+                  <ion-label>{{ $t("Arrival date") }}</ion-label>
+                  <ion-chip>
+                      <ion-icon  :icon="calendarOutline"/>
+                      <ion-datetime value="12/01/2021"/>
+                      <ion-icon :icon="closeCircle"/>
                   </ion-chip>
-                
+                    
               </ion-item>
            </ion-list>
         </aside>
@@ -60,7 +59,6 @@
               <ion-label>{{ $t("Show order items") }}</ion-label>
               <ion-toggle slot="end"  checked></ion-toggle>
               
-             
             </ion-item>
             <ion-item lines="none">
               <ion-icon slot="start" :icon="swapVerticalOutline" />
