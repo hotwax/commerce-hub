@@ -43,11 +43,11 @@
             <ion-icon :icon="shirtOutline" slot="start" />
             <ion-label>Product inventory</ion-label>
           </ion-item>
-          <ion-item button lines="none" detail>
+          <ion-item button @click="() => router.push('/shipments')" lines="none" detail>
             <ion-icon :icon="sendOutline" slot="start" />
             <ion-label>Shipments</ion-label>
           </ion-item>
-          <ion-item button lines="none" detail>
+          <ion-item button @click="() => router.push('/purchase-order')" lines="none" detail>
             <ion-icon :icon="calendarOutline" slot="start" />
             <ion-label>Purchase orders</ion-label>
           </ion-item>
