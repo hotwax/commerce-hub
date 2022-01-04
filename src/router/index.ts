@@ -5,6 +5,7 @@ import Home from '@/views/Home.vue'
 import Order from '@/views/Order.vue'
 import ProductInventory from '@/views/ProductInventory.vue'
 import PurchaseOrder from '@/views/PurchaseOrder.vue'
+import PurchaseOrderDetail from '@/views/PurchaseOrderDetail.vue'
 import Login from '@/views/Login.vue'
 import Settings from "@/views/Settings.vue"
 import store from '@/store'
@@ -28,7 +29,7 @@ const loginGuard = (to: any, from: any, next: any) => {
 const routes: Array<RouteRecordRaw> = [
   {
     path: '/',
-    redirect: '/home'
+    redirect: '/purchase-order-detail'
   },
   {
     path: '/order',
@@ -46,6 +47,11 @@ const routes: Array<RouteRecordRaw> = [
     path: '/purchase-order',
     name: 'PurchaseOrder',
     component:PurchaseOrder,
+  },
+  {
+    path: '/purchase-order-detail',
+    name: 'PurchaseOrderDetail',
+    component: PurchaseOrderDetail,
     beforeEnter: authGuard
   },
   {
