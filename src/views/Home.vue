@@ -35,11 +35,11 @@
         </nav>
 
         <section class="pages-card">
-          <ion-item button @click="() => router.push('/order')" lines="none" detail>
+          <ion-item button @click="() => router.push('/find-order')" lines="none" detail>
             <ion-icon :icon="ticketOutline" slot="start" />
             <ion-label>Orders</ion-label>
           </ion-item>
-          <ion-item button @click="() => router.push('/product')" lines="none" detail>
+          <ion-item button @click="() => router.push('/find-product-inventory')" lines="none" detail>
             <ion-icon :icon="shirtOutline" slot="start" />
             <ion-label>Product inventory</ion-label>
           </ion-item>
@@ -47,7 +47,7 @@
             <ion-icon :icon="sendOutline" slot="start" />
             <ion-label>Shipments</ion-label>
           </ion-item>
-          <ion-item button @click="() => router.push('/purchase-order')" lines="none" detail>
+          <ion-item button @click="() => router.push('/find-purchase-order')" lines="none" detail>
             <ion-icon :icon="calendarOutline" slot="start" />
             <ion-label>Purchase orders</ion-label>
           </ion-item>
