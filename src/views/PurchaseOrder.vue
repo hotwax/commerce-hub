@@ -78,7 +78,7 @@
             <div class="product-detail">
               <section class="section-header">
                 <div class="primary-info">
-                  <ion-item lines="none">
+                  <ion-item lines="none" @click="() => router.push('/purchase-order-detail')">
                     <ion-label>
                       <p>Product store</p>
                       PO external ID
@@ -206,6 +206,7 @@ import {
   swapVerticalOutline,
   syncOutline
 } from 'ionicons/icons';
+import { useRouter } from 'vue-router';
 
 export default {
   name: 'PurchaseOrder',
@@ -234,6 +235,8 @@ export default {
     IonToolbar
   },
   setup() {
+    const router = useRouter();
+
     return {
       calendarOutline,
       closeCircle,
@@ -242,7 +245,8 @@ export default {
       filterOutline,
       folderOutline,
       swapVerticalOutline,
-      syncOutline
+      syncOutline,
+      router
     };
   },
 };
