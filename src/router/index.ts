@@ -5,6 +5,7 @@ import Home from '@/views/Home.vue'
 import Order from '@/views/Order.vue'
 import OrderFind from '@/views/OrderFind.vue'
 import ProductInventory from '@/views/ProductInventory.vue'
+import PurchaseOrder from '@/views/PurchaseOrder.vue'
 import ProductInventoryDetail from '@/views/ProductInventoryDetail.vue'
 import PurchaseOrderDetail from '@/views/PurchaseOrderDetail.vue'
 import Login from '@/views/Login.vue'
@@ -49,6 +50,11 @@ const routes: Array<RouteRecordRaw> = [
     name: 'ProductInventory',
     component: ProductInventory,
     beforeEnter: authGuard
+  },
+  {
+    path: '/purchase-order',
+    name: 'PurchaseOrder',
+    component:PurchaseOrder,
   },
   {
     path: '/product-inventory-detail',
