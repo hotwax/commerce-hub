@@ -12,7 +12,7 @@
             <ion-icon :icon="downloadOutline" slot="icon-only" />
           </ion-button>
           <ion-button fill="clear" class="mobile-only">
-            <ion-icon slot="icon-only" :icon="filterOutline" />
+            <ion-icon :icon="filterOutline" slot="icon-only" />
           </ion-button>
         </ion-buttons>
       </ion-toolbar>
@@ -58,13 +58,13 @@
         <main class="main">
           <section class="sort">
             <ion-item lines="none">
-              <ion-icon slot="start" :icon="documentTextOutline" />
+              <ion-icon :icon="documentTextOutline"  slot="start" />
               <ion-label>{{ $t("Show order items") }}</ion-label>
               <ion-toggle slot="end" checked></ion-toggle>
             </ion-item>
 
             <ion-item lines="none">
-              <ion-icon slot="start" :icon="swapVerticalOutline" />
+              <ion-icon :icon="swapVerticalOutline" slot="start" />
               <ion-label>{{ $t("Sort by") }}</ion-label>
               <ion-select value="any">
                 <ion-select-option value="any">Arrival date</ion-select-option>
