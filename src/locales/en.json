@@ -1,12 +1,15 @@
 {
-  "Arrival date":"Arrival date",
-  "Color":"Color",
-  "Date":"Date",
-  "Facility":"Facility",
-  "Location":"Location",
-  "Product Store":"Product Store",
-  "Purchase orders":"Purchase orders",
-  "Show order items":"Show order items",
-  "Size":"Size",
-  "Sort by":"Sort by"
+  "Arrival date": "Arrival date",
+  "Color": "Color",
+  "Date": "Date",
+  "Facility": "Facility",
+  "Items": "Items",
+  "Location": "Location",
+  "Product Store": "Product Store",
+  "Purchase orders": "Purchase orders",
+  "Show order items": "Show order items",
+  "Size": "Size",
+  "Search purchase orders and products": "Search purchase orders and products",
+  "Sort by": "Sort by",
+  "variants": "variants"
 }
