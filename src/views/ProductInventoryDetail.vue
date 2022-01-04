@@ -150,11 +150,11 @@
               <ion-card>
                 <ion-item>
                   <ion-label>{{ $t("Open orders") }}</ion-label>
-                  <ion-label class="text-center">
+                  <ion-label>
                     400
                     <p>{{ $t("Total") }}</p>
                   </ion-label>
-                  <ion-label class="text-center">
+                  <ion-label>
                     400
                     <p>{{ $t("Without promise date") }}</p>
                   </ion-label>
@@ -164,10 +164,10 @@
                   <ion-label>
                     <p>{{ $t("Pre orders") }}</p>
                   </ion-label>
-                  <ion-label class="text-center">
+                  <ion-label>
                     <p>400</p>
                   </ion-label>
-                  <ion-label class="text-center">
+                  <ion-label>
                     <p>400</p>
                   </ion-label>
                 </ion-item>
@@ -176,10 +176,10 @@
                   <ion-label>
                     <p>{{ $t("Back orders") }}</p>
                   </ion-label>
-                  <ion-label class="text-center">
+                  <ion-label>
                     <p>400</p>
                   </ion-label>
-                  <ion-label class="text-center">
+                  <ion-label>
                     <p>400</p>
                   </ion-label>
                 </ion-item>
@@ -188,10 +188,10 @@
                   <ion-label>
                     <p>{{ $t("Unfillable") }}</p>
                   </ion-label>
-                  <ion-label class="text-center">
+                  <ion-label>
                     <p>400</p>
                   </ion-label>
-                  <ion-label class="text-center">
+                  <ion-label>
                     <p>400</p>
                   </ion-label>
                 </ion-item>
