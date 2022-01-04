@@ -147,7 +147,7 @@
             <div class="product-detail">
               <section class="section-header">
                 <div class="primary-info">
-                  <ion-item lines="none">
+                  <ion-item lines="none" @click="() => router.push('/product-inventory-detail')">
                     <ion-thumbnail slot="start" class="mobile-only">
                       <Image src="https://cdn.shopify.com/s/files/1/0069/7384/9727/products/test-track.jpg?v=1626255137" />
                     </ion-thumbnail>
@@ -268,6 +268,8 @@ import {
   filterOutline,
 } from "ionicons/icons";
 
+import { useRouter } from 'vue-router';
+
 export default {
   name: "ProductInventory",
   components: {
@@ -298,12 +300,16 @@ export default {
     IonToolbar,
   },
   setup () {
+
+    const router = useRouter();
+
     return {
       downloadOutline,
       folderOutline,
       swapVerticalOutline,
       sync,
-      filterOutline
+      filterOutline,
+      router
     };
   },
 };
