@@ -8,7 +8,7 @@
 
       <div class="header">
         <nav class="nav-card">
-          <a href="">
+          <a :href="'http://localhost:8102/?token=' + token">
             <ion-card>
               <img src="../assets/images/PreOrder.svg" />
               <ion-card-header>
@@ -129,12 +129,6 @@ export default defineComponent({
     ...mapGetters({
      token: 'user/getUserToken'
     })
-  },
-  methods:{
-    openApp(url: any){
-      console.log(this.token);
-      window.location.href = url+`?token=${this.token}`;
-    }
   },
   setup() {
     const router = useRouter();
