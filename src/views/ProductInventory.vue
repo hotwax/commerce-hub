@@ -2,244 +2,598 @@
   <ion-page>
     <ion-header :translucent="true">
       <ion-toolbar>
-        <ion-back-button default-href="/" slot="start" />
-        <ion-title>{{ $t("Product inventory") }}</ion-title>
+        <ion-back-button slot="start" default-href="/" />
+        <ion-title>{{ $t("Product inventory detail") }}</ion-title>
         <ion-buttons slot="end">
-          <ion-button>
-            <ion-icon :icon="sync" slot="icon-only" />
-          </ion-button>
-          <ion-button>
-            <ion-icon :icon="downloadOutline" slot="icon-only" />
-          </ion-button>
-          <ion-button fill="clear" class="mobile-only">
-            <ion-icon slot="icon-only" :icon="filterOutline" />
+          <ion-button fill="clear">
+            <ion-icon :icon="syncOutline" slot="icon-only" />
           </ion-button>
         </ion-buttons>
       </ion-toolbar>
     </ion-header>
 
-    <ion-content>
-      <div class="find">
-        <section class="search">
-          <ion-searchbar />
+    <ion-content :fullscreen="true">
+      <main>
+        <section class="product">
+          <div class="product-image desktop-only">
+            <ion-card>
+              <Image src="https://cdn.shopify.com/s/files/1/0069/7384/9727/products/test-track.jpg?v=1626255137" />
+            </ion-card>
+          </div>
+          <div class="product-info desktop-only">
+            <ion-label>Parent product name</ion-label>
+            <ion-card>
+              <ion-card-header>
+                <ion-card-title>{{ $t("General information") }}</ion-card-title>
+              </ion-card-header>
+              <ion-item>
+                <ion-label>{{ $t("Shopify ID") }}</ion-label>
+                <ion-label slot="end">external ID</ion-label>
+              </ion-item>
+              <ion-item>
+                <ion-label>{{ $t("Internal ID") }}</ion-label>
+                <ion-label slot="end">internal ID</ion-label>
+              </ion-item>
+              <ion-item>
+                <ion-label>{{ $t("In stock") }}</ion-label>
+                <ion-label slot="end">QOH</ion-label>
+              </ion-item>
+              <ion-item>
+                <ion-label>{{ $t("On order") }}</ion-label>
+                <ion-label slot="end">ordered</ion-label>
+              </ion-item>
+            </ion-card>
+          </div>
         </section>
-     
-        <aside class="filters desktop-only">
-          <ion-list>
-            <ion-list-header>{{ $t("Catalog") }}</ion-list-header>
-              <ion-item>
-                <ion-label>{{ $t("Categories") }}</ion-label>
-                <ion-select value="any">
-                  <ion-select-option value="any">all</ion-select-option>
-                </ion-select>
-              </ion-item>
 
-              <ion-card>
-                <ion-card-header>
-                  <ion-card-title>{{ $t("Purchase date") }}</ion-card-title>
-                </ion-card-header>
-                <ion-card-content>
-                  <ion-chip>
-                    <ion-label>PO #</ion-label>
-                  </ion-chip>
-                  <ion-chip>
-                    <ion-label>PO #</ion-label>
-                  </ion-chip>
-                </ion-card-content>
-              </ion-card>
+        <ion-item class="mobile-only" lines="none">
+          <ion-thumbnail>
+            <Image src="https://cdn.shopify.com/s/files/1/0069/7384/9727/products/test-track.jpg?v=1626255137" />
+          </ion-thumbnail>
+          <ion-label>
+            Virtual name
+            <p>Shopify ID</p>
+          </ion-label>
+          <ion-chip>
+            <ion-label>Shopify logo</ion-label>
+          </ion-chip>
+        </ion-item>
 
-              <ion-item>
-                <ion-label>{{ $t("Size") }}</ion-label>
-                <ion-select value="any">
-                  <ion-select-option value="any">all</ion-select-option>
-                </ion-select>
-              </ion-item>
-              <ion-item>
-                <ion-label>{{ $t("Color") }}</ion-label>
-                <ion-select value="any">
-                  <ion-select-option value="any">all</ion-select-option>
-                </ion-select>
-              </ion-item>
+        <hr />
 
-              <ion-card>
-                <ion-card-header>
-                  <ion-card-title>{{ $t("Purchase date") }}</ion-card-title>
-                </ion-card-header>
-                <ion-card-content>
-                  <ion-chip>
-                    <ion-label>PO #</ion-label>
-                  </ion-chip>
-                  <ion-chip>
-                    <ion-label>PO #</ion-label>
-                  </ion-chip>
-                </ion-card-content>
-              </ion-card>
-            </ion-list>
-
-            <ion-list>
-              <ion-list-header>{{ $t("Order") }}</ion-list-header>
-              <ion-item>
-                <ion-label>{{ $t("order created") }}</ion-label>
-                <ion-checkbox />
-              </ion-item>
-              <ion-item>
-                <ion-label>{{ $t("order created") }}</ion-label>
-                <ion-checkbox />
-              </ion-item>
-
-              <ion-card>
-                <ion-card-header>
-                  <ion-card-title>{{ $t("Purchase date") }}</ion-card-title>
-                </ion-card-header>
-                <ion-card-content>
-                  <ion-chip>
-                    <ion-label>PO #</ion-label>
-                  </ion-chip>
-                  <ion-chip>
-                    <ion-label>PO #</ion-label>
-                  </ion-chip>
-                </ion-card-content>
-              </ion-card>
-            </ion-list>
-
-            <ion-list>
-              <ion-list-header>{{ $t("Location") }}</ion-list-header>
-              <ion-item>
-                <ion-label>{{ $t("Product Store") }}</ion-label>
-                <ion-select value="any">
-                  <ion-select-option value="any">Australia</ion-select-option>
-                </ion-select>
-              </ion-item>
-              <ion-item>
-                <ion-label>{{ $t("Facility") }}</ion-label>
-                <ion-select value="any">
-                  <ion-select-option value="any">California Warehouse</ion-select-option>
-                </ion-select>
-              </ion-item>
-           </ion-list>
-        </aside>
-
-        <main class="main">
-          <section class="sort">
-            <ion-item lines="none" class="border-sort">
-              <ion-icon slot="start" :icon="folderOutline" />
-              <ion-label>{{ "Group by" }}</ion-label>
-              <ion-select value="any">
-                <ion-select-option value="any">Partent</ion-select-option>
-              </ion-select>
+        <section class="variant">
+          <div class="variant-features">
+            <ion-item class="desktop-only" lines="none">
+              <ion-icon slot="start" :icon="shirtOutline" />
+              <ion-label>{{ $t("Variant") }}</ion-label>
             </ion-item>
-            <ion-item lines="none">
-              <ion-icon slot="start" :icon="swapVerticalOutline" />
-              <ion-label>{{ $t("Sort") }}</ion-label>
-              <ion-select value="any">
-                <ion-select-option value="any">{{ $t("Product name") }}</ion-select-option>
-              </ion-select>
-            </ion-item>
-          </section>
+            <ion-list>
+              <ion-list-header>{{ $t("Color") }}</ion-list-header>
+              <ion-item lines="none">
+                <ion-chip>
+                  <ion-label>All</ion-label>
+                </ion-chip>
+                <ion-chip>
+                  <ion-label>Color 1</ion-label>
+                </ion-chip>
+                <ion-chip>
+                  <ion-icon :icon="checkmarkOutline" />
+                  <ion-label>Color 2</ion-label>
+                </ion-chip>
+              </ion-item>
+            </ion-list>
+            <ion-list>
+              <ion-list-header>{{ $t("Size") }}</ion-list-header>
+              <ion-item lines="none">
+                <ion-chip>
+                  <ion-label>All</ion-label>
+                </ion-chip>
+                <ion-chip>
+                  <ion-label>Size 1</ion-label>
+                </ion-chip>
+                <ion-chip>
+                  <ion-icon :icon="checkmarkOutline" />
+                  <ion-label>Size 2</ion-label>
+                </ion-chip>
+              </ion-item>
+            </ion-list>
+          </div>
 
-           <hr />
+          <div class="variant-info desktop-only">
+            <ion-card>
+              <ion-card-header>
+                <ion-card-title>{{ $t("Shopify IDs") }}</ion-card-title>
+              </ion-card-header>
+              <ion-item>
+                <ion-label>{{ $t("SKU") }}</ion-label>
+                <ion-label slot="end">SKU</ion-label>
+              </ion-item>
+              <ion-item>
+                <ion-label>{{ $t("UPC") }}</ion-label>
+                <ion-label slot="end">order id</ion-label>
+              </ion-item>
+              <ion-item>
+                <ion-label>{{ $t("Internal ID") }}</ion-label>
+                <ion-label slot="end">internal id</ion-label>
+              </ion-item>
+            </ion-card>
+          </div>
+        </section>
 
-          <div class="product">
-            <div class="product-image desktop-only">
-                <Image src="https://cdn.shopify.com/s/files/1/0069/7384/9727/products/test-track.jpg?v=1626255137" />
+        <section>
+          <ion-item lines="none">
+            <ion-icon slot="start" :icon="ticketOutline" />
+            <ion-label>Orders</ion-label>
+          </ion-item>
+          <div class="orders">
+            <div class="shipping-method">
+              <ion-card>
+                <ion-card-header>
+                  <ion-card-title>{{ $t("Shipping method") }}</ion-card-title>
+                </ion-card-header>
+                <ion-item detail>
+                  <ion-label>{{ $t("Store pickup") }}</ion-label>
+                  <ion-note slot="end">orders</ion-note>
+                </ion-item>
+                <ion-item detail>
+                  <ion-label>{{ $t("Standard") }}</ion-label>
+                  <ion-note slot="end">orders</ion-note>
+                </ion-item>
+                <ion-item detail>
+                  <ion-label>{{ $t("Expedited") }}</ion-label>
+                  <ion-note slot="end">orders</ion-note>
+                </ion-item>
+              </ion-card>
             </div>
 
-            <div class="product-detail">
-              <section class="section-header">
-                <div class="primary-info">
-                  <ion-item lines="none">
-                    <ion-thumbnail slot="start" class="mobile-only">
-                      <Image src="https://cdn.shopify.com/s/files/1/0069/7384/9727/products/test-track.jpg?v=1626255137" />
-                    </ion-thumbnail>
-                    <ion-label>
-                      <p>Brand</p>
-                      Virtual Name
-                      <p>{{ $t("Color") }} : color</p>
-                      <p>{{ $t("Size") }}: size</p>
-                    </ion-label>
-                  </ion-item>
-                </div>
-                <div class="tags desktop-only">
-                  <ion-chip>
-                    <ion-icon />
-                    <ion-label>Shopify ID</ion-label>
-                  </ion-chip>
-                </div>
-                <div class="metadata">
-                  <ion-item lines="none" detail>
-                    <ion-note slot="end" class="metatags">3 variants</ion-note>
-                  </ion-item>
-                </div>
-              </section>
+            <div class="open-orders">
+              <ion-card>
+                <ion-item>
+                  <ion-label>{{ $t("Open orders") }}</ion-label>
+                  <ion-label>
+                    400
+                    <p>{{ $t("Total") }}</p>
+                  </ion-label>
+                  <ion-label>
+                    400
+                    <p>{{ $t("Without promise date") }}</p>
+                  </ion-label>
+                </ion-item>
 
-              <div class="desktop-only">
-                <ion-list>
-                  <ion-list-header>Variants</ion-list-header>
-                  <div class="variant-detail">
-                    <div class="variant-info">
-                      <ion-item lines="none">
-                        <ion-label>
-                          SKU
-                          <p>{{ $t("Color") }} : color</p>
-                          <p>{{ $t("Size") }}: size</p>
-                        </ion-label>
-                      </ion-item>
-                    </div>
+                <ion-item>
+                  <ion-label>
+                    <p>{{ $t("Pre orders") }}</p>
+                  </ion-label>
+                  <ion-label>
+                    <p>400</p>
+                  </ion-label>
+                  <ion-label>
+                    <p>400</p>
+                  </ion-label>
+                </ion-item>
 
-                    <div class="variant-tags">
-                      <ion-chip>
-                        <ion-icon />
-                        <ion-label>{{ $t("Shopify ID") }}</ion-label>
-                      </ion-chip>
-                    </div>
+                <ion-item>
+                  <ion-label>
+                    <p>{{ $t("Back orders") }}</p>
+                  </ion-label>
+                  <ion-label>
+                    <p>400</p>
+                  </ion-label>
+                  <ion-label>
+                    <p>400</p>
+                  </ion-label>
+                </ion-item>
 
-                    <div class="variant-metadata">
-                      <ion-item lines="none" detail>
-                        <ion-note slot="end" class="metatags">3 variants</ion-note>
-                      </ion-item>
-                    </div>
-                  </div>
-                  <div class="variant-detail">
-                    <div class="virtual-info">
-                      <ion-item lines="none">
-                        <ion-label>
-                          SKU
-                          <p>{{ $t("Color") }} : color</p>
-                          <p>{{ $t("Size") }}: size</p>
-                        </ion-label>
-                      </ion-item>
-                    </div>
-                    <div class="variant-tags">
-                      <ion-chip>
-                       <ion-icon />
-                       <ion-label>{{ $t("Shopify ID") }}</ion-label>
-                      </ion-chip>
-                    </div>
-                    <div class="variant-metadata">
-                      <ion-item lines="none" detail>
-                        <ion-note slot="end" class="metatags">3 variants</ion-note>
-                      </ion-item>
-                    </div>
-                  </div>
-                </ion-list>
-              </div>
+                <ion-item>
+                  <ion-label>
+                    <p>{{ $t("Unfillable") }}</p>
+                  </ion-label>
+                  <ion-label>
+                    <p>400</p>
+                  </ion-label>
+                  <ion-label>
+                    <p>400</p>
+                  </ion-label>
+                </ion-item>
+              </ion-card>
             </div>
           </div>
-        
-          <section class="section-grid"></section>
-        </main>
-      </div>
+        </section>
+
+        <section class="segments">
+          <ion-segment scrollable @ionChange="segmentChanged($event)" v-model="segment">
+            <ion-segment-button value="locations" layout="icon-start">
+              <ion-icon :icon="locationOutline" />
+              <ion-label>{{ $t("Locations") }}</ion-label>
+            </ion-segment-button>
+            <ion-segment-button value="purchase-orders" layout="icon-start">
+              <ion-icon :icon="calendarOutline" />
+              <ion-label>{{ $t("Purchase orders") }}</ion-label>
+            </ion-segment-button>
+            <ion-segment-button value="fulfillment" layout="icon-start">
+              <ion-icon :icon="sendOutline" />
+              <ion-label>{{ $t("Fulfillment") }}</ion-label>
+            </ion-segment-button>
+            <ion-segment-button value="logs" layout="icon-start">
+              <ion-icon :icon="listOutline" />
+              <ion-label>{{ $t("Logs") }}</ion-label>
+            </ion-segment-button>
+          </ion-segment>
+
+          <div v-if="segment == 'locations'">
+            <ion-searchbar class="mobile-only" />
+            <div class="actions">
+              <div class="action-chips">
+                <ion-chip>
+                  <ion-icon :icon="checkmarkOutline" />
+                  <ion-label>All</ion-label>
+                </ion-chip>
+                <ion-chip>
+                  <ion-label>Retail</ion-label>
+                </ion-chip>
+                <ion-chip>
+                  <ion-label>Warehouses</ion-label>
+                </ion-chip>
+              </div>
+              <div class="action-buttons desktop-only">
+                <ion-button fill="outline" color="medium">{{ $t("Edit ordered stock") }}</ion-button>
+                <ion-button fill="outline" color="medium">{{ $t("Edit qoh") }}</ion-button>
+              </div>
+            </div>
+
+            <hr />
+
+            <div class="list-item locations">
+              <ion-item lines="none">
+                <ion-icon :icon="globeOutline" slot="start" />
+                <ion-label>30 {{ $t("locations") }}</ion-label>
+              </ion-item>
+
+              <ion-label class="tablet">
+                600
+                <p>{{ $t("orders") }}</p>
+              </ion-label>
+
+              <ion-label>
+                400
+                <p>{{ $t("purchase order ATP") }}</p>
+              </ion-label>
+
+              <ion-label class="tablet">
+                400
+                <p>{{ $t("QOH") }}</p>
+              </ion-label>
+
+              <ion-label>
+                400
+                <p>{{ $t("safety stock") }}</p>
+              </ion-label>
+
+              <ion-label class="tablet">
+                400
+                <p>{{ $t("ATP") }}</p>
+              </ion-label>
+
+              <ion-checkbox />
+
+              <ion-button fill="clear" color="medium" @click="openLocationPopover">
+                <ion-icon slot="icon-only" :icon="ellipsisVerticalOutline" />
+              </ion-button>
+            </div>
+
+            <hr />
+
+            <div class="list-item locations">
+              <ion-item lines="none">
+                <ion-icon :icon="storefrontOutline" slot="start" />
+                <ion-label>
+                  <p>Retail</p>
+                  Store 1 name
+                  <p>Pickup and shipping</p>
+                </ion-label>
+              </ion-item>
+
+              <ion-label class="tablet">
+                600
+                <p>{{ $t("orders") }}</p>
+              </ion-label>
+
+              <ion-label>
+                400
+                <p>{{ $t("purchase order ATP") }}</p>
+              </ion-label>
+
+              <ion-label class="tablet">
+                400
+                <p>{{ $t("QOH") }}</p>
+              </ion-label>
+
+              <ion-label>
+                400
+                <p>{{ $t("safety stock") }}</p>
+              </ion-label>
+
+              <ion-label class="tablet">
+                400
+                <p>{{ $t("ATP") }}</p>
+              </ion-label>
+
+              <ion-checkbox />
+
+              <ion-button fill="clear" color="medium" @click="openLocationPopover">
+                <ion-icon slot="icon-only" :icon="ellipsisVerticalOutline" />
+              </ion-button>
+            </div>
+
+            <hr />
+
+            <div class="list-item locations">
+              <ion-item lines="none">
+                <ion-icon :icon="businessOutline" slot="start" />
+                <ion-label>
+                  <p>Warehouse</p>
+                  Warehouse 1 name
+                  <p>Shipping</p>
+                </ion-label>
+              </ion-item>
+
+              <ion-label class="tablet">
+                600
+                <p>{{ $t("orders") }}</p>
+              </ion-label>
+
+              <ion-label>
+                400
+                <p>{{ $t("purchase order ATP") }}</p>
+              </ion-label>
+
+              <ion-label class="tablet">
+                400
+                <p>{{ $t("QOH") }}</p>
+              </ion-label>
+
+              <ion-label>
+                400
+                <p>{{ $t("safety stock") }}</p>
+              </ion-label>
+
+              <ion-label class="tablet">
+                400
+                <p>{{ $t("ATP") }}</p>
+              </ion-label>
+
+              <ion-checkbox />
+
+              <ion-button fill="clear" color="medium" @click="openLocationPopover">
+                <ion-icon slot="icon-only" :icon="ellipsisVerticalOutline" />
+              </ion-button>
+            </div>
+
+            <hr />
+
+          </div>
+
+          <div v-if="segment == 'purchase-orders'">
+            <div class="actions">
+              <div class="action-chips">
+                <ion-chip>
+                  <ion-icon :icon="checkmarkOutline" />
+                  <ion-label>All</ion-label>
+                </ion-chip>
+                <ion-chip>
+                  <ion-label>Upcoming</ion-label>
+                </ion-chip>
+                <ion-chip>
+                  <ion-label>Past date</ion-label>
+                </ion-chip>
+              </div>
+              <div class="action-buttons desktop-only">
+                <ion-button fill="outline" color="medium" @click="editQuantity()">{{ $t("Edit ordered qty") }}</ion-button>
+                <ion-button fill="outline" color="medium">{{ $t("Edit arrival date") }}</ion-button>
+              </div>
+            </div>
+
+            <hr />
+
+            <div class="list-item purchase-orders">
+              <ion-item lines="none">
+                <ion-label>PO ID</ion-label>
+              </ion-item>
+
+              <ion-label class="tablet">
+                600
+                <p>{{ $t("ordered") }}</p>
+              </ion-label>
+
+              <ion-label class="tablet">
+                400
+                <p>{{ $t("ATP") }}</p>
+              </ion-label>
+
+              <ion-label>
+                400
+                <p>{{ $t("received") }}</p>
+              </ion-label>
+
+              <ion-label class="tablet">
+                6th Dec 2021
+                <p>{{ $t("arrival date") }}</p>
+              </ion-label>
+
+              <ion-checkbox />
+
+              <ion-button fill="clear" color="medium" @click="openPopover">
+                <ion-icon slot="icon-only" :icon="ellipsisVerticalOutline" />
+              </ion-button>
+            </div>
+
+            <hr />
+
+          </div>
+
+          <div v-if="segment == 'fulfillment'">
+            <div class="actions">
+              <div class="action-chips">
+                <ion-chip>
+                  <ion-icon :icon="checkmarkOutline" />
+                  <ion-label>All</ion-label>
+                </ion-chip>
+                <ion-chip>
+                  <ion-label>Upcoming</ion-label>
+                </ion-chip>
+                <ion-chip>
+                  <ion-label>Past date</ion-label>
+                </ion-chip>
+              </div>
+              <div class="action-buttons desktop-only">
+                <ion-button fill="outline" color="medium">{{ $t("Edit safety stock") }}</ion-button>
+                <ion-button fill="outline" color="medium">{{ $t("Edit threshold") }}</ion-button>
+              </div>
+            </div>
+
+            <hr />
+
+            <div class="list-item fulfillment">
+              <ion-item lines="none">
+                <ion-icon :icon="globeOutline" slot="start" />
+                <ion-label>2 {{ $t("locations") }}</ion-label>
+              </ion-item>
+
+              <ion-label>
+                8
+                <p>{{ $t("safety stock") }}</p>
+              </ion-label>
+
+              <ion-label>
+                19 / 20
+                <p>{{ $t("threshold consumed") }}</p>
+              </ion-label>
+
+              <ion-chip class="tablet" outline>
+                <ion-label>93 {{ $t("ATP") }}</ion-label>
+                <ion-icon :icon="shareOutline" />
+              </ion-chip>
+
+              <ion-label class="tablet">
+                <ion-toggle />
+                <p>{{ $t("pickup") }}</p>
+              </ion-label>
+
+              <ion-label class="tablet">
+                <ion-toggle />
+                <p>{{ $t("delivery") }}</p>
+              </ion-label>
+
+              <ion-checkbox />
+
+              <ion-button fill="clear" color="medium" @click="openFulfillmentSettings">
+                <ion-icon slot="icon-only" :icon="ellipsisVerticalOutline" />
+              </ion-button>
+            </div>
+
+            <hr />
+
+            <div class="list-item fulfillment">
+              <ion-item lines="none">
+                <ion-icon :icon="storefrontOutline" slot="start" />
+                <ion-label>
+                  <p>Retail</p>
+                  Brooklyn
+                </ion-label>
+              </ion-item>
+
+              <ion-label>
+                8
+                <p>{{ $t("safety stock") }}</p>
+              </ion-label>
+
+              <ion-label>
+                19 / 20
+                <p>{{ $t("threshold consumed") }}</p>
+              </ion-label>
+
+              <ion-chip class="tablet" outline>
+                <ion-label>93 {{ $t("ATP") }}</ion-label>
+                <ion-icon :icon="shareOutline" />
+              </ion-chip>
+
+              <ion-label class="tablet">
+                <ion-toggle />
+                <p>{{ $t("pickup") }}</p>
+              </ion-label>
+
+              <ion-label class="tablet">
+                <ion-toggle />
+                <p>{{ $t("delivery") }}</p>
+              </ion-label>
+
+              <ion-checkbox />
+
+              <ion-button fill="clear" color="medium" @click="openFulfillmentSettings">
+                <ion-icon slot="icon-only" :icon="ellipsisVerticalOutline" />
+              </ion-button>
+            </div>
+
+            <hr />
+
+            <div class="list-item fulfillment">
+              <ion-item lines="none">
+                <ion-icon :icon="businessOutline" slot="start" />
+                <ion-label>
+                  <p>Warehouse</p>
+                  Hoboken
+                </ion-label>
+              </ion-item>
+
+              <ion-label>
+                8
+                <p>{{ $t("safety stock") }}</p>
+              </ion-label>
+
+              <ion-label>
+                19 / 20
+                <p>{{ $t("threshold consumed") }}</p>
+              </ion-label>
+
+              <ion-chip class="tablet" outline>
+                <ion-label>93 {{ $t("ATP") }}</ion-label>
+                <ion-icon :icon="shareOutline" />
+              </ion-chip>
+
+              <ion-label class="tablet">
+                <ion-toggle />
+                <p>{{ $t("pickup") }}</p>
+              </ion-label>
+
+              <ion-label class="tablet">
+                <ion-toggle />
+                <p>{{ $t("delivery") }}</p>
+              </ion-label>
+
+              <ion-checkbox />
+
+              <ion-button fill="clear" color="medium" @click="openFulfillmentSettings">
+                <ion-icon slot="icon-only" :icon="ellipsisVerticalOutline" />
+              </ion-button>
+            </div>
+
+            <hr />
+
+          </div>
+
+          <div v-if="segment == 'logs'"></div>
+        </section>
+      </main>
     </ion-content>
   </ion-page>
 </template>
-<script>
-import Image from "../components/Image.vue";
+
+<script lang="ts">
 import {
   IonBackButton,
   IonButton,
   IonButtons,
   IonCard,
-  IonCardContent,
   IonCardHeader,
   IonCardTitle,
   IonCheckbox,
@@ -254,29 +608,45 @@ import {
   IonNote,
   IonPage,
   IonSearchbar,
-  IonSelect,
-  IonSelectOption,
-  IonThumbnail,
+  IonSegment,
+  IonSegmentButton,
   IonTitle,
+  IonThumbnail,
+  IonToggle,
   IonToolbar,
-} from "@ionic/vue";
+  modalController,
+  popoverController
+} from '@ionic/vue';
+import { defineComponent, ref } from 'vue';
+import { useRouter } from 'vue-router';
 import {
-  folderOutline,
-  swapVerticalOutline,
-  downloadOutline,
-  sync,
-  filterOutline,
-} from "ionicons/icons";
+  businessOutline,
+  calendarOutline,
+  checkmarkOutline,
+  ellipsisVerticalOutline,
+  globeOutline,
+  listOutline,
+  locationOutline,
+  shareOutline,
+  shirtOutline,
+  sendOutline,
+  storefrontOutline,
+  syncOutline,
+  ticketOutline,
+} from 'ionicons/icons';
+import Image from '@/components/Image.vue';
+import EditQuantityModal from '@/components/EditQuantityModal.vue';
+import LocationPopover from '@/components/LocationPopover.vue';
+import PurchaseOrderPopover from '@/components/PurchaseOrderPopover.vue';
+import FulfillmentSettingsPopover from '@/components/FulfillmentSettingsPopover.vue';
 
-export default {
-  name: "ProductInventory",
+export default defineComponent({
+  name: 'ProductInventory',
   components: {
-    Image,
     IonBackButton,
     IonButton,
     IonButtons,
     IonCard,
-    IonCardContent,
     IonCardHeader,
     IonCardTitle,
     IonCheckbox,
@@ -291,57 +661,119 @@ export default {
     IonNote,
     IonPage,
     IonSearchbar,
-    IonSelect,
-    IonSelectOption,
-    IonThumbnail,
+    IonSegment,
+    IonSegmentButton,
     IonTitle,
+    IonThumbnail,
+    IonToggle,
     IonToolbar,
+    Image
   },
-  setup () {
+  methods: {
+    segmentChanged(ev: CustomEvent) {
+      this.segment = ev.detail.value;
+    },
+    async editQuantity() {
+      const editmodal = await modalController.create({
+        component: EditQuantityModal
+      });
+      return editmodal.present();
+    },
+    async openLocationPopover(ev: Event) {
+      const popover = await popoverController.create({
+        component: LocationPopover,
+        event: ev,
+        translucent: true,
+        showBackdrop: false,
+      });
+      return popover.present();
+    },
+    async openPopover(ev: Event) {
+      const popover = await popoverController.create({
+        component: PurchaseOrderPopover,
+        event: ev,
+        translucent: true,
+        showBackdrop: false,
+      });
+      return popover.present();
+    },
+    async openFulfillmentSettings(ev: Event) {
+      const popover = await popoverController.create({
+        component: FulfillmentSettingsPopover,
+        event: ev,
+        translucent: true,
+        showBackdrop: false,
+      });
+      return popover.present();
+    },
+  },
+  setup() {
+    const router = useRouter();
+    const segment = ref("locations");
+
     return {
-      downloadOutline,
-      folderOutline,
-      swapVerticalOutline,
-      sync,
-      filterOutline
-    };
-  },
-};
+      businessOutline,
+      calendarOutline,
+      checkmarkOutline,
+      ellipsisVerticalOutline,
+      globeOutline,
+      listOutline,
+      locationOutline,
+      shareOutline,
+      shirtOutline,
+      sendOutline,
+      storefrontOutline,
+      syncOutline,
+      ticketOutline,
+      router,
+      segment,
+    }
+  }
+});
 </script>
 
 <style scoped>
-.variant-detail {
+.product {
   display: grid;
-  grid: "vinfo vtags vmetadata" / 1fr max-content 1fr;
+  grid-template-columns: 254px auto;
+  justify-items: start;
   align-items: center;
-  border-bottom: 1px solid #92949c;
 }
 
+.product-info,
 .variant-info {
-  grid-area: vinfo;
+  width: 343px;
 }
 
-.variant-tags {
-  grid-area: vtags;
-  justify-self: center;
+.variant,
+.actions {
+  display: grid;
+  grid-template-columns: repeat(2, auto);
+  justify-content: space-between;
+  align-items: center;
 }
 
-.variant-metadata {
-  grid-area: vmetadata;
+.open-orders > ion-card > ion-item > ion-label:not(:first-child)  {
+   text-align: center;
+}
+
+/*Height of segment is defined now since their are less list items. Will remove it later */
+.segments {
+  height: 400px;
+}
+
+ion-segment {
+  justify-content: start;
+}
+
+.purchase-orders {
+  --columns-desktop: 7;
 }
 
 @media (min-width: 991px) {
-  .product {
+  .orders {
     display: grid;
-    grid-template-columns: 115px auto;
-  }
-
-  .product-image {
-    height: 180px;
-  }
-
-  .section-header {
-  grid-template-columns: 1fr max-content 1fr;
+    grid-template-columns: 343px 570px;
   }
 }
 </style>
