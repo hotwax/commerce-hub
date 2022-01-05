@@ -107,7 +107,36 @@
                     {{ $t("Items") }}
                     <hr align="right" width="90%" />
                   </ion-list-header>
-                  <div class="variant-detail">
+                  <div class="list-item">
+                    <div>
+                      <ion-item lines="none">
+                        <ion-thumbnail slot="start">
+                          <Image src="https://cdn.shopify.com/s/files/1/0069/7384/9727/products/test-track.jpg?v=1626255137" />
+                        </ion-thumbnail>
+                        <ion-label>
+                          SKU
+                          <p>{{ $t("Color") }} : color</p>
+                          <p>{{ $t("Size") }}: size</p>
+                        </ion-label>
+                      </ion-item>
+                    </div>
+
+                    <div class="variant-tags">
+                      <ion-chip outline>
+                        <!-- TODO -->
+                        <ion-icon />
+                        <ion-label>Shopify ID</ion-label>
+                      </ion-chip>
+                    </div>
+
+                    <div>
+                      <ion-item lines="none">
+                        <ion-note slot="end" class="metatags">ATP Ordered</ion-note>
+                      </ion-item>
+                    </div>
+                  </div>
+                  <hr align="right" width="90%" />
+                  <div class="list-item">
                     <div class="variant-info">
                       <ion-item lines="none">
                         <ion-thumbnail slot="start">
@@ -135,34 +164,7 @@
                       </ion-item>
                     </div>
                   </div>
-                  <div class="variant-detail">
-                    <div class="variant-info">
-                      <ion-item lines="none">
-                        <ion-thumbnail slot="start">
-                          <Image src="https://cdn.shopify.com/s/files/1/0069/7384/9727/products/test-track.jpg?v=1626255137" />
-                        </ion-thumbnail>
-                        <ion-label>
-                          SKU
-                          <p>{{ $t("Color") }} : color</p>
-                          <p>{{ $t("Size") }}: size</p>
-                        </ion-label>
-                      </ion-item>
-                    </div>
-
-                    <div class="variant-tags">
-                      <ion-chip outline>
-                        <!-- TODO -->
-                        <ion-icon />
-                        <ion-label>Shopify ID</ion-label>
-                      </ion-chip>
-                    </div>
-
-                    <div class="variant-metadata">
-                      <ion-item lines="none">
-                        <ion-note slot="end" class="metatags">ATP Ordered</ion-note>
-                      </ion-item>
-                    </div>
-                  </div>
+                  <hr />
                 </ion-list>
               </div>
             </div>
@@ -258,6 +260,15 @@ export default {
 <style scoped>
 
 @media (min-width: 991px) {
+  .list-item {
+    --columns-desktop: 3;
+    grid-template-columns: 1fr max-content 1fr;
+  }
+
+  .variant-tags {
+  justify-self: center;
+  }
+
   .section-header {
     grid-template-columns: 1fr max-content 1fr;
   }

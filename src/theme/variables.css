@@ -321,26 +321,6 @@ http://ionicframework.com/docs/theming/ */
   justify-self: start
 }
 
-.variant-detail {
-  display: grid;
-  grid: "vinfo vtags vmetadata" / 1fr max-content 1fr;
-  align-items: center;
-  border-bottom: 1px solid var(--ion-color-medium);
-}
-
-.variant-info {
-  grid-area: vinfo;
-}
-
-.variant-tags {
-  grid-area: vtags;
-  justify-self: center;
-}
-
-.variant-metadata {
-  grid-area: vmetadata;
-}
-
 
 ion-thumbnail > img {
   object-fit: contain;
@@ -432,7 +412,8 @@ hr {
   
   .cards {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, minmax(314px, max-content));
+    align-items: start;
     grid-area: cards;
   }
   

@@ -101,11 +101,11 @@
         <main class="main" @click="() => router.push('/order')">
           <section class="sort"></section>
 
-           <hr />
+          <hr />
 
           <section class="section-header">
             <div class="primary-info">
-               <ion-item lines="none">
+              <ion-item lines="none">
                 <ion-label>
                   Order ID
                   <p>Customer Name</p>
@@ -249,6 +249,7 @@ import Image from '../components/Image.vue';
 import {
   IonBackButton,
   IonBadge,
+  IonButtons,
   IonButton,
   IonCard,
   IonCardContent,
@@ -269,8 +270,14 @@ import {
   IonTitle,
   IonToolbar,
   IonSelectOption,
-} from "@ionic/vue";
-import { pricetag, ribbon, downloadOutline, syncOutline, filterOutline } from 'ionicons/icons';
+} from '@ionic/vue';
+import {
+  pricetag,
+  ribbon,
+  downloadOutline,
+  syncOutline,
+  filterOutline,
+} from 'ionicons/icons';
 import { useRouter } from 'vue-router';
 
 export default {
@@ -280,6 +287,7 @@ export default {
     IonSelectOption,
     IonBackButton,
     IonBadge,
+    IonButtons,
     IonButton,
     IonCard,
     IonCardContent,
@@ -309,7 +317,7 @@ export default {
       downloadOutline,
       syncOutline,
       filterOutline,
-      router
+      router,
     };
   },
 };
@@ -324,4 +332,3 @@ export default {
   display: block;
 }
 </style>
-

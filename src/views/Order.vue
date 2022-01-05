@@ -56,18 +56,18 @@
                     <ion-label>Loyalty Status</ion-label>
                   </ion-chip>
                 </ion-item>
-                <ion-item lines="full">
+                <ion-item>
                   <ion-icon :icon="mailOutline" slot="start" />
-                  <ion-label>{{ $t("Email") }}</ion-label>
+                  <ion-label>Email</ion-label>
                 </ion-item>
                 <ion-item>
                   <ion-icon :icon="callOutline" slot="start" />
-                  <ion-label>{{ $t("Phone Number") }}</ion-label>
+                  <ion-label>Phone Number</ion-label>
                 </ion-item>
                 <ion-item lines="none">
                   <ion-icon :icon="cashOutline" slot="start" />
                   <ion-label>
-                    {{ $t("Full Name") }}
+                    Full Name
                     <p>Address line 1</p>
                     <p>Address line 1</p>
                     <p>Address line 1</p>
@@ -78,7 +78,7 @@
             </ion-card>
             <ion-card>
               <ion-list>
-                <ion-list-header>Shopify IDs</ion-list-header>
+                <ion-list-header>{{ $t("Shopify IDs") }}</ion-list-header>
                 <ion-item>
                   <ion-label> {{ $t("Order Number") }} </ion-label>
                   <p slot="end">14 Jan 2021</p>
@@ -87,7 +87,7 @@
                   <ion-label> {{ $t("Order ID") }} </ion-label>
                   <p slot="end">14 Jan 2021</p>
                 </ion-item>
-                <ion-item>
+                <ion-item lines="none">
                   <ion-label> {{ $t("Order Name") }} </ion-label>
                   <p slot="end">14 Jan 2021</p>
                 </ion-item>
@@ -108,7 +108,7 @@
                 src="https://cdn.shopify.com/s/files/1/0069/7384/9727/products/test-track.jpg?v=1626255137"
               />
               <ion-button color="secondary" fill="outline">
-                product inventory
+                {{ $t("Product inventory") }}
                 <ion-icon :icon="openOutline" />
               </ion-button>
             </div>
@@ -153,7 +153,7 @@
                 <div class="product-card">
                   <ion-card>
                     <ion-list>
-                      <ion-list-header>Destination</ion-list-header>
+                      <ion-list-header>{{ $t("Destination") }}</ion-list-header>
                       <ion-item>
                         <ion-label>
                           Full Name
@@ -164,7 +164,7 @@
                         </ion-label>
                       </ion-item>
                       <ion-buttons>
-                        <ion-button color="primary" fill="clear">edit address</ion-button>
+                        <ion-button color="primary" fill="clear">{{ $t("Edit address") }}</ion-button>
                       </ion-buttons>
                     </ion-list>
                   </ion-card>
@@ -172,8 +172,10 @@
                     <ion-list>
                       <ion-list-header>{{ $t("Pre-order") }}</ion-list-header>
                       <ion-item>
-                        <ion-label> {{ $t("Purchae Order") }} </ion-label>
-                        <ion-chip slot="end">PO#</ion-chip>
+                        <ion-label> {{ $t("Purchase order") }} </ion-label>
+                        <ion-chip slot="end">
+                          <ion-label>PO#</ion-label>
+                        </ion-chip>
                       </ion-item>
                       <ion-item>
                         <ion-label> {{ $t("Estimated arrival") }} </ion-label>
@@ -188,7 +190,7 @@
                         <p slot="end">14 Jan 2021</p>
                       </ion-item>
                       <ion-buttons>
-                        <ion-button color="primary" fill="clear">Edit dates</ion-button>
+                        <ion-button color="primary" fill="clear">{{ $t("Edit dates") }}</ion-button>
                       </ion-buttons>
                     </ion-list>
                   </ion-card>
@@ -204,11 +206,11 @@
                         <p>Tracking number</p>
                       </ion-item>
                       <ion-item>
-                        <ion-label> {{ $t("Location inventory") }} </ion-label>
+                        <ion-label> {{ $t("Location Inventory") }} </ion-label>
                         <p>0</p>
                       </ion-item>
                       <ion-buttons>
-                        <ion-button color="primary" fill="clear">Change fulfillment location</ion-button>
+                        <ion-button color="primary" fill="clear">{{ $t("Change fulfillment location") }}</ion-button>
                       </ion-buttons>
                     </ion-list>
                   </ion-card>
@@ -312,6 +314,7 @@ export default {
 .product-card {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(343px, 1fr));
+  align-items: start;
 }
 
 @media (min-width: 991px) {
