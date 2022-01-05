@@ -98,7 +98,7 @@
           </ion-card>
         </aside>
 
-        <main class="main">
+        <main class="main" @click="() => router.push('/order')">
           <section class="sort"></section>
 
            <hr />
@@ -114,12 +114,12 @@
             </div>
 
             <div class="tags">
-              <ion-chip>
+              <ion-chip outline>
                 <ion-icon :icon="pricetag" />
                 <ion-label>Shopify ID</ion-label>
               </ion-chip>
-              <ion-chip>
-                <ion-icon :icon="pricetag" />
+              <ion-chip outline>
+                <ion-icon :icon="ribbon" />
                 <ion-label>Customer Loyalty Status</ion-label>
               </ion-chip>
             </div>
@@ -131,7 +131,7 @@
           </section>
 
           <section class="section-grid">
-            <ion-card @click="() => router.push('/order')">
+            <ion-card>
               <ion-item>
                 <ion-thumbnail slot="start">
                   <Image />
@@ -245,7 +245,7 @@
 </template>
 
 <script>
-import Image from "../components/Image.vue";
+import Image from '../components/Image.vue';
 import {
   IonBackButton,
   IonBadge,
@@ -270,11 +270,11 @@ import {
   IonToolbar,
   IonSelectOption,
 } from "@ionic/vue";
-import { pricetag, ribbon, downloadOutline, syncOutline, filterOutline } from "ionicons/icons";
+import { pricetag, ribbon, downloadOutline, syncOutline, filterOutline } from 'ionicons/icons';
 import { useRouter } from 'vue-router';
 
 export default {
-  name: "Order",
+  name: 'Order',
   components: {
     Image,
     IonSelectOption,
@@ -322,11 +322,6 @@ export default {
 
 .metadata > ion-note {
   display: block;
-}
-
-hr {
-  border-width: 1px;
-  color: var(--ion-color-medium);
 }
 </style>
 

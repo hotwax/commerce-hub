@@ -55,7 +55,7 @@
           </ion-list>
         </aside>
 
-        <main class="main">
+        <main class="main" @click="() => router.push('/purchase-order')">
           <section class="sort">
             <ion-item lines="none">
               <ion-icon :icon="documentTextOutline"  slot="start" />
@@ -78,7 +78,7 @@
             <div class="product-detail">
               <section class="section-header">
                 <div class="primary-info">
-                  <ion-item lines="none" @click="() => router.push('/purchase-order')">
+                  <ion-item lines="none">
                     <ion-label>
                       <p>Product store</p>
                       PO external ID
@@ -103,7 +103,10 @@
 
               <div class="desktop-only">
                 <ion-list>
-                  <ion-list-header>{{ $t("Items") }}</ion-list-header>
+                  <ion-list-header>
+                    {{ $t("Items") }}
+                    <hr align="right" width="90%" />
+                  </ion-list-header>
                   <div class="variant-detail">
                     <div class="variant-info">
                       <ion-item lines="none">
@@ -253,25 +256,6 @@ export default {
 </script>
 
 <style scoped>
-.variant-detail {
-  display: grid;
-  grid: "vinfo vtags vmetadata" / 1fr max-content 1fr;
-  align-items: center;
-  border-bottom: 1px solid var(--ion-color-medium);
-}
-
-.variant-info {
-  grid-area: vinfo;
-}
-
-.variant-tags {
-  grid-area: vtags;
-  justify-self: center;
-}
-
-.variant-metadata {
-  grid-area: vmetadata;
-}
 
 @media (min-width: 991px) {
   .section-header {
