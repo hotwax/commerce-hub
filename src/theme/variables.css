@@ -234,3 +234,166 @@ http://ionicframework.com/docs/theming/ */
     --ion-card-background: #1e1e1e;
   }
 }
+
+.overline {
+  font-weight: 500 !important;
+  font-size: 10px !important;
+  line-height: 16px !important;
+  letter-spacing: 1.5px;
+  color: #666;
+  text-transform: uppercase !important;
+}
+
+.find {
+  display: grid;
+  grid-template-areas: "search"
+                       "main";
+}
+.find > .filters{
+  display: none;
+}
+
+.search {
+  grid-area: search;
+}
+
+.filters {
+  grid-area: filters;
+}
+
+.main {
+  grid-area: main;
+}
+
+.section-header {
+  display: grid;
+  grid-template-areas: "info metadata"
+                       "tags tags";
+  align-items: center;                     
+}
+
+.primary-info {
+  grid-area: info;
+}
+
+.tags {
+  grid-area: tags;
+  justify-self: center;
+}
+
+.metadata {
+  grid-area: metadata;
+  justify-self: end;
+}
+
+.section-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(343px, 1fr));
+}
+
+ion-thumbnail > img {
+  object-fit: contain;
+}
+
+ion-select {
+  max-width: 100%;
+}
+
+hr {
+  border-width: 1px;
+  color: var(--ion-color-medium);
+}
+
+.desktop-only {
+  display: none;
+}
+
+.mobile-only {
+  display: unset;
+}
+
+.list-item {
+  --columns-mobile: 2;
+  --columns-tablet: 5;
+  --columns-desktop: 8;
+  --col-calc: var(--columns-mobile);
+  --implicit-columns: calc(var(--col-calc) - 1);
+  display: grid;
+  grid-template-columns: repeat(var(--implicit-columns), 1fr) max-content;
+  justify-items: center;
+  align-items: center;
+}
+
+.list-item > * {
+  display: none;
+}
+
+.list-item > *:last-child {
+  display: unset;
+  justify-self: end;
+}
+
+.list-item > ion-label {
+  text-align: center;
+}
+
+.list-item > *:first-child {
+  display: unset;
+  justify-self: start
+}
+
+@media (min-width: 700px) {
+  .list-item {
+    --col-calc: var(--columns-tablet);
+  }
+
+  .tablet {
+    display: unset;
+  }
+}
+
+
+@media (min-width: 991px) {
+  .find {
+    grid: "search  main" min-content
+          "filters main" 1fr 
+          / 375px;                    
+  }
+  
+  .section-header {
+    grid: "info tags metadata" / max-content 1fr minmax(min-content, max-content);
+  }
+
+  .sort {
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  .sort > ion-item {
+    width: 308px;
+  }
+
+  .desktop-only {
+    display: unset;
+  }
+
+  .mobile-only {
+    display: none;
+  }  
+
+  .find > .filters{
+    display: unset;
+  }  
+
+  .list-item {
+    --col-calc: var(--columns-desktop);
+  }
+
+  .list-item > * {
+    display: unset;
+  }
+
+  .tablet {
+    display: unset;
+  }
+}
