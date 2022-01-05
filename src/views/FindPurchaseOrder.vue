@@ -266,7 +266,7 @@ export default {
   }
 
   .variant-tags {
-  justify-self: center;
+    justify-self: center;
   }
 
   .section-header {
