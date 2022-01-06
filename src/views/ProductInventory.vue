@@ -13,7 +13,7 @@
     </ion-header>
 
     <ion-content :fullscreen="true">
-      <main>
+      <main class="main-content">
         <section class="product">
           <div class="product-image desktop-only">
             <ion-card>
@@ -733,10 +733,6 @@ export default defineComponent({
 </script>
 
 <style scoped>
-
-main {
-  margin: var(--spacer-lg);
-}
 
 .product {
   display: grid;

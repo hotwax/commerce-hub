@@ -324,8 +324,8 @@ export default {
 </script>
 
 <style scoped>
-.main {
-  margin-left: var(--spacer-2xl);
+.section-header{
+  margin: 0 var(--spacer-xs);
 }
 
 .metadata {
@@ -334,5 +334,11 @@ export default {
 
 .metadata > ion-note {
   display: block;
+}
+
+@media (min-width: 991px) {
+  .main {
+    margin-left: var(--spacer-xl);
+  }
 }
 </style>

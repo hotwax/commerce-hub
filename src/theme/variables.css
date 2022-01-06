@@ -257,12 +257,7 @@ http://ionicframework.com/docs/theming/ */
 .find {
   display: grid;
   grid-template-areas: "search"
-                       "main";
-  margin: var(--spacer-lg);                     
-}
-
-.find > .main {
-  margin-left: var(--spacer-lg);
+                       "main";            
 }
 
 .find > .filters{
@@ -271,7 +266,7 @@ http://ionicframework.com/docs/theming/ */
 
 .search {
   grid-area: search;
-  margin-bottom: var(--spacer-xl);
+  margin-bottom: var(--spacer-lg);
 }
 
 .filters {
@@ -374,7 +369,8 @@ hr {
   .find {
     grid: "search  main" min-content
           "filters main" 1fr 
-          / 375px;                    
+          / 375px; 
+    margin: var(--spacer-lg);                            
   }
   
   .section-header {
@@ -402,6 +398,18 @@ hr {
   .find > .filters{
     display: unset;
   }  
+
+  .find > .main {
+    margin-left: var(--spacer-lg);
+  }
+
+  .products > ion-item {
+    margin-bottom: var(--spacer-lg);
+  }
+
+  .main-content {
+    margin: var(--spacer-lg);
+  }
 
   .list-item {
     --col-calc: var(--columns-desktop);

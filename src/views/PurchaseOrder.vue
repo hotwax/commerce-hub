@@ -14,7 +14,7 @@
     </ion-header>
 
     <ion-content :fullscreen="true">
-      <main>
+      <main class="main-content">
         <section class="header">
           <div class="id">
             <ion-item lines="none">
@@ -109,12 +109,12 @@
           </div>
         </section>
 
-        <section>
+        <section class="products">
           <ion-item lines="none">
             <ion-icon slot="start" :icon="shirtOutline" />
             <ion-label>Products</ion-label>
           </ion-item>
-          <div class="product">
+          <div class="product-detail">
             <div class="product-image desktop-only">
               <Image src="https://cdn.shopify.com/s/files/1/0069/7384/9727/products/test-track.jpg?v=1626255137"/>
             </div>
@@ -353,41 +353,20 @@ export default defineComponent({
 </script>
 
 <style scoped>
-main {
-  margin: var(--spacer-lg);
-}
-
-.header {
-  display: grid;
-  grid-template-areas: "po"
-                       "timeline"
-                       "podetail";
-  align-items: center;
-}
-
-.po-header {
-  grid-area: po;
-}
-
-.po-detail {
-  grid-area: podetail;
-}
-
-.timeline {
-  grid-area: timeline;
-}
 
 @media (min-width: 991px) {
-
-  .product {
+  .product-detail {
     display: grid;
     grid-template-columns: 250px 1fr;
     align-items: center;
   }
-
   .product-image {
-    border: 1px solid black;
+    border: 1px solid var(--ion-color-medium);
     border-radius: 10px;
+  }
+
+  .product-info {
+    margin-left: var(--spacer-lg);
   }
 }
 </style>
