@@ -178,8 +178,8 @@
                     Variants
                     <hr align="right" width="90%" />
                   </ion-list-header>
-                  <div class="variant-detail">
-                    <div class="variant-info">
+                  <div class="list-item">
+                    <div>
                       <ion-item lines="none">
                         <ion-label>
                           SKU
@@ -196,7 +196,7 @@
                       </ion-chip>
                     </div>
 
-                    <div class="variant-metadata">
+                    <div>
                       <ion-item lines="none" detail>
                         <ion-note slot="end" class="metatags">3 variants</ion-note>
                       </ion-item>
