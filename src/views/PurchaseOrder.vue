@@ -353,6 +353,10 @@ export default defineComponent({
 </script>
 
 <style scoped>
+main {
+  margin: var(--spacer-lg);
+}
+
 .header {
   display: grid;
   grid-template-areas: "po"

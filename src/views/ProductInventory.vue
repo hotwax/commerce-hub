@@ -733,6 +733,11 @@ export default defineComponent({
 </script>
 
 <style scoped>
+
+main {
+  margin: var(--spacer-lg);
+}
+
 .product {
   display: grid;
   grid-template-columns: 254px auto;

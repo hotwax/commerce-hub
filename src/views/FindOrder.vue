@@ -316,6 +316,10 @@ export default {
 </script>
 
 <style scoped>
+.main {
+  margin-left: var(--spacer-2xl);
+}
+
 .metadata {
   text-align: end;
 }
