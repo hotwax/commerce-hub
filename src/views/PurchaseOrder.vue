@@ -16,7 +16,7 @@
     <ion-content :fullscreen="true">
       <main>
         <section class="header">
-          <div class="po-header">
+          <div class="id">
             <ion-item lines="none">
               <ion-icon slot="start" :icon="ticketOutline" />
               <ion-label>External Purchase Order ID</ion-label>
@@ -24,7 +24,43 @@
             </ion-item>
           </div>
 
-          <div class="po-detail">
+          <div class="timeline">
+            <div>
+              <ion-item lines="none" detail>
+                <ion-icon slot="start" :icon="timeOutline" class="mobile-only" />
+                <ion-label>{{ $t("Timeline") }}</ion-label>
+                <ion-note slot="end">1:07pm 6th Dec 2021</ion-note>
+              </ion-item>
+            </div>
+            <div class="desktop-only">
+              <ion-item>
+                <ion-icon slot="start" :icon="ticketOutline" />
+                <ion-label>
+                  <p class="overline">+ 10 minutes</p>
+                  Imported from ERP
+                </ion-label>
+                <ion-icon :icon="informationCircleOutline" />
+              </ion-item>
+              <ion-item>
+                <ion-icon slot="start" :icon="businessOutline" />
+                <ion-label>
+                  <p class="overline">+ 2 hours 15 minutes</p>
+                  4 items received
+                </ion-label>
+                <ion-icon :icon="informationCircleOutline" />
+              </ion-item>
+              <ion-item>
+                <ion-icon slot="start" :icon="shirtOutline" />
+                <ion-label>
+                  <p class="overline">+ 20 minutes</p>
+                  SKU added
+                </ion-label>
+                <ion-icon :icon="informationCircleOutline" />
+              </ion-item>
+            </div>
+          </div>
+
+          <div class="cards">
             <div>
               <ion-card>
                 <ion-card-header>
@@ -69,42 +105,6 @@
                   </ion-button>
                 </ion-item>
               </ion-card>
-            </div>
-          </div>
-
-          <div class="timeline">
-            <div>
-              <ion-item lines="none" detail>
-                <ion-icon slot="start" :icon="timeOutline" class="mobile-only" />
-                <ion-label>{{ $t("Timeline") }}</ion-label>
-                <ion-note slot="end">1:07pm 6th Dec 2021</ion-note>
-              </ion-item>
-            </div>
-            <div class="desktop-only">
-              <ion-item>
-                <ion-icon slot="start" :icon="ticketOutline" />
-                <ion-label>
-                  <p class="overline">+ 10 minutes</p>
-                  Imported from ERP
-                </ion-label>
-                <ion-icon :icon="informationCircleOutline" />
-              </ion-item>
-              <ion-item>
-                <ion-icon slot="start" :icon="businessOutline" />
-                <ion-label>
-                  <p class="overline">+ 2 hours 15 minutes</p>
-                  4 items received
-                </ion-label>
-                <ion-icon :icon="informationCircleOutline" />
-              </ion-item>
-              <ion-item>
-                <ion-icon slot="start" :icon="shirtOutline" />
-                <ion-label>
-                  <p class="overline">+ 20 minutes</p>
-                  SKU added
-                </ion-label>
-                <ion-icon :icon="informationCircleOutline" />
-              </ion-item>
             </div>
           </div>
         </section>
@@ -378,21 +378,6 @@ main {
 }
 
 @media (min-width: 991px) {
-  .header {
-    display: grid;
-    grid: "po       timeline"
-          "podetail timeline" 
-          / max-content 400px;
-    justify-content: space-between;  
-  }
-  .po-detail {
-    display: grid;
-    grid-template-columns: repeat(2, 400px);
-  }
-
-  .timeline {
-    border-left: 1px solid var(--ion-color-medium);
-  }
 
   .product {
     display: grid;

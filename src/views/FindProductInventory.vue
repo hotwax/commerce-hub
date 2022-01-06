@@ -119,7 +119,7 @@
            </ion-list>
         </aside>
 
-        <main class="main">
+        <main class="main" @click="() => router.push('/product-inventory')">
           <section class="sort">
             <ion-item lines="none" class="border-sort">
               <ion-icon slot="start" :icon="folderOutline" />
@@ -147,7 +147,7 @@
             <div class="product-detail">
               <section class="section-header">
                 <div class="primary-info">
-                  <ion-item lines="none" @click="() => router.push('/product-inventory')">
+                  <ion-item lines="none">
                     <ion-thumbnail slot="start" class="mobile-only">
                       <Image src="https://cdn.shopify.com/s/files/1/0069/7384/9727/products/test-track.jpg?v=1626255137" />
                     </ion-thumbnail>
@@ -174,7 +174,10 @@
 
               <div class="desktop-only">
                 <ion-list>
-                  <ion-list-header>Variants</ion-list-header>
+                  <ion-list-header>
+                    Variants
+                    <hr align="right" width="90%" />
+                  </ion-list-header>
                   <div class="variant-detail">
                     <div class="variant-info">
                       <ion-item lines="none">
@@ -199,8 +202,9 @@
                       </ion-item>
                     </div>
                   </div>
-                  <div class="variant-detail">
-                    <div class="virtual-info">
+                  <hr align="right" width="90%" />
+                  <div class="list-item">
+                    <div>
                       <ion-item lines="none">
                         <ion-label>
                           SKU
@@ -215,12 +219,13 @@
                        <ion-label>{{ $t("Shopify ID") }}</ion-label>
                       </ion-chip>
                     </div>
-                    <div class="variant-metadata">
+                    <div>
                       <ion-item lines="none" detail>
                         <ion-note slot="end" class="metatags">3 variants</ion-note>
                       </ion-item>
                     </div>
                   </div>
+                  <hr />
                 </ion-list>
               </div>
             </div>
@@ -232,8 +237,9 @@
     </ion-content>
   </ion-page>
 </template>
+
 <script>
-import Image from "../components/Image.vue";
+import Image from '../components/Image.vue';
 import {
   IonBackButton,
   IonButton,
@@ -259,19 +265,19 @@ import {
   IonThumbnail,
   IonTitle,
   IonToolbar,
-} from "@ionic/vue";
+} from '@ionic/vue';
 import {
   folderOutline,
   swapVerticalOutline,
   downloadOutline,
   sync,
   filterOutline,
-} from "ionicons/icons";
+} from 'ionicons/icons';
 
 import { useRouter } from 'vue-router';
 
 export default {
-  name: "ProductInventory",
+  name: 'ProductInventory',
   components: {
     Image,
     IonBackButton,
@@ -316,30 +322,11 @@ export default {
 </script>
 
 <style scoped>
-.variant-detail {
-  display: grid;
-  grid: "vinfo vtags vmetadata" / 1fr max-content 1fr;
-  align-items: center;
-  border-bottom: 1px solid #92949c;
-}
-
-.variant-info {
-  grid-area: vinfo;
-}
-
-.variant-tags {
-  grid-area: vtags;
-  justify-self: center;
-}
-
-.variant-metadata {
-  grid-area: vmetadata;
-}
 
 @media (min-width: 991px) {
   .product {
     display: grid;
-    grid-template-columns: 115px auto;
+    grid-template-columns: 115px 1fr;
   }
 
   .product-image {
@@ -348,6 +335,15 @@ export default {
 
   .section-header {
   grid-template-columns: 1fr max-content 1fr;
+  }
+
+  .list-item {
+    --columns-desktop: 3;
+    grid-template-columns: 1fr max-content 1fr;
+  }
+
+  .variant-tags {
+  justify-self: center;
   }
 }
 </style>

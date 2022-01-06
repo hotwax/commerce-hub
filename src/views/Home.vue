@@ -88,11 +88,11 @@
                 </ion-item>
                 <ion-item>
                   <ion-label>Last brokered</ion-label>
-                  <ion-text slot="end">California Warehouse</ion-text>
+                  <ion-label slot="end">California Warehouse</ion-label>
                 </ion-item>
                 <ion-item>
                   <ion-label>Rebrokered</ion-label>
-                  <ion-text slot="end">5 times</ion-text>
+                  <ion-label slot="end">5 times</ion-label>
                 </ion-item>
               </ion-card>
           </div>  

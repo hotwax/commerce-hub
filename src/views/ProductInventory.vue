@@ -99,7 +99,7 @@
             </ion-list>
           </div>
 
-          <div class="variant-info desktop-only">
+          <div class="variant-features desktop-only">
             <ion-card>
               <ion-card-header>
                 <ion-card-title>{{ $t("Shopify IDs") }}</ion-card-title>
@@ -746,7 +746,7 @@ main {
 }
 
 .product-info,
-.variant-info {
+.variant-features {
   width: 343px;
 }
 
