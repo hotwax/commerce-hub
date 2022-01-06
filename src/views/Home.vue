@@ -8,7 +8,7 @@
 
       <div class="header">
         <nav class="nav-card">
-          <a :href="'http://localhost:8102/?token=' + token">
+          <a :href="openApp()">
             <ion-card>
               <img src="../assets/images/PreOrder.svg" />
               <ion-card-header>
@@ -130,9 +130,20 @@ export default defineComponent({
      token: 'user/getUserToken'
     })
   },
+  methods: {
+    openApp( ) {
+      const userInfo = {
+        token: this.token,
+        baseURL: "dev-hc",
+        slug: "product-details",
+        id: 10000
+      }
+      const info = JSON.stringify(userInfo);
+      return 'http://localhost:8101/?info=' + info;
+    }
+  },
   setup() {
     const router = useRouter();
-
     return {
       router,
       ticketOutline,
