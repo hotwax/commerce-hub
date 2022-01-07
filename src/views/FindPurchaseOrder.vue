@@ -55,7 +55,7 @@
           </ion-list>
         </aside>
 
-        <main class="main" @click="() => router.push('/purchase-order')">
+        <main class="main">
           <section class="sort">
             <ion-item lines="none">
               <ion-icon :icon="documentTextOutline"  slot="start" />
@@ -74,7 +74,7 @@
 
           <hr />
 
-          <div class="product">
+          <div class="product" @click="() => router.push('/purchase-order')">
             <div class="product-detail">
               <section class="section-header">
                 <div class="primary-info">
