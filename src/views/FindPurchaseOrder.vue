@@ -105,7 +105,7 @@
                 <ion-list>
                   <ion-list-header>
                     {{ $t("Items") }}
-                    <hr align="right" width="90%" />
+                    <hr />
                   </ion-list-header>
                   <div class="list-item">
                     <div>
@@ -135,7 +135,7 @@
                       </ion-item>
                     </div>
                   </div>
-                  <hr align="right" width="90%" />
+                  <hr />
                   <div class="list-item">
                     <div class="variant-info">
                       <ion-item lines="none">

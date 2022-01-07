@@ -178,7 +178,7 @@ ion-card > ion-card-header {
 }
 
 .pages-card > ion-item {
-  border: 1px solid black;
+  border: 1px solid var(--ion-color-medium);
   border-radius: 15px;
 }
 

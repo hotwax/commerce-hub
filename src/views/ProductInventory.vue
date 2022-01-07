@@ -62,7 +62,7 @@
         <hr />
 
         <section class="variant">
-          <div class="variant-features">
+          <div class="variant-info">
             <ion-item class="desktop-only" lines="none">
               <ion-icon slot="start" :icon="shirtOutline" />
               <ion-label>{{ $t("Variant") }}</ion-label>
@@ -99,7 +99,7 @@
             </ion-list>
           </div>
 
-          <div class="variant-features desktop-only">
+          <div class="variant-id desktop-only">
             <ion-card>
               <ion-card-header>
                 <ion-card-title>{{ $t("Shopify IDs") }}</ion-card-title>
@@ -741,7 +741,8 @@ export default defineComponent({
 }
 
 .product-info,
-.variant-features {
+.variant-info,
+.variant-id {
   width: 343px;
 }
 

@@ -60,7 +60,7 @@
             </div>
           </div>
 
-          <div class="cards">
+          <div class="info">
             <div>
               <ion-card>
                 <ion-card-header>
@@ -164,7 +164,7 @@
               <ion-list class="desktop-only">
                 <ion-list-header>
                   {{ $t("Items") }}
-                  <hr align="right" width="90%" />
+                  <hr />
                 </ion-list-header>
 
                 <div class="list-item">
@@ -207,7 +207,7 @@
                   </ion-button>
                 </div>
 
-                <hr align="right" width="90%" />
+                <hr />
 
                 <div class="list-item">
                   <ion-item lines="none">
@@ -363,7 +363,7 @@ export default defineComponent({
   }
 
   .product-image {
-    border: 1px solid black;
+    border: 1px solid var(--ion-color-medium);
     border-radius: 10px;
   }
 }

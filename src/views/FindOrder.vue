@@ -98,11 +98,12 @@
           </ion-card>
         </aside>
 
-        <main class="main" @click="() => router.push('/order')">
+        <main class="main">
           <section class="sort"></section>
 
           <hr />
 
+          <!-- Order Item Section -->
           <section class="section-header">
             <div class="primary-info">
               <ion-item lines="none">
@@ -130,7 +131,7 @@
             </div>
           </section>
 
-          <section class="section-grid">
+          <section class="section-grid" @click="() => router.push('/order')">
             <ion-card>
               <ion-item>
                 <ion-thumbnail slot="start">

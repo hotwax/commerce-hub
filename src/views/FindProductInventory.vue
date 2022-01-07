@@ -119,7 +119,7 @@
            </ion-list>
         </aside>
 
-        <main class="main" @click="() => router.push('/product-inventory')">
+        <main class="main">
           <section class="sort">
             <ion-item lines="none" class="border-sort">
               <ion-icon slot="start" :icon="folderOutline" />
@@ -139,12 +139,13 @@
 
            <hr />
 
-          <div class="product">
+          <div class="product" @click="() => router.push('/product-inventory')">
             <div class="product-image desktop-only">
                 <Image src="https://cdn.shopify.com/s/files/1/0069/7384/9727/products/test-track.jpg?v=1626255137" />
             </div>
 
             <div class="product-detail">
+              <!-- Product Item Section -->
               <section class="section-header">
                 <div class="primary-info">
                   <ion-item lines="none">
@@ -176,7 +177,7 @@
                 <ion-list>
                   <ion-list-header>
                     Variants
-                    <hr align="right" width="90%" />
+                    <hr />
                   </ion-list-header>
                   <div class="list-item">
                     <div>
@@ -202,7 +203,7 @@
                       </ion-item>
                     </div>
                   </div>
-                  <hr align="right" width="90%" />
+                  <hr />
                   <div class="list-item">
                     <div>
                       <ion-item lines="none">

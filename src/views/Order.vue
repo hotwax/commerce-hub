@@ -46,7 +46,7 @@
             </div>
           </div>
 
-          <div class="cards">
+          <div class="info">
             <ion-card>
               <ion-list>
                 <ion-item lines="none">
@@ -327,7 +327,7 @@ export default {
   .product-image {
     grid-area: image;
     height: 362px;
-    border: 1px solid black;
+    border: 1px solid var(--ion-color-medium);
     border-radius: 10px;
   }
 
