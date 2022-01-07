@@ -74,6 +74,7 @@
 
           <hr />
 
+          <!-- Product section -->
           <div @click="() => router.push('/purchase-order')">
             <section class="section-header">
               <div class="primary-info">

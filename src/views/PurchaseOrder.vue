@@ -98,7 +98,7 @@
             <ion-icon slot="start" :icon="shirtOutline" />
             <ion-label>Products</ion-label>
           </ion-item>
-
+          
           <div class="product">
             <div class="product-image desktop-only">
               <Image src="https://cdn.shopify.com/s/files/1/0069/7384/9727/products/test-track.jpg?v=1626255137"/>

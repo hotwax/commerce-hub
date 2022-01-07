@@ -92,6 +92,7 @@
           </div>
         </section>
 
+        <!-- Product section -->
         <section>
           <ion-item lines="none">
             <ion-icon slot="start" :icon="shirtOutline" />
