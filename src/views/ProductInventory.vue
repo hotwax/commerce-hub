@@ -15,11 +15,10 @@
     <ion-content :fullscreen="true">
       <main>
         <section class="product">
-          <div class="product-image desktop-only">
-            <ion-card>
-              <Image src="https://cdn.shopify.com/s/files/1/0069/7384/9727/products/test-track.jpg?v=1626255137" />
-            </ion-card>
-          </div>
+          <ion-card class="product-image desktop-only">
+            <Image src="https://cdn.shopify.com/s/files/1/0069/7384/9727/products/test-track.jpg?v=1626255137" />
+          </ion-card>
+        
           <div class="product-info desktop-only">
             <ion-label>Parent product name</ion-label>
             <ion-card>
@@ -126,7 +125,7 @@
             <ion-label>Orders</ion-label>
           </ion-item>
           <div class="orders">
-            <div class="shipping-method">
+            <div>
               <ion-card>
                 <ion-card-header>
                   <ion-card-title>{{ $t("Shipping method") }}</ion-card-title>
@@ -222,8 +221,9 @@
 
           <div v-if="segment == 'locations'">
             <ion-searchbar class="mobile-only" />
+
             <div class="actions">
-              <div class="action-chips">
+              <div>
                 <ion-chip>
                   <ion-icon :icon="checkmarkOutline" />
                   <ion-label>All</ion-label>
@@ -235,15 +235,19 @@
                   <ion-label>Warehouses</ion-label>
                 </ion-chip>
               </div>
-              <div class="action-buttons desktop-only">
-                <ion-button fill="outline" color="medium">{{ $t("Edit ordered stock") }}</ion-button>
-                <ion-button fill="outline" color="medium">{{ $t("Edit qoh") }}</ion-button>
+              <div class="desktop-only">
+                <ion-button fill="outline" color="medium">{{
+                  $t("Edit ordered stock")
+                }}</ion-button>
+                <ion-button fill="outline" color="medium">{{
+                  $t("Edit qoh")
+                }}</ion-button>
               </div>
             </div>
 
             <hr />
 
-            <div class="list-item locations">
+            <div class="list-item">
               <ion-item lines="none">
                 <ion-icon :icon="globeOutline" slot="start" />
                 <ion-label>30 {{ $t("locations") }}</ion-label>
@@ -276,14 +280,18 @@
 
               <ion-checkbox />
 
-              <ion-button fill="clear" color="medium" @click="openLocationPopover">
+              <ion-button
+                fill="clear"
+                color="medium"
+                @click="openLocationPopover"
+              >
                 <ion-icon slot="icon-only" :icon="ellipsisVerticalOutline" />
               </ion-button>
             </div>
 
             <hr />
 
-            <div class="list-item locations">
+            <div class="list-item">
               <ion-item lines="none">
                 <ion-icon :icon="storefrontOutline" slot="start" />
                 <ion-label>
@@ -327,7 +335,7 @@
 
             <hr />
 
-            <div class="list-item locations">
+            <div class="list-item">
               <ion-item lines="none">
                 <ion-icon :icon="businessOutline" slot="start" />
                 <ion-label>
@@ -370,12 +378,11 @@
             </div>
 
             <hr />
-
           </div>
 
           <div v-if="segment == 'purchase-orders'">
             <div class="actions">
-              <div class="action-chips">
+              <div>
                 <ion-chip>
                   <ion-icon :icon="checkmarkOutline" />
                   <ion-label>All</ion-label>
@@ -428,12 +435,11 @@
             </div>
 
             <hr />
-
           </div>
 
           <div v-if="segment == 'fulfillment'">
             <div class="actions">
-              <div class="action-chips">
+              <div>
                 <ion-chip>
                   <ion-icon :icon="checkmarkOutline" />
                   <ion-label>All</ion-label>
@@ -453,7 +459,7 @@
 
             <hr />
 
-            <div class="list-item fulfillment">
+            <div class="list-item">
               <ion-item lines="none">
                 <ion-icon :icon="globeOutline" slot="start" />
                 <ion-label>2 {{ $t("locations") }}</ion-label>
@@ -493,7 +499,7 @@
 
             <hr />
 
-            <div class="list-item fulfillment">
+            <div class="list-item">
               <ion-item lines="none">
                 <ion-icon :icon="storefrontOutline" slot="start" />
                 <ion-label>
@@ -536,7 +542,7 @@
 
             <hr />
 
-            <div class="list-item fulfillment">
+            <div class="list-item">
               <ion-item lines="none">
                 <ion-icon :icon="businessOutline" slot="start" />
                 <ion-label>
@@ -578,7 +584,6 @@
             </div>
 
             <hr />
-
           </div>
 
           <div v-if="segment == 'logs'"></div>
@@ -726,7 +731,7 @@ export default defineComponent({
       syncOutline,
       ticketOutline,
       router,
-      segment,
+      segment
     }
   }
 });
@@ -754,8 +759,8 @@ export default defineComponent({
   align-items: center;
 }
 
-.open-orders > ion-card > ion-item > ion-label:not(:first-child)  {
-   text-align: center;
+.open-orders > ion-card > ion-item > ion-label:not(:first-child) {
+  text-align: center;
 }
 
 /*Height of segment is defined now since their are less list items. Will remove it later */

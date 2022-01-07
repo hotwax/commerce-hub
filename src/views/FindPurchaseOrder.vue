@@ -58,7 +58,7 @@
         <main class="main">
           <section class="sort">
             <ion-item lines="none">
-              <ion-icon :icon="documentTextOutline"  slot="start" />
+              <ion-icon :icon="documentTextOutline" slot="start" />
               <ion-label>{{ $t("Show order items") }}</ion-label>
               <ion-toggle slot="end" checked></ion-toggle>
             </ion-item>
@@ -74,103 +74,70 @@
 
           <hr />
 
-          <div class="product" @click="() => router.push('/purchase-order')">
-            <div class="product-detail">
-              <section class="section-header">
-                <div class="primary-info">
-                  <ion-item lines="none">
-                    <ion-label>
-                      <p>Product store</p>
-                      PO external ID
-                      <p>Created date</p>
-                    </ion-label>
-                  </ion-item>
-                </div>
-
-                <div class="tags desktop-only">
-                  <ion-chip outline>
-                    <ion-icon :icon="calendarOutline" />
-                    <ion-label>Arrival date</ion-label>
-                  </ion-chip>
-                </div>
-
-                <div class="metadata">
-                  <ion-item lines="none" detail>
-                    <ion-note slot="end" class="metatags">2 {{ $t("variants") }}</ion-note>
-                  </ion-item>
-                </div>
-              </section>
-
-              <div class="desktop-only">
-                <ion-list>
-                  <ion-list-header>
-                    {{ $t("Items") }}
-                    <hr />
-                  </ion-list-header>
-                  <div class="list-item">
-                    <div>
-                      <ion-item lines="none">
-                        <ion-thumbnail slot="start">
-                          <Image src="https://cdn.shopify.com/s/files/1/0069/7384/9727/products/test-track.jpg?v=1626255137" />
-                        </ion-thumbnail>
-                        <ion-label>
-                          SKU
-                          <p>{{ $t("Color") }} : color</p>
-                          <p>{{ $t("Size") }}: size</p>
-                        </ion-label>
-                      </ion-item>
-                    </div>
-
-                    <div class="variant-tags">
-                      <ion-chip outline>
-                        <!-- TODO -->
-                        <ion-icon />
-                        <ion-label>Shopify ID</ion-label>
-                      </ion-chip>
-                    </div>
-
-                    <div>
-                      <ion-item lines="none">
-                        <ion-note slot="end" class="metatags">ATP Ordered</ion-note>
-                      </ion-item>
-                    </div>
-                  </div>
-                  <hr />
-                  <div class="list-item">
-                    <div class="variant-info">
-                      <ion-item lines="none">
-                        <ion-thumbnail slot="start">
-                          <Image src="https://cdn.shopify.com/s/files/1/0069/7384/9727/products/test-track.jpg?v=1626255137" />
-                        </ion-thumbnail>
-                        <ion-label>
-                          SKU
-                          <p>{{ $t("Color") }} : color</p>
-                          <p>{{ $t("Size") }}: size</p>
-                        </ion-label>
-                      </ion-item>
-                    </div>
-
-                    <div class="variant-tags">
-                      <ion-chip outline>
-                        <!-- TODO -->
-                        <ion-icon />
-                        <ion-label>Shopify ID</ion-label>
-                      </ion-chip>
-                    </div>
-
-                    <div class="variant-metadata">
-                      <ion-item lines="none">
-                        <ion-note slot="end" class="metatags">ATP Ordered</ion-note>
-                      </ion-item>
-                    </div>
-                  </div>
-                  <hr />
-                </ion-list>
+          <div @click="() => router.push('/purchase-order')">
+            <section class="section-header">
+              <div class="primary-info">
+                <ion-item lines="none">
+                  <ion-label>
+                    <p>Product store</p>
+                    PO external ID
+                    <p>Created date</p>
+                  </ion-label>
+                </ion-item>
               </div>
+
+              <div class="tags desktop-only">
+                <ion-chip outline>
+                  <ion-icon :icon="calendarOutline" />
+                  <ion-label>Arrival date</ion-label>
+                </ion-chip>
+              </div>
+
+              <div class="metadata">
+                <ion-item lines="none" detail>
+                  <ion-note slot="end">2 {{ $t("variants") }}</ion-note>
+                </ion-item>
+              </div>
+            </section>
+
+            <div class="desktop-only">
+              <ion-list>
+                <ion-list-header>
+                  {{ $t("Items") }}
+                  <hr />
+                </ion-list-header>
+                <div v-for="item in 2" :key="item" class="list-item">
+                  <div>
+                    <ion-item lines="none">
+                      <ion-thumbnail slot="start">
+                        <Image src="https://cdn.shopify.com/s/files/1/0069/7384/9727/products/test-track.jpg?v=1626255137" />
+                      </ion-thumbnail>
+                      <ion-label>
+                        SKU
+                        <p>{{ $t("Color") }} : color</p>
+                        <p>{{ $t("Size") }}: size</p>
+                      </ion-label>
+                    </ion-item>
+                  </div>
+
+                  <div>
+                    <ion-chip outline>
+                      <!-- TODO -->
+                      <ion-icon />
+                      <ion-label>Shopify ID</ion-label>
+                    </ion-chip>
+                  </div>
+
+                  <div>
+                    <ion-item lines="none">
+                      <ion-note slot="end">ATP Ordered</ion-note>
+                    </ion-item>
+                  </div>
+                </div>
+                <hr />
+              </ion-list>
             </div>
           </div>
-
-          <section class="section-grid"></section>
         </main>
       </div>
     </ion-content>
@@ -258,15 +225,10 @@ export default {
 </script>
 
 <style scoped>
-
 @media (min-width: 991px) {
   .list-item {
     --columns-desktop: 3;
     grid-template-columns: 1fr max-content 1fr;
-  }
-
-  .variant-tags {
-    justify-self: center;
   }
 
   .section-header {

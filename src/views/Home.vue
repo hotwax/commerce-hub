@@ -6,8 +6,8 @@
         <img src="../assets/images/hc.png"/>
       </figure>
 
-      <div class="header">
-        <nav class="nav-card">
+      <nav>
+        <section class="external">
           <a href="">
             <ion-card>
               <img src="../assets/images/PreOrder.svg" />
@@ -32,9 +32,9 @@
               </ion-card-header>
             </ion-card>
           </a>
-        </nav>
+        </section>
 
-        <section class="pages-card">
+        <section class="internal">
           <ion-item button @click="() => router.push('/find-order')" lines="none" detail>
             <ion-icon :icon="ticketOutline" slot="start" />
             <ion-label>Orders</ion-label>
@@ -56,7 +56,7 @@
             <ion-label>Settings</ion-label>
           </ion-item>
         </section>
-      </div>
+      </nav>
 
       <section class="scroller">
         <ion-item class="scroller-header" lines="none">
@@ -150,7 +150,7 @@ figure > img {
   height: 122px;
 }
 
-.header {
+nav {
   display: grid;
   grid-template-columns: auto 375px;
   align-items: center;
@@ -158,7 +158,7 @@ figure > img {
   margin: auto;
 }
 
-.nav-card {
+.external {
   display: flex;
 }
 
@@ -177,7 +177,7 @@ ion-card > ion-card-header {
   text-align: center;
 }
 
-.pages-card > ion-item {
+.internal > ion-item {
   border: 1px solid var(--ion-color-medium);
   border-radius: 15px;
 }

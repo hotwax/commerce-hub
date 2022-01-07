@@ -32,28 +32,12 @@
                 <ion-note slot="end">1:07pm 6th Dec 2021</ion-note>
               </ion-item>
             </div>
-            <div class="desktop-only">
+            <div v-for="item in 3" :key="item" class="desktop-only">
               <ion-item>
                 <ion-icon slot="start" :icon="ticketOutline" />
                 <ion-label>
                   <p class="overline">+ 10 minutes</p>
                   Imported from ERP
-                </ion-label>
-                <ion-icon :icon="informationCircleOutline" />
-              </ion-item>
-              <ion-item>
-                <ion-icon slot="start" :icon="businessOutline" />
-                <ion-label>
-                  <p class="overline">+ 2 hours 15 minutes</p>
-                  4 items received
-                </ion-label>
-                <ion-icon :icon="informationCircleOutline" />
-              </ion-item>
-              <ion-item>
-                <ion-icon slot="start" :icon="shirtOutline" />
-                <ion-label>
-                  <p class="overline">+ 20 minutes</p>
-                  SKU added
                 </ion-label>
                 <ion-icon :icon="informationCircleOutline" />
               </ion-item>
@@ -114,12 +98,13 @@
             <ion-icon slot="start" :icon="shirtOutline" />
             <ion-label>Products</ion-label>
           </ion-item>
+
           <div class="product">
             <div class="product-image desktop-only">
               <Image src="https://cdn.shopify.com/s/files/1/0069/7384/9727/products/test-track.jpg?v=1626255137"/>
             </div>
 
-            <div class="product-info">
+            <div>
               <hr />
 
               <div class="list-item">
@@ -282,7 +267,7 @@ import {
   IonThumbnail,
   IonTitle,
   IonToolbar,
-  popoverController,
+  popoverController
 } from '@ionic/vue';
 import { defineComponent } from 'vue';
 import {
@@ -294,7 +279,7 @@ import {
   shirtOutline,
   syncOutline,
   ticketOutline,
-  timeOutline,
+  timeOutline
 } from 'ionicons/icons';
 import Image from '@/components/Image.vue';
 import ProductPopover from '@/components/ProductPopover.vue';
@@ -323,7 +308,7 @@ export default defineComponent({
     IonThumbnail,
     IonTitle,
     IonToolbar,
-    Image,
+    Image
   },
   methods: {
     async openProductPopover(ev: Event) {
@@ -346,16 +331,14 @@ export default defineComponent({
       shirtOutline,
       syncOutline,
       ticketOutline,
-      timeOutline,
-    };
-  },
+      timeOutline
+    }
+  }
 });
 </script>
 
 <style scoped>
-
 @media (min-width: 991px) {
-
   .product {
     display: grid;
     grid-template-columns: 250px 1fr;
