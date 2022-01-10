@@ -66,10 +66,10 @@
   
         <div class="scroller-wrapper" ref="ionCard">
           <div @click="prevItems($event)" class="button-nav-wrapper prev-button-wrapper">
-            <ion-icon :icon="arrowBack" slot="start" />
+            <ion-icon :icon="chevronBackOutline" />
           </div>
           <div @click="nextItems($event)" class="button-nav-wrapper next-button-wrapper">
-            <ion-icon :icon="arrowForward" slot="end" />
+            <ion-icon :icon="chevronForwardOutline" />
           </div>
           <div class="scroller-content" ref="scrollItem">
             <div class="scroller-item" v-for="i = 1 in 10" :key="i" >
@@ -115,7 +115,7 @@
 import { IonButton, IonCard, IonContent, IonCardHeader, IonCardTitle, IonIcon, IonItem, IonLabel, IonNote, IonPage, IonThumbnail } from '@ionic/vue';
 import { defineComponent } from 'vue';
 import { useRouter } from 'vue-router';
-import { ticketOutline, shirtOutline, sendOutline, calendarOutline, settingsOutline, arrowBack, arrowForward } from 'ionicons/icons';
+import { ticketOutline, shirtOutline, sendOutline, calendarOutline, settingsOutline, chevronForwardOutline, chevronBackOutline } from 'ionicons/icons';
 import { createAnimation } from '@ionic/vue';
 import { ref } from 'vue';
 
@@ -145,8 +145,8 @@ export default defineComponent({
       sendOutline,
       calendarOutline,
       settingsOutline,
-      arrowBack,
-      arrowForward,
+      chevronBackOutline,
+      chevronForwardOutline,
       ionCard,
       scrollItem
     }
@@ -163,6 +163,12 @@ export default defineComponent({
     },
     async prevItems(event: any) {
       this.ionCard.scrollLeft -= 350;
+      const animation = createAnimation()
+        .addElement(this.scrollItem)
+        .easing('linear')
+        .duration(1500)
+        .fromTo('transform', 'translate(150px)', 'translate(350px)');
+        animation.play();
     },
   }
 });
@@ -218,15 +224,12 @@ ion-card > ion-card-header {
 
 .scroller-content {
   display: flex;
-  scroll-behavior: smooth;
-  scroll-snap-type: x mandatory;
 }
 
 .scroller-item{
   flex-shrink: 0;
   position: relative;
   transform: translateX(calc(max(var(--page-width), 100vw)/2 - var(--page-width)/2));
-  left: 0;
   scroll-snap-align: start;
 }
 
@@ -238,6 +241,7 @@ ion-card > ion-card-header {
   position: relative;
   overflow-x: scroll;
   scroll-behavior: smooth;
+  scroll-snap-type: x mandatory;
 }
 
 main {
@@ -255,17 +259,32 @@ main {
 .button-nav-wrapper {
   position: fixed;
   z-index: 1;
-  bottom: 14%;
+  bottom: 28%;
   cursor: pointer;
-  background: #757575;
+  background-color: rgba(0,0,0,.2);
   color: white;
   font-size: 24px;
   border-radius: 50%;
-  width: 30px;
-  height: 30px;
+  width: 45px;
+  height: 45px;
   display: inline-flex;
   justify-content: center;
   align-items: center;
+  opacity: 0;
+}
+
+.button-nav-wrapper:hover {
+  background: rgba(0,0,0,.36);
+}
+
+.scroller-wrapper:hover .button-nav-wrapper {
+  opacity: 1;
+  transition: opacity .5s linear;
+}
+
+.scroller-wrapper::-webkit-scrollbar {
+    width: 0; 
+    background: transparent;
 }
 
 </style>
