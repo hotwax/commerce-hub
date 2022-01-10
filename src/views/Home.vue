@@ -64,9 +64,16 @@
             <ion-button slot="end" fill="outline" size="medium">View all</ion-button>
         </ion-item>
   
-        <div class="scroller-content">
-          <div class="scroller-item" v-for="i = 1 in 10" :key="i">  
-              <ion-card>
+        <div class="scroller-wrapper" ref="ionCard">
+          <div @click="prevItems($event)" class="button-nav-wrapper prev-button-wrapper">
+            <ion-icon :icon="arrowBack" slot="start" />
+          </div>
+          <div @click="nextItems($event)" class="button-nav-wrapper next-button-wrapper">
+            <ion-icon :icon="arrowForward" slot="end" />
+          </div>
+          <div class="scroller-content" ref="scrollItem">
+            <div class="scroller-item" v-for="i = 1 in 10" :key="i" >
+              <ion-card id="ion-card" class="ion-custom-card">
                 <ion-item lines="none">
                   <ion-label>
                     Customer name
@@ -95,7 +102,8 @@
                   <ion-text slot="end">5 times</ion-text>
                 </ion-item>
               </ion-card>
-          </div>  
+            </div>
+          </div>
         </div>
       </section>
      </main>
@@ -107,7 +115,9 @@
 import { IonButton, IonCard, IonContent, IonCardHeader, IonCardTitle, IonIcon, IonItem, IonLabel, IonNote, IonPage, IonThumbnail } from '@ionic/vue';
 import { defineComponent } from 'vue';
 import { useRouter } from 'vue-router';
-import { ticketOutline, shirtOutline, sendOutline, calendarOutline, settingsOutline } from 'ionicons/icons'
+import { ticketOutline, shirtOutline, sendOutline, calendarOutline, settingsOutline, arrowBack, arrowForward } from 'ionicons/icons';
+import { createAnimation } from '@ionic/vue';
+import { ref } from 'vue';
 
 export default defineComponent({
   name: 'Home',
@@ -126,15 +136,34 @@ export default defineComponent({
   },
   setup() {
     const router = useRouter();
-
+    const ionCard = ref();
+    const scrollItem = ref();
     return {
       router,
       ticketOutline,
       shirtOutline,
       sendOutline,
       calendarOutline,
-      settingsOutline
+      settingsOutline,
+      arrowBack,
+      arrowForward,
+      ionCard,
+      scrollItem
     }
+  },
+   methods: {
+    async nextItems(event: any) {
+        this.ionCard.scrollLeft += 350;
+        const animation = createAnimation()
+        .addElement(this.scrollItem)
+        .easing('linear')
+        .duration(1500)
+        .fromTo('transform', 'translate(350px)', 'translate(150px)');
+        animation.play();
+    },
+    async prevItems(event: any) {
+      this.ionCard.scrollLeft -= 350;
+    },
   }
 });
 </script>
@@ -189,20 +218,54 @@ ion-card > ion-card-header {
 
 .scroller-content {
   display: flex;
-  overflow-x: scroll;
+  scroll-behavior: smooth;
+  scroll-snap-type: x mandatory;
 }
 
 .scroller-item{
   flex-shrink: 0;
   position: relative;
   transform: translateX(calc(max(var(--page-width), 100vw)/2 - var(--page-width)/2));
+  left: 0;
+  scroll-snap-align: start;
 }
 
 .scroller-content > .scroller-item:last-child ion-card{
   margin-right: 40px;
 }
 
+.scroller-wrapper {
+  position: relative;
+  overflow-x: scroll;
+  scroll-behavior: smooth;
+}
+
 main {
   --page-width: 1024px;
 }
+
+.prev-button-wrapper {
+  left: 1%;
+}
+
+.next-button-wrapper {
+  right: 1%;
+}
+
+.button-nav-wrapper {
+  position: fixed;
+  z-index: 1;
+  bottom: 14%;
+  cursor: pointer;
+  background: #757575;
+  color: white;
+  font-size: 24px;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+}
+
 </style>
