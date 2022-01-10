@@ -8,7 +8,7 @@
 
       <div class="header">
         <nav class="nav-card">
-          <a href="">
+          <a :href="openApp()">
             <ion-card>
               <img src="../assets/images/PreOrder.svg" />
               <ion-card-header>
@@ -106,6 +106,7 @@
 <script lang="ts">
 import { IonButton, IonCard, IonContent, IonCardHeader, IonCardTitle, IonIcon, IonItem, IonLabel, IonNote, IonPage, IonThumbnail } from '@ionic/vue';
 import { defineComponent } from 'vue';
+import { mapGetters } from 'vuex'
 import { useRouter } from 'vue-router';
 import { ticketOutline, shirtOutline, sendOutline, calendarOutline, settingsOutline } from 'ionicons/icons'
 
@@ -124,9 +125,25 @@ export default defineComponent({
     IonPage, 
     IonThumbnail
   },
+  computed: {
+    ...mapGetters({
+     token: 'user/getUserToken'
+    })
+  },
+  methods: {
+    openApp( ) {
+      const userInfo = {
+        token: this.token,
+        baseURL: "dev-hc",
+        slug: "product-details",
+        id: 10000
+      }
+      const info = JSON.stringify(userInfo);
+      return 'http://localhost:8101/?info=' + info;
+    }
+  },
   setup() {
     const router = useRouter();
-
     return {
       router,
       ticketOutline,
