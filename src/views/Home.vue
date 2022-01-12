@@ -154,21 +154,27 @@ export default defineComponent({
    methods: {
     async nextItems(event: any) {
         this.ionCard.scrollLeft += 350;
+        const ionCard = this.ionCard;
+        this.ionCard.style.overflow = 'hidden';
         const animation = createAnimation()
         .addElement(this.scrollItem)
         .easing('linear')
         .duration(1500)
         .fromTo('transform', 'translate(350px)', 'translate(150px)');
         animation.play();
+        setInterval(function () {ionCard.style.overflow = 'auto'}, 2000);
     },
     async prevItems(event: any) {
       this.ionCard.scrollLeft -= 350;
+      const ionCard = this.ionCard;
+      this.ionCard.style.overflow = 'hidden';
       const animation = createAnimation()
         .addElement(this.scrollItem)
         .easing('linear')
         .duration(1500)
         .fromTo('transform', 'translate(150px)', 'translate(350px)');
         animation.play();
+        setInterval(function () {ionCard.style.overflow = 'auto'}, 2000);
     },
   }
 });
@@ -259,7 +265,7 @@ main {
 .button-nav-wrapper {
   position: fixed;
   z-index: 1;
-  bottom: 28%;
+  bottom: 31%;
   cursor: pointer;
   background-color: rgba(0,0,0,.2);
   color: white;
