@@ -164,7 +164,7 @@ nav {
 
 a {
   text-decoration: none;
-  flex-grow: 1;
+  flex: 1;
 }
 
 a > ion-card > img {
