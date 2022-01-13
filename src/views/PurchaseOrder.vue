@@ -16,7 +16,7 @@
     <ion-content :fullscreen="true">
       <main>
         <section class="header">
-          <div class="po-header">
+          <div class="id">
             <ion-item lines="none">
               <ion-icon slot="start" :icon="ticketOutline" />
               <ion-label>External Purchase Order ID</ion-label>
@@ -24,7 +24,27 @@
             </ion-item>
           </div>
 
-          <div class="po-detail">
+          <div class="timeline">
+            <div>
+              <ion-item lines="none" detail>
+                <ion-icon slot="start" :icon="timeOutline" class="mobile-only" />
+                <ion-label>{{ $t("Timeline") }}</ion-label>
+                <ion-note slot="end">1:07pm 6th Dec 2021</ion-note>
+              </ion-item>
+            </div>
+            <div v-for="item in 3" :key="item" class="desktop-only">
+              <ion-item>
+                <ion-icon slot="start" :icon="ticketOutline" />
+                <ion-label>
+                  <p class="overline">+ 10 minutes</p>
+                  Imported from ERP
+                </ion-label>
+                <ion-icon :icon="informationCircleOutline" />
+              </ion-item>
+            </div>
+          </div>
+
+          <div class="info">
             <div>
               <ion-card>
                 <ion-card-header>
@@ -71,42 +91,6 @@
               </ion-card>
             </div>
           </div>
-
-          <div class="timeline">
-            <div>
-              <ion-item lines="none" detail>
-                <ion-icon slot="start" :icon="timeOutline" class="mobile-only" />
-                <ion-label>{{ $t("Timeline") }}</ion-label>
-                <ion-note slot="end">1:07pm 6th Dec 2021</ion-note>
-              </ion-item>
-            </div>
-            <div class="desktop-only">
-              <ion-item>
-                <ion-icon slot="start" :icon="ticketOutline" />
-                <ion-label>
-                  <p class="overline">+ 10 minutes</p>
-                  Imported from ERP
-                </ion-label>
-                <ion-icon :icon="informationCircleOutline" />
-              </ion-item>
-              <ion-item>
-                <ion-icon slot="start" :icon="businessOutline" />
-                <ion-label>
-                  <p class="overline">+ 2 hours 15 minutes</p>
-                  4 items received
-                </ion-label>
-                <ion-icon :icon="informationCircleOutline" />
-              </ion-item>
-              <ion-item>
-                <ion-icon slot="start" :icon="shirtOutline" />
-                <ion-label>
-                  <p class="overline">+ 20 minutes</p>
-                  SKU added
-                </ion-label>
-                <ion-icon :icon="informationCircleOutline" />
-              </ion-item>
-            </div>
-          </div>
         </section>
 
         <section>
@@ -114,12 +98,13 @@
             <ion-icon slot="start" :icon="shirtOutline" />
             <ion-label>Products</ion-label>
           </ion-item>
+          
           <div class="product">
             <div class="product-image desktop-only">
               <Image src="https://cdn.shopify.com/s/files/1/0069/7384/9727/products/test-track.jpg?v=1626255137"/>
             </div>
 
-            <div class="product-info">
+            <div>
               <hr />
 
               <div class="list-item">
@@ -164,7 +149,7 @@
               <ion-list class="desktop-only">
                 <ion-list-header>
                   {{ $t("Items") }}
-                  <hr align="right" width="90%" />
+                  <hr />
                 </ion-list-header>
 
                 <div class="list-item">
@@ -207,7 +192,7 @@
                   </ion-button>
                 </div>
 
-                <hr align="right" width="90%" />
+                <hr />
 
                 <div class="list-item">
                   <ion-item lines="none">
@@ -282,7 +267,7 @@ import {
   IonThumbnail,
   IonTitle,
   IonToolbar,
-  popoverController,
+  popoverController
 } from '@ionic/vue';
 import { defineComponent } from 'vue';
 import {
@@ -294,7 +279,7 @@ import {
   shirtOutline,
   syncOutline,
   ticketOutline,
-  timeOutline,
+  timeOutline
 } from 'ionicons/icons';
 import Image from '@/components/Image.vue';
 import ProductPopover from '@/components/ProductPopover.vue';
@@ -323,7 +308,7 @@ export default defineComponent({
     IonThumbnail,
     IonTitle,
     IonToolbar,
-    Image,
+    Image
   },
   methods: {
     async openProductPopover(ev: Event) {
@@ -346,50 +331,14 @@ export default defineComponent({
       shirtOutline,
       syncOutline,
       ticketOutline,
-      timeOutline,
-    };
-  },
+      timeOutline
+    }
+  }
 });
 </script>
 
 <style scoped>
-.header {
-  display: grid;
-  grid-template-areas: "po"
-                       "timeline"
-                       "podetail";
-  align-items: center;
-}
-
-.po-header {
-  grid-area: po;
-}
-
-.po-detail {
-  grid-area: podetail;
-}
-
-.timeline {
-  grid-area: timeline;
-}
-
 @media (min-width: 991px) {
-  .header {
-    display: grid;
-    grid: "po       timeline"
-          "podetail timeline" 
-          / max-content 400px;
-    justify-content: space-between;  
-  }
-  .po-detail {
-    display: grid;
-    grid-template-columns: repeat(2, 400px);
-  }
-
-  .timeline {
-    border-left: 1px solid var(--ion-color-medium);
-  }
-
   .product {
     display: grid;
     grid-template-columns: 250px 1fr;
@@ -397,7 +346,7 @@ export default defineComponent({
   }
 
   .product-image {
-    border: 1px solid black;
+    border: 1px solid var(--ion-color-medium);
     border-radius: 10px;
   }
 }
