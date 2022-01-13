@@ -24,29 +24,25 @@
           </div>
 
           <div class="timeline">
-            <div>
-              <ion-item>
-                <ion-icon slot="start" :icon="timeOutline" class="mobile-only" />
-                <ion-label>{{ $t("Timeline") }}</ion-label>
-                <ion-note slot="end">1:07pm 6th Dec 2021</ion-note>
-              </ion-item>
-            </div>
+            <ion-item lines="none">
+              <ion-icon slot="start" :icon="timeOutline" class="mobile-only" />
+              <ion-label>{{ $t("Timeline") }}</ion-label>
+              <ion-note slot="end">1:07pm 6th Dec 2021</ion-note>
+            </ion-item>
 
             <div class="desktop-only">
-              <ion-list>
-                <ion-item v-for="item in 7" :key="item">
-                  <ion-icon :icon="ticketOutline" slot="start" />
-                  <ion-label>
-                    <p>+10 minutes</p>
-                    Imported from Shopify
-                  </ion-label>
-                  <ion-icon slot="end" :icon="informationCircleOutline" />
-                </ion-item>
-              </ion-list>
+              <ion-item v-for="item in 7" :key="item">
+                <ion-icon :icon="ticketOutline" slot="start" />
+                <ion-label>
+                  <p>+10 minutes</p>
+                  Imported from Shopify
+                </ion-label>
+                <ion-icon slot="end" :icon="informationCircleOutline" />
+              </ion-item>
             </div>
           </div>
 
-          <div class="cards">
+          <div class="info">
             <ion-card>
               <ion-list>
                 <ion-item lines="none">
@@ -96,7 +92,8 @@
           </div>
         </section>
 
-        <section class="products">
+        <!-- Product section -->
+        <section>
           <ion-item lines="none">
             <ion-icon slot="start" :icon="shirtOutline" />
             <ion-label>{{ $t("Products") }}</ion-label>
@@ -104,9 +101,7 @@
 
           <div class="product-detail">
             <div class="product-image desktop-only">
-              <Image
-                src="https://cdn.shopify.com/s/files/1/0069/7384/9727/products/test-track.jpg?v=1626255137"
-              />
+              <Image src="https://cdn.shopify.com/s/files/1/0069/7384/9727/products/test-track.jpg?v=1626255137" />
               <ion-button color="secondary" fill="outline">
                 {{ $t("Product inventory") }}
                 <ion-icon :icon="openOutline" />
@@ -120,9 +115,7 @@
                 <div>
                   <ion-item lines="none">
                     <ion-thumbnail slot="start" class="mobile-only">
-                      <Image
-                        src="https://cdn.shopify.com/s/files/1/0069/7384/9727/products/test-track.jpg?v=1626255137"
-                      />
+                      <Image src="https://cdn.shopify.com/s/files/1/0069/7384/9727/products/test-track.jpg?v=1626255137" />
                     </ion-thumbnail>
                     <ion-label>
                       <p>Brand</p>
@@ -133,7 +126,7 @@
                   </ion-item>
                 </div>
 
-                <div class="p-tags desktop-only">
+                <div class="product-tags desktop-only">
                   <ion-chip>
                     <ion-icon />
                     <ion-label>Shopify ID</ion-label>
@@ -224,7 +217,7 @@
   </ion-page>
 </template>
 <script>
-import Image from "@/components/Image.vue";
+import Image from '@/components/Image.vue';
 import {
   callOutline,
   caretDown,
@@ -236,8 +229,8 @@ import {
   shirtOutline,
   syncOutline,
   ticketOutline,
-  timeOutline,
-} from "ionicons/icons";
+  timeOutline
+} from 'ionicons/icons';
 import {
   IonBackButton,
   IonBadge,
@@ -256,11 +249,11 @@ import {
   IonPage,
   IonThumbnail,
   IonTitle,
-  IonToolbar,
-} from "@ionic/vue";
+  IonToolbar
+} from '@ionic/vue';
 
 export default {
-  name: "Order",
+  name: 'Order',
   components: {
     Image,
     IonBackButton,
@@ -280,7 +273,7 @@ export default {
     IonPage,
     IonThumbnail,
     IonTitle,
-    IonToolbar,
+    IonToolbar
   },
   setup() {
     return {
@@ -294,7 +287,7 @@ export default {
       shirtOutline,
       syncOutline,
       ticketOutline,
-      timeOutline,
+      timeOutline
     };
   },
 };
@@ -308,7 +301,7 @@ export default {
   align-items: center;
 }
 
-.p-tags {
+.product-tags {
   justify-self: center;
 }
 

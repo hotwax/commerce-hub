@@ -347,6 +347,10 @@ hr {
   color: var(--ion-color-medium);
 }
 
+ion-list-header > hr {
+  width: 90%;
+}
+
 .desktop-only {
   display: none;
 }
@@ -383,7 +387,7 @@ hr {
   }
 
   .sort > ion-item {
-    width: 308px;
+    max-width: 308px;
     border-left: 1px solid var(--ion-color-medium);
   }
 
@@ -435,9 +439,9 @@ hr {
     grid-area: id;
   }
   
-  .cards {
+  .info {
     display: grid;
-    grid-template-columns: repeat(2, minmax(314px, max-content));
+    grid-template-columns: repeat(auto-fill, minmax(314px, max-content));
     align-items: start;
     grid-area: cards;
   }
