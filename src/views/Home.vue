@@ -199,7 +199,7 @@ ion-card > ion-card-header {
 }
 
 .scroller-content > .scroller-item:last-child ion-card{
-  margin-right: 40px;
+  margin-right: var(--spacer-xl);
 }
 
 main {

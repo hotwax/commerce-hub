@@ -251,11 +251,21 @@ export default {
 </script>
 
 <style scoped>
+.section-header{
+  margin: 0 var(--spacer-xs);
+}
+
 .metadata {
   text-align: end;
 }
 
 .metadata > ion-note {
   display: block;
+}
+
+@media (min-width: 991px) {
+  .main {
+    margin-left: var(--spacer-xl);
+  }
 }
 </style>

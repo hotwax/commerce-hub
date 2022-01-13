@@ -12,12 +12,12 @@
       </ion-toolbar>
     </ion-header>
     <ion-content>
-      <main>
+      <main class="main-content">
         <section class="header">
           <div class="id">
             <ion-item lines="none">
               <ion-icon slot="start" :icon="ticketOutline" />
-              <ion-label>order id</ion-label>
+              <ion-label>Order id</ion-label>
               <ion-badge slot="end">Approved</ion-badge>
               <ion-icon slot="end" :icon="caretDown" />
             </ion-item>
@@ -294,6 +294,7 @@ export default {
 </script>
 
 <style scoped>
+
 .product-header {
   display: grid;
   grid-template-columns: max-content 1fr max-content;
@@ -311,6 +312,7 @@ export default {
 }
 
 @media (min-width: 991px) {
+
   .product-detail {
     display: grid;
     grid: "image product"
@@ -322,10 +324,12 @@ export default {
     height: 362px;
     border: 1px solid var(--ion-color-medium);
     border-radius: 10px;
+    margin-top: var(--spacer-xs);
   }
 
   .product-info {
     grid-area: product;
+    margin-left: var(--spacer-lg);
   }
 }
 </style>

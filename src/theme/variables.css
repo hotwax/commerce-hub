@@ -74,6 +74,16 @@ http://ionicframework.com/docs/theming/ */
   --ion-color-light-contrast-rgb: 0, 0, 0;
   --ion-color-light-shade: #d7d8da;
   --ion-color-light-tint: #f5f6f9;
+
+  /** Spacer **/
+  --spacer-2xs: 0.25rem; /* 4px */
+  --spacer-xs: 0.5rem;   /* 8px */
+  --spacer-sm: 1rem;     /* 16px */
+  --spacer-base: 1.5rem; /* 24px */
+  --spacer-lg: 2rem;     /* 32px */
+  --spacer-xl: 2.5rem;   /* 40px */
+  --spacer-2xl: 5rem;    /* 80px */
+  --spacer-3xl: 10rem;   /* 160px */
 }
 
 @media (prefers-color-scheme: dark) {
@@ -247,14 +257,16 @@ http://ionicframework.com/docs/theming/ */
 .find {
   display: grid;
   grid-template-areas: "search"
-                       "main";
+                       "main";            
 }
+
 .find > .filters{
   display: none;
 }
 
 .search {
   grid-area: search;
+  margin-bottom: var(--spacer-lg);
 }
 
 .filters {
@@ -361,7 +373,8 @@ ion-list-header > hr {
   .find {
     grid: "search  main" min-content
           "filters main" 1fr 
-          / 375px;                    
+          / 375px; 
+    margin: var(--spacer-lg);                            
   }
   
   .section-header {
@@ -389,6 +402,18 @@ ion-list-header > hr {
   .find > .filters{
     display: unset;
   }  
+
+  .find > .main {
+    margin-left: var(--spacer-lg);
+  }
+
+  .products > ion-item {
+    margin-bottom: var(--spacer-lg);
+  }
+
+  .main-content {
+    margin: var(--spacer-lg);
+  }
 
   .list-item {
     --col-calc: var(--columns-desktop);

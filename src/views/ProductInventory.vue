@@ -13,7 +13,7 @@
     </ion-header>
 
     <ion-content :fullscreen="true">
-      <main>
+      <main class="main-content">
         <section class="product">
           <ion-card class="product-image desktop-only">
             <Image src="https://cdn.shopify.com/s/files/1/0069/7384/9727/products/test-track.jpg?v=1626255137" />
@@ -738,6 +738,7 @@ export default defineComponent({
 </script>
 
 <style scoped>
+
 .product {
   display: grid;
   grid-template-columns: 254px auto;
