@@ -8,30 +8,24 @@
 
       <nav>
         <section class="external">
-          <a href="">
-            <ion-card>
-              <img src="../assets/images/PreOrder.svg" />
-              <ion-card-header>
-                <ion-card-title>Pre Order Management</ion-card-title>
-              </ion-card-header>
-            </ion-card>
-          </a>
-          <a href="">
-            <ion-card>
-              <img src="../assets/images/Threshold.svg" />
-              <ion-card-header>
-                <ion-card-title>Threshold Management</ion-card-title>
-              </ion-card-header>
-            </ion-card>
-          </a>
-          <a href="">
-            <ion-card>
-              <img src="../assets/images/Transfer.svg" />
-              <ion-card-header>
-                <ion-card-title>Stock Transfer</ion-card-title>
-              </ion-card-header>
-            </ion-card>
-          </a>
+          <ion-card href="">
+            <img src="../assets/images/PreOrder.svg" />
+            <ion-card-header>
+              <ion-card-title>Pre Order Management</ion-card-title>
+            </ion-card-header>
+          </ion-card>
+          <ion-card href="">
+            <img src="../assets/images/Threshold.svg" />
+            <ion-card-header>
+              <ion-card-title>Threshold Management</ion-card-title>
+            </ion-card-header>
+          </ion-card>
+          <ion-card href="">
+            <img src="../assets/images/Transfer.svg" />
+            <ion-card-header>
+              <ion-card-title>Stock Transfer</ion-card-title>
+            </ion-card-header>
+          </ion-card>
         </section>
 
         <section class="internal">
