@@ -136,7 +136,7 @@ export default defineComponent({
 
 <style scoped>
 
-figure{
+figure {
   text-align: center;
 }
 
