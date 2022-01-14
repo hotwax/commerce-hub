@@ -124,7 +124,7 @@
                   <div>
                     <ion-chip outline>
                       <!-- TODO -->
-                      <ion-icon />
+                      <ion-icon :icon="pricetag" />
                       <ion-label>Shopify ID</ion-label>
                     </ion-chip>
                   </div>
@@ -176,6 +176,7 @@ import {
   downloadOutline,
   filterOutline,
   folderOutline,
+  pricetag,
   swapVerticalOutline,
   syncOutline
 } from 'ionicons/icons';
@@ -217,6 +218,7 @@ export default {
       downloadOutline,
       filterOutline,
       folderOutline,
+      pricetag,
       swapVerticalOutline,
       syncOutline,
       router

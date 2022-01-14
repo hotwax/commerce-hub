@@ -104,7 +104,7 @@
               <Image src="https://cdn.shopify.com/s/files/1/0069/7384/9727/products/test-track.jpg?v=1626255137" />
               <ion-button color="secondary" fill="outline">
                 {{ $t("Product inventory") }}
-                <ion-icon :icon="openOutline" />
+                <ion-icon :icon="openOutline" slot="end" />
               </ion-button>
             </div>
 
@@ -128,7 +128,8 @@
 
                 <div class="product-tags desktop-only">
                   <ion-chip>
-                    <ion-icon />
+                    <!-- TODO update shopify icon later -->
+                    <ion-icon :icon="pricetag" />
                     <ion-label>Shopify ID</ion-label>
                   </ion-chip>
                 </div>
@@ -225,6 +226,7 @@ import {
   informationCircleOutline,
   mailOutline,
   openOutline,
+  pricetag,
   ribbon,
   shirtOutline,
   syncOutline,
@@ -283,6 +285,7 @@ export default {
       informationCircleOutline,
       mailOutline,
       openOutline,
+      pricetag,
       ribbon,
       shirtOutline,
       syncOutline,
