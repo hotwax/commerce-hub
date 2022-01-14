@@ -63,7 +63,7 @@ export default defineComponent({
     })
   },
   mounted() {
-    this.instanceUrl= this.currentInstanceUrl;
+    this.instanceUrl = this.currentInstanceUrl;
   },
   methods: {
     login: function () {
