@@ -161,7 +161,7 @@
                 </div>
                 <div class="tags desktop-only">
                   <ion-chip>
-                    <ion-icon />
+                    <ion-icon :icon="pricetag" />
                     <ion-label>Shopify ID</ion-label>
                   </ion-chip>
                 </div>
@@ -191,7 +191,7 @@
 
                     <div>
                       <ion-chip>
-                        <ion-icon />
+                        <ion-icon :icon="pricetag" />
                         <ion-label>{{ $t("Shopify ID") }}</ion-label>
                       </ion-chip>
                     </div>
@@ -245,6 +245,7 @@ import {
   downloadOutline,
   filterOutline,
   folderOutline,
+  pricetag,
   sync,
   swapVerticalOutline  
 } from 'ionicons/icons';
@@ -288,6 +289,7 @@ export default {
       filterOutline,
       folderOutline,
       sync,
+      pricetag,
       swapVerticalOutline, 
       router
     };
