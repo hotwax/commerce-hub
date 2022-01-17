@@ -48,13 +48,13 @@
               <ion-label>{{ $t("Arrival date") }}</ion-label>
               <ion-chip>
                 <ion-icon :icon="calendarOutline" />
-                <ion-datetime value="12/01/2021" />
+                <ion-input type="date" />
                 <ion-icon :icon="closeCircle" />
               </ion-chip>
             </ion-item>
           </ion-list>
         </aside>
-
+        
         <main class="main">
           <section class="sort">
             <ion-item lines="none">
@@ -152,9 +152,9 @@ import {
   IonButtons,
   IonChip,
   IonContent,
-  IonDatetime,
   IonHeader,
   IonIcon,
+  IonInput,
   IonItem,
   IonLabel,
   IonList,
@@ -191,9 +191,9 @@ export default {
     IonButtons,
     IonChip,
     IonContent,
-    IonDatetime,
     IonHeader,
     IonIcon,
+    IonInput,
     IonItem,
     IonLabel,
     IonList,
@@ -206,7 +206,7 @@ export default {
     IonThumbnail,
     IonToggle,
     IonTitle,
-    IonToolbar
+    IonToolbar,
   },
   setup() {
     const router = useRouter();
@@ -228,6 +228,12 @@ export default {
 </script>
 
 <style scoped>
+ion-input[type="date"]::-webkit-inner-spin-button,
+ion-input[type="date"]::-webkit-calendar-picker-indicator {
+    display: none;
+    -webkit-appearance: none;
+}
+
 @media (min-width: 991px) {
   .list-item {
     --columns-desktop: 3;
