@@ -3,9 +3,10 @@
     <ion-content :fullscreen="true">
      <main> 
       <figure>
-        <img src="../assets/images/hc.png"/>
+        <img class="light" src="../assets/images/hc.png"/>
+        <img class="dark" src="../assets/images/HWCLogoDarkMode.png"/>
       </figure>
-
+     
       <nav>
         <section class="external">
           <ion-card href="">
@@ -142,6 +143,24 @@ figure {
 figure > img {
   width: 386px;
   height: 122px;
+}
+
+.dark {
+  display: none;
+}
+
+.light {
+  display: unset;
+}
+
+@media (prefers-color-scheme: dark) {
+  .dark {
+    display: unset;
+  }
+
+  .light {
+    display: none;
+  }
 }
 
 nav {
