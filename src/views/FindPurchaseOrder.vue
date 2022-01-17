@@ -206,7 +206,7 @@ export default {
     IonThumbnail,
     IonToggle,
     IonTitle,
-    IonToolbar,
+    IonToolbar
   },
   setup() {
     const router = useRouter();
@@ -228,11 +228,6 @@ export default {
 </script>
 
 <style scoped>
-ion-input[type="date"]::-webkit-inner-spin-button,
-ion-input[type="date"]::-webkit-calendar-picker-indicator {
-    display: none;
-    -webkit-appearance: none;
-}
 
 @media (min-width: 991px) {
   .list-item {
