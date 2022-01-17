@@ -228,7 +228,6 @@ export default {
 </script>
 
 <style scoped>
-
 @media (min-width: 991px) {
   .list-item {
     --columns-desktop: 3;
