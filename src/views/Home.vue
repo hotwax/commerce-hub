@@ -3,38 +3,33 @@
     <ion-content :fullscreen="true">
      <main> 
       <figure>
-        <img src="../assets/images/hc.png"/>
+        <img class="light" src="../assets/images/hc.png"/>
+        <img class="dark" src="../assets/images/HWCLogoDarkMode.png"/>
       </figure>
+     
+      <nav>
+        <section class="external">
+          <ion-card href="">
+            <img src="../assets/images/PreOrder.svg" />
+            <ion-card-header>
+              <ion-card-title>Pre Order Management</ion-card-title>
+            </ion-card-header>
+          </ion-card>
+          <ion-card href="">
+            <img src="../assets/images/Threshold.svg" />
+            <ion-card-header>
+              <ion-card-title>Threshold Management</ion-card-title>
+            </ion-card-header>
+          </ion-card>
+          <ion-card href="">
+            <img src="../assets/images/Transfer.svg" />
+            <ion-card-header>
+              <ion-card-title>Stock Transfer</ion-card-title>
+            </ion-card-header>
+          </ion-card>
+        </section>
 
-      <div class="header">
-        <nav class="nav-card">
-          <a href="">
-            <ion-card>
-              <img src="../assets/images/PreOrder.svg" />
-              <ion-card-header>
-                <ion-card-title>Pre Order Management</ion-card-title>
-              </ion-card-header>
-            </ion-card>
-          </a>
-          <a href="">
-            <ion-card>
-              <img src="../assets/images/Threshold.svg" />
-              <ion-card-header>
-                <ion-card-title>Threshold Management</ion-card-title>
-              </ion-card-header>
-            </ion-card>
-          </a>
-          <a href="">
-            <ion-card>
-              <img src="../assets/images/Transfer.svg" />
-              <ion-card-header>
-                <ion-card-title>Stock Transfer</ion-card-title>
-              </ion-card-header>
-            </ion-card>
-          </a>
-        </nav>
-
-        <section class="pages-card">
+        <section class="internal">
           <ion-item button @click="() => router.push('/find-order')" lines="none" detail>
             <ion-icon :icon="ticketOutline" slot="start" />
             <ion-label>Orders</ion-label>
@@ -56,7 +51,7 @@
             <ion-label>Settings</ion-label>
           </ion-item>
         </section>
-      </div>
+      </nav>
 
       <section class="scroller">
         <ion-item class="scroller-header" lines="none">
@@ -88,11 +83,11 @@
                 </ion-item>
                 <ion-item>
                   <ion-label>Last brokered</ion-label>
-                  <ion-text slot="end">California Warehouse</ion-text>
+                  <ion-label slot="end">California Warehouse</ion-label>
                 </ion-item>
                 <ion-item>
                   <ion-label>Rebrokered</ion-label>
-                  <ion-text slot="end">5 times</ion-text>
+                  <ion-label slot="end">5 times</ion-label>
                 </ion-item>
               </ion-card>
           </div>  
@@ -150,7 +145,25 @@ figure > img {
   height: 122px;
 }
 
-.header {
+.dark {
+  display: none;
+}
+
+.light {
+  display: unset;
+}
+
+@media (prefers-color-scheme: dark) {
+  .dark {
+    display: unset;
+  }
+
+  .light {
+    display: none;
+  }
+}
+
+nav {
   display: grid;
   grid-template-columns: auto 375px;
   align-items: center;
@@ -158,13 +171,13 @@ figure > img {
   margin: auto;
 }
 
-.nav-card {
+.external {
   display: flex;
 }
 
 a {
   text-decoration: none;
-  flex-grow: 1;
+  flex: 1;
 }
 
 a > ion-card > img {
@@ -177,8 +190,8 @@ ion-card > ion-card-header {
   text-align: center;
 }
 
-.pages-card > ion-item {
-  border: 1px solid black;
+.internal > ion-item {
+  border: 1px solid var(--ion-color-medium);
   border-radius: 15px;
 }
 
@@ -199,7 +212,7 @@ ion-card > ion-card-header {
 }
 
 .scroller-content > .scroller-item:last-child ion-card{
-  margin-right: 40px;
+  margin-right: var(--spacer-xl);
 }
 
 main {

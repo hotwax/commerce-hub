@@ -23,105 +23,105 @@
         <section class="search">
           <ion-searchbar />
         </section>
-     
+
         <aside class="filters desktop-only">
           <ion-list>
             <ion-list-header>{{ $t("Catalog") }}</ion-list-header>
-              <ion-item>
-                <ion-label>{{ $t("Categories") }}</ion-label>
-                <ion-select value="any">
-                  <ion-select-option value="any">all</ion-select-option>
-                </ion-select>
-              </ion-item>
+            <ion-item>
+              <ion-label>{{ $t("Categories") }}</ion-label>
+              <ion-select value="any">
+                <ion-select-option value="any">all</ion-select-option>
+              </ion-select>
+            </ion-item>
 
-              <ion-card>
-                <ion-card-header>
-                  <ion-card-title>{{ $t("Purchase date") }}</ion-card-title>
-                </ion-card-header>
-                <ion-card-content>
-                  <ion-chip>
-                    <ion-label>PO #</ion-label>
-                  </ion-chip>
-                  <ion-chip>
-                    <ion-label>PO #</ion-label>
-                  </ion-chip>
-                </ion-card-content>
-              </ion-card>
+            <ion-card>
+              <ion-card-header>
+                <ion-card-title>{{ $t("Purchase date") }}</ion-card-title>
+              </ion-card-header>
+              <ion-card-content>
+                <ion-chip>
+                  <ion-label>PO #</ion-label>
+                </ion-chip>
+                <ion-chip>
+                  <ion-label>PO #</ion-label>
+                </ion-chip>
+              </ion-card-content>
+            </ion-card>
 
-              <ion-item>
-                <ion-label>{{ $t("Size") }}</ion-label>
-                <ion-select value="any">
-                  <ion-select-option value="any">all</ion-select-option>
-                </ion-select>
-              </ion-item>
-              <ion-item>
-                <ion-label>{{ $t("Color") }}</ion-label>
-                <ion-select value="any">
-                  <ion-select-option value="any">all</ion-select-option>
-                </ion-select>
-              </ion-item>
+            <ion-item>
+              <ion-label>{{ $t("Size") }}</ion-label>
+              <ion-select value="any">
+                <ion-select-option value="any">all</ion-select-option>
+              </ion-select>
+            </ion-item>
+            <ion-item>
+              <ion-label>{{ $t("Color") }}</ion-label>
+              <ion-select value="any">
+                <ion-select-option value="any">all</ion-select-option>
+              </ion-select>
+            </ion-item>
 
-              <ion-card>
-                <ion-card-header>
-                  <ion-card-title>{{ $t("Purchase date") }}</ion-card-title>
-                </ion-card-header>
-                <ion-card-content>
-                  <ion-chip>
-                    <ion-label>PO #</ion-label>
-                  </ion-chip>
-                  <ion-chip>
-                    <ion-label>PO #</ion-label>
-                  </ion-chip>
-                </ion-card-content>
-              </ion-card>
-            </ion-list>
+            <ion-card>
+              <ion-card-header>
+                <ion-card-title>{{ $t("Purchase date") }}</ion-card-title>
+              </ion-card-header>
+              <ion-card-content>
+                <ion-chip>
+                  <ion-label>PO #</ion-label>
+                </ion-chip>
+                <ion-chip>
+                  <ion-label>PO #</ion-label>
+                </ion-chip>
+              </ion-card-content>
+            </ion-card>
+          </ion-list>
 
-            <ion-list>
-              <ion-list-header>{{ $t("Order") }}</ion-list-header>
-              <ion-item>
-                <ion-label>{{ $t("order created") }}</ion-label>
-                <ion-checkbox />
-              </ion-item>
-              <ion-item>
-                <ion-label>{{ $t("order created") }}</ion-label>
-                <ion-checkbox />
-              </ion-item>
+          <ion-list>
+            <ion-list-header>{{ $t("Order") }}</ion-list-header>
+            <ion-item>
+              <ion-label>{{ $t("order created") }}</ion-label>
+              <ion-checkbox />
+            </ion-item>
+            <ion-item>
+              <ion-label>{{ $t("order created") }}</ion-label>
+              <ion-checkbox />
+            </ion-item>
 
-              <ion-card>
-                <ion-card-header>
-                  <ion-card-title>{{ $t("Purchase date") }}</ion-card-title>
-                </ion-card-header>
-                <ion-card-content>
-                  <ion-chip>
-                    <ion-label>PO #</ion-label>
-                  </ion-chip>
-                  <ion-chip>
-                    <ion-label>PO #</ion-label>
-                  </ion-chip>
-                </ion-card-content>
-              </ion-card>
-            </ion-list>
+            <ion-card>
+              <ion-card-header>
+                <ion-card-title>{{ $t("Purchase date") }}</ion-card-title>
+              </ion-card-header>
+              <ion-card-content>
+                <ion-chip>
+                  <ion-label>PO #</ion-label>
+                </ion-chip>
+                <ion-chip>
+                  <ion-label>PO #</ion-label>
+                </ion-chip>
+              </ion-card-content>
+            </ion-card>
+          </ion-list>
 
-            <ion-list>
-              <ion-list-header>{{ $t("Location") }}</ion-list-header>
-              <ion-item>
-                <ion-label>{{ $t("Product Store") }}</ion-label>
-                <ion-select value="any">
-                  <ion-select-option value="any">Australia</ion-select-option>
-                </ion-select>
-              </ion-item>
-              <ion-item>
-                <ion-label>{{ $t("Facility") }}</ion-label>
-                <ion-select value="any">
-                  <ion-select-option value="any">California Warehouse</ion-select-option>
-                </ion-select>
-              </ion-item>
-           </ion-list>
+          <ion-list>
+            <ion-list-header>{{ $t("Location") }}</ion-list-header>
+            <ion-item>
+              <ion-label>{{ $t("Product Store") }}</ion-label>
+              <ion-select value="any">
+                <ion-select-option value="any">Australia</ion-select-option>
+              </ion-select>
+            </ion-item>
+            <ion-item>
+              <ion-label>{{ $t("Facility") }}</ion-label>
+              <ion-select value="any">
+                <ion-select-option value="any">California Warehouse</ion-select-option>
+              </ion-select>
+            </ion-item>
+          </ion-list>
         </aside>
 
         <main class="main">
           <section class="sort">
-            <ion-item lines="none" class="border-sort">
+            <ion-item lines="none">
               <ion-icon slot="start" :icon="folderOutline" />
               <ion-label>{{ "Group by" }}</ion-label>
               <ion-select value="any">
@@ -137,17 +137,17 @@
             </ion-item>
           </section>
 
-           <hr />
+          <hr />
 
-          <div class="product">
+          <div class="product" @click="() => router.push('/product-inventory')">
             <div class="product-image desktop-only">
-                <Image src="https://cdn.shopify.com/s/files/1/0069/7384/9727/products/test-track.jpg?v=1626255137" />
+              <Image src="https://cdn.shopify.com/s/files/1/0069/7384/9727/products/test-track.jpg?v=1626255137" />
             </div>
 
-            <div class="product-detail">
+            <div>
               <section class="section-header">
                 <div class="primary-info">
-                  <ion-item lines="none" @click="() => router.push('/product-inventory')">
+                  <ion-item lines="none">
                     <ion-thumbnail slot="start" class="mobile-only">
                       <Image src="https://cdn.shopify.com/s/files/1/0069/7384/9727/products/test-track.jpg?v=1626255137" />
                     </ion-thumbnail>
@@ -161,22 +161,25 @@
                 </div>
                 <div class="tags desktop-only">
                   <ion-chip>
-                    <ion-icon />
+                    <ion-icon :icon="pricetag" />
                     <ion-label>Shopify ID</ion-label>
                   </ion-chip>
                 </div>
                 <div class="metadata">
                   <ion-item lines="none" detail>
-                    <ion-note slot="end" class="metatags">3 variants</ion-note>
+                    <ion-note slot="end">3 variants</ion-note>
                   </ion-item>
                 </div>
               </section>
 
               <div class="desktop-only">
                 <ion-list>
-                  <ion-list-header>Variants</ion-list-header>
-                  <div class="variant-detail">
-                    <div class="variant-info">
+                  <ion-list-header>
+                    Variants
+                    <hr />
+                  </ion-list-header>
+                  <div v-for="item in 2" :key="item" class="list-item">
+                    <div>
                       <ion-item lines="none">
                         <ion-label>
                           SKU
@@ -186,54 +189,32 @@
                       </ion-item>
                     </div>
 
-                    <div class="variant-tags">
+                    <div>
                       <ion-chip>
-                        <ion-icon />
+                        <ion-icon :icon="pricetag" />
                         <ion-label>{{ $t("Shopify ID") }}</ion-label>
                       </ion-chip>
                     </div>
 
-                    <div class="variant-metadata">
+                    <div>
                       <ion-item lines="none" detail>
-                        <ion-note slot="end" class="metatags">3 variants</ion-note>
+                        <ion-note slot="end">3 variants</ion-note>
                       </ion-item>
                     </div>
                   </div>
-                  <div class="variant-detail">
-                    <div class="virtual-info">
-                      <ion-item lines="none">
-                        <ion-label>
-                          SKU
-                          <p>{{ $t("Color") }} : color</p>
-                          <p>{{ $t("Size") }}: size</p>
-                        </ion-label>
-                      </ion-item>
-                    </div>
-                    <div class="variant-tags">
-                      <ion-chip>
-                       <ion-icon />
-                       <ion-label>{{ $t("Shopify ID") }}</ion-label>
-                      </ion-chip>
-                    </div>
-                    <div class="variant-metadata">
-                      <ion-item lines="none" detail>
-                        <ion-note slot="end" class="metatags">3 variants</ion-note>
-                      </ion-item>
-                    </div>
-                  </div>
+                  <hr />
                 </ion-list>
               </div>
             </div>
           </div>
-        
-          <section class="section-grid"></section>
         </main>
       </div>
     </ion-content>
   </ion-page>
 </template>
+
 <script>
-import Image from "../components/Image.vue";
+import Image from '../components/Image.vue';
 import {
   IonBackButton,
   IonButton,
@@ -258,20 +239,21 @@ import {
   IonSelectOption,
   IonThumbnail,
   IonTitle,
-  IonToolbar,
-} from "@ionic/vue";
+  IonToolbar
+} from '@ionic/vue';
 import {
-  folderOutline,
-  swapVerticalOutline,
   downloadOutline,
-  sync,
   filterOutline,
-} from "ionicons/icons";
+  folderOutline,
+  pricetag,
+  sync,
+  swapVerticalOutline  
+} from 'ionicons/icons';
 
-import { useRouter } from 'vue-router';
+import { useRouter } from "vue-router";
 
 export default {
-  name: "ProductInventory",
+  name: 'ProductInventory',
   components: {
     Image,
     IonBackButton,
@@ -297,18 +279,18 @@ export default {
     IonSelectOption,
     IonThumbnail,
     IonTitle,
-    IonToolbar,
+    IonToolbar
   },
-  setup () {
-
+  setup() {
     const router = useRouter();
 
     return {
       downloadOutline,
-      folderOutline,
-      swapVerticalOutline,
-      sync,
       filterOutline,
+      folderOutline,
+      sync,
+      pricetag,
+      swapVerticalOutline, 
       router
     };
   },
@@ -316,30 +298,10 @@ export default {
 </script>
 
 <style scoped>
-.variant-detail {
-  display: grid;
-  grid: "vinfo vtags vmetadata" / 1fr max-content 1fr;
-  align-items: center;
-  border-bottom: 1px solid #92949c;
-}
-
-.variant-info {
-  grid-area: vinfo;
-}
-
-.variant-tags {
-  grid-area: vtags;
-  justify-self: center;
-}
-
-.variant-metadata {
-  grid-area: vmetadata;
-}
-
 @media (min-width: 991px) {
   .product {
     display: grid;
-    grid-template-columns: 115px auto;
+    grid-template-columns: 115px 1fr;
   }
 
   .product-image {
@@ -347,7 +309,12 @@ export default {
   }
 
   .section-header {
-  grid-template-columns: 1fr max-content 1fr;
+    grid-template-columns: 1fr max-content 1fr;
+  }
+
+  .list-item {
+    --columns-desktop: 3;
+    grid-template-columns: 1fr max-content 1fr;
   }
 }
 </style>
