@@ -346,15 +346,10 @@ export default {
   grid-template-columns: repeat(auto-fill, minmax(343px, 1fr));
   align-items: start;
 }
-<<<<<<< HEAD:src/views/Orders.vue
-@media (min-width: 900px) {
-  .order-detail {
-=======
 
 @media (min-width: 991px) {
 
   .product-detail {
->>>>>>> hotwax/main:src/views/Order.vue
     display: grid;
     grid: "image product"
           / 240px 1fr;
