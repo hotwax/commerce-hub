@@ -57,6 +57,35 @@ app.config.globalProperties.$filters = {
       featureValue = featureSplit[2] ? featureSplit[2] : '';
     }
     return featureValue;
+  },
+  getOrderIdentificationId(identifications: any, id: string) {
+    let externalId = ''
+    if (identifications) {
+      const externalIdentification = identifications.find((identification: any) => identification.startsWith(id))
+      const externalIdentificationSplit = externalIdentification ? externalIdentification.split('/') : [];
+      externalId = externalIdentificationSplit[1] ? externalIdentificationSplit[1] : '';
+    }
+    return externalId;
+  },
+  getCustomerLoyalty(orderNotes: any, cusotmerLoyaltyOptions: any) {
+    let customerLoyalty = '' as any
+    if (orderNotes && cusotmerLoyaltyOptions) {
+      for (const customerLoyaltyOption of Object.entries(cusotmerLoyaltyOptions)) {
+        if (orderNotes.includes(customerLoyaltyOption[0])) {
+          customerLoyalty = customerLoyaltyOption[1];
+        }
+      }
+    }
+    return customerLoyalty;
+  },
+  getShippingFrom(orderRoles: any, shippingOption: any) {
+    let shippingFrom = ''
+    if (orderRoles) {
+      const role = orderRoles.find((roleItem: any) => roleItem.startsWith(shippingOption));
+      const roleSplit = role ? role.split('/') : [];
+      shippingFrom = roleSplit[2] ? roleSplit[2] : '';
+    }
+    return shippingFrom;
   }
 }
 
