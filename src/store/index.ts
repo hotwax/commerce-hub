@@ -5,7 +5,7 @@ import actions from './actions'
 import RootState from './RootState'
 import createPersistedState from "vuex-persistedstate";
 import userModule from './modules/user';
-import productModule from "./modules/product";
+import productModule from "./modules/product"
 import orderModule from "./modules/order"
 
 

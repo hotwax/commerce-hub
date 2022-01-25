@@ -307,8 +307,8 @@ export default defineComponent ({
       filterOutline,
       pricetag,
       ribbon,
-      router,
       syncOutline,
+      router,
       store
     };
   },
