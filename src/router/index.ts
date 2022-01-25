@@ -1,10 +1,14 @@
 import { createRouter, createWebHistory } from '@ionic/vue-router';
 import { RouteRecordRaw } from 'vue-router';
+import Login from '@/views/Login.vue'
 import Home from '@/views/Home.vue'
 import Orders from '@/views/Orders.vue'
-import OrderFind from '@/views/OrderFind.vue'
 import OrderDetail from "@/views/OrderDetail.vue"
-import Login from '@/views/Login.vue'
+import FindOrder from '@/views/FindOrder.vue'
+import FindProductInventory from '@/views/FindProductInventory.vue'
+import ProductInventory from '@/views/ProductInventory.vue'
+import FindPurchaseOrder from '@/views/FindPurchaseOrder.vue'
+import PurchaseOrder from '@/views/PurchaseOrder.vue'
 import Settings from "@/views/Settings.vue"
 import store from '@/store'
 
@@ -30,15 +34,33 @@ const routes: Array<RouteRecordRaw> = [
     redirect: '/settings'
   },
   {
+    path: '/login',
+    name: 'Login',
+    component: Login,
+    beforeEnter: loginGuard
+  },
+  {
+    path: '/home',
+    name: 'Home',
+    component: Home,
+    beforeEnter: authGuard
+  },
+  {
+    path: '/find-order',
+    name: 'FindOrder',
+    component: FindOrder,
+    beforeEnter: authGuard
+  },
+  {
     path: '/order',
     name: 'Order',
     component: Orders,
     beforeEnter: authGuard
   },
   {
-    path: '/orderfind',
-    name: 'OrderFind',
-    component: OrderFind,
+    path: '/find-product-inventory',
+    name: 'FindProductInventory',
+    component:FindProductInventory,
     beforeEnter: authGuard
   },
   {
@@ -49,17 +71,22 @@ const routes: Array<RouteRecordRaw> = [
     beforeEnter: authGuard
   },
   {
-    path: '/home',
-    name: 'Home',
-    component: Home,
+    path: '/product-inventory',
+    name: 'ProductInventory',
+    component: ProductInventory,
     beforeEnter: authGuard
   },
   {
-    path: '/login',
-    name: 'Login',
-    component: Login,
-    beforeEnter: loginGuard
+    path: '/find-purchase-order',
+    name: 'FindPurchaseOrder',
+    component:FindPurchaseOrder,
   },
+  {  
+    path: '/purchase-order',
+    name: 'PurchaseOrder',
+    component: PurchaseOrder,
+    beforeEnter: authGuard
+  },  
   {
     path: "/settings",
     name: "Settings",

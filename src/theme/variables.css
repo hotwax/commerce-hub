@@ -74,6 +74,16 @@ http://ionicframework.com/docs/theming/ */
   --ion-color-light-contrast-rgb: 0, 0, 0;
   --ion-color-light-shade: #d7d8da;
   --ion-color-light-tint: #f5f6f9;
+
+  /** Spacer **/
+  --spacer-2xs: 0.25rem; /* 4px */
+  --spacer-xs: 0.5rem;   /* 8px */
+  --spacer-sm: 1rem;     /* 16px */
+  --spacer-base: 1.5rem; /* 24px */
+  --spacer-lg: 2rem;     /* 32px */
+  --spacer-xl: 2.5rem;   /* 40px */
+  --spacer-2xl: 5rem;    /* 80px */
+  --spacer-3xl: 10rem;   /* 160px */
 }
 
 @media (prefers-color-scheme: dark) {
@@ -235,14 +245,28 @@ http://ionicframework.com/docs/theming/ */
   }
 }
 
+.overline {
+  font-weight: 500 !important;
+  font-size: 10px !important;
+  line-height: 16px !important;
+  letter-spacing: 1.5px;
+  color: #666;
+  text-transform: uppercase !important;
+}
+
 .find {
   display: grid;
   grid-template-areas: "search"
-                       "main";
+                       "main";            
+}
+
+.find > .filters{
+  display: none;
 }
 
 .search {
   grid-area: search;
+  margin-bottom: var(--spacer-lg);
 }
 
 .filters {
@@ -279,6 +303,37 @@ http://ionicframework.com/docs/theming/ */
   grid-template-columns: repeat(auto-fill, minmax(343px, 1fr));
 }
 
+.list-item {
+  --columns-mobile: 2;
+  --columns-tablet: 5;
+  --columns-desktop: 8;
+  --col-calc: var(--columns-mobile);
+  --implicit-columns: calc(var(--col-calc) - 1);
+  display: grid;
+  grid-template-columns: repeat(var(--implicit-columns), 1fr) max-content;
+  justify-items: center;
+  align-items: center;
+}
+
+.list-item > * {
+  display: none;
+}
+
+.list-item > *:last-child {
+  display: unset;
+  justify-self: end;
+}
+
+.list-item > ion-label {
+  text-align: center;
+}
+
+.list-item > *:first-child {
+  display: unset;
+  justify-self: start
+}
+
+
 ion-thumbnail > img {
   object-fit: contain;
 }
@@ -292,6 +347,10 @@ hr {
   color: var(--ion-color-medium);
 }
 
+ion-list-header > hr {
+  width: 90%;
+}
+
 .desktop-only {
   display: none;
 }
@@ -300,12 +359,24 @@ hr {
   display: unset;
 }
 
+@media (min-width: 700px) {
+  .list-item {
+    --col-calc: var(--columns-tablet);
+  }
+
+  .tablet {
+    display: unset;
+  }
+}
+
 @media (min-width: 991px) {
   .find {
     grid: "search  main" min-content
           "filters main" 1fr 
-          / 375px;                    
+          / 375px; 
+    margin: var(--spacer-lg);                            
   }
+  
   .section-header {
     grid: "info tags metadata" / max-content 1fr minmax(min-content, max-content);
   }
@@ -316,7 +387,8 @@ hr {
   }
 
   .sort > ion-item {
-    width: 308px;
+    max-width: 308px;
+    border-left: 1px solid var(--ion-color-medium);
   }
 
   .desktop-only {
@@ -326,4 +398,56 @@ hr {
   .mobile-only {
     display: none;
   }  
+
+  .find > .filters{
+    display: unset;
+  }  
+
+  .find > .main {
+    margin-left: var(--spacer-lg);
+  }
+
+  .products > ion-item {
+    margin-bottom: var(--spacer-lg);
+  }
+
+  .main-content {
+    margin: var(--spacer-lg);
+  }
+
+  .list-item {
+    --col-calc: var(--columns-desktop);
+  }
+
+  .list-item > * {
+    display: unset;
+  }
+
+  .tablet {
+    display: unset;
+  }
+
+  .header {
+    display: grid;
+    grid: "id       timeline" min-content
+          "cards    timeline" 1fr
+          / 1fr 500px;
+    justify-content: space-between;  
+  }
+
+  .id {
+    grid-area: id;
+  }
+  
+  .info {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(314px, max-content));
+    align-items: start;
+    grid-area: cards;
+  }
+  
+  .timeline {
+    grid-area: timeline;
+    border-left: 1px solid var(--ion-color-medium);
+  }
 }
