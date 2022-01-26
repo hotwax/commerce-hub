@@ -3,13 +3,6 @@ import ProductState from "./ProductState";
 import RootState from "../../RootState";
 
 const getters: GetterTree<ProductState, RootState> = {
-  getCached (state) {
-    return state.cached;
-  },
-  getProduct: (state) => (productId: string) => {
-    // Returning empty object so that it doesn't breaks the UI
-    return state.cached[productId] ? state.cached[productId] : {};
-  },
   getSearchProducts(state) {
     return state.products.list;
   },
@@ -19,5 +12,12 @@ const getters: GetterTree<ProductState, RootState> = {
       state.products.list.length < state.products.total
     );
   },
+  getCached(state) {
+    return state.cached;
+  },
+  getProduct: (state) => (productId: string) => {
+    // Returning empty object so that it doesn't breaks the UI
+    return state.cached[productId] ? state.cached[productId] : {};
+  }
 };
 export default getters;

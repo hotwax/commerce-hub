@@ -1,10 +1,10 @@
+
 import { createRouter, createWebHistory } from '@ionic/vue-router';
 import { RouteRecordRaw } from 'vue-router';
 import Login from '@/views/Login.vue'
 import Home from '@/views/Home.vue'
-import Orders from '@/views/Orders.vue'
-import OrderDetail from "@/views/OrderDetail.vue"
 import FindOrder from '@/views/FindOrder.vue'
+import Order from '@/views/Order.vue'
 import FindProductInventory from '@/views/FindProductInventory.vue'
 import ProductInventory from '@/views/ProductInventory.vue'
 import FindPurchaseOrder from '@/views/FindPurchaseOrder.vue'
@@ -31,7 +31,7 @@ const loginGuard = (to: any, from: any, next: any) => {
 const routes: Array<RouteRecordRaw> = [
   {
     path: '/',
-    redirect: '/settings'
+    redirect: '/home'
   },
   {
     path: '/login',
@@ -52,9 +52,9 @@ const routes: Array<RouteRecordRaw> = [
     beforeEnter: authGuard
   },
   {
-    path: '/order',
+    path: '/order/:slug',
     name: 'Order',
-    component: Orders,
+    component: Order,
     beforeEnter: authGuard
   },
   {
@@ -64,17 +64,9 @@ const routes: Array<RouteRecordRaw> = [
     beforeEnter: authGuard
   },
   {
-    path: '/orderdetail/:slug',
-    name: 'OrderDetail',
-    component: OrderDetail,
-    props: true,
-    beforeEnter: authGuard
-  },
-  {
     path: '/product-inventory',
     name: 'ProductInventory',
     component: ProductInventory,
-    beforeEnter: authGuard
   },
   {
     path: '/find-purchase-order',

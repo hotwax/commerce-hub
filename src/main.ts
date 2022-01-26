@@ -49,15 +49,6 @@ app.config.globalProperties.$filters = {
     // TODO Fix this setDefault should set the default timezone instead of getting it everytiem and setting the tz
     return moment.utc(value, inFormat).tz(userProfile.userTimeZone).format(outFormat ? outFormat : 'MM-DD-YYYY');
   },
-  getOrderIdentificationId(identifications: any, id: string) {
-    let  externalId = ''
-    if (identifications) {
-      const externalIdentification = identifications.find((identification: any) => identification.startsWith(id))
-      const externalIdentificationSplit = externalIdentification ? externalIdentification.split('/') : [];
-      externalId = externalIdentificationSplit[1] ? externalIdentificationSplit[1] : '';
-    }
-    return externalId;
-  },
   getFeature(featureHierarchy: any, featureKey: string) {
     let  featureValue = ''
     if (featureHierarchy) {
@@ -67,27 +58,7 @@ app.config.globalProperties.$filters = {
     }
     return featureValue;
   },
-  getCustomerLoyalty(orderNotes: any, cusotmerLoyaltyOptions: any) {
-    let  customerLoyalty = '' as any
-    if (orderNotes && cusotmerLoyaltyOptions) {
-      for (const customerLoyaltyOption of Object.entries(cusotmerLoyaltyOptions)) {
-          if (orderNotes.includes(customerLoyaltyOption[0])) {
-            customerLoyalty = customerLoyaltyOption[1];
-          }
-      }
-    }
-    return customerLoyalty;
-  },
-  getShippingFrom(orderRoles: any, shippingOption: any){
-    let shippingFrom = ''
-    if(orderRoles){
-      const role = orderRoles.find((roleItem: any) => roleItem.startsWith(shippingOption));
-      const roleSplit = role ? role.split('/') : [];
-      shippingFrom = roleSplit[2] ? roleSplit[2] : '';
-    }
-    return shippingFrom;
-  },
-  getIdentificationId(identifications: any, id: string) {
+  getOrderIdentificationId(identifications: any, id: string) {
     let externalId = ''
     if (identifications) {
       const externalIdentification = identifications.find((identification: any) => identification.startsWith(id))
@@ -95,6 +66,26 @@ app.config.globalProperties.$filters = {
       externalId = externalIdentificationSplit[1] ? externalIdentificationSplit[1] : '';
     }
     return externalId;
+  },
+  getCustomerLoyalty(orderNotes: any, cusotmerLoyaltyOptions: any) {
+    let customerLoyalty = '' as any
+    if (orderNotes && cusotmerLoyaltyOptions) {
+      for (const customerLoyaltyOption of Object.entries(cusotmerLoyaltyOptions)) {
+        if (orderNotes.includes(customerLoyaltyOption[0])) {
+          customerLoyalty = customerLoyaltyOption[1];
+        }
+      }
+    }
+    return customerLoyalty;
+  },
+  getShippingFrom(orderRoles: any, shippingOption: any) {
+    let shippingFrom = ''
+    if (orderRoles) {
+      const role = orderRoles.find((roleItem: any) => roleItem.startsWith(shippingOption));
+      const roleSplit = role ? role.split('/') : [];
+      shippingFrom = roleSplit[2] ? roleSplit[2] : '';
+    }
+    return shippingFrom;
   }
 }
 

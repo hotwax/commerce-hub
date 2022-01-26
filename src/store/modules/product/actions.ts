@@ -46,11 +46,10 @@ const actions: ActionTree<ProductState, RootState> = {
     // TODO Handle specific error
     return resp;
   },
-
   // Will fetch product information
-  async fetchProducts ( { commit, state }, { productIds }) {
+  async fetchProducts({ commit, state }, { productIds }) {
     const cachedProductIds = Object.keys(state.cached);
-    const productIdFilter= productIds.reduce((filter: string, productId: any) => {
+    const productIdFilter = productIds.reduce((filter: string, productId: any) => {
       if (filter !== '') filter += ' OR '
       if (cachedProductIds.includes(productId)) {
         return filter;
@@ -71,15 +70,15 @@ const actions: ActionTree<ProductState, RootState> = {
   },
 
   // Get product related information
-  async getProductInformation(context, { orders }){
+  async getProductInformation(context, { orders }) {
     let productIds: any = new Set();
     orders.groups.forEach((order: any) => {
-      order.doclist.docs.forEach((item: any) =>{
-        if(item.productId) productIds.add(item.productId);
+      order.doclist.docs.forEach((item: any) => {
+        if (item.productId) productIds.add(item.productId);
       })
     })
     productIds = [...productIds]
-    if(productIds.length){
+    if (productIds.length) {
       this.dispatch('product/fetchProducts', { productIds })
     }
   }

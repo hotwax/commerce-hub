@@ -17,8 +17,8 @@
           <div class="id">
             <ion-item lines="none">
               <ion-icon slot="start" :icon="ticketOutline" />
-              <ion-label>Order id</ion-label>
-              <ion-badge slot="end">Approved</ion-badge>
+              <ion-label> {{ order.id }} </ion-label>
+              <ion-badge slot="end"> {{ order.statusDescription }} </ion-badge>
               <ion-icon slot="end" :icon="caretDown" />
             </ion-item>
           </div>
@@ -27,9 +27,11 @@
             <ion-item lines="none">
               <ion-icon slot="start" :icon="timeOutline" class="mobile-only" />
               <ion-label>{{ $t("Timeline") }}</ion-label>
+              <!-- TODO: Add timeline -->
               <ion-note slot="end">1:07pm 6th Dec 2021</ion-note>
             </ion-item>
 
+            <!-- TODO: Implement this functionality -->
             <div class="desktop-only">
               <ion-item v-for="item in 7" :key="item">
                 <ion-icon :icon="ticketOutline" slot="start" />
@@ -46,28 +48,29 @@
             <ion-card>
               <ion-list>
                 <ion-item lines="none">
-                  <ion-label>John Doe</ion-label>
-                  <ion-chip slot="end">
+                  <ion-label> {{ order.customerName }} </ion-label>
+                  <ion-chip slot="end" v-if="order.cusotmerLoyaltyOptions">
                     <ion-icon :icon="ribbon" />
-                    <ion-label>Loyalty Status</ion-label>
+                    <!-- TODO: handle this property when comes with response -->
+                    <ion-label> {{ order.cusotmerLoyaltyOptions }} </ion-label>
                   </ion-chip>
                 </ion-item>
-                <ion-item>
+                <ion-item v-if="order.billTo?.email?.email">
                   <ion-icon :icon="mailOutline" slot="start" />
-                  <ion-label>Email</ion-label>
+                  <ion-label> {{ order.billTo?.email?.email }} </ion-label>
                 </ion-item>
-                <ion-item>
+                <ion-item v-if="order.billTo?.phoneNumber?.contactNumber">
                   <ion-icon :icon="callOutline" slot="start" />
-                  <ion-label>Phone Number</ion-label>
+                  <ion-label> {{ order.billTo?.phoneNumber?.contactNumber }} </ion-label>
                 </ion-item>
-                <ion-item lines="none">
+                <ion-item lines="none" v-if="order.billTo?.postalAddress?.toName || order.billTo?.postalAddress?.address1 || order.billTo?.postalAddress?.address2 || order.billTo?.postalAddress?.city || order.billTo?.postalAddress?.country">
                   <ion-icon :icon="cashOutline" slot="start" />
                   <ion-label>
-                    Full Name
-                    <p>Address line 1</p>
-                    <p>Address line 1</p>
-                    <p>Address line 1</p>
-                    <p>Address line 1</p>
+                    {{ order.billTo?.postalAddress?.toName }}
+                    <p> {{ order.billTo?.postalAddress?.address1 }} </p>
+                    <p> {{ order.billTo?.postalAddress?.address2 }} </p>
+                    <p> {{ order.billTo?.postalAddress?.city }} </p>
+                    <p> {{ order.billTo?.postalAddress?.country }} </p>
                   </ion-label>
                 </ion-item>
               </ion-list>
@@ -77,15 +80,15 @@
                 <ion-list-header>{{ $t("Shopify IDs") }}</ion-list-header>
                 <ion-item>
                   <ion-label> {{ $t("Order Number") }} </ion-label>
-                  <p slot="end">14 Jan 2021</p>
+                  <p slot="end"> {{ order.orderNumber ? order.orderNumber : "-" }} </p>
                 </ion-item>
                 <ion-item>
                   <ion-label> {{ $t("Order ID") }} </ion-label>
-                  <p slot="end">14 Jan 2021</p>
+                  <p slot="end"> {{ order.orderId ? order.orderId : "-" }} </p>
                 </ion-item>
                 <ion-item lines="none">
                   <ion-label> {{ $t("Order Name") }} </ion-label>
-                  <p slot="end">14 Jan 2021</p>
+                  <p slot="end"> {{ order.orderName ? order.orderName : "-" }} </p>
                 </ion-item>
               </ion-list>
             </ion-card>
@@ -99,44 +102,45 @@
             <ion-label>{{ $t("Products") }}</ion-label>
           </ion-item>
 
-          <div class="product-detail">
-            <div class="product-image desktop-only">
-              <Image src="https://cdn.shopify.com/s/files/1/0069/7384/9727/products/test-track.jpg?v=1626255137" />
+          <div class="product-detail" v-for="(shipGroup, index) of order.shipGroup" :key="index">
+            <div class="product-image desktop-only" v-for="(item, index) of shipGroup.items" :key="index">
+              <Image :src="getProduct(item.productId).mainImageUrl" />
+              <!-- TODO: work on this functionality -->
               <ion-button color="secondary" fill="outline">
                 {{ $t("Product inventory") }}
                 <ion-icon :icon="openOutline" slot="end" />
               </ion-button>
             </div>
 
-            <div class="product-info">
+            <div class="product-info" v-for="(item, index) of shipGroup.items" :key="index">
               <hr />
 
               <div class="product-header">
                 <div>
                   <ion-item lines="none">
                     <ion-thumbnail slot="start" class="mobile-only">
-                      <Image src="https://cdn.shopify.com/s/files/1/0069/7384/9727/products/test-track.jpg?v=1626255137" />
+                      <Image :src="getProduct(item.productId).mainImageUrl" />
                     </ion-thumbnail>
                     <ion-label>
-                      <p>Brand</p>
-                      Virtual Name
-                      <p>{{ $t("Color") }} : color</p>
-                      <p>{{ $t("Size") }}: size</p>
+                      <p> {{ item.brandName }} </p>
+                      {{item.name}}
+                      <p> {{ $t("Color") }} : {{ $filters.getFeature(getProduct(item.productId).featureHierarchy, '1/COLOR/') }} </p>
+                      <p> {{ $t("Size") }} : {{ $filters.getFeature(getProduct(item.productId).featureHierarchy, '1/SIZE/') }} </p>
                     </ion-label>
                   </ion-item>
                 </div>
 
                 <div class="product-tags desktop-only">
-                  <ion-chip>
+                  <ion-chip v-if="getProduct(item.itemId).goodIdentifications">
                     <!-- TODO update shopify icon later -->
                     <ion-icon :icon="pricetag" />
-                    <ion-label>Shopify ID</ion-label>
+                    <ion-label> {{ $filters.getIdentificationId(getProduct(item.itemId).goodIdentifications, goodIdentificationTypeId) }} </ion-label>
                   </ion-chip>
                 </div>
 
                 <div>
                   <ion-item lines="none" detail>
-                    <ion-badge slot="end" color="success">Shipped</ion-badge>
+                    <ion-badge slot="end" color="success"> {{ item.status }} </ion-badge>
                   </ion-item>
                 </div>
               </div>
@@ -150,11 +154,12 @@
                       <ion-list-header>{{ $t("Destination") }}</ion-list-header>
                       <ion-item>
                         <ion-label>
-                          Full Name
-                          <p>Address line 1</p>
-                          <p>Address line 1</p>
-                          <p>Address line 1</p>
-                          <p>Address line 1</p>
+                          {{ shipGroup.shipTo.postalAddress.toName }}
+                          <p>{{ shipGroup.shipTo.postalAddress.address1 }}</p>
+                          <p>{{ shipGroup.shipTo.postalAddress.address2 }}</p>
+                          <p>{{ shipGroup.shipTo.postalAddress.city }}</p>
+                          <p>{{ shipGroup.shipTo.postalAddress.country }}</p>
+                          <p>{{ shipGroup.shipTo.postalAddress.postalCode }}</p>
                         </ion-label>
                       </ion-item>
                       <ion-buttons>
@@ -168,22 +173,25 @@
                       <ion-item>
                         <ion-label> {{ $t("Purchase order") }} </ion-label>
                         <ion-chip slot="end">
+                          <!-- TODO: work on this property -->
                           <ion-label>PO#</ion-label>
                         </ion-chip>
                       </ion-item>
                       <ion-item>
                         <ion-label> {{ $t("Estimated arrival") }} </ion-label>
-                        <p slot="end">14 Jan 2021</p>
+                        <!-- TODO: handle it property again -->
+                        <p slot="end"> {{ item.arrivalDate ? item.arrivalDate : "-" }} </p>
                       </ion-item>
                       <ion-item>
                         <ion-label> {{ $t("Promise date") }} </ion-label>
-                        <p slot="end">14 Jan 2021</p>
+                        <p slot="end"> {{ item.promisedDatetime ? item.promisedDatetime : "-" }} </p>
                       </ion-item>
                       <ion-item>
                         <ion-label> {{ $t("Auto cancel") }} </ion-label>
-                        <p slot="end">14 Jan 2021</p>
+                        <p slot="end"> {{ item.autoCancelDate ? item.autoCancelDate : "-" }} </p>
                       </ion-item>
                       <ion-buttons>
+                        <!-- TODO: work on this functionality -->
                         <ion-button color="primary" fill="clear">{{ $t("Edit dates") }}</ion-button>
                       </ion-buttons>
                     </ion-list>
@@ -193,17 +201,19 @@
                       <ion-list-header>{{ $t("Fulfillment") }}</ion-list-header>
                       <ion-item>
                         <ion-label> {{ $t("Shipping method") }} </ion-label>
-                        <p>Standard</p>
+                        <p> {{ shipGroup.shipmentMethodTypeId ? shipGroup.shipmentMethodTypeId : "-"}} </p>
                       </ion-item>
                       <ion-item>
                         <ion-label> {{ $t("Tracking number") }} </ion-label>
-                        <p>Tracking number</p>
+                        <p> {{ shipGroup.trackingNumber ? shipGroup.trackingNumber : "-"}} </p>
                       </ion-item>
                       <ion-item>
                         <ion-label> {{ $t("Location Inventory") }} </ion-label>
-                        <p>0</p>
+                        <!-- TODO: handle this property -->
+                        <p> {{ item.quantity ? item.quantity : "-" }} </p>
                       </ion-item>
                       <ion-buttons>
+                        <!-- TODO: work on this functionality -->
                         <ion-button color="primary" fill="clear">{{ $t("Change fulfillment location") }}</ion-button>
                       </ion-buttons>
                     </ion-list>
@@ -217,7 +227,7 @@
     </ion-content>
   </ion-page>
 </template>
-<script>
+<script lang="ts">
 import Image from '@/components/Image.vue';
 import {
   callOutline,
@@ -253,8 +263,11 @@ import {
   IonTitle,
   IonToolbar
 } from '@ionic/vue';
+import { useStore } from "@/store";
+import { mapGetters } from "vuex";
+import { defineComponent } from "vue";
 
-export default {
+export default defineComponent({
   name: 'Order',
   components: {
     Image,
@@ -277,7 +290,28 @@ export default {
     IonTitle,
     IonToolbar
   },
+  data(){
+    return {
+      goodIdentificationTypeId: process.env.VUE_APP_PRDT_IDENT_TYPE_ID
+    }
+  },
+  computed: {
+    ...mapGetters({
+      order: 'order/getOrderDetails',
+      getProduct: 'product/getProduct',
+    })
+  },
+  methods:{
+    orderDetails(orderId?: any){
+      this.store.dispatch("order/getOrderDetails", orderId);
+    }
+  },
+  mounted(){
+    this.orderDetails(this.$route.params.slug);
+  },
   setup() {
+    const store = useStore();
+
     return {
       callOutline,
       caretDown,
@@ -288,12 +322,13 @@ export default {
       pricetag,
       ribbon,
       shirtOutline,
+      store,
       syncOutline,
       ticketOutline,
       timeOutline
     };
   },
-};
+});
 </script>
 
 <style scoped>

@@ -5,8 +5,8 @@ import actions from './actions'
 import RootState from './RootState'
 import createPersistedState from "vuex-persistedstate";
 import userModule from './modules/user';
-import orderModule from "./modules/order"
 import productModule from "./modules/product"
+import orderModule from "./modules/order"
 
 
 // TODO check how to register it from the components only
