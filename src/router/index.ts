@@ -52,7 +52,7 @@ const routes: Array<RouteRecordRaw> = [
     beforeEnter: authGuard
   },
   {
-    path: '/order',
+    path: '/order/:slug',
     name: 'Order',
     component: Order,
     beforeEnter: authGuard

@@ -104,61 +104,82 @@
           <!-- Order Item Section -->
           <hr />
 
-          <div>
+          <div v-for="(order, index) in orders" :key="index" :order="order">
             <section class="section-header">
               <div class="primary-info">
                 <ion-item lines="none">
                   <ion-label>
-                    Order ID
-                    <p>Customer Name</p>
+                    {{ order.doclist.docs[0].orderId }}
+                    <p> {{ order.doclist.docs[0].customerName }} </p>
                   </ion-label>
                 </ion-item>
               </div>
 
               <div class="tags">
-                <ion-chip outline>
+                <ion-chip @click="copyToClipboard($filters.getOrderIdentificationId(order.doclist.docs[0].orderIdentifications, 'orderIdentificationTypeId'))"  outline v-if="$filters.getOrderIdentificationId(order.doclist.docs[0].orderIdentifications, 'orderIdentificationTypeId')">
                   <ion-icon :icon="pricetag" />
-                  <ion-label>Shopify ID</ion-label>
+                  <ion-label> {{ $filters.getOrderIdentificationId(order.doclist.docs[0].orderIdentifications, 'orderIdentificationTypeId') }} </ion-label>
                 </ion-chip>
-                <ion-chip outline>
+                <ion-chip outline v-if="$filters.getCustomerLoyalty(order.doclist.docs[0].orderNotes, 'cusotmerLoyaltyOptions')">
                   <ion-icon :icon="ribbon" />
-                  <ion-label>Customer Loyalty Status</ion-label>
+                  <ion-label> {{ $filters.getCustomerLoyalty(order.doclist.docs[0].orderNotes, 'cusotmerLoyaltyOptions') }} </ion-label>
                 </ion-chip>
               </div>
 
               <div class="metadata">
-                <ion-note>Ordered on 7 Jan 2021</ion-note>
-                <ion-badge>Approved</ion-badge>
+                <ion-note> {{ $t("Ordered on") }} {{ $filters.formatUtcDate(order.doclist.docs[0].orderDate, 'YYYY-MM-DDTHH:mm:ssZ') }} </ion-note>
+                <ion-badge> {{ order.doclist.docs[0].orderStatusId }} </ion-badge>
               </div>
             </section>
 
-            <section class="section-grid" @click="() => router.push('/order')">
-              <div v-for="item in 7" :key="item">
+            <section class="section-grid" @click="() => router.push(`/order/${order.doclist.docs[0].orderId}`)">
+              <div v-for="(item, index) in order.doclist.docs" :key="index" :item="item">
                 <ion-card>
                   <ion-item>
                     <ion-thumbnail slot="start">
-                      <Image src="https://cdn.shopify.com/s/files/1/0069/7384/9727/products/test-track.jpg?v=1626255137" />
+                      <Image :src="getProduct(item.productId).mainImageUrl" />
                     </ion-thumbnail>
                     <ion-label>
-                      <p>Brand</p>
-                      Virtual Name
-                      <p>{{ $t("Color") }} : color</p>
-                      <p>{{ $t("Size") }}: size</p>
+                      <p> {{ getProduct(item.productId).brandName ? getProduct(item.productId).brandName : '-' }} </p>
+                      {{ item.virtualProductName }}
+                      <p> {{ $t("Color") }} : {{ $filters.getFeature(getProduct(item.productId).featureHierarchy, '1/COLOR/') }} </p>
+                      <p> {{ $t("Size") }} : {{ $filters.getFeature(getProduct(item.productId).featureHierarchy, '1/SIZE/') }} </p>
                     </ion-label>
-                    <ion-badge color="primary" slot="end">Approved</ion-badge>
+                    <ion-badge color="primary" slot="end"> {{ item.orderItemStatusId }} </ion-badge>
                   </ion-item>
-                  <ion-item>
-                    <ion-label> {{ $t("Promise date") }} </ion-label>
-                    <p slot="end">14 Jan 2021</p>
-                  </ion-item>
-                  <ion-item>
-                    <ion-label> {{ $t("PO arrival date") }} </ion-label>
-                    <p slot="end">14 Jan 2021</p>
-                  </ion-item>
-                  <ion-item>
-                    <ion-label> {{ $t("Last brokered") }} </ion-label>
-                    <p slot="end">California Warehouse</p>
-                  </ion-item>
+                  <!-- TODO: Need to handle this property -->
+                  <div v-if="item.preOrderStatus || item.backOrderStatus || item.unFillable">
+                    <ion-item>
+                      <ion-label> {{ $t("Promise date") }} </ion-label>
+                      <p slot="end"> {{ item.promisedDatetime ? $filters.formatUtcDate(item.promisedDatetime, 'YYYY-MM-DDTHH:mm:ssZ') : '-'  }} </p>
+                    </ion-item>
+                    <ion-item>
+                      <ion-label> {{ $t("PO arrival date") }} </ion-label>
+                      <!-- TODO: Need to handle this property -->
+                      <p slot="end"> {{ item.promiseOrderArrivalDate ? item.promiseOrderArrivalDate : '-' }} </p>
+                    </ion-item>
+                    <ion-item>
+                      <ion-label> {{ $t("Last brokered") }} </ion-label>
+                      <!-- TODO: Need to handle this property -->
+                      <p slot="end"> {{ item.lastBrokered ? item.lastBrokered : '-' }} </p>
+                    </ion-item>
+                  </div>
+                  <div v-else>
+                    <ion-item>
+                      <ion-label> {{ $t("Shipping method") }} </ion-label>
+                      <p slot="end"> {{ item.shipmentMethodTypeId }} </p>
+                    </ion-item>
+                    <ion-item>
+                      <ion-label> {{ $t("Shipping from") }} </ion-label>
+                      <p slot="end">
+                        {{ $filters.getShippingFrom(item.orderRoles, '1/Ship-From Vendor/') ? $filters.getShippingFrom(item.orderRoles, '1/Ship-From Vendor/') : "-" }}
+                      </p>
+                    </ion-item>
+                    <ion-item>
+                      <ion-label> {{ $t("Location inventory") }} </ion-label>
+                      <p slot="end"> {{item.uniqueOrderItemsCount}} </p>
+                    </ion-item>
+                  </div>
                 </ion-card>
               </div>
             </section>
@@ -171,8 +192,7 @@
   </ion-page>
 </template>
 
-<script>
-import Image from '../components/Image.vue';
+<script lang="ts">
 import {
   IonBackButton,
   IonBadge,
@@ -205,9 +225,17 @@ import {
   ribbon,
   syncOutline,
 } from 'ionicons/icons';
+import { defineComponent } from "vue";
+import { mapGetters } from "vuex";
+import { showToast } from '@/utils'
+import { Plugins } from '@capacitor/core';
+import Image from '@/components/Image.vue';
+import { useStore } from 'vuex';
 import { useRouter } from 'vue-router';
 
-export default {
+const { Clipboard } = Plugins;
+
+export default defineComponent ({
   name: 'Order',
   components: {
     Image,
@@ -235,8 +263,41 @@ export default {
     IonTitle,
     IonToolbar,
   },
+  computed: {
+    ...mapGetters({
+      orders: 'order/getList',
+      getProduct: 'product/getProduct',
+      currentFacilityId: 'user/getCurrentFacility'
+    })
+  },  
+  methods: {
+    async getOrders(vSize?: any, vIndex?: any){
+      const viewSize = vSize ? vSize : process.env.VUE_APP_VIEW_SIZE;
+      const viewIndex = vIndex ? vIndex : 0;
+      const payload = {
+        viewIndex: viewIndex,
+        viewSize: viewSize,
+        queryString: '* *',
+        groupLimit: 10000,
+        groupByField: 'orderId',
+        filters: JSON.parse(process.env.VUE_APP_ORDER_FILTERS)
+      }
+      await this.store.dispatch("order/findOrders", payload);
+    },
+    async copyToClipboard(text: any) {
+      await Clipboard.write({
+        string: text
+      }).then(() => {
+        showToast(this.$t('Copied', { text }));
+      })
+    }
+  },
+  mounted() {
+    this.getOrders();
+  },
   setup() {
     const router = useRouter();
+    const store = useStore();
 
     return {
       downloadOutline,
@@ -244,10 +305,11 @@ export default {
       pricetag,
       ribbon,
       syncOutline,
-      router
+      router,
+      store
     };
   },
-};
+});
 </script>
 
 <style scoped>
