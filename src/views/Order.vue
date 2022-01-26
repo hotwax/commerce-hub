@@ -332,7 +332,6 @@ export default defineComponent({
 </script>
 
 <style scoped>
-
 .product-header {
   display: grid;
   grid-template-columns: max-content 1fr max-content;
