@@ -171,9 +171,7 @@
                     </ion-item>
                     <ion-item>
                       <ion-label> {{ $t("Shipping from") }} </ion-label>
-                      <p slot="end">
-                        {{ $filters.getShippingFrom(item.orderRoles, '1/Ship-From Vendor/') ? $filters.getShippingFrom(item.orderRoles, '1/Ship-From Vendor/') : "-" }}
-                      </p>
+                      <p slot="end"> {{ $filters.getShippingFrom(item.orderRoles, '1/Ship-From Vendor/') ? $filters.getShippingFrom(item.orderRoles, '1/Ship-From Vendor/') : "-" }} </p>
                     </ion-item>
                     <ion-item>
                       <ion-label> {{ $t("Location inventory") }} </ion-label>
@@ -275,14 +273,14 @@ export default defineComponent ({
       const viewSize = vSize ? vSize : process.env.VUE_APP_VIEW_SIZE;
       const payload = {
         "json": {
-        "params": {
-          "rows": viewSize,
-          "group": true,
-          "group.field": "orderId",
-          "group.limit": 10000
-        },
-        "query": "docType:OISGIR",
-        "fields": ""
+          "params": {
+            "rows": viewSize,
+            "group": true,
+            "group.field": "orderId",
+            "group.limit": 10000
+          },
+          "query": "docType:OISGIR",
+          "fields": ""
         }
       }
       await this.store.dispatch("order/findOrders", payload);
