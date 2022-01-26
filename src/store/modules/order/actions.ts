@@ -16,9 +16,7 @@ const actions: ActionTree<OrderState, RootState> = {
       if (resp && resp.status === 200 && !hasError(resp)) {
         const orders = resp.data.grouped.orderId;
         this.dispatch('product/getProductInformation', { orders });
-        commit(types.ORDER_LIST_UPDATED, {
-          items: orders.groups,
-        });
+        commit(types.ORDER_LIST_UPDATED, { items: orders.groups });
       } else {
         showToast(translate("Something went wrong"));
       }
@@ -31,9 +29,7 @@ const actions: ActionTree<OrderState, RootState> = {
     let resp;
     try{
       resp = await OrderService.findOrderDetails(payload);
-      commit(types.ORDER_DETAILS_UPDATED, {
-        orderDetails: resp.data
-      })
+      commit(types.ORDER_DETAILS_UPDATED, { orderDetails: resp.data })
     } catch(error) {
       showToast(translate("Something went wrong"));
     }

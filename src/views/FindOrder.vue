@@ -171,9 +171,7 @@
                     </ion-item>
                     <ion-item>
                       <ion-label> {{ $t("Shipping from") }} </ion-label>
-                      <p slot="end">
-                        {{ $filters.getShippingFrom(item.orderRoles, '1/Ship-From Vendor/') ? $filters.getShippingFrom(item.orderRoles, '1/Ship-From Vendor/') : "-" }}
-                      </p>
+                      <p slot="end"> {{ $filters.getShippingFrom(item.orderRoles, '1/Ship-From Vendor/') ? $filters.getShippingFrom(item.orderRoles, '1/Ship-From Vendor/') : "-" }} </p>
                     </ion-item>
                     <ion-item>
                       <ion-label> {{ $t("Location inventory") }} </ion-label>
