@@ -1,0 +1,6 @@
+---
+title: Implemented functionality to fetch order with the help of searchOrders endpoint and show those orders in FindOrder.vue page.
+ticket_id: "#1wn444v"
+merge_request: 39
+author: Aniket Kumar Pandey
+type: added
