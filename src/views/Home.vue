@@ -169,6 +169,10 @@ figure > img {
   max-width: 200px;
  }
 
+ .internal {
+   margin-top: 24px;
+ }
+
 .internal > ion-item {
   border: 1px solid var(--ion-color-medium);
   border-radius: 15px;
@@ -209,23 +213,24 @@ ion-card > ion-card-header {
   margin-right: var(--spacer-xl);
 }
 
-ion-label[slot="end"] {
-   text-align: end;
-   white-space: normal;
-}
-
 @media (min-width: 991px) {
   nav {
     display: grid;
     grid-template-columns: auto 375px;
-    align-items: center;
     width: var(--page-width);
     margin: auto;
   }
 
   .external {
-    overflow-x: hidden;
+    overflow-x: unset;
   }
+
+  .internal {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    margin-top: unset;
+ }
 
   main {
     --page-width: 1024px;
