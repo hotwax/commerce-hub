@@ -149,10 +149,6 @@ figure > img {
   display: none;
 }
 
-.light {
-  display: unset;
-}
-
 @media (prefers-color-scheme: dark) {
   .dark {
     display: unset;
@@ -163,36 +159,33 @@ figure > img {
   }
 }
 
-nav {
-  display: grid;
-  grid-template-columns: auto 375px;
-  align-items: center;
-  width: var(--page-width);
-  margin: auto;
-}
-
 .external {
   display: flex;
+  overflow-x: scroll;
 }
 
-a {
-  text-decoration: none;
-  flex: 1;
-}
+.external > ion-card {
+  flex: 1 0 100%;
+  max-width: 200px;
+ }
 
-a > ion-card > img {
+ .external > ion-card > img {
   object-fit: cover;
   width: 100%;
   height: 200px;
 }
 
-ion-card > ion-card-header {
-  text-align: center;
-}
+ .internal {
+   margin-top: 24px;
+ }
 
 .internal > ion-item {
   border: 1px solid var(--ion-color-medium);
   border-radius: 15px;
+}
+
+ion-card > ion-card-header {
+  text-align: center;
 }
 
 .scroller > .scroller-header {
@@ -215,7 +208,27 @@ ion-card > ion-card-header {
   margin-right: var(--spacer-xl);
 }
 
-main {
-  --page-width: 1024px;
+@media (min-width: 991px) {
+  nav {
+    display: grid;
+    grid-template-columns: auto 375px;
+    width: var(--page-width);
+    margin: auto;
+  }
+
+  .external {
+    overflow-x: unset;
+  }
+
+  .internal {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    margin-top: unset;
+ }
+
+  main {
+    --page-width: 1024px;
+  }
 }
 </style>
