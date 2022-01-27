@@ -169,6 +169,12 @@ figure > img {
   max-width: 200px;
  }
 
+ .external > ion-card > img {
+  object-fit: cover;
+  width: 100%;
+  height: 200px;
+}
+
  .internal {
    margin-top: 24px;
  }
@@ -176,17 +182,6 @@ figure > img {
 .internal > ion-item {
   border: 1px solid var(--ion-color-medium);
   border-radius: 15px;
-}
-
-a {
-  text-decoration: none;
-  flex: 1;
-}
-
-a > ion-card > img {
-  object-fit: cover;
-  width: 100%;
-  height: 200px;
 }
 
 ion-card > ion-card-header {
