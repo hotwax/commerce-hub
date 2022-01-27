@@ -14,6 +14,12 @@
         <ion-button slot="end" fill="outline" color="dark" @click="logout()">{{ $t("Logout") }}</ion-button>
       </ion-item>
 
+      <ion-item>
+        <ion-icon :icon="codeWorkingOutline" slot="start"/>
+        <ion-label>{{ $t("OMS") }}</ion-label>
+        <p slot="end">{{ instanceUrl }}</p>
+      </ion-item>
+
       <!-- Select store -->
        <ion-item>
         <ion-icon :icon="storefrontOutline" slot="start" />
@@ -30,7 +36,7 @@
 <script lang="ts">
 import { alertController, IonButton, IonContent, IonHeader,IonIcon, IonItem, IonLabel, IonPage, IonSelect, IonSelectOption, IonTitle, IonToolbar, popoverController } from '@ionic/vue';
 import { defineComponent } from 'vue';
-import { ellipsisVertical, personCircleOutline, storefrontOutline} from 'ionicons/icons'
+import { codeWorkingOutline, ellipsisVertical, personCircleOutline, storefrontOutline} from 'ionicons/icons'
 import { mapGetters, useStore } from 'vuex';
 import { useRouter } from 'vue-router';
 
@@ -53,6 +59,7 @@ export default defineComponent({
     ...mapGetters({
       userProfile: 'user/getUserProfile',
       currentFacility: 'user/getCurrentFacility',
+      instanceUrl: 'user/getInstanceUrl'
     })
   },
   methods: {
@@ -75,6 +82,7 @@ export default defineComponent({
     const router = useRouter();
 
     return {
+      codeWorkingOutline,
       ellipsisVertical,
       personCircleOutline,
       storefrontOutline,
