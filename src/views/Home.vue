@@ -6,7 +6,7 @@
      
         <nav>
           <section class="external">
-            <ion-card href="">
+            <ion-card href="https://preorder.hotwax.io/login">
               <img src="../assets/images/PreOrder.svg" />
               <ion-card-header>
                 <ion-card-title>Pre Order Management</ion-card-title>
