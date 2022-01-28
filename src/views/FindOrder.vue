@@ -104,7 +104,7 @@
           <!-- Order Item Section -->
           <hr />
 
-          <div>
+          <div @click="() => router.push('/order')">
             <section class="section-header">
               <div class="primary-info">
                 <ion-item lines="none">
