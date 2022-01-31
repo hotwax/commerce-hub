@@ -12,7 +12,7 @@
                 <ion-card-title>Pre Order Management</ion-card-title>
               </ion-card-header>
             </ion-card>
-            <ion-card href="">
+            <ion-card href="https://threshold-management.hotwax.io/login">
               <img src="../assets/images/Threshold.svg" />
               <ion-card-header>
                 <ion-card-title>Threshold Management</ion-card-title>
