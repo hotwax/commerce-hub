@@ -98,13 +98,13 @@
           </ion-card>
         </aside>
 
-        <main class="main">
+        <main>
           <section class="sort"></section>
 
           <!-- Order Item Section -->
           <hr />
 
-          <div>
+          <div @click="() => router.push('/order')">
             <section class="section-header">
               <div class="primary-info">
                 <ion-item lines="none">
