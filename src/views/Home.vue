@@ -136,10 +136,10 @@ export default defineComponent({
 </script>
 
 <style scoped>
-figure {
-  max-width: 375px;
-  margin: auto;
-}
+  figure {
+    max-width: 375px;
+    margin: auto;
+  }
 
 .external {
   display: flex;
