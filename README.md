@@ -9,7 +9,7 @@ Ionic CLI - If you don't have the ionic CLI installed refer [official documentat
 2. Go to the app directory.
 3. Run following command to download dependencies  
     `npm i`
-4. Create a `.env` file by taking reference from the `.env.example` and set the `VUE_APP_BASE_URL` to the instance you want to connect the app.
+4. Create a `.env` file by taking reference from the `.env.example`.
 5. To run the app in browser use the command: `ionic serve`
 
 
@@ -20,9 +20,49 @@ Ionic CLI - If you don't have the ionic CLI installed refer [official documentat
 3. Go to the <repository-name> directory using command: `cd <repository-name>`
 4. Run following command to download dependencies
     `npm i`
-5. Create a `.env` file by taking reference from the `.env.example` and change the `VUE_APP_BASE_URL` to the instance you want to connect the app.
+5. Create a `.env` file by taking reference from the `.env.example`.
 6. To run the app in browser use the command: `ionic serve`
 
+## Firebase Hosting
+
+We are using firebase hosting for the Commerce Hub app deployment
+Here are the steps to deploy app on firebase hosting
+
+### Prerequisite
+
+- [Firebase Cli](https://firebase.google.com/docs/cli) should be installed
+- Firebase project should be created
+- You should have access to firebase project
+
+### Deployment
+
+- Generate .env file from .env.example
+
+- Build the application using following command
+  `ionic build`
+
+- Login into firebase
+  `firebase login`
+
+- Run following command to deploy to firebase hosting
+  `firebase deploy --only hosting:commerce-hub`
+  `firebase deploy --only hosting:commerce-hub-dev`
+
+## How to build application in different environment or modes(staging, production, qa, etc)?
+
+As there is a bug in Ionic cli due to which we cannot pass flag variables for commands (See [#4669](https://github.com/ionic-team/ionic-cli/issues/4642)). To build application in different modes we need to use vue-cli-service to build and then use the built app using capacitor copy command further.
+
+Follow following instructions:
+
+1. Manually build the application using vue-cli-service:
+   npx vue-cli-service build --mode=sandbox
+
+2. Copy web assets to the native project without building the app:
+   ionic capacitor copy ios --no-build
+
+3. Open the Android Studio / XCode project:
+   ionic capacitor open android  
+   ionic capacitor open ios
 
 # Contribution Guideline
 
@@ -34,7 +74,7 @@ Ionic CLI - If you don't have the ionic CLI installed refer [official documentat
 6. Use [Pull Request template](https://github.com/hotwax/commerce-hub/blob/main/.github/PULL_REQUEST_TEMPLATE.md) (it's automatically added to each PR) and fill as much fields as possible to describe your solution.
 7. Reference any relevant issues or other information in your PR.
 8. Wait for review and adjust your PR according to it.
-9. Congrats! Your PR should now me merged in!
+9. Congrats! Your PR should now be merged in!
 
 If you can't handle some parts of the issue then please ask for help in the comment. If you have any problems during the implementation of some complex issue, feel free to implement just a part of it.
 
@@ -45,14 +85,13 @@ Always define the type of issue:
 * Feature request
 
 While writing issues, please be as specific as possible. All requests regarding support with implementation or application setup should be sent to.
-    
-    
 # UI / UX Resources
 You may find some useful resources for improving the UI / UX of the app <a href="https://www.figma.com/community/file/885791511781717756" target="_blank">here</a>.
 
 # Join the community on Discord
-If you have any questions or ideas feel free to join our <a href="https://discord.gg/SwpJnpdyg3" target="_blank">Discord channel</a>
+If you have any questions or ideas feel free to join our <a href="https://discord.gg/SwpJnpdyg3" target="_blank">Discord channel</a>.
     
 # The license
 
-Commerce Hub app is completely free and released under the Apache v2.0 License. Check <a href="https://github.com/hotwax/commerce-hub/blob/main/LICENSE" target="_blank">LICENSE</a> for more details.
+Commerce Hub app is completely free and released under the Apache v2.0 License. Check <a href="https://github.com/hotwax/bopis/blob/main/LICENSE" target="_blank">LICENSE</a> for more details.
+
