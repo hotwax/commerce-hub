@@ -1,5 +1,6 @@
 {
   "hosting": {
+    "target": "commerce-hub-dev",
     "public": "dist",
     "ignore": [
       "firebase.json",
