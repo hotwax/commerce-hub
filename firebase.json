@@ -1,33 +1,34 @@
 {
-    "hosting": [
+  "hosting": [
+    {
+      "target": "commerce-hub",
+      "public": "dist",
+      "ignore": [
+        "firebase.json",
+        "**/.*",
+        "**/node_modules/**"
+      ],
+      "rewrites": [
         {
-        "target": "commerce-hub",
-        "public": "dist",
-        "ignore": [
-          "firebase.json",
-          "**/.*",
-          "**/node_modules/**"
-        ],
-        "rewrites": [ {
           "source": "**",
           "destination": "/index.html"
-        } ]
-    
-      },
-      {
-        "target": "commerce-hub-dev",
-        "public": "dist",
-        "ignore": [
-          "firebase.json",
-          "**/.*",
-          "**/node_modules/**"
-        ],
-        "rewrites": [ {
+        }
+      ]
+    },
+    {
+      "target": "commerce-hub-dev",
+      "public": "dist",
+      "ignore": [
+        "firebase.json",
+        "**/.*",
+        "**/node_modules/**"
+      ],
+      "rewrites": [
+        {
           "source": "**",
           "destination": "/index.html"
-        } ]
-    
-      }
-
-    ]
-  }
+        }
+      ]
+    }
+  ]
+}
