@@ -13,6 +13,8 @@ jobs:
       - uses: actions/checkout@v2
       - name: Install Dependencies
         run: npm install
+      - name: Generate .env file
+        run: cp .env.example .env
       - name: Build
         run: npm run build
       - uses: FirebaseExtended/action-hosting-deploy@v0
@@ -21,3 +23,4 @@ jobs:
           firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_HOTWAX_DIGITAL_COMMERCE }}'
           channelId: live
           projectId: hotwax-digital-commerce
+          target: commerce-hub-dev
