@@ -98,7 +98,7 @@
           </ion-card>
         </aside>
 
-        <main class="main">
+        <main>
           <section class="sort"></section>
 
           <!-- Order Item Section -->

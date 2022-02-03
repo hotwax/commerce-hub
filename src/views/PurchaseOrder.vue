@@ -14,7 +14,7 @@
     </ion-header>
 
     <ion-content :fullscreen="true">
-      <main class="main-content">
+      <main>
         <section class="header">
           <div class="id">
             <ion-item lines="none">
