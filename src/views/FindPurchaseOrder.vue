@@ -54,8 +54,8 @@
             </ion-item>
           </ion-list>
         </aside>
-        
-        <main class="main">
+
+        <main>
           <section class="sort">
             <ion-item lines="none">
               <ion-icon :icon="documentTextOutline" slot="start" />

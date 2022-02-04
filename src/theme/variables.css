@@ -273,7 +273,7 @@ http://ionicframework.com/docs/theming/ */
   grid-area: filters;
 }
 
-.main {
+main {
   grid-area: main;
 }
 

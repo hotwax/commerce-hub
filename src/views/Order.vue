@@ -12,7 +12,7 @@
       </ion-toolbar>
     </ion-header>
     <ion-content>
-      <main class="main-content">
+      <main>
         <section class="header">
           <div class="id">
             <ion-item lines="none">
