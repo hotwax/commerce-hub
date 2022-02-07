@@ -48,7 +48,7 @@
               <ion-label>{{ $t("Arrival date") }}</ion-label>
               <ion-chip>
                 <ion-icon :icon="calendarOutline" />
-                <ion-datetime value="12/01/2021" />
+                <ion-input type="date" />
                 <ion-icon :icon="closeCircle" />
               </ion-chip>
             </ion-item>
@@ -152,9 +152,9 @@ import {
   IonButtons,
   IonChip,
   IonContent,
-  IonDatetime,
   IonHeader,
   IonIcon,
+  IonInput,
   IonItem,
   IonLabel,
   IonList,
@@ -191,9 +191,9 @@ export default {
     IonButtons,
     IonChip,
     IonContent,
-    IonDatetime,
     IonHeader,
     IonIcon,
+    IonInput,
     IonItem,
     IonLabel,
     IonList,
