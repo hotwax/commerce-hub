@@ -264,6 +264,10 @@ http://ionicframework.com/docs/theming/ */
   display: none;
 }
 
+.find > main {
+  grid-area: main;
+}
+
 .search {
   grid-area: search;
   margin-bottom: var(--spacer-lg);
@@ -271,10 +275,6 @@ http://ionicframework.com/docs/theming/ */
 
 .filters {
   grid-area: filters;
-}
-
-main {
-  grid-area: main;
 }
 
 .section-header {
@@ -403,7 +403,7 @@ ion-list-header > hr {
     display: unset;
   }  
 
-  .find > .main {
+  .find > main {
     margin-left: var(--spacer-lg);
   }
 
