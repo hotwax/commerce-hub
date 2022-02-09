@@ -18,8 +18,10 @@
             <ion-item lines="none">
               <ion-icon slot="start" :icon="ticketOutline" />
               <ion-label>Order id</ion-label>
-              <ion-badge slot="end">Approved</ion-badge>
-              <ion-icon slot="end" :icon="caretDown" />
+              <ion-badge>Approved</ion-badge>
+              <ion-select slot="end">
+                <ion-select-option value="approved">approved</ion-select-option>
+              </ion-select>
             </ion-item>
           </div>
 
