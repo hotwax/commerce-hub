@@ -158,7 +158,7 @@ export default defineComponent({
 }
 
  .internal {
-   margin-top: var(--spacer-base);
+   margin: var(--spacer-sm) var( --spacer-xs) 0 var( --spacer-xs);
  }
 
 .internal > ion-item {
