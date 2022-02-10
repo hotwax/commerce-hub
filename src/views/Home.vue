@@ -164,6 +164,7 @@ export default defineComponent({
 .internal > ion-item {
   border: 1px solid var(--ion-color-medium);
   border-radius: 15px;
+  margin-bottom: var(--spacer-xs);
 }
 
 ion-card > ion-card-header {
@@ -208,6 +209,10 @@ ion-card > ion-card-header {
     justify-content: space-between;
     margin-top: unset;
  }
+
+ .internal > ion-item {
+   margin-bottom: unset;
+}
 
   main {
     --page-width: 1040px;
