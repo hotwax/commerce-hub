@@ -75,7 +75,7 @@
           <hr />
 
           <!-- Product section -->
-          <div @click="() => router.push('/purchase-order')">
+          <div @click="() => router.push('/shipment')">
             <section class="section-header">
               <div class="primary-info">
                 <ion-item lines="none">
