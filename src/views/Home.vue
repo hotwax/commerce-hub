@@ -157,14 +157,10 @@ export default defineComponent({
   height: 200px;
 }
 
- .internal {
-   margin: var(--spacer-sm) var( --spacer-xs) 0 var( --spacer-xs);
- }
-
 .internal > ion-item {
   border: 1px solid var(--ion-color-medium);
   border-radius: 15px;
-  margin-bottom: var(--spacer-xs);
+  margin: var(--spacer-xs) var( --spacer-xs) 0;
 }
 
 ion-card > ion-card-header {
@@ -207,12 +203,8 @@ ion-card > ion-card-header {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    margin-top: unset;
+    margin: unset;
  }
-
- .internal > ion-item {
-   margin-bottom: unset;
-}
 
   main {
     --page-width: 1040px;
