@@ -18,9 +18,10 @@
             <ion-item lines="none">
               <ion-icon slot="start" :icon="ticketOutline" />
               <ion-label>Order id</ion-label>
-              <ion-badge>Approved</ion-badge>
-              <ion-select slot="end">
-                <ion-select-option value="approved">approved</ion-select-option>
+              <ion-badge :value="status" slot="end">{{ status }}</ion-badge>
+              <ion-select :value="status" @ionChange="changeStatus($event)" slot="end">
+                <ion-select-option value="approved">Approved</ion-select-option>
+                <ion-select-option value="completed">Completed</ion-select-option>
               </ion-select>
             </ion-item>
           </div>
@@ -278,6 +279,16 @@ export default {
     IonThumbnail,
     IonTitle,
     IonToolbar
+  },
+  data() {
+    return {
+      status: "..." // default value
+    }
+  },
+  methods: {
+    changeStatus (ev) {
+      this.status = ev['detail'].value
+    }
   },
   setup() {
     return {

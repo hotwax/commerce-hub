@@ -20,9 +20,11 @@
             <ion-item lines="none">
               <ion-icon slot="start" :icon="ticketOutline" />
               <ion-label>External Purchase Order ID</ion-label>
-              <ion-badge>Approved</ion-badge>
+              <ion-badge slot="end">Approved</ion-badge>
+              <ion-badge slot="end">Completed</ion-badge>
               <ion-select slot="end">
-                <ion-select-option value="approved">approved</ion-select-option>
+                <ion-select-option value="approved">Approved</ion-select-option>
+                <ion-select-option value="completed">Completed</ion-select-option>
               </ion-select>
             </ion-item>
           </div>
