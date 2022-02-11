@@ -127,8 +127,8 @@
               </div>
 
               <div class="metadata">
-                <ion-badge color="danger">13 min ago</ion-badge>
-                <ion-badge color="dark">payment pending</ion-badge>
+                <ion-note>Ordered on 7 Jan 2021</ion-note>
+                <ion-badge>Approved</ion-badge>
               </div>
             </section>
 
@@ -227,6 +227,7 @@ export default {
     IonLabel,
     IonList,
     IonListHeader,
+    IonNote,
     IonPage,
     IonSearchbar,
     IonSelect,
