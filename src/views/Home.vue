@@ -193,10 +193,10 @@ ion-card > ion-card-header {
 
 @media (min-width: 991px) {
   nav {
-   display: grid;
-   grid-template-columns: auto 375px;
-   width: var(--page-width);
-   margin: auto;
+    display: grid;
+    grid-template-columns: auto 375px;
+    width: var(--page-width);
+    margin: auto;
   }
 
   .external {
