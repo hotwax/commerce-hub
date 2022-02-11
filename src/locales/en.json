@@ -1,5 +1,6 @@
 {
   "Add": "Add",
+  "Add item to shipment": "Add item to shipment",
   "Adjust quantity": "Adjust quantity",
   "arrival date": "arrival date",
   "Arrival date": "Arrival date",
@@ -25,6 +26,7 @@
   "Edit ordered quantity": "Edit ordered quantity",
   "Edit ordered qty": "Edit ordered qty",
   "Edit safety stock": "Edit safety stock",
+  "Edit shipped quantity": "Edit shipped quantity",
   "Edit threshold": "Edit threshold",
   "Edit quantity on hand": "Edit quantity on hand",
   "Edit qoh": "Edit qoh",
@@ -63,6 +65,7 @@
   "Orders": "Orders",
   "Overwrite": "Overwrite",
   "pickup": "pickup",
+  "PO": "PO",
   "PO arrival date": "PO arrival date",
   "Pre-order": "Pre-order",
   "Product inventory": "Product inventory",

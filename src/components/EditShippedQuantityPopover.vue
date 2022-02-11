@@ -2,7 +2,7 @@
   <ion-content>
     <ion-list>
       <ion-list-header>SKU</ion-list-header>
-      <ion-item button>{{ $t("Edit shipped quantity") }}</ion-item>
+      <ion-item button lines="none">{{ $t("Edit shipped quantity") }}</ion-item>
     </ion-list>
   </ion-content>
 </template>

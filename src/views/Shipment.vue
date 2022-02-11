@@ -27,10 +27,10 @@
                 <ion-select-option value="Shipped">Shipped</ion-select-option>
               </ion-select>
             </ion-item>
-            <ion-item>
+            <ion-item lines="none">
               <ion-chip outline>
-                <ion-icon :icon="timeOutline" />
-                <ion-label>PO: PO External ID</ion-label>
+                <ion-icon :icon="openOutline" />
+                <ion-label>{{ $t("PO") }}: PO External ID</ion-label>
               </ion-chip>
             </ion-item>
           </div>
@@ -61,7 +61,7 @@
                 <ion-card-header>
                   <ion-card-title>Ship from Facility name</ion-card-title>
                 </ion-card-header>
-                <ion-item>
+                <ion-item lines="none">
                   <ion-icon :icon="locationOutline" slot="start" />
                   <ion-label>
                     Address1
@@ -70,7 +70,7 @@
                     <p>State, Country</p>
                   </ion-label>
                 </ion-item>
-                <ion-item>
+                <ion-item lines="none">
                   <ion-icon :icon=" calendarOutline" slot="start" />
                   <ion-label>12th December 2021</ion-label>
                   <ion-badge slot="end" color="success">Shipped</ion-badge>
@@ -83,7 +83,7 @@
                 <ion-card-header>
                   <ion-card-title>Ship from Facility name</ion-card-title>
                 </ion-card-header>
-                <ion-item>
+                <ion-item lines="none"> 
                   <ion-icon :icon="locationOutline" slot="start" />
                   <ion-label>
                     Address1
@@ -92,7 +92,7 @@
                     <p>State, Country</p>
                   </ion-label>
                 </ion-item>
-                <ion-item>
+                <ion-item lines="none">
                   <ion-icon :icon=" calendarOutline" slot="start" />
                   <ion-label>14th December 2021</ion-label>
                   <ion-badge slot="end" color="medium">ETA</ion-badge>
@@ -108,11 +108,12 @@
               <ion-icon slot="start" :icon="shirtOutline" />
               <ion-label>Products</ion-label>
             </ion-item>
-            <ion-button fill="outline">
-              <ion-icon :icon="addOutline" />
-              Add item to shipment
+            <ion-button fill="outline" size="small">
+              <ion-icon :icon="addOutline" slot="start" />
+              {{ $t("Add item to shipment") }}
             </ion-button>
           </div>
+
           <div class="product-detail">
             <div class="product-image desktop-only">
               <Image src="https://cdn.shopify.com/s/files/1/0069/7384/9727/products/test-track.jpg?v=1626255137"/>
@@ -126,7 +127,7 @@
                   <ion-thumbnail slot="start" class="mobile-only">
                     <Image src="https://cdn.shopify.com/s/files/1/0069/7384/9727/products/test-track.jpg?v=1626255137" />
                   </ion-thumbnail>
-                  <ion-label>
+                  <ion-label class="ion-text-wrap">
                     <p class="overline">Brand</p>
                     Parent product
                   </ion-label>
@@ -134,12 +135,12 @@
 
                 <ion-label class="mobile">
                   600
-                  <p>{{ $t("shipped") }}</p>
+                  <p>shipped</p>
                 </ion-label>
 
                 <ion-label class="mobile">
                   200
-                  <p>{{ $t("received") }}</p>
+                  <p>received</p>
                 </ion-label>
 
                 <ion-checkbox />
@@ -255,6 +256,7 @@ import {
   ellipsisVerticalOutline,
   informationCircleOutline,
   locationOutline,
+  openOutline,
   sendOutline,
   shirtOutline,
   syncOutline,
@@ -321,6 +323,7 @@ export default defineComponent({
       ellipsisVerticalOutline,
       informationCircleOutline,
       locationOutline,
+      openOutline,
       sendOutline,
       shirtOutline,
       syncOutline,
@@ -332,11 +335,6 @@ export default defineComponent({
 </script>
 
 <style scoped>
-
-ion-label {
-  white-space: normal;
-}
-
 /* To hide selected text which appear after selecting any option*/
 ion-select::part(text) {
   display: none;
@@ -354,12 +352,12 @@ ion-select {
   display: unset;
 }
 
-@media (min-width: 991px) {
-  .product-header {
+.product-header {
     display: flex;
     justify-content: space-between;
-  }
+}
 
+@media (min-width: 991px) {
   .list-item {
     --columns-desktop: 5;
   }
