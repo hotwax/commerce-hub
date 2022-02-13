@@ -158,13 +158,13 @@ figure {
 }
 
 .internal {
-  margin: var(--spacer-base) var(--spacer-xs) 0;
+  margin: var(--spacer-base) 0 0;
 }
 
 .internal > ion-item {
   border: 1px solid var(--ion-color-medium);
   border-radius: 15px;
-  margin-bottom: var(--spacer-xs);
+  margin: var(--spacer-xs) var(--spacer-xs) 0;
 }
 
 ion-card > ion-card-header {
