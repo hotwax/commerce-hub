@@ -231,7 +231,7 @@ export default {
   text-align: end;
 }
 
-.items-metadata :first-child {
+.items-metadata > ion-note {
   display: block;
 }
 
