@@ -59,7 +59,7 @@
             <div>
               <ion-card>
                 <ion-card-header>
-                  <ion-card-title>Ship from Facility name</ion-card-title>
+                  <ion-card-title>{{ $t("Ship from Facility name") }}</ion-card-title>
                 </ion-card-header>
                 <ion-item lines="none">
                   <ion-icon :icon="locationOutline" slot="start" />
@@ -81,7 +81,7 @@
             <div>
               <ion-card>
                 <ion-card-header>
-                  <ion-card-title>Ship from Facility name</ion-card-title>
+                  <ion-card-title>{{ $t("Ship from Facility name") }}</ion-card-title>
                 </ion-card-header>
                 <ion-item lines="none"> 
                   <ion-icon :icon="locationOutline" slot="start" />
@@ -106,7 +106,7 @@
           <div class="product-header">
             <ion-item lines="none">
               <ion-icon slot="start" :icon="shirtOutline" />
-              <ion-label>Products</ion-label>
+              <ion-label>{{ $t("Products") }}</ion-label>
             </ion-item>
             <ion-button fill="outline" size="small">
               <ion-icon :icon="addOutline" slot="start" />
@@ -135,12 +135,12 @@
 
                 <ion-label class="mobile">
                   600
-                  <p>shipped</p>
+                  <p>{{ $t("shipped") }}</p>
                 </ion-label>
 
                 <ion-label class="mobile">
                   200
-                  <p>received</p>
+                  <p>{{ $t("received") }}</p>
                 </ion-label>
 
                 <ion-checkbox />
