@@ -136,10 +136,14 @@ export default defineComponent({
 </script>
 
 <style scoped>
-  figure {
-    max-width: 375px;
-    margin: auto;
-  }
+.item > ion-label {
+  white-space: normal;
+}
+
+figure {
+  max-width: 375px;
+  margin: auto;
+}
 
 .external {
   display: flex;

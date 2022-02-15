@@ -245,10 +245,6 @@ http://ionicframework.com/docs/theming/ */
   }
 }
 
-ion-item > ion-label {
-  white-space: normal !important;
-}
-
 .overline {
   font-weight: 500 !important;
   font-size: 10px !important;
