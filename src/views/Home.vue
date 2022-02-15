@@ -138,10 +138,10 @@ export default defineComponent({
 </script>
 
 <style scoped>
-  figure {
-    max-width: 375px;
-    margin: auto;
-  }
+figure {
+  max-width: 375px;
+  margin: auto;
+}
 
 .external {
   display: flex;
@@ -156,19 +156,20 @@ export default defineComponent({
   scroll-snap-align: start;
  }
 
- .external > ion-card > img {
+.external > ion-card > img {
   object-fit: cover;
   width: 100%;
   height: 200px;
 }
 
- .internal {
-   margin-top: 24px;
- }
+.internal {
+  margin: var(--spacer-base) 0 0;
+}
 
 .internal > ion-item {
   border: 1px solid var(--ion-color-medium);
   border-radius: 15px;
+  margin: var(--spacer-xs) var(--spacer-xs) 0;
 }
 
 ion-card > ion-card-header {
@@ -218,8 +219,12 @@ ion-card > ion-card-header {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    margin-top: unset;
- }
+    margin: unset;
+  }
+
+  .internal > ion-item {
+    margin-bottom: unset;
+  }
 
   main {
     --page-width: 1040px;
