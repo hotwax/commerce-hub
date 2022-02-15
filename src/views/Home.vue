@@ -1,8 +1,8 @@
 <template>
   <ion-page>    
     <ion-content :fullscreen="true">
-     <main> 
-       <Logo />
+      <main> 
+        <Logo />
      
         <nav>
           <section class="external">
@@ -146,11 +146,14 @@ export default defineComponent({
 .external {
   display: flex;
   overflow-x: scroll;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory;
 }
 
 .external > ion-card {
   flex: 1 0 100%;
   max-width: 200px;
+  scroll-snap-align: start;
  }
 
  .external > ion-card > img {
