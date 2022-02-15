@@ -57,7 +57,8 @@
           </ion-item>
     
           <div class="scroller-content">
-            <div class="scroller-item" v-for="i = 1 in 10" :key="i">  
+            <div class="scroller-card" v-for="i = 1 in 10" :key="i"> 
+              <div class="scroller-item">  
                 <ion-card>
                   <ion-item lines="none">
                     <ion-label>
@@ -89,7 +90,8 @@
                     <p  slot="end">5 times</p>
                   </ion-item>
                 </ion-card>
-            </div>  
+              </div>  
+            </div> 
           </div>
         </section>
       </main>
@@ -178,15 +180,22 @@ ion-card > ion-card-header {
 .scroller-content {
   display: flex;
   overflow-x: scroll;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory;
+}
+
+.scroller-card {
+  scroll-snap-align: start;
 }
 
 .scroller-item{
   flex-shrink: 0;
   position: relative;
+  width: max-content;
   transform: translateX(calc(max(var(--page-width), 100vw)/2 - var(--page-width)/2));
 }
 
-.scroller-content > .scroller-item:last-child ion-card{
+.scroller-content > .scroller-card:last-child ion-card{
   margin-right: var(--spacer-xl);
 }
 
