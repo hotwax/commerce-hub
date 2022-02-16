@@ -35,7 +35,7 @@
               <ion-icon :icon="shirtOutline" slot="start" />
               <ion-label>Product inventory</ion-label>
             </ion-item>
-            <ion-item button @click="() => router.push('/shipments')" lines="none" detail>
+            <ion-item button @click="() => router.push('/find-shipment')" lines="none" detail>
               <ion-icon :icon="sendOutline" slot="start" />
               <ion-label>Shipments</ion-label>
             </ion-item>
@@ -136,10 +136,10 @@ export default defineComponent({
 </script>
 
 <style scoped>
-  figure {
-    max-width: 375px;
-    margin: auto;
-  }
+figure {
+  max-width: 375px;
+  margin: auto;
+}
 
 .external {
   display: flex;
@@ -149,21 +149,22 @@ export default defineComponent({
 .external > ion-card {
   flex: 1 0 100%;
   max-width: 200px;
- }
+}
 
- .external > ion-card > img {
+.external > ion-card > img {
   object-fit: cover;
   width: 100%;
   height: 200px;
 }
 
- .internal {
-   margin-top: 24px;
- }
+.internal {
+  margin: var(--spacer-base) 0 0;
+}
 
 .internal > ion-item {
   border: 1px solid var(--ion-color-medium);
   border-radius: 15px;
+  margin: var(--spacer-xs) var(--spacer-xs) 0;
 }
 
 ion-card > ion-card-header {
@@ -206,8 +207,12 @@ ion-card > ion-card-header {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    margin-top: unset;
- }
+    margin: unset;
+  }
+
+  .internal > ion-item {
+    margin-bottom: unset;
+  }
 
   main {
     --page-width: 1040px;
