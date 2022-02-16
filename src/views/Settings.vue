@@ -88,7 +88,7 @@ import {
   IonNote,
   IonPage,
   IonTitle,
-  IonToolbar,
+  IonToolbar
 } from '@ionic/vue';
 import { defineComponent } from 'vue';
 import {
@@ -96,7 +96,7 @@ import {
   codeWorkingOutline,
   ellipsisVertical,
   peopleCircleOutline,
-  personCircleOutline,
+  personCircleOutline
 } from 'ionicons/icons';
 import { mapGetters, useStore } from 'vuex';
 import { useRouter } from 'vue-router';
@@ -120,25 +120,25 @@ export default defineComponent({
   },
   computed: {
     ...mapGetters({
-      userProfile: "user/getUserProfile",
-      currentFacility: "user/getCurrentFacility",
-      instanceUrl: "user/getInstanceUrl",
-    }),
+      userProfile: 'user/getUserProfile',
+      currentFacility: 'user/getCurrentFacility',
+      instanceUrl: 'user/getInstanceUrl'
+    })
   },
   methods: {
-    setFacility(facility: any) {
+    setFacility (facility: any) {
       this.userProfile.facilities.map((fac: any) => {
-        if (fac.facilityId == facility["detail"].value) {
-          this.store.dispatch("user/setFacility", { facility: fac });
+        if (fac.facilityId == facility['detail'].value) {
+          this.store.dispatch('user/setFacility', {'facility': fac});
           console.log(fac);
         }
-      });
+      })
     },
-    logout() {
-      this.store.dispatch("user/logout").then(() => {
-        this.router.push("/login");
-      });
-    },
+    logout () {
+      this.store.dispatch('user/logout').then(() => {
+        this.router.push('/login');
+      })
+    }
   },
   setup() {
     const store = useStore();
@@ -151,9 +151,9 @@ export default defineComponent({
       peopleCircleOutline,
       personCircleOutline,
       store,
-      router,
-    };
-  },
+      router
+    }
+  }
 });
 </script>
 <style scoped>
