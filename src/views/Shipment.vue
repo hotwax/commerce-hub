@@ -36,13 +36,12 @@
           </div>
 
           <div class="timeline">
-            <div>
-              <ion-item lines="none" detail>
-                <ion-icon slot="start" :icon="timeOutline" class="mobile-only" />
-                <ion-label>{{ $t("Timeline") }}</ion-label>
-                <ion-note slot="end">1:07pm 6th Dec 2021</ion-note>
-              </ion-item>
-            </div>
+            <ion-item lines="none" detail>
+              <ion-icon slot="start" :icon="timeOutline" class="mobile-only" />
+              <ion-label>{{ $t("Timeline") }}</ion-label>
+              <ion-note slot="end">1:07pm 6th Dec 2021</ion-note>
+            </ion-item>
+          
             <div v-for="item in 3" :key="item" class="desktop-only">
               <ion-item>
                 <ion-icon slot="start" :icon="ticketOutline" />
@@ -56,49 +55,45 @@
           </div>
 
           <div class="info">
-            <div>
-              <ion-card>
-                <ion-card-header>
-                  <ion-card-title>{{ $t("Ship from Facility name") }}</ion-card-title>
-                </ion-card-header>
-                <ion-item lines="none">
-                  <ion-icon :icon="locationOutline" slot="start" />
-                  <ion-label>
-                    Address1
-                    <p>Address2</p>
-                    <p>City, Zipcode</p>
-                    <p>State, Country</p>
-                  </ion-label>
-                </ion-item>
-                <ion-item lines="none">
-                  <ion-icon :icon=" calendarOutline" slot="start" />
-                  <ion-label>12th December 2021</ion-label>
-                  <ion-badge slot="end" color="success">Shipped</ion-badge>
-                </ion-item>
-              </ion-card>
-            </div>
-
-            <div>
-              <ion-card>
-                <ion-card-header>
-                  <ion-card-title>{{ $t("Ship from Facility name") }}</ion-card-title>
-                </ion-card-header>
-                <ion-item lines="none"> 
-                  <ion-icon :icon="locationOutline" slot="start" />
-                  <ion-label>
-                    Address1
-                    <p>Address2</p>
-                    <p>City, Zipcode</p>
-                    <p>State, Country</p>
-                  </ion-label>
-                </ion-item>
-                <ion-item lines="none">
-                  <ion-icon :icon=" calendarOutline" slot="start" />
-                  <ion-label>14th December 2021</ion-label>
-                  <ion-badge slot="end" color="medium">ETA</ion-badge>
-                </ion-item>
-              </ion-card>
-            </div>
+            <ion-card>
+              <ion-card-header>
+                <ion-card-title>{{ $t("Ship from Facility name") }}</ion-card-title>
+              </ion-card-header>
+              <ion-item lines="none">
+                <ion-icon :icon="locationOutline" slot="start" />
+                <ion-label>
+                  Address1
+                  <p>Address2</p>
+                  <p>City, Zipcode</p>
+                  <p>State, Country</p>
+                </ion-label>
+              </ion-item>
+              <ion-item lines="none">
+                <ion-icon :icon=" calendarOutline" slot="start" />
+                <ion-label>12th December 2021</ion-label>
+                <ion-badge slot="end" color="success">Shipped</ion-badge>
+              </ion-item>
+            </ion-card>
+      
+            <ion-card>
+              <ion-card-header>
+                <ion-card-title>{{ $t("Ship from Facility name") }}</ion-card-title>
+              </ion-card-header>
+              <ion-item lines="none"> 
+                <ion-icon :icon="locationOutline" slot="start" />
+                <ion-label>
+                  Address1
+                  <p>Address2</p>
+                  <p>City, Zipcode</p>
+                  <p>State, Country</p>
+                </ion-label>
+              </ion-item>
+              <ion-item lines="none">
+                <ion-icon :icon=" calendarOutline" slot="start" />
+                <ion-label>14th December 2021</ion-label>
+                <ion-badge slot="end" color="medium">ETA</ion-badge>
+              </ion-item>
+            </ion-card>
           </div>
         </section>
 
@@ -108,18 +103,18 @@
               <ion-icon slot="start" :icon="shirtOutline" />
               <ion-label>{{ $t("Products") }}</ion-label>
             </ion-item>
-            <ion-button fill="outline" size="small">
+            <ion-button fill="outline" size="small" class="desktop-only">
               <ion-icon :icon="addOutline" slot="start" />
               {{ $t("Add item to shipment") }}
             </ion-button>
           </div>
 
-          <div class="product-detail">
+          <div class="product">
             <div class="product-image desktop-only">
               <Image src="https://cdn.shopify.com/s/files/1/0069/7384/9727/products/test-track.jpg?v=1626255137"/>
             </div>
 
-            <div>
+            <div class="product-info">
               <hr />
 
               <div class="list-item">
@@ -345,6 +340,10 @@ ion-select {
 }
 
 .list-item {
+  --columns-desktop: 5;
+}
+
+.list-item {
   --columns-mobile: 4;
 }
 
@@ -353,20 +352,17 @@ ion-select {
 }
 
 .product-header {
-    display: flex;
-    justify-content: space-between;
+  display: flex;
+  justify-content: space-between;
 }
 
 @media (min-width: 991px) {
-  .list-item {
-    --columns-desktop: 5;
-  }
-
-  .product-detail {
+  .product {
     display: grid;
     grid-template-columns: 250px 1fr;
     align-items: center;
   }
+
   .product-image {
     border: 1px solid var(--ion-color-medium);
     border-radius: 10px;

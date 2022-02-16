@@ -30,8 +30,8 @@
               <ion-note slot="end">1:07pm 6th Dec 2021</ion-note>
             </ion-item>
 
-            <div class="desktop-only">
-              <ion-item v-for="item in 7" :key="item">
+            <div v-for="item in 7" :key="item" class="desktop-only">
+              <ion-item>
                 <ion-icon :icon="ticketOutline" slot="start" />
                 <ion-label>
                   <p>+10 minutes</p>
@@ -99,7 +99,7 @@
             <ion-label>{{ $t("Products") }}</ion-label>
           </ion-item>
 
-          <div class="product-detail">
+          <div class="product">
             <div class="product-image desktop-only">
               <Image src="https://cdn.shopify.com/s/files/1/0069/7384/9727/products/test-track.jpg?v=1626255137" />
               <ion-button color="secondary" fill="outline">
@@ -316,7 +316,7 @@ export default {
 
 @media (min-width: 991px) {
 
-  .product-detail {
+  .product {
     display: grid;
     grid: "image product"
           / 240px 1fr;

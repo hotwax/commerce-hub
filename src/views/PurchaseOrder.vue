@@ -25,13 +25,12 @@
           </div>
 
           <div class="timeline">
-            <div>
-              <ion-item lines="none" detail>
-                <ion-icon slot="start" :icon="timeOutline" class="mobile-only" />
-                <ion-label>{{ $t("Timeline") }}</ion-label>
-                <ion-note slot="end">1:07pm 6th Dec 2021</ion-note>
-              </ion-item>
-            </div>
+            <ion-item lines="none" detail>
+              <ion-icon slot="start" :icon="timeOutline" class="mobile-only" />
+              <ion-label>{{ $t("Timeline") }}</ion-label>
+              <ion-note slot="end">1:07pm 6th Dec 2021</ion-note>
+            </ion-item>
+            
             <div v-for="item in 3" :key="item" class="desktop-only">
               <ion-item>
                 <ion-icon slot="start" :icon="ticketOutline" />
@@ -45,51 +44,47 @@
           </div>
 
           <div class="info">
-            <div>
-              <ion-card>
-                <ion-card-header>
-                  <ion-card-title>Facility name</ion-card-title>
-                </ion-card-header>
-                <ion-item>
-                  <ion-icon :icon="locationOutline" slot="start" />
-                  <ion-label>
-                    Address1
-                    <p>Address2</p>
-                    <p>City, Zipcode</p>
-                    <p>State, Country</p>
-                  </ion-label>
-                </ion-item>
-              </ion-card>
-            </div>
-
-            <div>
-              <ion-card>
-                <ion-card-header>
-                  <ion-card-title>{{ $t("Allocations") }}</ion-card-title>
-                </ion-card-header>
-                <ion-item>
-                  <ion-label>{{ $t("All orders") }}</ion-label>
-                  <ion-button color="dark" fill="outline">
-                    40 {{ $t("orders") }}
-                    <ion-icon slot="end" :icon="downloadOutline" />
-                  </ion-button>
-                </ion-item>
-                <ion-item>
-                  <ion-label>{{ $t("Pre orders") }}</ion-label>
-                  <ion-button color="dark" fill="outline">
-                    30 {{ $t("orders") }}
-                    <ion-icon slot="end" :icon="downloadOutline" />
-                  </ion-button>
-                </ion-item>
-                <ion-item lines="none">
-                  <ion-label>{{ $t("Back orders") }}</ion-label>
-                  <ion-button color="dark" fill="outline">
-                    10 {{ $t("orders") }}
-                    <ion-icon slot="end" :icon="downloadOutline" />
-                  </ion-button>
-                </ion-item>
-              </ion-card>
-            </div>
+            <ion-card>
+              <ion-card-header>
+                <ion-card-title>Facility name</ion-card-title>
+              </ion-card-header>
+              <ion-item>
+                <ion-icon :icon="locationOutline" slot="start" />
+                <ion-label>
+                  Address1
+                  <p>Address2</p>
+                  <p>City, Zipcode</p>
+                  <p>State, Country</p>
+                </ion-label>
+              </ion-item>
+            </ion-card>
+          
+            <ion-card>
+              <ion-card-header>
+                <ion-card-title>{{ $t("Allocations") }}</ion-card-title>
+              </ion-card-header>
+              <ion-item>
+                <ion-label>{{ $t("All orders") }}</ion-label>
+                <ion-button color="dark" fill="outline">
+                  40 {{ $t("orders") }}
+                  <ion-icon slot="end" :icon="downloadOutline" />
+                </ion-button>
+              </ion-item>
+              <ion-item>
+                <ion-label>{{ $t("Pre orders") }}</ion-label>
+                <ion-button color="dark" fill="outline">
+                  30 {{ $t("orders") }}
+                  <ion-icon slot="end" :icon="downloadOutline" />
+                </ion-button>
+              </ion-item>
+              <ion-item lines="none">
+                <ion-label>{{ $t("Back orders") }}</ion-label>
+                <ion-button color="dark" fill="outline">
+                  10 {{ $t("orders") }}
+                  <ion-icon slot="end" :icon="downloadOutline" />
+                </ion-button>
+              </ion-item>
+            </ion-card>
           </div>
         </section>
 
@@ -98,12 +93,12 @@
             <ion-icon slot="start" :icon="shirtOutline" />
             <ion-label>Products</ion-label>
           </ion-item>
-          <div class="product-detail">
+          <div class="product">
             <div class="product-image desktop-only">
               <Image src="https://cdn.shopify.com/s/files/1/0069/7384/9727/products/test-track.jpg?v=1626255137"/>
             </div>
 
-            <div>
+            <div class="product-info">
               <hr />
 
               <div class="list-item">
@@ -338,11 +333,12 @@ export default defineComponent({
 
 <style scoped>
 @media (min-width: 991px) {
-  .product-detail {
+  .product {
     display: grid;
     grid-template-columns: 250px 1fr;
     align-items: center;
   }
+
   .product-image {
     border: 1px solid var(--ion-color-medium);
     border-radius: 10px;
