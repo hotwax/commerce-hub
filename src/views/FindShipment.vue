@@ -3,7 +3,7 @@
     <ion-header :translucent="true">
       <ion-toolbar>
         <ion-back-button default-href="/" slot="start" />
-        <ion-title>{{ $t("Purchase orders") }}</ion-title>
+        <ion-title>{{ $t("Shipments") }}</ion-title>
         <ion-buttons slot="end">
           <ion-button>
             <ion-icon :icon="syncOutline" slot="icon-only" />
@@ -21,7 +21,7 @@
     <ion-content>
       <div class="find">
         <section class="search">
-          <ion-searchbar :placeholder="$t('Search purchase orders and products')" />
+          <ion-searchbar :placeholder="$t('Search shipments and products')" />
         </section>
 
         <aside class="filters">
@@ -59,7 +59,7 @@
           <section class="sort">
             <ion-item lines="none">
               <ion-icon :icon="documentTextOutline" slot="start" />
-              <ion-label>{{ $t("Show order items") }}</ion-label>
+              <ion-label>{{ $t("Show shipment items") }}</ion-label>
               <ion-toggle slot="end" checked></ion-toggle>
             </ion-item>
 
@@ -75,13 +75,13 @@
           <hr />
 
           <!-- Product section -->
-          <div @click="() => router.push('/purchase-order')">
+          <div @click="() => router.push('/shipment')">
             <section class="section-header">
               <div class="primary-info">
                 <ion-item lines="none">
                   <ion-label>
                     <p>Product store</p>
-                    PO external ID
+                    Shipment external ID
                     <p>Created date</p>
                   </ion-label>
                 </ion-item>
@@ -96,7 +96,7 @@
 
               <div class="metadata">
                 <ion-item lines="none" detail>
-                  <ion-note slot="end">2 {{ $t("variants") }}</ion-note>
+                  <ion-note slot="end">2 {{ $t("items") }}</ion-note>
                 </ion-item>
               </div>
             </section>
@@ -123,9 +123,9 @@
 
                   <div>
                     <ion-chip outline>
-                      <!-- TODO, Update icon -->
+                      <!-- TODO , Update icon -->
                       <ion-icon :icon="pricetag" />
-                      <ion-label>Shopify ID</ion-label>
+                      <ion-label>External ID</ion-label>
                     </ion-chip>
                   </div>
 
@@ -182,7 +182,7 @@ import {
 import { useRouter } from 'vue-router';
 
 export default {
-  name: 'PurchaseOrder',
+  name: 'FindShipment',
   components: {
     Image,
     IonBackButton,

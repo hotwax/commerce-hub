@@ -20,7 +20,12 @@
             <ion-item lines="none">
               <ion-icon slot="start" :icon="ticketOutline" />
               <ion-label>External Purchase Order ID</ion-label>
-              <ion-badge slot="end">Approved</ion-badge>
+              <ion-badge slot="end">{{ status }}</ion-badge>
+              <ion-select :value="status" @ionChange="changeStatus($event)" slot="end">
+                <ion-select-option value="Approved">Approved</ion-select-option>
+                <ion-select-option value="Completed">Completed</ion-select-option>
+                <ion-select-option value="Shipped">Shipped</ion-select-option>
+              </ion-select>
             </ion-item>
           </div>
 
@@ -263,6 +268,8 @@ import {
   IonListHeader,
   IonNote,
   IonPage,
+  IonSelect,
+  IonSelectOption,
   IonThumbnail,
   IonTitle,
   IonToolbar,
@@ -304,12 +311,22 @@ export default defineComponent({
     IonListHeader,
     IonNote,
     IonPage,
+    IonSelect,
+    IonSelectOption,
     IonThumbnail,
     IonTitle,
     IonToolbar,
     Image
   },
+  data() {
+    return {
+      status: "Approved" // default value
+    }
+  },
   methods: {
+    changeStatus (ev: any) {
+      this.status = ev['detail'].value
+    },
     async openProductPopover(ev: Event) {
       const popover = await popoverController.create({
         component: ProductPopover,
@@ -337,6 +354,16 @@ export default defineComponent({
 </script>
 
 <style scoped>
+/* To hide selected text which appear after selecting any option*/
+ion-select::part(text) {
+  display: none;
+}
+
+/* To remove margin between badge and ion-select */
+ion-select {
+  margin-inline-start: 0;
+}
+
 @media (min-width: 991px) {
   .product-detail {
     display: grid;
