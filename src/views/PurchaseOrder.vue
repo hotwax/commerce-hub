@@ -97,7 +97,17 @@
           <ion-item lines="none">
             <ion-icon slot="start" :icon="shirtOutline" />
             <ion-label>Products</ion-label>
+
+            <ion-button slot="end" fill="outline" color="medium" class="desktop-only">
+              <ion-icon :icon="addOutline" slot="start" />
+              {{ $t("Add item to order") }}
+            </ion-button>
+            <ion-button slot="end" fill="clear" class="mobile-only">
+              {{ $t("Add") }}
+              <ion-icon :icon="addCircleOutline" slot="end"/>
+            </ion-button>
           </ion-item>
+          
           <div class="product">
             <div class="product-image desktop-only">
               <Image src="https://cdn.shopify.com/s/files/1/0069/7384/9727/products/test-track.jpg?v=1626255137"/>
@@ -272,6 +282,8 @@ import {
 } from '@ionic/vue';
 import { defineComponent } from 'vue';
 import {
+  addOutline,
+  addCircleOutline,
   businessOutline,
   downloadOutline,
   ellipsisVerticalOutline,
@@ -334,6 +346,8 @@ export default defineComponent({
   },
   setup() {
     return {
+      addOutline,
+      addCircleOutline,
       businessOutline,
       downloadOutline,
       ellipsisVerticalOutline,

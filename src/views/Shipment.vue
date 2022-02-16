@@ -97,17 +97,20 @@
           </div>
         </section>
 
-        <section class="products">
-          <div class="product-header">
-            <ion-item lines="none">
-              <ion-icon slot="start" :icon="shirtOutline" />
-              <ion-label>{{ $t("Products") }}</ion-label>
-            </ion-item>
-            <ion-button fill="outline" size="small" class="desktop-only">
+        <section class="products">       
+          <ion-item lines="none">
+            <ion-icon slot="start" :icon="shirtOutline" />
+            <ion-label>{{ $t("Products") }}</ion-label>
+
+            <ion-button slot="end" fill="outline" color="medium" class="desktop-only">
               <ion-icon :icon="addOutline" slot="start" />
               {{ $t("Add item to shipment") }}
             </ion-button>
-          </div>
+            <ion-button slot="end" fill="clear" class="mobile-only">
+              {{ $t("Add") }}
+              <ion-icon :icon="addCircleOutline" slot="end"/>
+            </ion-button>
+          </ion-item>                 
 
           <div class="product">
             <div class="product-image desktop-only">
@@ -244,6 +247,7 @@ import {
 import { defineComponent } from 'vue';
 import {
   addOutline,
+  addCircleOutline,
   businessOutline,
   calendarOutline,
   checkmarkDoneOutline,
@@ -311,6 +315,7 @@ export default defineComponent({
   setup() {
     return {
       addOutline,
+      addCircleOutline,
       businessOutline,
       checkmarkDoneOutline,
       calendarOutline,
@@ -349,11 +354,6 @@ ion-select {
 
 .mobile {
   display: unset;
-}
-
-.product-header {
-  display: flex;
-  justify-content: space-between;
 }
 
 @media (min-width: 991px) {
