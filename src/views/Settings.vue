@@ -12,51 +12,52 @@
         <ion-card>
           <ion-item lines="none">
             <ion-icon :icon="personCircleOutline" slot="start" />
-            <ion-label>Profile</ion-label>
+            <ion-label>{{ $t("Profile") }}</ion-label>
           </ion-item>
           <ion-item>
-            <ion-label>User</ion-label>
-            <ion-note slot="end">Cyrill</ion-note>
+            <ion-label>{{ $t("User") }}</ion-label>
+            <ion-label slot="end">Cyrill</ion-label>
           </ion-item>
           <ion-item lines="full">
-            <ion-label>OMS</ion-label>
-            <ion-note slot="end">dev-hc</ion-note>
+            <ion-label>{{ $t("OMS") }}</ion-label>
+            <ion-label slot="end">dev-hc</ion-label>
           </ion-item>
-          <ion-button fill="clear">Details</ion-button>
+          <ion-button fill="clear">{{ $t("Details") }}</ion-button>
         </ion-card>
+
         <ion-card>
           <ion-item lines="none">
             <ion-icon :icon="businessOutline" slot="start" />
-            <ion-label>Locations</ion-label>
+            <ion-label>{{ $t("Locations")}}</ion-label>
           </ion-item>
           <ion-item>
-            <ion-label>Locations</ion-label>
+            <ion-label>{{ $t("Locations")}}</ion-label>
             <ion-note slot="end">number of locations</ion-note>
           </ion-item>
           <ion-item lines="full">
-            <ion-label>Shops</ion-label>
+            <ion-label>{{ $t("Shops") }}</ion-label>
             <ion-note slot="end">sales channels</ion-note>
           </ion-item>
-          <ion-button fill="clear">Details</ion-button>
+          <ion-button fill="clear">{{ $t("Details") }}</ion-button>
         </ion-card>
+
         <ion-card>
           <ion-item lines="none">
             <ion-icon :icon="peopleCircleOutline" slot="start" />
-            <ion-label>Users</ion-label>
+            <ion-label>{{ $t("Users") }}</ion-label>
           </ion-item>
           <ion-item>
-            <ion-label>Staff</ion-label>
+            <ion-label>{{ $t("Staff") }}</ion-label>
             <ion-note slot="end">user count</ion-note>
           </ion-item>
-          <ion-item lines="full">
-           
-          </ion-item>
-          <ion-button fill="clear">Details</ion-button>
+          <ion-item lines="full"></ion-item>
+          <ion-button fill="clear">{{ $t("Details") }}</ion-button>
         </ion-card>
+
         <ion-card>
           <ion-item lines="none">
             <ion-icon :icon="codeWorkingOutline" slot="start" />
-            <ion-label>Connections</ion-label>
+            <ion-label>{{ $t("Connections") }}</ion-label>
           </ion-item>
           <ion-item>
             <ion-label>Shopify store name</ion-label>
@@ -66,7 +67,7 @@
             <ion-label>Ship station</ion-label>
             <ion-badge color="success" slot="end">active</ion-badge>
           </ion-item>
-          <ion-button fill="clear">Details</ion-button>
+          <ion-button fill="clear">{{ $t("Details") }}</ion-button>
         </ion-card>
       </div>
     </ion-content>
@@ -76,29 +77,43 @@
 <script lang="ts">
 import {
   IonBackButton,
+  IonBadge,
+  IonButton,
   IonContent,
+  IonCard,
   IonHeader,
+  IonIcon,
+  IonItem,
+  IonLabel,
+  IonNote,
   IonPage,
   IonTitle,
   IonToolbar,
-} from "@ionic/vue";
-import { defineComponent } from "vue";
+} from '@ionic/vue';
+import { defineComponent } from 'vue';
 import {
   businessOutline,
   codeWorkingOutline,
   ellipsisVertical,
   peopleCircleOutline,
   personCircleOutline,
-} from "ionicons/icons";
-import { mapGetters, useStore } from "vuex";
-import { useRouter } from "vue-router";
+} from 'ionicons/icons';
+import { mapGetters, useStore } from 'vuex';
+import { useRouter } from 'vue-router';
 
 export default defineComponent({
-  name: "Settings",
+  name: 'Settings',
   components: {
     IonBackButton,
+    IonBadge,
+    IonButton,
     IonContent,
+    IonCard,
     IonHeader,
+    IonIcon,
+    IonItem,
+    IonLabel,
+    IonNote,
     IonPage,
     IonTitle,
     IonToolbar,
@@ -142,12 +157,10 @@ export default defineComponent({
 });
 </script>
 <style scoped>
-@media (min-width: 991px) {
-  ion-content > div {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    max-width: 720px;
-    margin: var(--spacer-xl) auto 0;
-  }
+ion-content > div {
+  display: grid;
+  grid-template-columns: repeat(auto-fill,minmax(343px, 1fr));
+  max-width: 720px;
+  margin: var(--spacer-base) auto 0;
 }
 </style>
