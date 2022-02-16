@@ -130,8 +130,8 @@
                   </div>
 
                   <div class="items-metadata">
-                    <ion-note slot="end">ATP</ion-note>
-                    <ion-note slot="end">Ordered</ion-note>
+                    <ion-note>ATP</ion-note>
+                    <ion-note>Ordered</ion-note>
                   </div>
                 </div>
                 <hr />
