@@ -2,6 +2,7 @@
   <ion-page>
     <ion-header :translucent="true">
       <ion-toolbar>
+        <ion-menu-button slot="start" />
         <ion-back-button slot="start" default-href="/" />
         <ion-title>{{ $t("Settings") }}</ion-title>
       </ion-toolbar>
@@ -85,6 +86,7 @@ import {
   IonIcon,
   IonItem,
   IonLabel,
+  IonMenuButton,
   IonNote,
   IonPage,
   IonTitle,
@@ -113,10 +115,11 @@ export default defineComponent({
     IonIcon,
     IonItem,
     IonLabel,
+    IonMenuButton,
     IonNote,
     IonPage,
     IonTitle,
-    IonToolbar,
+    IonToolbar
   },
   computed: {
     ...mapGetters({
