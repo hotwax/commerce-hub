@@ -72,6 +72,16 @@
           <hr />
         </main>
       </div>
+
+      <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+        <ion-fab-button>
+          <ion-icon :icon="addOutline" />
+        </ion-fab-button>
+        <ion-fab-list side="top">
+          <ion-fab-button><ion-icon :icon="storefrontOutline" /></ion-fab-button>
+          <ion-fab-button><ion-icon :icon="businessOutline" /></ion-fab-button>
+        </ion-fab-list>
+      </ion-fab>
     </ion-content>
   </ion-page>
 </template>
@@ -82,6 +92,9 @@ import {
   IonButton,
   IonButtons,
   IonContent,
+  IonFab,
+  IonFabButton,
+  IonFabList,
   IonHeader,
   IonIcon,
   IonItem,
@@ -97,6 +110,7 @@ import {
 } from '@ionic/vue';
 import { defineComponent } from 'vue';
 import {
+  addOutline,
   businessOutline,
   ellipsisVerticalOutline,
   filterOutline,
@@ -112,6 +126,9 @@ export default defineComponent({
     IonButton,
     IonButtons,
     IonContent,
+    IonFab,
+    IonFabButton,
+    IonFabList,
     IonHeader,
     IonIcon,
     IonItem,
@@ -137,6 +154,7 @@ export default defineComponent({
   },
   setup() {
     return {
+      addOutline,
       businessOutline,
       ellipsisVerticalOutline,
       filterOutline,
