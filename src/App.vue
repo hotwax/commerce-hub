@@ -10,6 +10,7 @@ import { defineComponent } from 'vue';
 import { loadingController } from '@ionic/vue';
 import emitter from "@/event-bus"
 
+
 export default defineComponent({
   name: 'App',
   components: {
@@ -56,9 +57,3 @@ export default defineComponent({
   },
 });
 </script>
-
-<style scoped>
-ion-split-pane {
-  --side-width: 304px;
-}
-</style>
