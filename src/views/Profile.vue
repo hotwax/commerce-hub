@@ -38,7 +38,7 @@
             </ion-item>
             <ion-item>
               <ion-label position="fixed">{{ $t("Password") }}</ion-label>
-              <ion-input :placeholder="$t('password')" clear-input></ion-input>
+              <ion-input :placeholder="$t('password')" type="password" clear-input></ion-input>
             </ion-item>
             <ion-item lines="none">
               <ion-label>{{ $t("Time zone") }}</ion-label>
