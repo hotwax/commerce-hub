@@ -1,8 +1,8 @@
 <template>
   <ion-page>    
-    <ion-content :fullscreen="true">
-      <main> 
-        <Logo />
+    <ion-content>
+     <main> 
+       <Logo />
      
         <nav>
           <section class="external">
@@ -35,7 +35,7 @@
               <ion-icon :icon="shirtOutline" slot="start" />
               <ion-label>Product inventory</ion-label>
             </ion-item>
-            <ion-item button @click="() => router.push('/shipments')" lines="none" detail>
+            <ion-item button @click="() => router.push('/find-shipment')" lines="none" detail>
               <ion-icon :icon="sendOutline" slot="start" />
               <ion-label>Shipments</ion-label>
             </ion-item>
