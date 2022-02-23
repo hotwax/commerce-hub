@@ -175,7 +175,7 @@
                     </ion-item>
                     <ion-item>
                       <ion-label> {{ $t("Location inventory") }} </ion-label>
-                      <p slot="end"> {{item.uniqueOrderItemsCount}} </p>
+                      <p slot="end"> {{ getProductStock(item.productId) }} </p>
                     </ion-item>
                   </div>
                 </ion-card>
@@ -265,7 +265,8 @@ export default defineComponent ({
     ...mapGetters({
       orders: 'order/getList',
       getProduct: 'product/getProduct',
-      currentFacilityId: 'user/getCurrentFacility'
+      currentFacilityId: 'user/getCurrentFacility',
+      getProductStock: 'stock/getProductStock'
     })
   },  
   methods: {
