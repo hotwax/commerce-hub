@@ -57,41 +57,39 @@
           </ion-item>
     
           <div class="scroller-content">
-            <div class="scroller-card" v-for="i = 1 in 10" :key="i"> 
-              <div class="scroller-item">  
-                <ion-card>
-                  <ion-item lines="none">
-                    <ion-label>
-                      Customer name
-                      <p>Order ID</p>
-                    </ion-label>
-                    <ion-note slot="end">auto cancel delta</ion-note>
-                  </ion-item>
-                  <ion-item lines="full">
-                    <ion-thumbnail slot="start">
-                      <img src="https://cdn.shopify.com/s/files/1/0069/7384/9727/products/test-track.jpg?v=1626255137" />
-                    </ion-thumbnail>
-                    <ion-label>
-                      <p>Brand</p>
-                      Virtual name
-                      <p>Color: color</p>
-                      <p>Size: size</p>
-                    </ion-label>
-                    <ion-note slot="end" color="success">15 in stock</ion-note>
-                  </ion-item>
-                  <ion-item>
-                    <ion-label>Last brokered</ion-label>
-                    <!-- TODO Replace 'p' tag with 'ion-label' after upgrading Ionic 5 to Ionic 6 -->
-                    <p slot="end">California Warehouse</p>
-                  </ion-item>
-                  <ion-item>
-                    <ion-label>Rebrokered</ion-label>
-                    <!-- TODO Replace 'p' tag with 'ion-label' after upgrading Ionic 5 to Ionic 6 -->
-                    <p  slot="end">5 times</p>
-                  </ion-item>
-                </ion-card>
-              </div>  
-            </div> 
+            <div class="scroller-item" v-for="i = 1 in 10" :key="i">  
+              <ion-card>
+                <ion-item lines="none">
+                  <ion-label>
+                    Customer name
+                    <p>Order ID</p>
+                  </ion-label>
+                  <ion-note slot="end">auto cancel delta</ion-note>
+                </ion-item>
+                <ion-item lines="full">
+                  <ion-thumbnail slot="start">
+                    <img src="https://cdn.shopify.com/s/files/1/0069/7384/9727/products/test-track.jpg?v=1626255137" />
+                  </ion-thumbnail>
+                  <ion-label>
+                    <p>Brand</p>
+                    Virtual name
+                    <p>Color: color</p>
+                    <p>Size: size</p>
+                  </ion-label>
+                  <ion-note slot="end" color="success">15 in stock</ion-note>
+                </ion-item>
+                <ion-item>
+                  <ion-label>Last brokered</ion-label>
+                  <!-- TODO Replace 'p' tag with 'ion-label' after upgrading Ionic 5 to Ionic 6 -->
+                  <p slot="end">California Warehouse</p>
+                </ion-item>
+                <ion-item>
+                  <ion-label>Rebrokered</ion-label>
+                  <!-- TODO Replace 'p' tag with 'ion-label' after upgrading Ionic 5 to Ionic 6 -->
+                  <p  slot="end">5 times</p>
+                </ion-item>
+              </ion-card>
+            </div>   
           </div>
         </section>
       </main>
@@ -146,14 +144,12 @@ figure {
 .external {
   display: flex;
   overflow-x: scroll;
-  overscroll-behavior-x: contain;
   scroll-snap-type: x mandatory;
 }
 
 .external > ion-card {
   flex: 1 0 100%;
   max-width: 200px;
-  scroll-snap-align: start;
  }
 
 .external > ion-card > img {
@@ -188,18 +184,16 @@ ion-card > ion-card-header {
   scroll-snap-type: x mandatory;
 }
 
-.scroller-card {
-  scroll-snap-align: start;
-}
-
 .scroller-item{
   flex-shrink: 0;
   position: relative;
   width: max-content;
   transform: translateX(calc(max(var(--page-width), 100vw)/2 - var(--page-width)/2));
+  /* set first block, second inline */
+  scroll-snap-align: start end;
 }
 
-.scroller-content > .scroller-card:last-child ion-card{
+.scroller-content > .scroller-item:last-child ion-card{
   margin-right: var(--spacer-xl);
 }
 
