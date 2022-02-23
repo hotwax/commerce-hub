@@ -110,7 +110,7 @@
                 <ion-item lines="none">
                   <ion-label>
                     {{ order.doclist.docs[0].orderId }}
-                    <p> {{ order.doclist.docs[0].customerName }} </p>
+                    <p> {{ order.doclist.docs[0].customerPartyName }} </p>
                   </ion-label>
                 </ion-item>
               </div>
@@ -141,7 +141,7 @@
                     </ion-thumbnail>
                     <ion-label>
                       <p> {{ getProduct(item.productId).brandName ? getProduct(item.productId).brandName : '-' }} </p>
-                      {{ item.virtualProductName }}
+                      {{ item.parentProductName }}
                       <p> {{ $t("Color") }}: {{ $filters.getFeature(getProduct(item.productId).featureHierarchy, '1/COLOR/') }} </p>
                       <p> {{ $t("Size") }}: {{ $filters.getFeature(getProduct(item.productId).featureHierarchy, '1/SIZE/') }} </p>
                     </ion-label>
@@ -171,7 +171,7 @@
                     </ion-item>
                     <ion-item>
                       <ion-label> {{ $t("Shipping from") }} </ion-label>
-                      <p slot="end"> {{ $filters.getShippingFrom(item.orderRoles, '1/Ship-From Vendor/') ? $filters.getShippingFrom(item.orderRoles, '1/Ship-From Vendor/') : "-" }} </p>
+                      <p slot="end"> {{ item.facilityName ? item.facilityName : "-" }} </p>
                     </ion-item>
                     <ion-item>
                       <ion-label> {{ $t("Location inventory") }} </ion-label>
@@ -280,8 +280,8 @@ export default defineComponent ({
             "group.field": "orderId",
             "group.limit": 10000
           },
-          "query": "docType:OISGIR",
-          "fields": ""
+          "query": "docType: ORDER",
+          "filter": ["orderTypeId: SALES_ORDER"]
         }
       }
       await this.store.dispatch("order/findOrders", payload);
