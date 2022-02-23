@@ -142,8 +142,8 @@
                     <ion-label>
                       <p> {{ getProduct(item.productId).brandName ? getProduct(item.productId).brandName : '-' }} </p>
                       {{ item.virtualProductName }}
-                      <p> {{ $t("Color") }} : {{ $filters.getFeature(getProduct(item.productId).featureHierarchy, '1/COLOR/') }} </p>
-                      <p> {{ $t("Size") }} : {{ $filters.getFeature(getProduct(item.productId).featureHierarchy, '1/SIZE/') }} </p>
+                      <p> {{ $t("Color") }}: {{ $filters.getFeature(getProduct(item.productId).featureHierarchy, '1/COLOR/') }} </p>
+                      <p> {{ $t("Size") }}: {{ $filters.getFeature(getProduct(item.productId).featureHierarchy, '1/SIZE/') }} </p>
                     </ion-label>
                     <ion-badge color="primary" slot="end"> {{ item.orderItemStatusId }} </ion-badge>
                   </ion-item>
