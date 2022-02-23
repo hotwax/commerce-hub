@@ -175,7 +175,7 @@
                     </ion-item>
                     <ion-item>
                       <ion-label> {{ $t("Location inventory") }} </ion-label>
-                      <p slot="end"> {{ getProductStock(item.productId) }} </p>
+                      <p slot="end">{{ getProductStock(item.productId) }}</p>
                     </ion-item>
                   </div>
                 </ion-card>

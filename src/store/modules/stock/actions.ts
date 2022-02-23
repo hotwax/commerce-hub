@@ -31,6 +31,7 @@ const actions: ActionTree<StockState, RootState> = {
         "facilityId": this.state.user.currentFacility.facilityId
       },
       "fieldsToSelect": ["productId","atp"],
+      "viewSize": productIds.length
     });
     if (resp.status === 200 && !hasError(resp)) {
       // Handled empty response in case of failed query
