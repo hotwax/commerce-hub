@@ -50,17 +50,18 @@ const actions: ActionTree<ProductState, RootState> = {
   async fetchProducts({ commit, state }, { productIds }) {
     const cachedProductIds = Object.keys(state.cached);
     const productIdFilter = productIds.reduce((filter: string, productId: any) => {
-      if (filter !== '') filter += ' OR '
       if (cachedProductIds.includes(productId)) {
         return filter;
       } else {
+        if (filter !== '') filter += ' OR '
         return filter += productId;
       }
     }, '');
 
     if (productIdFilter === '') return;
     const resp = await ProductService.fetchProducts({
-      "filters": ['productId: (' + productIdFilter + ')']
+      "filters": ['productId: (' + productIdFilter + ')'],
+      "viewSize": productIds.length
     })
     if (resp.status === 200 && !hasError(resp)) {
       const products = resp.data.response.docs;
