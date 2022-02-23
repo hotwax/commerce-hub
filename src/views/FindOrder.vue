@@ -98,13 +98,13 @@
           </ion-card>
         </aside>
 
-        <main class="main">
+        <main>
           <section class="sort"></section>
 
           <!-- Order Item Section -->
           <hr />
 
-          <div v-for="(order, index) in orders" :key="index" :order="order">
+          <div v-for="(order, index) in orders" :key="index" :order="order" @click="() => router.push('/order')">
             <section class="section-header">
               <div class="primary-info">
                 <ion-item lines="none">

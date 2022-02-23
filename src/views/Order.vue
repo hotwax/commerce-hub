@@ -12,14 +12,18 @@
       </ion-toolbar>
     </ion-header>
     <ion-content>
-      <main class="main-content">
+      <main>
         <section class="header">
           <div class="id">
             <ion-item lines="none">
               <ion-icon slot="start" :icon="ticketOutline" />
               <ion-label>Order id</ion-label>
-              <ion-badge slot="end">Approved</ion-badge>
-              <ion-icon slot="end" :icon="caretDown" />
+              <ion-badge slot="end">{{ status }}</ion-badge>
+              <ion-select :value="status" @ionChange="changeStatus($event)" slot="end">
+                <ion-select-option value="Approved">Approved</ion-select-option>
+                <ion-select-option value="Completed">Completed</ion-select-option>
+                <ion-select-option value="Shipped">Shipped</ion-select-option>
+              </ion-select>
             </ion-item>
           </div>
 
@@ -249,6 +253,8 @@ import {
   IonListHeader,
   IonNote,
   IonPage,
+  IonSelect,
+  IonSelectOption,
   IonThumbnail,
   IonTitle,
   IonToolbar
@@ -273,9 +279,21 @@ export default {
     IonListHeader,
     IonNote,
     IonPage,
+    IonSelect,
+    IonSelectOption,
     IonThumbnail,
     IonTitle,
     IonToolbar
+  },
+  data() {
+    return {
+      status: "Approved" // default value
+    }
+  },
+  methods: {
+    changeStatus (ev) {
+      this.status = ev['detail'].value
+    }
   },
   setup() {
     return {
@@ -297,6 +315,15 @@ export default {
 </script>
 
 <style scoped>
+/* To hide selected text which appear after selecting any option*/
+ion-select::part(text) {
+  display: none;
+}
+
+/* To remove margin between badge and ion-select */
+ion-select {
+  margin-inline-start: 0;
+}
 
 .product-header {
   display: grid;

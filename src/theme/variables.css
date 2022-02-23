@@ -74,16 +74,6 @@ http://ionicframework.com/docs/theming/ */
   --ion-color-light-contrast-rgb: 0, 0, 0;
   --ion-color-light-shade: #d7d8da;
   --ion-color-light-tint: #f5f6f9;
-
-  /** Spacer **/
-  --spacer-2xs: 0.25rem; /* 4px */
-  --spacer-xs: 0.5rem;   /* 8px */
-  --spacer-sm: 1rem;     /* 16px */
-  --spacer-base: 1.5rem; /* 24px */
-  --spacer-lg: 2rem;     /* 32px */
-  --spacer-xl: 2.5rem;   /* 40px */
-  --spacer-2xl: 5rem;    /* 80px */
-  --spacer-3xl: 10rem;   /* 160px */
 }
 
 @media (prefers-color-scheme: dark) {
@@ -245,6 +235,18 @@ http://ionicframework.com/docs/theming/ */
   }
 }
 
+/** Spacer variables **/
+body {
+  --spacer-2xs: 0.25rem; /* 4px */
+  --spacer-xs: 0.5rem;   /* 8px */
+  --spacer-sm: 1rem;     /* 16px */
+  --spacer-base: 1.5rem; /* 24px */
+  --spacer-lg: 2rem;     /* 32px */
+  --spacer-xl: 2.5rem;   /* 40px */
+  --spacer-2xl: 5rem;    /* 80px */
+  --spacer-3xl: 10rem;   /* 160px */
+}
+
 .overline {
   font-weight: 500 !important;
   font-size: 10px !important;
@@ -264,6 +266,10 @@ http://ionicframework.com/docs/theming/ */
   display: none;
 }
 
+.find > main {
+  grid-area: main;
+}
+
 .search {
   grid-area: search;
   margin-bottom: var(--spacer-lg);
@@ -271,10 +277,6 @@ http://ionicframework.com/docs/theming/ */
 
 .filters {
   grid-area: filters;
-}
-
-.main {
-  grid-area: main;
 }
 
 .section-header {
@@ -403,7 +405,7 @@ ion-list-header > hr {
     display: unset;
   }  
 
-  .find > .main {
+  .find > main {
     margin-left: var(--spacer-lg);
   }
 
