@@ -36,8 +36,8 @@
               <ion-note slot="end">1:07pm 6th Dec 2021</ion-note>
             </ion-item>
             
-            <div v-for="item in 3" :key="item" class="desktop-only">
-              <ion-item>
+            <ion-list class="desktop-only">
+              <ion-item v-for="item in 3" :key="item">
                 <ion-icon slot="start" :icon="ticketOutline" />
                 <ion-label>
                   <p class="overline">+ 10 minutes</p>
@@ -45,7 +45,7 @@
                 </ion-label>
                 <ion-icon :icon="informationCircleOutline" />
               </ion-item>
-            </div>
+            </ion-list>
           </div>
 
           <div class="info">
@@ -96,7 +96,7 @@
         <section class="products">
           <ion-item lines="none">
             <ion-icon slot="start" :icon="shirtOutline" />
-            <ion-label>Products</ion-label>
+            <ion-label>{{ $t("Products") }}</ion-label>
 
             <ion-button slot="end" fill="outline" color="medium" class="desktop-only">
               <ion-icon :icon="addOutline" slot="start" />
@@ -113,7 +113,7 @@
               <Image src="https://cdn.shopify.com/s/files/1/0069/7384/9727/products/test-track.jpg?v=1626255137"/>
             </div>
 
-            <div class="product-info">
+            <div>
               <hr />
 
               <div class="list-item">
@@ -377,16 +377,14 @@ ion-select {
   .product {
     display: grid;
     grid-template-columns: 250px 1fr;
-    align-items: center;
+    gap: var(--spacer-lg);
+    align-items: start;
   }
 
   .product-image {
+    margin: var(--spacer-xs) 0 0 var(--spacer-xs);
     border: 1px solid var(--ion-color-medium);
     border-radius: 10px;
-  }
-
-  .product-info {
-    margin-left: var(--spacer-lg);
   }
 }
 </style>
