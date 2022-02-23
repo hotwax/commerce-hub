@@ -13,7 +13,7 @@
       </ion-toolbar>
     </ion-header>
 
-    <ion-content :fullscreen="true">
+    <ion-content>
       <main>
         <section class="header">
           <div class="id">
