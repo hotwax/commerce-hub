@@ -2,25 +2,24 @@
   <ion-page>
     <ion-header :translucent="true">
       <ion-toolbar>
-        <ion-menu-button slot="start" />
         <ion-back-button slot="start" default-href="/" />
         <ion-title>{{ $t("Settings") }}</ion-title>
       </ion-toolbar>
     </ion-header>
 
-    <ion-content :fullscreen="true">
-      <div>
+    <ion-content>
+      <main>
         <ion-card>
           <ion-item lines="none">
             <ion-icon :icon="personCircleOutline" slot="start" />
             <ion-label>{{ $t("Profile") }}</ion-label>
           </ion-item>
           <ion-item>
-            <ion-label>{{ $t("User") }}</ion-label>
+            <ion-label>User</ion-label>
             <ion-label slot="end">Cyrill</ion-label>
           </ion-item>
           <ion-item lines="full">
-            <ion-label>{{ $t("OMS") }}</ion-label>
+            <ion-label>OMS</ion-label>
             <ion-label slot="end">dev-hc</ion-label>
           </ion-item>
           <ion-button fill="clear">{{ $t("Details") }}</ion-button>
@@ -70,7 +69,7 @@
           </ion-item>
           <ion-button fill="clear">{{ $t("Details") }}</ion-button>
         </ion-card>
-      </div>
+      </main>
     </ion-content>
   </ion-page>
 </template>
@@ -86,7 +85,6 @@ import {
   IonIcon,
   IonItem,
   IonLabel,
-  IonMenuButton,
   IonNote,
   IonPage,
   IonTitle,
@@ -115,7 +113,6 @@ export default defineComponent({
     IonIcon,
     IonItem,
     IonLabel,
-    IonMenuButton,
     IonNote,
     IonPage,
     IonTitle,
@@ -160,7 +157,7 @@ export default defineComponent({
 });
 </script>
 <style scoped>
-ion-content > div {
+main {
   display: grid;
   grid-template-columns: repeat(auto-fill,minmax(343px, 1fr));
   max-width: 720px;
