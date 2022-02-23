@@ -12,6 +12,9 @@ import PurchaseOrder from '@/views/PurchaseOrder.vue'
 import FindShipment from '@/views/FindShipment.vue'
 import Settings from "@/views/Settings.vue"
 import Users from '@/views/Users.vue'
+import User from '@/views/User.vue'
+import CreateUser from '@/views/CreateUser.vue'
+
 import store from '@/store'
 
 const authGuard = (to: any, from: any, next: any) => {
@@ -96,6 +99,18 @@ const routes: Array<RouteRecordRaw> = [
     path: "/users",
     name: "Users",
     component: Users,
+    beforeEnter: authGuard
+  },
+  {
+    path: "/user",
+    name: "User",
+    component: User,
+    beforeEnter: authGuard
+  },
+  {
+    path: "/create-user",
+    name: "CreateUser",
+    component: CreateUser,
     beforeEnter: authGuard
   }
 ]
