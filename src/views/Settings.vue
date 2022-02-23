@@ -15,12 +15,12 @@
             <ion-label>{{ $t("Profile") }}</ion-label>
           </ion-item>
           <ion-item>
-            <ion-label>User</ion-label>
-            <ion-label slot="end">Cyrill</ion-label>
+            <ion-label>{{ userProfile !== null ? userProfile.partyName : '' }}</ion-label>
+            <ion-label slot="end">User data</ion-label>
           </ion-item>
           <ion-item lines="full">
-            <ion-label>OMS</ion-label>
-            <ion-label slot="end">dev-hc</ion-label>
+            <ion-label>{{ $t("OMS") }}</ion-label>
+            <ion-label slot="end">{{ instanceUrl }}</ion-label>
           </ion-item>
           <ion-button fill="clear">{{ $t("Details") }}</ion-button>
         </ion-card>
