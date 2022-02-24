@@ -150,6 +150,7 @@ figure {
 .external > ion-card {
   flex: 1 0 100%;
   max-width: 200px;
+  scroll-snap-align: center;
  }
 
 .external > ion-card > img {
