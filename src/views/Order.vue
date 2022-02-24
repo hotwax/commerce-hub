@@ -352,9 +352,12 @@ ion-select {
   .product-image {
     grid-area: image;
     height: 362px;
+    margin: var(--spacer-xs) 0 0 var(--spacer-xs);
+  }
+
+  .product-image > img {
     border: 1px solid var(--ion-color-medium);
     border-radius: 10px;
-    margin-top: var(--spacer-xs);
   }
 
   .product-info {
