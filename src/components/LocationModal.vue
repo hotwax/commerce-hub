@@ -3,7 +3,7 @@
     <ion-toolbar>
       <ion-buttons slot="start">
         <ion-button @click="closeModal">
-          <ion-icon :icon="closeOutline" />
+          <ion-icon :icon="closeOutline" slot="icon-only" />
         </ion-button>
       </ion-buttons>
       <ion-title>{{ $t("Locations") }}</ion-title>

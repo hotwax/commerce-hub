@@ -2,7 +2,13 @@
   <ion-page>
     <ion-header :translucent="true">
       <ion-toolbar>
+        <ion-back-button default-href="/" slot="start" />
         <ion-title>{{ $t("Users") }}</ion-title>
+        <ion-buttons slot="end">
+          <ion-button fill="clear" class="mobile-only">
+            <ion-icon slot="icon-only" :icon="filterOutline" />
+          </ion-button>
+        </ion-buttons>
       </ion-toolbar>
     </ion-header>
     <ion-content :fullscreen="true">
@@ -45,8 +51,8 @@
 
         <main>
           <div class="list-item">
-            <ion-item lines="none">
-              <ion-icon :icon="globeOutline" slot="start" />
+            <ion-item lines="none" @click="() => router.push('/user')">
+              <ion-icon :icon="personCircleOutline" slot="start" />
               <ion-label>
                 Fullname
                 <p>username</p>
@@ -54,7 +60,7 @@
               </ion-label>
             </ion-item>
 
-            <ion-label class="tablet">
+            <ion-label>
               14 Jan 2021
               <p>{{ $t("created") }}</p>
             </ion-label>
@@ -63,23 +69,21 @@
               <ion-label>4 {{ $t("locations") }}</ion-label>
             </ion-chip>
 
-            <ion-item lines="none" class="desktop-only">
-            <ion-select value="fulfillment">
-              <ion-select-option value="fulfillment">Fulfillment manager</ion-select-option>
-              <ion-select-option value="merchendiser">Merchendiser</ion-select-option>
-              <ion-select-option value="administrator">Administrator</ion-select-option>
-              </ion-select>
-            </ion-item>
+            <div class="mobile">
+              <ion-item lines="none" class="desktop-only">
+                <ion-select value="fulfillment">
+                  <ion-select-option value="fulfillment">Fulfillment manager</ion-select-option>
+                  <ion-select-option value="merchendiser">Merchendiser</ion-select-option>
+                  <ion-select-option value="administrator">Administrator</ion-select-option>
+                </ion-select>
+              </ion-item>
 
-            <ion-item lines="none" class="mobile-only">
-              <ion-note slot="end">Fulfillment manager</ion-note>
-            </ion-item>
+              <ion-item lines="none" class="mobile-only">
+                <ion-note slot="end">Fulfillment manager</ion-note>
+              </ion-item>
+            </div>
 
-            <ion-button
-              fill="clear"
-              color="medium"
-              @click="openUserPopover"
-            >
+            <ion-button fill="clear" color="medium" @click="openUserPopover">
               <ion-icon slot="icon-only" :icon="ellipsisVerticalOutline" />
             </ion-button>
           </div>
@@ -87,15 +91,25 @@
           <hr />
         </main>
       </div>
+
+      <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+        <ion-fab-button @click="createUser()">
+          <ion-icon :icon="addOutline" />
+        </ion-fab-button>
+      </ion-fab>
     </ion-content>
   </ion-page>
 </template>
 
 <script lang="ts">
 import {
+  IonBackButton,
   IonButton,
+  IonButtons,
   IonChip,
   IonContent,
+  IonFab,
+  IonFabButton,
   IonHeader,
   IonIcon,
   IonItem,
@@ -109,19 +123,33 @@ import {
   IonToolbar,
   IonTitle,
   modalController,
-  popoverController
-} from "@ionic/vue";
-import { defineComponent } from "vue";
-import { ellipsisVerticalOutline, globeOutline, idCardOutline, toggleOutline } from "ionicons/icons";
+  popoverController,
+} from '@ionic/vue';
+import { defineComponent } from 'vue';
+import {
+  addOutline,
+  ellipsisVerticalOutline,
+  filterOutline,
+  globeOutline,
+  idCardOutline,
+  personCircleOutline,
+  toggleOutline,
+} from 'ionicons/icons';
 import UserPopover from '@/components/UserPopover.vue';
 import LocationModal from '@/components/LocationModal.vue';
+import CreateUserModal from '@/components/CreateUserModal.vue';
+import { useRouter } from 'vue-router';
 
 export default defineComponent({
-  name: "Users",
+  name: 'Users',
   components: {
+    IonBackButton,
     IonButton,
+    IonButtons,
     IonChip,
     IonContent,
+    IonFab,
+    IonFabButton,
     IonHeader,
     IonIcon,
     IonItem,
@@ -147,26 +175,41 @@ export default defineComponent({
     },
     async editLocation() {
       const editmodal = await modalController.create({
-        component: LocationModal
+        component: LocationModal,
       });
       return editmodal.present();
     },
+    async createUser() {
+      const createmodal = await modalController.create({
+        component: CreateUserModal,
+      });
+      return createmodal.present();
+    },
   },
   setup() {
+    const router = useRouter();
+
     return {
+      addOutline,
       ellipsisVerticalOutline,
+      filterOutline,
       globeOutline,
       idCardOutline,
-      toggleOutline
-    }
-   }  
- })
+      personCircleOutline,
+      toggleOutline,
+      router,
+    };
+  },
+});
 </script>
 
 <style scoped>
-
 .list-item {
-    --columns-mobile: 3;
-    --columns-desktop: 6;
+  --columns-mobile:3;
+  --columns-desktop: 5;
+}
+
+.mobile {
+  display: unset;
 }
 </style>

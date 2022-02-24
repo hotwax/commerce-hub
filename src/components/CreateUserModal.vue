@@ -3,8 +3,8 @@
     <ion-header :translucent="true">
       <ion-toolbar>
         <ion-buttons slot="start">
-          <ion-button>
-            <ion-icon :icon="closeOutline" />
+          <ion-button @click="closeModal">
+            <ion-icon :icon="closeOutline" slot="icon-only" />
           </ion-button>
         </ion-buttons>
         <ion-title>{{ $t("Create user") }}</ion-title>
@@ -17,24 +17,24 @@
     <ion-content>
       <ion-item lines="full">
         <ion-label position="fixed">{{ $t("First name") }}</ion-label>
-        <ion-input type="text" required />
+        <ion-input type="text" />
       </ion-item>
       <ion-item lines="full">
         <ion-label position="fixed">{{ $t("Last name") }}</ion-label>
-        <ion-input type="text" required />
+        <ion-input type="text" />
       </ion-item>
       <ion-item lines="full">
         <ion-label position="fixed">{{ $t("Email") }}</ion-label>
-        <ion-input type="email" required />
+        <ion-input type="email" />
       </ion-item>
       <ion-item lines="full">
         <ion-label position="fixed">{{ $t("Phone") }}</ion-label>
-        <ion-input type="number" required />
+        <ion-input />
       </ion-item>
 
       <ion-item lines="none">
         <ion-label>{{ $t("Role") }}</ion-label>
-        <ion-select value="fulfillment">
+        <ion-select :interface-options="customPopoverOptions" interface="popover" value="fulfillment">
           <ion-select-option value="fulfillment">Fulfillment</ion-select-option>
           <ion-select-option value="fulfillment-manager">Fulfillment manager</ion-select-option>
           <ion-select-option value="merchendiser">Merchendiser</ion-select-option>
@@ -87,17 +87,18 @@ import {
   IonSelect,
   IonSelectOption,
   IonTitle,
-  IonToolbar 
-} from "@ionic/vue";
-import { defineComponent } from "vue";
+  IonToolbar,
+  modalController,
+} from '@ionic/vue';
+import { defineComponent } from 'vue';
 import {
   businessOutline,
   closeOutline,
   storefrontOutline,
-} from "ionicons/icons";
+} from 'ionicons/icons';
 
 export default defineComponent({
-  name: "Create User",
+  name: 'CreateUser',
   components: {
     IonButton,
     IonButtons,
@@ -114,13 +115,23 @@ export default defineComponent({
     IonSelect,
     IonSelectOption,
     IonTitle,
-    IonToolbar
+    IonToolbar,
+  },
+  methods: {
+    closeModal() {
+      modalController.dismiss({ dismissed: true });
+    },
   },
   setup() {
+    const customPopoverOptions: any = {
+      header: "Role",
+    };
+
     return {
       businessOutline,
       closeOutline,
       storefrontOutline,
+      customPopoverOptions,
     };
   },
 });
