@@ -104,7 +104,7 @@
           <!-- Order Item Section -->
           <hr />
 
-          <div v-for="(order, index) in orders" :key="index" :order="order" @click="() => router.push('/order')">
+          <div v-for="(order, index) in orders" :key="index" :order="order" @click="() => router.push(`/order/${order.doclist.docs[0].orderId}`)">
             <section class="section-header">
               <div class="primary-info">
                 <ion-item lines="none">
@@ -128,11 +128,11 @@
 
               <div class="metadata">
                 <ion-note> {{ $t("Ordered on") }} {{ $filters.formatUtcDate(order.doclist.docs[0].orderDate, 'YYYY-MM-DDTHH:mm:ssZ') }} </ion-note>
-                <ion-badge> {{ $filters.getOrderStatus(order.doclist.docs[0].orderStatusId) }} </ion-badge>
+                <ion-badge :color="orderStatus[order.doclist.docs[0].orderStatusId].color">{{ orderStatus[order.doclist.docs[0].orderStatusId].label }}</ion-badge>
               </div>
             </section>
 
-            <section class="section-grid" @click="() => router.push(`/order/${order.doclist.docs[0].orderId}`)">
+            <section class="section-grid">
                 <ion-card v-for="(item, index) in order.doclist.docs" :key="index" :item="item">
                   <ion-item>
                     <ion-thumbnail slot="start">
@@ -145,7 +145,7 @@
                       <p> {{ $t("Color") }}: {{ $filters.getFeature(getProduct(item.productId).featureHierarchy, '1/COLOR/') }} </p>
                       <p> {{ $t("Size") }}: {{ $filters.getFeature(getProduct(item.productId).featureHierarchy, '1/SIZE/') }} </p>
                     </ion-label>
-                    <ion-badge color="primary" slot="end"> {{ $filters.getItemStatus(item.orderItemStatusId) }} </ion-badge>
+                    <ion-badge :color="itemStatus[item.orderItemStatusId].color" slot="end"> {{ itemStatus[item.orderItemStatusId].label }} </ion-badge>
                   </ion-item>
                   <!-- TODO: Need to handle this property -->
                   <div v-if="item.preOrderStatus || item.backOrderStatus || item.unFillable">
@@ -226,7 +226,7 @@ import {
   ribbon,
   syncOutline,
 } from 'ionicons/icons';
-import { defineComponent, ref } from "vue";
+import { defineComponent, reactive, ref } from "vue";
 import { mapGetters } from "vuex";
 import { showToast } from '@/utils'
 import { Plugins } from '@capacitor/core';
@@ -274,7 +274,7 @@ export default defineComponent ({
       getProductStock: 'stock/getProductStock',
       isScrollable: 'order/isScrollable'
     })
-  },  
+  },
   methods: {
     async getOrders(vSize?: any, vIndex?: any){
       const viewSize = vSize ? vSize : process.env.VUE_APP_VIEW_SIZE;
@@ -324,11 +324,15 @@ export default defineComponent ({
     const router = useRouter();
     const store = useStore();
     const queryString = ref();
+    const orderStatus = reactive(JSON.parse(process.env.VUE_APP_ORDER_STATUS))
+    const itemStatus = reactive(JSON.parse(process.env.VUE_APP_ITEM_STATUS))
 
     return {
       downloadOutline,
       filterOutline,
+      itemStatus,
       pricetag,
+      orderStatus,
       ribbon,
       syncOutline,
       router,
