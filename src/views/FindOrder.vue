@@ -148,7 +148,7 @@
                     <ion-badge :color="itemStatus[item.orderItemStatusId].color ? itemStatus[item.orderItemStatusId].color : 'primary'" slot="end"> {{ itemStatus[item.orderItemStatusId].label ? itemStatus[item.orderItemStatusId].label : item.orderItemStatusId }} </ion-badge>
                   </ion-item>
                   <!-- TODO: Need to handle this property -->
-                  <div v-if="item.preOrderStatus || item.backOrderStatus || item.unFillable">
+                  <div v-if="item.preOrderStatus || item.backOrderStatus">
                     <ion-item>
                       <ion-label> {{ $t("Promise date") }} </ion-label>
                       <p slot="end"> {{ item.promisedDatetime ? $filters.formatUtcDate(item.promisedDatetime, 'YYYY-MM-DDTHH:mm:ssZ', 'D MMM YYYY') : '-'  }} </p>
