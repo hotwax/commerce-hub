@@ -188,7 +188,6 @@ ion-card > ion-card-header {
 .scroller-item{
   flex-shrink: 0;
   position: relative;
-  width: max-content;
   transform: translateX(calc(max(var(--page-width), 100vw)/2 - var(--page-width)/2));
   scroll-snap-align: center;
 }
