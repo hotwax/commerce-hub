@@ -21,7 +21,7 @@
     <ion-content>
       <div class="find">
         <section class="search">
-          <ion-searchbar />
+          <ion-searchbar v-model="queryString" @keyup.enter="getOrders()"/>
         </section>
 
         <aside class="filters desktop-only">
@@ -226,7 +226,7 @@ import {
   ribbon,
   syncOutline,
 } from 'ionicons/icons';
-import { defineComponent } from "vue";
+import { defineComponent, ref } from "vue";
 import { mapGetters } from "vuex";
 import { showToast } from '@/utils'
 import { Plugins } from '@capacitor/core';
@@ -288,10 +288,16 @@ export default defineComponent ({
             "group.field": "orderId",
             "group.limit": 10000,
             "group.ngroups": true
-          },
-          "query": "docType: ORDER",
-          "filter": ["orderTypeId: SALES_ORDER"]
+          } as any,
+          "query": "*:*",
+          "filter": "docType: ORDER AND orderTypeId: SALES_ORDER"
         }
+      }
+      if (this.queryString) {
+        payload.json.params.defType = 'edismax'
+        payload.json.params.qf = 'orderId customerPartyName customerPartyId productId internalName'
+        payload.json.params['q.op'] = 'AND'
+        payload.json.query = `*${this.queryString}*`
       }
       await this.store.dispatch("order/findOrders", payload);
     },
@@ -317,6 +323,7 @@ export default defineComponent ({
   setup() {
     const router = useRouter();
     const store = useStore();
+    const queryString = ref();
 
     return {
       downloadOutline,
@@ -325,7 +332,8 @@ export default defineComponent ({
       ribbon,
       syncOutline,
       router,
-      store
+      store,
+      queryString
     };
   },
 });
