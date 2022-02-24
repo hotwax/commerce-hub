@@ -128,7 +128,7 @@
 
               <div class="metadata">
                 <ion-note> {{ $t("Ordered on") }} {{ $filters.formatUtcDate(order.doclist.docs[0].orderDate, 'YYYY-MM-DDTHH:mm:ssZ') }} </ion-note>
-                <ion-badge> {{ order.doclist.docs[0].orderStatusId }} </ion-badge>
+                <ion-badge> {{ $filters.getOrderStatus(order.doclist.docs[0].orderStatusId) }} </ion-badge>
               </div>
             </section>
 
@@ -145,7 +145,7 @@
                       <p> {{ $t("Color") }}: {{ $filters.getFeature(getProduct(item.productId).featureHierarchy, '1/COLOR/') }} </p>
                       <p> {{ $t("Size") }}: {{ $filters.getFeature(getProduct(item.productId).featureHierarchy, '1/SIZE/') }} </p>
                     </ion-label>
-                    <ion-badge color="primary" slot="end"> {{ item.orderItemStatusId }} </ion-badge>
+                    <ion-badge color="primary" slot="end"> {{ $filters.getItemStatus(item.orderItemStatusId) }} </ion-badge>
                   </ion-item>
                   <!-- TODO: Need to handle this property -->
                   <div v-if="item.preOrderStatus || item.backOrderStatus || item.unFillable">

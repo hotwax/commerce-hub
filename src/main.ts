@@ -88,6 +88,14 @@ app.config.globalProperties.$filters = {
       shippingFrom = roleSplit[2] ? roleSplit[2] : '';
     }
     return shippingFrom;
+  },
+  getItemStatus(itemStatusId: string) {
+    const status = JSON.parse(process.env.VUE_APP_ITEM_STATUS).find((status: any) => status.id === itemStatusId);
+    return status ? status.value : itemStatusId
+  },
+  getOrderStatus(orderStatusId: string) {
+    const status = JSON.parse(process.env.VUE_APP_ORDER_STATUS).find((status: any) => status.id === orderStatusId);
+    return status ? status.value : orderStatusId
   }
 }
 
