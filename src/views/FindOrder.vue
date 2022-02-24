@@ -127,8 +127,8 @@
               </div>
 
               <div class="metadata">
-                <ion-note> {{ $t("Ordered on") }} {{ $filters.formatUtcDate(order.doclist.docs[0].orderDate, 'YYYY-MM-DDTHH:mm:ssZ') }} </ion-note>
-                <ion-badge :color="orderStatus[order.doclist.docs[0].orderStatusId].color">{{ orderStatus[order.doclist.docs[0].orderStatusId].label }}</ion-badge>
+                <ion-note> {{ $t("Ordered on") }} {{ $filters.formatUtcDate(order.doclist.docs[0].orderDate, 'YYYY-MM-DDTHH:mm:ssZ', 'D MMM YYYY') }} </ion-note>
+                <ion-badge :color="orderStatus[order.doclist.docs[0].orderStatusId].color ? orderStatus[order.doclist.docs[0].orderStatusId].color : 'primary'">{{ orderStatus[order.doclist.docs[0].orderStatusId].label ? orderStatus[order.doclist.docs[0].orderStatusId].label : order.doclist.docs[0].orderStatusId }}</ion-badge>
               </div>
             </section>
 
@@ -145,21 +145,21 @@
                       <p> {{ $t("Color") }}: {{ $filters.getFeature(getProduct(item.productId).featureHierarchy, '1/COLOR/') }} </p>
                       <p> {{ $t("Size") }}: {{ $filters.getFeature(getProduct(item.productId).featureHierarchy, '1/SIZE/') }} </p>
                     </ion-label>
-                    <ion-badge :color="itemStatus[item.orderItemStatusId].color" slot="end"> {{ itemStatus[item.orderItemStatusId].label }} </ion-badge>
+                    <ion-badge :color="itemStatus[item.orderItemStatusId].color ? itemStatus[item.orderItemStatusId].color : 'primary'" slot="end"> {{ itemStatus[item.orderItemStatusId].label ? itemStatus[item.orderItemStatusId].label : item.orderItemStatusId }} </ion-badge>
                   </ion-item>
                   <!-- TODO: Need to handle this property -->
                   <div v-if="item.preOrderStatus || item.backOrderStatus || item.unFillable">
                     <ion-item>
                       <ion-label> {{ $t("Promise date") }} </ion-label>
-                      <p slot="end"> {{ item.promisedDatetime ? $filters.formatUtcDate(item.promisedDatetime, 'YYYY-MM-DDTHH:mm:ssZ') : '-'  }} </p>
+                      <p slot="end"> {{ item.promisedDatetime ? $filters.formatUtcDate(item.promisedDatetime, 'YYYY-MM-DDTHH:mm:ssZ', 'D MMM YYYY') : '-'  }} </p>
                     </ion-item>
                     <ion-item>
                       <ion-label> {{ $t("PO arrival date") }} </ion-label>
                       <!-- TODO: Need to handle this property -->
-                      <p slot="end"> {{ item.promiseOrderArrivalDate ? item.promiseOrderArrivalDate : '-' }} </p>
+                      <p slot="end"> {{ item.promiseOrderArrivalDate ? $filters.formatUtcDate(item.promiseOrderArrivalDate, 'YYYY-MM-DDTHH:mm:ssZ', 'D MMM YYYY') : '-' }} </p>
                     </ion-item>
                     <ion-item>
-                      <ion-label> {{ $t("Last brokered") }} </ion-label>
+                      <ion-label> {{ $t("Location") }} </ion-label>
                       <!-- TODO: Need to handle this property -->
                       <p slot="end"> {{ item.lastBrokered ? item.lastBrokered : '-' }} </p>
                     </ion-item>
