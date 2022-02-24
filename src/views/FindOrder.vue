@@ -141,6 +141,7 @@
                     <ion-label>
                       <p> {{ getProduct(item.productId).brandName ? getProduct(item.productId).brandName : '-' }} </p>
                       {{ item.parentProductName }}
+                      <!-- TODO: make the attribute displaying logic dynamic -->
                       <p> {{ $t("Color") }}: {{ $filters.getFeature(getProduct(item.productId).featureHierarchy, '1/COLOR/') }} </p>
                       <p> {{ $t("Size") }}: {{ $filters.getFeature(getProduct(item.productId).featureHierarchy, '1/SIZE/') }} </p>
                     </ion-label>
@@ -179,9 +180,11 @@
                   </div>
                 </ion-card>
             </section>
+            <hr />
           </div>
-
-          <hr />
+          <ion-infinite-scroll @ionInfinite="loadMoreOrders($event)" threshold="100px" :disabled="!isScrollable">
+            <ion-infinite-scroll-content loading-spinner="crescent" :loading-text="$t('Loading')"/>
+          </ion-infinite-scroll>
         </main>
       </div>
     </ion-content>
@@ -201,6 +204,8 @@ import {
   IonContent,
   IonHeader,
   IonIcon,
+  IonInfiniteScroll,
+  IonInfiniteScrollContent,
   IonItem,
   IonLabel,
   IonList,
@@ -247,6 +252,8 @@ export default defineComponent ({
     IonContent,
     IonHeader,
     IonIcon,
+    IonInfiniteScroll,
+    IonInfiniteScrollContent,
     IonItem,
     IonLabel,
     IonList,
@@ -264,19 +271,23 @@ export default defineComponent ({
       orders: 'order/getList',
       getProduct: 'product/getProduct',
       currentFacilityId: 'user/getCurrentFacility',
-      getProductStock: 'stock/getProductStock'
+      getProductStock: 'stock/getProductStock',
+      isScrollable: 'order/isScrollable'
     })
   },  
   methods: {
-    async getOrders(vSize?: any){
+    async getOrders(vSize?: any, vIndex?: any){
       const viewSize = vSize ? vSize : process.env.VUE_APP_VIEW_SIZE;
+      const viewIndex = vIndex ? vIndex : 0;
       const payload = {
         "json": {
           "params": {
             "rows": viewSize,
+            "start": viewSize * viewIndex,
             "group": true,
             "group.field": "orderId",
-            "group.limit": 10000
+            "group.limit": 10000,
+            "group.ngroups": true
           },
           "query": "docType: ORDER",
           "filter": ["orderTypeId: SALES_ORDER"]
@@ -289,6 +300,14 @@ export default defineComponent ({
         string: text
       }).then(() => {
         showToast(this.$t('Copied', { text }));
+      })
+    },
+    async loadMoreOrders(event: any) {
+      this.getOrders(
+        undefined,
+        Math.ceil(this.orders.length / process.env.VUE_APP_VIEW_SIZE).toString()
+      ).then(() => {
+        event.target.complete();
       })
     }
   },

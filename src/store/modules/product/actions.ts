@@ -73,7 +73,7 @@ const actions: ActionTree<ProductState, RootState> = {
   // Get product related information
   async getProductInformation(context, { orders }) {
     let productIds: any = new Set();
-    orders.groups.forEach((order: any) => {
+    orders.forEach((order: any) => {
       order.doclist.docs.forEach((item: any) => {
         if (item.productId) productIds.add(item.productId);
       })

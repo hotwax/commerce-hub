@@ -14,9 +14,11 @@ const actions: ActionTree<OrderState, RootState> = {
     try {
       resp = await OrderService.findOrder(payload)
       if (resp && resp.status === 200 && !hasError(resp)) {
-        const orders = resp.data.grouped.orderId;
+        let orders = resp.data.grouped.orderId.groups;
+        const total = resp.data.grouped.orderId.ngroups;
+        if (payload.json.params.start && payload.json.params.start > 0) orders = state.list.orders.concat(orders)
         this.dispatch('product/getProductInformation', { orders });
-        commit(types.ORDER_LIST_UPDATED, { items: orders.groups });
+        commit(types.ORDER_LIST_UPDATED, { orders, total });
       } else {
         showToast(translate("Something went wrong"));
       }

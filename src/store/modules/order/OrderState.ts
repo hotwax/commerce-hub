@@ -1,6 +1,7 @@
 export default interface OrderState {
   list: {
-    items: any[],
+    orders: any[],
+    total: number
   },
   order: any
 }
