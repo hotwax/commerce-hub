@@ -189,8 +189,7 @@ ion-card > ion-card-header {
   position: relative;
   width: max-content;
   transform: translateX(calc(max(var(--page-width), 100vw)/2 - var(--page-width)/2));
-  /* set first block, second inline */
-  scroll-snap-align: start end;
+  scroll-snap-align: center;
 }
 
 .scroller-content > .scroller-item:last-child ion-card{
