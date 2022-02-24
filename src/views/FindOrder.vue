@@ -133,8 +133,7 @@
             </section>
 
             <section class="section-grid" @click="() => router.push(`/order/${order.doclist.docs[0].orderId}`)">
-              <div v-for="(item, index) in order.doclist.docs" :key="index" :item="item">
-                <ion-card>
+                <ion-card v-for="(item, index) in order.doclist.docs" :key="index" :item="item">
                   <ion-item>
                     <ion-thumbnail slot="start">
                       <Image :src="getProduct(item.productId).mainImageUrl" />
@@ -179,7 +178,6 @@
                     </ion-item>
                   </div>
                 </ion-card>
-              </div>
             </section>
           </div>
 
