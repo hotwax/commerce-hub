@@ -226,7 +226,7 @@ import {
   ribbon,
   syncOutline,
 } from 'ionicons/icons';
-import { defineComponent, reactive, ref } from "vue";
+import { defineComponent, ref } from "vue";
 import { mapGetters, useStore } from "vuex";
 import { showToast } from '@/utils'
 import { Plugins } from '@capacitor/core';
@@ -323,8 +323,8 @@ export default defineComponent ({
     const router = useRouter();
     const store = useStore();
     const queryString = ref();
-    const orderStatus = reactive(JSON.parse(process.env.VUE_APP_ORDER_STATUS))
-    const itemStatus = reactive(JSON.parse(process.env.VUE_APP_ITEM_STATUS))
+    const orderStatus = JSON.parse(process.env.VUE_APP_ORDER_STATUS)
+    const itemStatus = JSON.parse(process.env.VUE_APP_ITEM_STATUS)
     const orderPreOrderId = process.env.VUE_APP_PRE_ORDER_IDNT_ID
     const orderBackOrderId = process.env.VUE_APP_BACKORDER_IDNT_ID
 
