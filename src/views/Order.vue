@@ -112,7 +112,7 @@
               </ion-button>
             </div>
 
-            <div class="product-info">
+            <div>
               <hr />
 
               <div class="product-header">
@@ -351,7 +351,11 @@ ion-select {
   }
 
   .product-image {
+    height: 362px;
     margin: var(--spacer-xs) 0 0 var(--spacer-xs);
+  }
+
+  .product-image > img {
     border: 1px solid var(--ion-color-medium);
     border-radius: 10px;
   }
