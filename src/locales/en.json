@@ -73,12 +73,9 @@
   "Product inventory": "Product inventory",
   "Product inventory detail": "Product inventory detail",
   "Product name": "Product name",
-<<<<<<< HEAD
   "Product Store": "Product Store",
   "Products": "Products",
-=======
   "Profile": "Profile",
->>>>>>> 0e326599e5955e4344bf5de0979681f23ba36183
   "Promise date": "Promise date",
   "Purchase date": "Purchase date",
   "Purchase order": "Purchase order",
@@ -87,12 +84,9 @@
   "Purchase orders": "Purchase orders",
   "QOH": "QOH",
   "QTY": "QTY",
-<<<<<<< HEAD
   "Ready to create an app?": "Ready to create an app?",
-=======
   "Receive": "Receive",
   "received": "received",
->>>>>>> 0e326599e5955e4344bf5de0979681f23ba36183
   "reduce inventory": "reduce inventory",
   "Remove": "Remove",
   "Retail": "Retail",
@@ -106,15 +100,9 @@
   "Shipments": "Shipments",
   "Shipping method": "Shipping method",
   "Shopify ID": "Shopify ID",
-<<<<<<< HEAD
   "Show shipment items": "Show shipment items",
   "Shopify IDs": "Shopify IDs",
   "Show order items": "Show order items",
-=======
-  "Shopify IDs": "Shopify IDs",
-  "Show order items": "Show order items",
-  "Show shipment items": "Show shipment items",
->>>>>>> 0e326599e5955e4344bf5de0979681f23ba36183
   "Size": "Size",
   "SKU": "SKU",
   "Sort": "Sort",
@@ -135,18 +123,9 @@
   "View location details": "View location details",
   "View orders": "View orders",
   "Warehouse": "Warehouse",
-<<<<<<< HEAD
-  "Without promise date": "Without promise date"
-=======
   "Without promise date": "Without promise date",
-  "Ready to create an app?": "Ready to create an app?",
-  "Timeline": "Timeline",
-  "Type": "Type",
-  "Tracking number": "Tracking number",
   "User": "User",
   "User name": "User name",
   "Users": "Users",
-  "variants": "variants",
-  "View orders": "View orders"
->>>>>>> 0e326599e5955e4344bf5de0979681f23ba36183
+  "variants": "variants"
 }
