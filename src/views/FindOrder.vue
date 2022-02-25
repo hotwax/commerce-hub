@@ -11,7 +11,7 @@
           <ion-button fill="clear">
             <ion-icon slot="icon-only" :icon="downloadOutline" />
           </ion-button>
-          <ion-button fill="clear" class="mobile-only">
+          <ion-button fill="clear" class="mobile-only" @click="openOrderFilterModal()">
             <ion-icon slot="icon-only" :icon="filterOutline" />
           </ion-button>
         </ion-buttons>
@@ -214,10 +214,11 @@ import {
   IonPage,
   IonSearchbar,
   IonSelect,
+  IonSelectOption,
   IonThumbnail,
   IonTitle,
   IonToolbar,
-  IonSelectOption
+  modalController
 } from '@ionic/vue';
 import {
   downloadOutline,
@@ -231,6 +232,7 @@ import { mapGetters, useStore } from "vuex";
 import { showToast } from '@/utils'
 import { Plugins } from '@capacitor/core';
 import Image from '@/components/Image.vue';
+import OrderFilterModal from '@/components/OrderFilterModal.vue';
 import { useRouter } from 'vue-router';
 
 const { Clipboard } = Plugins;
@@ -239,7 +241,6 @@ export default defineComponent ({
   name: 'Order',
   components: {
     Image,
-    IonSelectOption,
     IonBackButton,
     IonBadge,
     IonButtons,
@@ -261,9 +262,10 @@ export default defineComponent ({
     IonPage,
     IonSearchbar,
     IonSelect,
+    IonSelectOption,
     IonThumbnail,
     IonTitle,
-    IonToolbar,
+    IonToolbar
   },
   computed: {
     ...mapGetters({
@@ -314,6 +316,12 @@ export default defineComponent ({
       ).then(() => {
         event.target.complete();
       })
+    },
+    async openOrderFilterModal() {
+      const orderFilterModal = await modalController.create({
+        component: OrderFilterModal
+      });
+      return orderFilterModal.present();
     }
   },
   mounted() {
