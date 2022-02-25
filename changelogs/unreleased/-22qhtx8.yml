@@ -1,0 +1,6 @@
+---
+title: 'Added: env file in gitignore and excluded the env.example file'
+ticket_id: "#22qhtx8"
+merge_request: 65
+author: Yash Maheshwari
+type: added
