@@ -148,7 +148,7 @@
                     <ion-badge :color="itemStatus[item.orderItemStatusId].color ? itemStatus[item.orderItemStatusId].color : 'primary'" slot="end"> {{ itemStatus[item.orderItemStatusId].label ? itemStatus[item.orderItemStatusId].label : item.orderItemStatusId }} </ion-badge>
                   </ion-item>
                   <!-- TODO: Need to handle this property -->
-                  <div v-if="item.preOrderStatus || item.backOrderStatus">
+                  <div v-if="item.facilityId === 'PRE_ORDER_PARKING' || item.facilityId === 'BACKORDER_PARKING'">
                     <ion-item>
                       <ion-label> {{ $t("Promise date") }} </ion-label>
                       <p slot="end"> {{ item.promisedDatetime ? $filters.formatUtcDate(item.promisedDatetime, 'YYYY-MM-DDTHH:mm:ssZ', 'D MMM YYYY') : '-'  }} </p>
@@ -161,7 +161,7 @@
                     <ion-item>
                       <ion-label> {{ $t("Location") }} </ion-label>
                       <!-- TODO: Need to handle this property -->
-                      <p slot="end"> {{ item.lastBrokered ? item.lastBrokered : '-' }} </p>
+                      <p slot="end"> {{ item.facilityName ? item.facilityName : '-' }} </p>
                     </ion-item>
                   </div>
                   <div v-else>
