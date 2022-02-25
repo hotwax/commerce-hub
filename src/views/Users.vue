@@ -66,19 +66,18 @@
               <ion-label>4 {{ $t("locations") }}</ion-label>
             </ion-chip>
 
-            <div class="mobile">
-              <ion-item lines="none" class="desktop-only">
-                <RolesPopover />
-              </ion-item>
+            <ion-item lines="none" class="desktop-only">
+              <RolesPopover />
+            </ion-item>
 
+            <div>
               <ion-item lines="none" class="mobile-only">
                 <ion-note slot="end">Fulfillment manager</ion-note>
               </ion-item>
+              <ion-button fill="clear" color="medium" @click="openUserPopover">
+                <ion-icon slot="icon-only" :icon="ellipsisVerticalOutline" />
+              </ion-button>
             </div>
-
-            <ion-button fill="clear" color="medium" @click="openUserPopover">
-              <ion-icon slot="icon-only" :icon="ellipsisVerticalOutline" />
-            </ion-button>
           </div>
 
           <hr />
@@ -200,11 +199,11 @@ export default defineComponent({
 
 <style scoped>
 .list-item {
-  --columns-mobile:3;
   --columns-desktop: 5;
 }
 
-.mobile {
-  display: unset;
+.list-item > *:last-child {
+  display: flex;
+  gap: var(--spacer-xs);
 }
 </style>
