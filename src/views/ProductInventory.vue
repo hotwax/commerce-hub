@@ -147,11 +147,11 @@
             <ion-card>
               <ion-item>
                 <ion-label>{{ $t("Open orders") }}</ion-label>
-                <ion-label>
+                <ion-label class="ion-text-center">
                   400
                   <p>{{ $t("Total") }}</p>
                 </ion-label>
-                <ion-label>
+                <ion-label class="ion-text-center">
                   400
                   <p>{{ $t("Without promise date") }}</p>
                 </ion-label>
@@ -161,10 +161,10 @@
                 <ion-label>
                   <p>{{ $t("Pre orders") }}</p>
                 </ion-label>
-                <ion-label>
+                <ion-label class="ion-text-center">
                   <p>400</p>
                 </ion-label>
-                <ion-label>
+                <ion-label class="ion-text-center">
                   <p>400</p>
                 </ion-label>
               </ion-item>
@@ -173,10 +173,10 @@
                 <ion-label>
                   <p>{{ $t("Back orders") }}</p>
                 </ion-label>
-                <ion-label>
+                <ion-label class="ion-text-center">
                   <p>400</p>
                 </ion-label>
-                <ion-label>
+                <ion-label class="ion-text-center">
                   <p>400</p>
                 </ion-label>
               </ion-item>
@@ -185,10 +185,10 @@
                 <ion-label>
                   <p>{{ $t("Unfillable") }}</p>
                 </ion-label>
-                <ion-label>
+                <ion-label class="ion-text-center">
                   <p>400</p>
                 </ion-label>
-                <ion-label>
+                <ion-label class="ion-text-center">
                   <p>400</p>
                 </ion-label>
               </ion-item>
@@ -755,10 +755,6 @@ export default defineComponent({
   grid-template-columns: repeat(2, auto);
   justify-content: space-between;
   align-items: center;
-}
-
-.orders:last-child > ion-card > ion-item > ion-label:not(:first-child) {
-  text-align: center;
 }
 
 /*Height of segment is defined now since their are less list items. Will remove it later */
