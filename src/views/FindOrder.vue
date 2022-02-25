@@ -116,9 +116,9 @@
               </div>
 
               <div class="tags">
-                <ion-chip @click="copyToClipboard($filters.getOrderIdentificationId(order.doclist.docs[0].orderIdentifications, 'orderIdentificationTypeId'))"  outline v-if="$filters.getOrderIdentificationId(order.doclist.docs[0].orderIdentifications, 'orderIdentificationTypeId')">
+                <ion-chip @click="copyToClipboard(order.doclist.docs[0].orderName)" outline v-if="order.doclist.docs[0].orderName">
                   <ion-icon :icon="pricetag" />
-                  <ion-label> {{ $filters.getOrderIdentificationId(order.doclist.docs[0].orderIdentifications, 'orderIdentificationTypeId') }} </ion-label>
+                  <ion-label> {{ order.doclist.docs[0].orderName }} </ion-label>
                 </ion-chip>
                 <ion-chip outline v-if="$filters.getCustomerLoyalty(order.doclist.docs[0].orderNotes, 'cusotmerLoyaltyOptions')">
                   <ion-icon :icon="ribbon" />
