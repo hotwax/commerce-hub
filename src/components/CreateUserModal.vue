@@ -15,31 +15,26 @@
     </ion-header>
 
     <ion-content>
-      <ion-item lines="full">
+      <ion-item>
         <ion-label position="fixed">{{ $t("First name") }}</ion-label>
         <ion-input type="text" />
       </ion-item>
-      <ion-item lines="full">
+      <ion-item>
         <ion-label position="fixed">{{ $t("Last name") }}</ion-label>
         <ion-input type="text" />
       </ion-item>
-      <ion-item lines="full">
+      <ion-item>
         <ion-label position="fixed">{{ $t("Email") }}</ion-label>
         <ion-input type="email" />
       </ion-item>
-      <ion-item lines="full">
+      <ion-item>
         <ion-label position="fixed">{{ $t("Phone") }}</ion-label>
         <ion-input />
       </ion-item>
 
-      <ion-item lines="none">
+      <ion-item>
         <ion-label>{{ $t("Role") }}</ion-label>
-        <ion-select :interface-options="customPopoverOptions" interface="popover" value="fulfillment">
-          <ion-select-option value="fulfillment">Fulfillment</ion-select-option>
-          <ion-select-option value="fulfillment-manager">Fulfillment manager</ion-select-option>
-          <ion-select-option value="merchendiser">Merchendiser</ion-select-option>
-          <ion-select-option value="administrator">Administrator</ion-select-option>
-        </ion-select>
+        <RolesPopover />
       </ion-item>
 
       <ion-item>
@@ -84,8 +79,6 @@ import {
   IonListHeader,
   IonPage,
   IonHeader,
-  IonSelect,
-  IonSelectOption,
   IonTitle,
   IonToolbar,
   modalController,
@@ -96,6 +89,7 @@ import {
   closeOutline,
   storefrontOutline,
 } from 'ionicons/icons';
+import RolesPopover from '@/components/RolesPopover.vue';
 
 export default defineComponent({
   name: 'CreateUser',
@@ -112,10 +106,9 @@ export default defineComponent({
     IonListHeader,
     IonPage,
     IonHeader,
-    IonSelect,
-    IonSelectOption,
     IonTitle,
     IonToolbar,
+    RolesPopover
   },
   methods: {
     closeModal() {

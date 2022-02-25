@@ -11,7 +11,8 @@
         </ion-buttons>
       </ion-toolbar>
     </ion-header>
-    <ion-content :fullscreen="true">
+
+    <ion-content>
       <div class="find">
         <section class="search">
           <ion-searchbar :placeholder="$t('Search users')" />
@@ -31,11 +32,7 @@
             <ion-item lines="none">
               <ion-icon :icon="idCardOutline" slot="start" />
               <ion-label>{{ $t("Role") }}</ion-label>
-              <ion-select value="fulfillment">
-                <ion-select-option value="fulfillment">Fulfillment manager</ion-select-option>
-                <ion-select-option value="merchendiser">Merchendiser</ion-select-option>
-                <ion-select-option value="administrator">Administrator</ion-select-option>
-              </ion-select>
+              <RolesPopover />
             </ion-item>
             <ion-item lines="none">
               <ion-icon :icon="toggleOutline" slot="start" />
@@ -43,7 +40,7 @@
               <ion-select value="active">
                 <ion-select-option value="active">Active</ion-select-option>
                 <ion-select-option value="away">Away</ion-select-option>
-                <ion-select-option value="dnd">Do Not Disturb</ion-select-option>
+                <ion-select-option value="deactivated">Deactivated</ion-select-option>
               </ion-select>
             </ion-item>
           </ion-list>
@@ -71,11 +68,7 @@
 
             <div class="mobile">
               <ion-item lines="none" class="desktop-only">
-                <ion-select value="fulfillment">
-                  <ion-select-option value="fulfillment">Fulfillment manager</ion-select-option>
-                  <ion-select-option value="merchendiser">Merchendiser</ion-select-option>
-                  <ion-select-option value="administrator">Administrator</ion-select-option>
-                </ion-select>
+                <RolesPopover />
               </ion-item>
 
               <ion-item lines="none" class="mobile-only">
@@ -136,6 +129,7 @@ import {
   toggleOutline,
 } from 'ionicons/icons';
 import UserPopover from '@/components/UserPopover.vue';
+import RolesPopover from '@/components/RolesPopover.vue';
 import LocationModal from '@/components/LocationModal.vue';
 import CreateUserModal from '@/components/CreateUserModal.vue';
 import { useRouter } from 'vue-router';
@@ -162,6 +156,7 @@ export default defineComponent({
     IonSelectOption,
     IonToolbar,
     IonTitle,
+    RolesPopover
   },
   methods: {
     async openUserPopover(ev: Event) {

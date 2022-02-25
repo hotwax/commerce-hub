@@ -21,11 +21,7 @@
         <ion-item lines="none">
           <ion-icon :icon="idCardOutline" slot="start" />
           <ion-label>{{ $t("Role") }}</ion-label>
-          <ion-select value="fulfillment">
-            <ion-select-option value="fulfillment">Fulfillment manager</ion-select-option>
-            <ion-select-option value="merchendiser">Merchendiser</ion-select-option>
-            <ion-select-option value="administrator">Administrator</ion-select-option>
-          </ion-select>
+          <RolesPopover />
         </ion-item>
 
         <ion-list>
@@ -82,8 +78,6 @@ import {
   IonNote,
   IonPage,
   IonHeader,
-  IonSelect,
-  IonSelectOption,
   IonTitle,
   IonToggle,
   IonToolbar  
@@ -97,6 +91,7 @@ import {
   personCircleOutline,
   storefrontOutline,
 } from 'ionicons/icons';
+import RolesPopover from '@/components/RolesPopover.vue';
 
 export default defineComponent({
   name: 'User',
@@ -112,11 +107,10 @@ export default defineComponent({
     IonNote,
     IonPage,
     IonHeader,
-    IonSelect,
-    IonSelectOption,
     IonTitle,
     IonToggle,
-    IonToolbar 
+    IonToolbar,
+    RolesPopover
   },
   setup() {
     return {
