@@ -1,0 +1,6 @@
+---
+title: 'Changed: "facilityId" with "facilityName" and dynamic "facilityId" with hardcoded "store"'.
+ticket_id: "#21fn6e5"
+merge_request: 63
+author: aniket
+type: changed
