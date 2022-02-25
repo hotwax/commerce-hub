@@ -12,7 +12,7 @@
       </ion-toolbar>
     </ion-header>
 
-    <ion-content :fullscreen="true">
+    <ion-content>
       <main>
         <section class="product">
           <ion-card class="product-image desktop-only">
