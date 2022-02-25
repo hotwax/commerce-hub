@@ -26,15 +26,6 @@ const actions: ActionTree<OrderState, RootState> = {
       showToast(translate("Something went wrong"));
     }
     return resp;
-  },
-  async getOrderDetails({commit}, payload){
-    let resp;
-    try{
-      resp = await OrderService.findOrderDetails(payload);
-      commit(types.ORDER_DETAILS_UPDATED, { orderDetails: resp.data })
-    } catch(error) {
-      showToast(translate("Something went wrong"));
-    }
   }
 } 
 

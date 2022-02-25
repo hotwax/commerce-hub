@@ -227,11 +227,10 @@ import {
   syncOutline,
 } from 'ionicons/icons';
 import { defineComponent, reactive, ref } from "vue";
-import { mapGetters } from "vuex";
+import { mapGetters, useStore } from "vuex";
 import { showToast } from '@/utils'
 import { Plugins } from '@capacitor/core';
 import Image from '@/components/Image.vue';
-import { useStore } from 'vuex';
 import { useRouter } from 'vue-router';
 
 const { Clipboard } = Plugins;
@@ -268,7 +267,7 @@ export default defineComponent ({
   },
   computed: {
     ...mapGetters({
-      orders: 'order/getList',
+      orders: 'order/getOrders',
       getProduct: 'product/getProduct',
       currentFacilityId: 'user/getCurrentFacility',
       getProductStock: 'stock/getProductStock',
