@@ -104,31 +104,31 @@
           <!-- Order Item Section -->
           <hr />
 
-          <div v-for="(order, index) in orders" :key="index" :order="order" @click="() => router.push(`/order/${order.doclist.docs[0].orderId}`)">
+          <div v-for="(order, index) in orders" :key="index" :order="order" @click="() => router.push(`/order/${order.orderId}`)">
             <section class="section-header">
               <div class="primary-info">
                 <ion-item lines="none">
                   <ion-label>
-                    {{ order.doclist.docs[0].orderId }}
-                    <p> {{ order.doclist.docs[0].customerPartyName }} </p>
+                    {{ order.orderId }}
+                    <p> {{ order.customerPartyName }} </p>
                   </ion-label>
                 </ion-item>
               </div>
 
               <div class="tags">
-                <ion-chip @click="copyToClipboard(order.doclist.docs[0].orderName)" outline v-if="order.doclist.docs[0].orderName">
+                <ion-chip @click="copyToClipboard(order.orderName)" outline v-if="order.orderName">
                   <ion-icon :icon="pricetag" />
-                  <ion-label> {{ order.doclist.docs[0].orderName }} </ion-label>
+                  <ion-label> {{ order.orderName }} </ion-label>
                 </ion-chip>
-                <ion-chip outline v-if="$filters.getCustomerLoyalty(order.doclist.docs[0].orderNotes, 'cusotmerLoyaltyOptions')">
+                <ion-chip outline v-if="$filters.getCustomerLoyalty(order.orderNotes, 'cusotmerLoyaltyOptions')">
                   <ion-icon :icon="ribbon" />
-                  <ion-label> {{ $filters.getCustomerLoyalty(order.doclist.docs[0].orderNotes, 'cusotmerLoyaltyOptions') }} </ion-label>
+                  <ion-label> {{ $filters.getCustomerLoyalty(order.orderNotes, 'cusotmerLoyaltyOptions') }} </ion-label>
                 </ion-chip>
               </div>
 
               <div class="metadata">
-                <ion-note> {{ $t("Ordered on") }} {{ $filters.formatUtcDate(order.doclist.docs[0].orderDate, 'YYYY-MM-DDTHH:mm:ssZ', 'D MMM YYYY') }} </ion-note>
-                <ion-badge :color="orderStatus[order.doclist.docs[0].orderStatusId].color ? orderStatus[order.doclist.docs[0].orderStatusId].color : 'primary'">{{ orderStatus[order.doclist.docs[0].orderStatusId].label ? orderStatus[order.doclist.docs[0].orderStatusId].label : order.doclist.docs[0].orderStatusId }}</ion-badge>
+                <ion-note> {{ $t("Ordered on") }} {{ $filters.formatUtcDate(order.orderDate, 'YYYY-MM-DDTHH:mm:ssZ', 'D MMM YYYY') }} </ion-note>
+                <ion-badge :color="orderStatus[order.orderStatusId].color ? orderStatus[order.orderStatusId].color : 'primary'">{{ orderStatus[order.orderStatusId].label ? orderStatus[order.orderStatusId].label : order.orderStatusId }}</ion-badge>
               </div>
             </section>
 
@@ -148,7 +148,7 @@
                     <ion-badge :color="itemStatus[item.orderItemStatusId].color ? itemStatus[item.orderItemStatusId].color : 'primary'" slot="end"> {{ itemStatus[item.orderItemStatusId].label ? itemStatus[item.orderItemStatusId].label : item.orderItemStatusId }} </ion-badge>
                   </ion-item>
                   <!-- TODO: Need to handle this property -->
-                  <div v-if="item.facilityId === 'PRE_ORDER_PARKING' || item.facilityId === 'BACKORDER_PARKING'">
+                  <div v-if="item.facilityId === orderPreOrderId || item.facilityId === orderBackOrderId">
                     <ion-item>
                       <ion-label> {{ $t("Promise date") }} </ion-label>
                       <p slot="end"> {{ item.promisedDatetime ? $filters.formatUtcDate(item.promisedDatetime, 'YYYY-MM-DDTHH:mm:ssZ', 'D MMM YYYY') : '-'  }} </p>
@@ -325,6 +325,8 @@ export default defineComponent ({
     const queryString = ref();
     const orderStatus = reactive(JSON.parse(process.env.VUE_APP_ORDER_STATUS))
     const itemStatus = reactive(JSON.parse(process.env.VUE_APP_ITEM_STATUS))
+    const orderPreOrderId = process.env.VUE_APP_PRE_ORDER_IDNT_ID
+    const orderBackOrderId = process.env.VUE_APP_BACKORDER_IDNT_ID
 
     return {
       downloadOutline,
@@ -332,6 +334,8 @@ export default defineComponent ({
       itemStatus,
       pricetag,
       orderStatus,
+      orderBackOrderId,
+      orderPreOrderId,
       ribbon,
       syncOutline,
       router,
