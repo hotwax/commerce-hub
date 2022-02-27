@@ -336,6 +336,7 @@ body {
 }
 
 
+ion-avatar > img ,
 ion-thumbnail > img {
   object-fit: contain;
 }
