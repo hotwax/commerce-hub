@@ -77,7 +77,7 @@
       
             <ion-card>
               <ion-card-header>
-                <ion-card-title>{{ $t("Ship from Facility name") }}</ion-card-title>
+                <ion-card-title>{{ $t("Ship to Facility name") }}</ion-card-title>
               </ion-card-header>
               <ion-item lines="none"> 
                 <ion-icon :icon="locationOutline" slot="start" />
