@@ -12,7 +12,7 @@
       </ion-toolbar>
     </ion-header>
 
-    <ion-content :fullscreen="true">
+    <ion-content
       <div class="find">
         <section class="search">
           <ion-searchbar :placeholder="$t('Search locations')" />
