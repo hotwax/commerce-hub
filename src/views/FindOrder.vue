@@ -46,27 +46,27 @@
               </ion-select>
             </ion-item>
           </ion-list>
-          <ion-list>
+          <ion-list @click="appliedFilterChanged()">
             <ion-list-header>{{ $t("Type") }}</ion-list-header>
             <ion-item>
               <ion-label>{{ $t("Store pickup") }}</ion-label>
-              <ion-checkbox />
+              <ion-checkbox v-model="appliedFilters.type.storePickup" />
             </ion-item>
             <ion-item>
               <ion-label>{{ $t("Ship from store") }}</ion-label>
-              <ion-checkbox />
+              <ion-checkbox v-model="appliedFilters.type.shipFromStore"/>
             </ion-item>
             <ion-item>
               <ion-label>{{ $t("Pre-order") }}</ion-label>
-              <ion-checkbox />
+              <ion-checkbox v-model="appliedFilters.type.preOrder"/>
             </ion-item>
             <ion-item>
               <ion-label>{{ $t("Back order") }}</ion-label>
-              <ion-checkbox />
+              <ion-checkbox v-model="appliedFilters.type.backOrder"/>
             </ion-item>
             <ion-item>
               <ion-label>{{ $t("Unfillable") }}</ion-label>
-              <ion-checkbox />
+              <ion-checkbox v-model="appliedFilters.type.unfillable"/>
             </ion-item>
           </ion-list>
           <ion-list>
@@ -235,7 +235,7 @@ import {
   ribbon,
   syncOutline,
 } from 'ionicons/icons';
-import { defineComponent, ref } from "vue";
+import { defineComponent, reactive, ref } from "vue";
 import { mapGetters, useStore } from "vuex";
 import { showToast } from '@/utils'
 import { Plugins } from '@capacitor/core';
@@ -285,7 +285,7 @@ export default defineComponent ({
     })
   },
   methods: {
-    async getOrders(vSize?: any, vIndex?: any){
+    async getOrders(vSize?: any, vIndex?: any) {
       const viewSize = vSize ? vSize : process.env.VUE_APP_VIEW_SIZE;
       const viewIndex = vIndex ? vIndex : 0;
       const payload = {
@@ -330,6 +330,9 @@ export default defineComponent ({
         component: OrderFilterModal
       });
       return orderFilterModal.present();
+    },
+    appliedFilterChanged() {
+      console.log(this.appliedFilters)
     }
   },
   mounted() {
@@ -343,6 +346,25 @@ export default defineComponent ({
     const itemStatus = JSON.parse(process.env.VUE_APP_ITEM_STATUS)
     const orderPreOrderId = process.env.VUE_APP_PRE_ORDER_IDNT_ID
     const orderBackOrderId = process.env.VUE_APP_BACKORDER_IDNT_ID
+    const appliedFilters = reactive({
+      'date': {
+        'orderCreated': '',
+        'promiseDate': '',
+        'autoCancelDate': ''
+      },
+      'type': {
+        'storePickup': false,
+        'shipFromStore': false,
+        'preOrder': false,
+        'backOrder': false,
+        'unfillable': false
+      },
+      'fulfillment': {
+        'status': '',
+        'shippingMethod': [],
+        'shipFromLocation': []
+      }
+    })
 
     return {
       downloadOutline,
@@ -355,6 +377,7 @@ export default defineComponent ({
       ribbon,
       syncOutline,
       router,
+      appliedFilters,
       store,
       queryString
     };
