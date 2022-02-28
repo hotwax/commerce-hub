@@ -28,19 +28,19 @@
           <ion-list>
             <ion-list-header>{{ $t("Date") }}</ion-list-header>
             <ion-item>
-              <ion-label>order created</ion-label>
+              <ion-label>{{ $t("Order created") }}</ion-label>
               <ion-select value="any">
                 <ion-select-option value="any">any</ion-select-option>
               </ion-select>
             </ion-item>
             <ion-item>
-              <ion-label>order created</ion-label>
+              <ion-label>{{ $t("Promise date") }}</ion-label>
               <ion-select value="any">
                 <ion-select-option value="any">any</ion-select-option>
               </ion-select>
             </ion-item>
             <ion-item>
-              <ion-label>order created</ion-label>
+              <ion-label>{{ $t("Auto cancel date") }}</ion-label>
               <ion-select value="any">
                 <ion-select-option value="any">any</ion-select-option>
               </ion-select>
@@ -49,34 +49,42 @@
           <ion-list>
             <ion-list-header>{{ $t("Type") }}</ion-list-header>
             <ion-item>
-              <ion-label>order created</ion-label>
+              <ion-label>{{ $t("Store pickup") }}</ion-label>
               <ion-checkbox />
             </ion-item>
             <ion-item>
-              <ion-label>order created</ion-label>
+              <ion-label>{{ $t("Ship from store") }}</ion-label>
               <ion-checkbox />
             </ion-item>
             <ion-item>
-              <ion-label>order created</ion-label>
+              <ion-label>{{ $t("Pre-order") }}</ion-label>
+              <ion-checkbox />
+            </ion-item>
+            <ion-item>
+              <ion-label>{{ $t("Back order") }}</ion-label>
+              <ion-checkbox />
+            </ion-item>
+            <ion-item>
+              <ion-label>{{ $t("Unfillable") }}</ion-label>
               <ion-checkbox />
             </ion-item>
           </ion-list>
           <ion-list>
             <ion-list-header>{{ $t("Fulfillment") }}</ion-list-header>
             <ion-item>
-              <ion-label>order created</ion-label>
+              <ion-label>{{ $t("Status") }}</ion-label>
               <ion-select value="any">
                 <ion-select-option value="any">any</ion-select-option>
               </ion-select>
             </ion-item>
             <ion-item>
-              <ion-label>order created</ion-label>
+              <ion-label>{{ $t("Shipping method") }}</ion-label>
               <ion-select value="any">
                 <ion-select-option value="any">any</ion-select-option>
               </ion-select>
             </ion-item>
             <ion-item>
-              <ion-label>order created</ion-label>
+              <ion-label>{{ $t("Ship from location") }}</ion-label>
               <ion-select value="any">
                 <ion-select-option value="any">any</ion-select-option>
               </ion-select>
