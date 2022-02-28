@@ -363,6 +363,9 @@ ion-select {
 
   .product-image {
     margin: var(--spacer-xs) 0 0 var(--spacer-xs);
+  }
+
+  .product-image > img {
     border: 1px solid var(--ion-color-medium);
     border-radius: 10px;
   }
