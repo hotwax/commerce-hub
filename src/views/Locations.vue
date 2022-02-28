@@ -12,7 +12,7 @@
       </ion-toolbar>
     </ion-header>
 
-    <ion-content
+    <ion-content>
       <div class="find">
         <section class="search">
           <ion-searchbar :placeholder="$t('Search locations')" />
