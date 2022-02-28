@@ -9,8 +9,10 @@ import FindProductInventory from '@/views/FindProductInventory.vue'
 import ProductInventory from '@/views/ProductInventory.vue'
 import FindPurchaseOrder from '@/views/FindPurchaseOrder.vue'
 import PurchaseOrder from '@/views/PurchaseOrder.vue'
+import Shipment from '@/views/Shipment.vue'
 import FindShipment from '@/views/FindShipment.vue'
 import Settings from "@/views/Settings.vue"
+import Profile from '@/views/Profile.vue'
 import store from '@/store'
 
 const authGuard = (to: any, from: any, next: any) => {
@@ -85,10 +87,22 @@ const routes: Array<RouteRecordRaw> = [
     name: 'FindShipment',
     component:FindShipment,
   },
+  {  
+    path: '/shipment',
+    name: 'Shipment',
+    component: Shipment,
+    beforeEnter: authGuard
+  },  
   {
     path: "/settings",
     name: "Settings",
     component: Settings,
+    beforeEnter: authGuard
+  },
+  {
+    path: "/profile",
+    name: "Profile",
+    component: Profile,
     beforeEnter: authGuard
   }
 ]

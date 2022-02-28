@@ -124,78 +124,75 @@
             <ion-icon slot="start" :icon="ticketOutline" />
             <ion-label>Orders</ion-label>
           </ion-item>
+          
           <div class="orders">
-            <div>
-              <ion-card>
-                <ion-card-header>
-                  <ion-card-title>{{ $t("Shipping method") }}</ion-card-title>
-                </ion-card-header>
-                <ion-item detail>
-                  <ion-label>{{ $t("Store pickup") }}</ion-label>
-                  <ion-note slot="end">orders</ion-note>
-                </ion-item>
-                <ion-item detail>
-                  <ion-label>{{ $t("Standard") }}</ion-label>
-                  <ion-note slot="end">orders</ion-note>
-                </ion-item>
-                <ion-item detail>
-                  <ion-label>{{ $t("Expedited") }}</ion-label>
-                  <ion-note slot="end">orders</ion-note>
-                </ion-item>
-              </ion-card>
-            </div>
+            <ion-card>
+              <ion-card-header>
+                <ion-card-title>{{ $t("Shipping method") }}</ion-card-title>
+              </ion-card-header>
+              <ion-item detail>
+                <ion-label>{{ $t("Store pickup") }}</ion-label>
+                <ion-note slot="end">orders</ion-note>
+              </ion-item>
+              <ion-item detail>
+                <ion-label>{{ $t("Standard") }}</ion-label>
+                <ion-note slot="end">orders</ion-note>
+              </ion-item>
+              <ion-item detail>
+                <ion-label>{{ $t("Expedited") }}</ion-label>
+                <ion-note slot="end">orders</ion-note>
+              </ion-item>
+            </ion-card>
+          
+            <ion-card>
+              <ion-item>
+                <ion-label>{{ $t("Open orders") }}</ion-label>
+                <ion-label class="ion-text-center">
+                  400
+                  <p>{{ $t("Total") }}</p>
+                </ion-label>
+                <ion-label class="ion-text-center">
+                  400
+                  <p>{{ $t("Without promise date") }}</p>
+                </ion-label>
+              </ion-item>
 
-            <div class="open-orders">
-              <ion-card>
-                <ion-item>
-                  <ion-label>{{ $t("Open orders") }}</ion-label>
-                  <ion-label>
-                    400
-                    <p>{{ $t("Total") }}</p>
-                  </ion-label>
-                  <ion-label>
-                    400
-                    <p>{{ $t("Without promise date") }}</p>
-                  </ion-label>
-                </ion-item>
+              <ion-item>
+                <ion-label>
+                  <p>{{ $t("Pre orders") }}</p>
+                </ion-label>
+                <ion-label class="ion-text-center">
+                  <p>400</p>
+                </ion-label>
+                <ion-label class="ion-text-center">
+                  <p>400</p>
+                </ion-label>
+              </ion-item>
 
-                <ion-item>
-                  <ion-label>
-                    <p>{{ $t("Pre orders") }}</p>
-                  </ion-label>
-                  <ion-label>
-                    <p>400</p>
-                  </ion-label>
-                  <ion-label>
-                    <p>400</p>
-                  </ion-label>
-                </ion-item>
+              <ion-item>
+                <ion-label>
+                  <p>{{ $t("Back orders") }}</p>
+                </ion-label>
+                <ion-label class="ion-text-center">
+                  <p>400</p>
+                </ion-label>
+                <ion-label class="ion-text-center">
+                  <p>400</p>
+                </ion-label>
+              </ion-item>
 
-                <ion-item>
-                  <ion-label>
-                    <p>{{ $t("Back orders") }}</p>
-                  </ion-label>
-                  <ion-label>
-                    <p>400</p>
-                  </ion-label>
-                  <ion-label>
-                    <p>400</p>
-                  </ion-label>
-                </ion-item>
-
-                <ion-item>
-                  <ion-label>
-                    <p>{{ $t("Unfillable") }}</p>
-                  </ion-label>
-                  <ion-label>
-                    <p>400</p>
-                  </ion-label>
-                  <ion-label>
-                    <p>400</p>
-                  </ion-label>
-                </ion-item>
-              </ion-card>
-            </div>
+              <ion-item>
+                <ion-label>
+                  <p>{{ $t("Unfillable") }}</p>
+                </ion-label>
+                <ion-label class="ion-text-center">
+                  <p>400</p>
+                </ion-label>
+                <ion-label class="ion-text-center">
+                  <p>400</p>
+                </ion-label>
+              </ion-item>
+            </ion-card>
           </div>
         </section>
 
@@ -758,10 +755,6 @@ export default defineComponent({
   grid-template-columns: repeat(2, auto);
   justify-content: space-between;
   align-items: center;
-}
-
-.open-orders > ion-card > ion-item > ion-label:not(:first-child) {
-  text-align: center;
 }
 
 /*Height of segment is defined now since their are less list items. Will remove it later */
