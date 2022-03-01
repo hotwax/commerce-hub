@@ -77,7 +77,7 @@
       
             <ion-card>
               <ion-card-header>
-                <ion-card-title>{{ $t("Ship from Facility name") }}</ion-card-title>
+                <ion-card-title>{{ $t("Ship to Facility name") }}</ion-card-title>
               </ion-card-header>
               <ion-item lines="none"> 
                 <ion-icon :icon="locationOutline" slot="start" />
@@ -363,6 +363,9 @@ ion-select {
 
   .product-image {
     margin: var(--spacer-xs) 0 0 var(--spacer-xs);
+  }
+
+  .product-image > img {
     border: 1px solid var(--ion-color-medium);
     border-radius: 10px;
   }

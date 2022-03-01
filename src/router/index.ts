@@ -12,6 +12,7 @@ import PurchaseOrder from '@/views/PurchaseOrder.vue'
 import Shipment from '@/views/Shipment.vue'
 import FindShipment from '@/views/FindShipment.vue'
 import Settings from "@/views/Settings.vue"
+import Locations from '@/views/Locations.vue'
 import Profile from '@/views/Profile.vue'
 import store from '@/store'
 
@@ -97,6 +98,12 @@ const routes: Array<RouteRecordRaw> = [
     path: "/settings",
     name: "Settings",
     component: Settings,
+    beforeEnter: authGuard
+  },
+  {
+    path: "/locations",
+    name: "Locations",
+    component: Locations,
     beforeEnter: authGuard
   },
   {
