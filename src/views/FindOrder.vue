@@ -46,7 +46,7 @@
               </ion-select>
             </ion-item>
           </ion-list>
-          <ion-list @click="appliedFilterChanged()">
+          <ion-list @click="getOrders()">
             <ion-list-header>{{ $t("Type") }}</ion-list-header>
             <ion-item>
               <ion-label>{{ $t("Store pickup") }}</ion-label>
@@ -308,6 +308,23 @@ export default defineComponent ({
         payload.json.params['q.op'] = 'AND'
         payload.json.query = `*${this.queryString}*`
       }
+
+      if (this.appliedFilters.type.storePickup) {
+        payload.json.filter = payload.json.filter.concat(' AND shipmentMethodTypeId: STOREPICKUP')
+      }
+
+      if (this.appliedFilters.type.preOrder) {
+        payload.json.filter = payload.json.filter.concat(' AND facilityId: PRE_ORDER_PARKING')
+      }
+
+      if (this.appliedFilters.type.backOrder) {
+        payload.json.filter = payload.json.filter.concat(' AND facilityId: BACKORDER_PARKING')
+      }
+
+      if (this.appliedFilters.type.unfillable) {
+        payload.json.filter = payload.json.filter.concat(' AND facilityId: _NA_')
+      }
+
       await this.store.dispatch("order/findOrders", payload);
     },
     async copyToClipboard(text: any) {
@@ -330,9 +347,6 @@ export default defineComponent ({
         component: OrderFilterModal
       });
       return orderFilterModal.present();
-    },
-    appliedFilterChanged() {
-      console.log(this.appliedFilters)
     }
   },
   mounted() {
