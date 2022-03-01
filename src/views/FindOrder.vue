@@ -98,11 +98,8 @@
               <ion-title>{{ $t("Purchase orders") }}</ion-title>
             </ion-toolbar>
             <ion-card-content>
-              <ion-chip>
-                <ion-label>PO #</ion-label>
-              </ion-chip>
-              <ion-chip>
-                <ion-label>PO #</ion-label>
+              <ion-chip v-for="(id, index) in poIds" :key="index">
+                <ion-label>{{ id }}</ion-label>
               </ion-chip>
             </ion-card-content>
           </ion-card>
@@ -289,7 +286,8 @@ export default defineComponent ({
   data() {
     return {
       shippingMethodOptions: [],
-      orderStatusOptions: []
+      orderStatusOptions: [],
+      poIds: []
     }
   },
   methods: {
@@ -394,8 +392,13 @@ export default defineComponent ({
       return orderFilterModal.present();
     }
   },
-  mounted() {
+  async mounted() {
     this.getOrders();
+    await this.store.dispatch('order/getPurchaseOrderIds').then(ids => {
+      if(ids.length > 0) {
+        this.poIds = ids
+      }
+    })
   },
   setup() {
     const router = useRouter();

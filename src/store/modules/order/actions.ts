@@ -36,6 +36,36 @@ const actions: ActionTree<OrderState, RootState> = {
       showToast(translate("Something went wrong"));
     }
     return resp;
+  },
+
+  async getPurchaseOrderIds({ dispatch }) {
+    let resp;
+
+    try {
+      const payload = {
+        "json": {
+          "params": {
+            "rows": 1000,
+            "group": true,
+            "group.field": "externalOrderId"
+          },
+          "filter": "docType: ORDER AND orderTypeId: PURCHASE_ORDER",
+          "fields": "externalOrderId",
+          "query": "*:*"
+        }
+      }
+
+      resp = await OrderService.getPOIds(payload);
+      if (resp.status == 200 && !hasError(resp)) {
+        return resp.data.grouped.externalOrderId.groups.map((group: any) => group.groupValue);
+      } else {
+        console.error('Something went wrong')
+      }
+    } catch(err) {
+      console.error('Something went wrong')
+    }
+
+    return resp;
   }
 } 
 
