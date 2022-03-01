@@ -149,11 +149,11 @@
                       <Image :src="getProduct(item.productId).mainImageUrl" />
                     </ion-thumbnail>
                     <ion-label>
-                      <p> {{ getProduct(item.productId).brandName ? getProduct(item.productId).brandName : '-' }} </p>
-                      {{ item.parentProductName }}
+                      <p>{{ getProduct(item.productId).brandName }}</p>
+                      {{ item.parentProductName ? item.parentProductName : item.productName }}
                       <!-- TODO: make the attribute displaying logic dynamic -->
-                      <p> {{ $t("Color") }}: {{ $filters.getFeature(getProduct(item.productId).featureHierarchy, '1/COLOR/') }} </p>
-                      <p> {{ $t("Size") }}: {{ $filters.getFeature(getProduct(item.productId).featureHierarchy, '1/SIZE/') }} </p>
+                      <p v-if="$filters.getFeature(getProduct(item.productId).featureHierarchy, '1/COLOR/')">{{ $t("Color") }}: {{ $filters.getFeature(getProduct(item.productId).featureHierarchy, '1/COLOR/') }}</p>
+                      <p v-if="$filters.getFeature(getProduct(item.productId).featureHierarchy, '1/SIZE/')">{{ $t("Size") }}: {{ $filters.getFeature(getProduct(item.productId).featureHierarchy, '1/SIZE/') }}</p>
                     </ion-label>
                     <ion-badge :color="itemStatus[item.orderItemStatusId].color ? itemStatus[item.orderItemStatusId].color : 'primary'" slot="end"> {{ itemStatus[item.orderItemStatusId].label ? itemStatus[item.orderItemStatusId].label : item.orderItemStatusId }} </ion-badge>
                   </ion-item>
