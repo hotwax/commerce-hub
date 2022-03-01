@@ -57,7 +57,7 @@ const actions: ActionTree<OrderState, RootState> = {
 
       resp = await OrderService.getPOIds(payload);
       if (resp.status == 200 && !hasError(resp)) {
-        return resp.data.grouped.externalOrderId.groups.map((group: any) => group.groupValue);
+        return resp.data.grouped.externalOrderId.groups.map((group: any) => group.groupValue).filter((id: string) => id);
       } else {
         console.error('Something went wrong')
       }
