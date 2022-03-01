@@ -73,20 +73,22 @@
             <ion-list-header>{{ $t("Fulfillment") }}</ion-list-header>
             <ion-item>
               <ion-label>{{ $t("Status") }}</ion-label>
-              <ion-select value="any">
-                <ion-select-option value="any">any</ion-select-option>
+              <ion-select :value="appliedFilters.fulfillment.status" @ionChange.prevent="($event) => {appliedFilters.fulfillment.status = $event['detail'].value; getOrders()}">
+                <ion-select-option v-for="status in orderStatusOptions" :key="status" :value="status">{{ status }}</ion-select-option>
               </ion-select>
             </ion-item>
             <ion-item>
               <ion-label>{{ $t("Shipping method") }}</ion-label>
-              <ion-select value="any">
-                <ion-select-option value="any">any</ion-select-option>
+              <ion-select :value="appliedFilters.fulfillment.shippingMethod" @ionChange.prevent="($event) => {appliedFilters.fulfillment.shippingMethod = $event['detail'].value; getOrders()}">
+                <ion-select-option v-for="method in shippingMethodOptions" :key="method" :value="method">{{ method }}</ion-select-option>
               </ion-select>
             </ion-item>
             <ion-item>
               <ion-label>{{ $t("Ship from location") }}</ion-label>
-              <ion-select value="any">
-                <ion-select-option value="any">any</ion-select-option>
+              <ion-select :value="appliedFilters.fulfillment.shipFromLocation" @ionChange="($event) => {appliedFilters.fulfillment.shipFromLocation = $event['detail'].value; getOrders()}">
+                <ion-select-option value="any" >{{ $t('Any') }}</ion-select-option>
+                <ion-select-option value="store" >{{ $t('Store') }}</ion-select-option>
+                <ion-select-option value="warehouse" >{{ $t('Warehouse') }}</ion-select-option>
               </ion-select>
             </ion-item>
           </ion-list>
@@ -284,6 +286,12 @@ export default defineComponent ({
       isScrollable: 'order/isScrollable'
     })
   },
+  data() {
+    return {
+      shippingMethodOptions: [],
+      orderStatusOptions: []
+    }
+  },
   methods: {
     async getOrders(vSize?: any, vIndex?: any) {
       const viewSize = vSize ? vSize : process.env.VUE_APP_VIEW_SIZE;
@@ -299,7 +307,24 @@ export default defineComponent ({
             "group.ngroups": true
           } as any,
           "query": "*:*",
-          "filter": "docType: ORDER AND orderTypeId: SALES_ORDER"
+          "filter": "docType: ORDER AND orderTypeId: SALES_ORDER",
+          "facet": {
+            "orderStatusIdFacet": {
+                "field": "orderStatusId",
+                "mincount": 0,
+                "limit": -1,
+                "sort": "index",
+                "type": "terms"
+            },
+            "shipmentMethodTypeIdFacet": {
+              "excludeTags": "shipmentMethodTypeIdFilter",
+              "field": "shipmentMethodTypeId",
+              "mincount": 0,
+              "limit": -1,
+              "sort": "index",
+              "type": "terms"
+            }
+          }
         }
       }
       if (this.queryString) {
@@ -325,7 +350,26 @@ export default defineComponent ({
         payload.json.filter = payload.json.filter.concat(' AND facilityId: _NA_')
       }
 
-      await this.store.dispatch("order/findOrders", payload);
+      if (this.appliedFilters.fulfillment.shipFromLocation === 'store') {
+        payload.json.filter = payload.json.filter.concat(' AND facilityTypeId: RETAIL_STORE')
+      } else if (this.appliedFilters.fulfillment.shipFromLocation === 'warehouse') {
+        payload.json.filter = payload.json.filter.concat(' AND facilityTypeId: WAREHOUSE')
+      }
+
+      if (this.appliedFilters.fulfillment.status) {
+        payload.json.filter = payload.json.filter.concat(` AND orderStatusId: ${this.appliedFilters.fulfillment.status}`)
+      }
+
+      if (this.appliedFilters.fulfillment.shippingMethod) {
+        payload.json.filter = payload.json.filter.concat(` AND shipmentMethodTypeId: ${this.appliedFilters.fulfillment.shippingMethod}`)
+      }
+
+      await this.store.dispatch("order/findOrders", payload).then(resp => {
+        if (resp.status == 200 && resp.data.facets) {
+          this.orderStatusOptions = resp.data.facets.orderStatusIdFacet.buckets.map((status: any) => status.val)
+          this.shippingMethodOptions = resp.data.facets.shipmentMethodTypeIdFacet.buckets.map((shippingMethod: any) => shippingMethod.val)
+        }
+      })
     },
     async copyToClipboard(text: any) {
       await Clipboard.write({
@@ -375,8 +419,8 @@ export default defineComponent ({
       },
       'fulfillment': {
         'status': '',
-        'shippingMethod': [],
-        'shipFromLocation': []
+        'shippingMethod': '',
+        'shipFromLocation': 'any'
       }
     })
 
