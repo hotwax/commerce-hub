@@ -299,6 +299,7 @@ export default defineComponent ({
       const payload = {
         "json": {
           "params": {
+            "sort": "orderDate desc",
             "rows": viewSize,
             "start": viewSize * viewIndex,
             "group": true,
