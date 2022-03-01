@@ -9,11 +9,13 @@ import FindProductInventory from '@/views/FindProductInventory.vue'
 import ProductInventory from '@/views/ProductInventory.vue'
 import FindPurchaseOrder from '@/views/FindPurchaseOrder.vue'
 import PurchaseOrder from '@/views/PurchaseOrder.vue'
+import Shipment from '@/views/Shipment.vue'
 import FindShipment from '@/views/FindShipment.vue'
 import Settings from "@/views/Settings.vue"
 import Users from '@/views/Users.vue'
 import User from '@/views/User.vue'
-
+import Locations from '@/views/Locations.vue'
+import Profile from '@/views/Profile.vue'
 import store from '@/store'
 
 const authGuard = (to: any, from: any, next: any) => {
@@ -56,7 +58,7 @@ const routes: Array<RouteRecordRaw> = [
     beforeEnter: authGuard
   },
   {
-    path: '/order',
+    path: '/order/:slug',
     name: 'Order',
     component: Order,
     beforeEnter: authGuard
@@ -88,6 +90,12 @@ const routes: Array<RouteRecordRaw> = [
     name: 'FindShipment',
     component:FindShipment,
   },
+  {  
+    path: '/shipment',
+    name: 'Shipment',
+    component: Shipment,
+    beforeEnter: authGuard
+  },  
   {
     path: "/settings",
     name: "Settings",
@@ -104,6 +112,18 @@ const routes: Array<RouteRecordRaw> = [
     path: "/user",
     name: "User",
     component: User,
+    beforeEnter: authGuard
+  },  
+  {
+    path: "/locations",
+    name: "Locations",
+    component: Locations,
+    beforeEnter: authGuard
+  },
+  {
+    path: "/profile",
+    name: "Profile",
+    component: Profile,
     beforeEnter: authGuard
   }
 ]

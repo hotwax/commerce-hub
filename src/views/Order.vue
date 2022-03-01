@@ -34,7 +34,7 @@
               <ion-note slot="end">1:07pm 6th Dec 2021</ion-note>
             </ion-item>
 
-            <div class="desktop-only">
+            <ion-list class="desktop-only">
               <ion-item v-for="item in 7" :key="item">
                 <ion-icon :icon="ticketOutline" slot="start" />
                 <ion-label>
@@ -43,7 +43,7 @@
                 </ion-label>
                 <ion-icon slot="end" :icon="informationCircleOutline" />
               </ion-item>
-            </div>
+            </ion-list>
           </div>
 
           <div class="info">
@@ -103,16 +103,16 @@
             <ion-label>{{ $t("Products") }}</ion-label>
           </ion-item>
 
-          <div class="product-detail">
+          <div class="product">
             <div class="product-image desktop-only">
               <Image src="https://cdn.shopify.com/s/files/1/0069/7384/9727/products/test-track.jpg?v=1626255137" />
-              <ion-button color="secondary" fill="outline">
+              <ion-button expand="block" color="secondary" fill="outline">
                 {{ $t("Product inventory") }}
                 <ion-icon :icon="openOutline" slot="end" />
               </ion-button>
             </div>
 
-            <div class="product-info">
+            <div>
               <hr />
 
               <div class="product-header">
@@ -343,14 +343,14 @@ ion-select {
 
 @media (min-width: 991px) {
 
-  .product-detail {
+  .product {
     display: grid;
-    grid: "image product"
-          / 240px 1fr;
+    grid-template-columns: 250px 1fr;
+    gap: var(--spacer-lg);     
+    align-items: start;
   }
 
   .product-image {
-    grid-area: image;
     height: 362px;
     margin: var(--spacer-xs) 0 0 var(--spacer-xs);
   }
@@ -358,11 +358,6 @@ ion-select {
   .product-image > img {
     border: 1px solid var(--ion-color-medium);
     border-radius: 10px;
-  }
-
-  .product-info {
-    grid-area: product;
-    margin-left: var(--spacer-lg);
   }
 }
 </style>

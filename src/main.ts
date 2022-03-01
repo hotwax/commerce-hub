@@ -59,6 +59,17 @@ app.config.globalProperties.$filters = {
       featureValue = featureSplit[2] ? featureSplit[2] : '';
     }
     return featureValue;
+  },
+  getCustomerLoyalty(orderNotes: any, cusotmerLoyaltyOptions: any) {
+    let customerLoyalty = '' as any
+    if (orderNotes && cusotmerLoyaltyOptions) {
+      for (const customerLoyaltyOption of Object.entries(cusotmerLoyaltyOptions)) {
+        if (orderNotes.includes(customerLoyaltyOption[0])) {
+          customerLoyalty = customerLoyaltyOption[1];
+        }
+      }
+    }
+    return customerLoyalty;
   }
 }
 
