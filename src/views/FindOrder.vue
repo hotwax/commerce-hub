@@ -29,21 +29,36 @@
             <ion-list-header>{{ $t("Date") }}</ion-list-header>
             <ion-item>
               <ion-label>{{ $t("Order created") }}</ion-label>
-              <ion-select value="any">
-                <ion-select-option value="any">any</ion-select-option>
-              </ion-select>
+              <ion-chip id="open-order-created-date-modal" slot="end">
+                <ion-label>{{ appliedFilters.date.orderCreated ? $filters.formatDate(appliedFilters.date.orderCreated, 'YYYY-MM-DDTHH:mm:ssTZD', 'D MMM YYYY') : 'any' }}</ion-label>
+              </ion-chip>
+              <ion-modal trigger="open-order-created-date-modal">
+                <ion-content force-overscroll="false">
+                  <ion-datetime :value="appliedFilters.date.orderCreated" presentation="date" @ionChange="orderCreationDateUpdated($event)"/>
+                </ion-content>
+              </ion-modal>
             </ion-item>
             <ion-item>
               <ion-label>{{ $t("Promise date") }}</ion-label>
-              <ion-select value="any">
-                <ion-select-option value="any">any</ion-select-option>
-              </ion-select>
+              <ion-chip id="open-order-promise-date-modal" slot="end">
+                <ion-label>{{ appliedFilters.date.promiseDate ? $filters.formatDate(appliedFilters.date.promiseDate, 'YYYY-MM-DDTHH:mm:ssTZD', 'D MMM YYYY') : 'any' }}</ion-label>
+              </ion-chip>
+              <ion-modal trigger="open-order-promise-date-modal">
+                <ion-content force-overscroll="false">
+                  <ion-datetime :value="appliedFilters.date.promiseDate" presentation="date" @ionChange="orderPromiseDateUpdated($event)"/>
+                </ion-content>
+              </ion-modal>
             </ion-item>
             <ion-item>
               <ion-label>{{ $t("Auto cancel date") }}</ion-label>
-              <ion-select value="any">
-                <ion-select-option value="any">any</ion-select-option>
-              </ion-select>
+              <ion-chip id="open-order-auto-cancel-date-modal" slot="end">
+                <ion-label>{{ appliedFilters.date.autoCancelDate ? $filters.formatDate(appliedFilters.date.autoCancelDate, 'YYYY-MM-DDTHH:mm:ssTZD', 'D MMM YYYY') : 'any' }}</ion-label>
+              </ion-chip>
+              <ion-modal trigger="open-order-auto-cancel-date-modal">
+                <ion-content force-overscroll="false">
+                  <ion-datetime :value="appliedFilters.date.autoCancelDate" presentation="date" @ionChange="orderAutoCancelDateUpdated($event)"/>
+                </ion-content>
+              </ion-modal>
             </ion-item>
           </ion-list>
           <ion-list @click="getOrders()">
@@ -209,6 +224,7 @@ import {
   IonCheckbox,
   IonChip,
   IonContent,
+  IonDatetime,
   IonHeader,
   IonIcon,
   IonInfiniteScroll,
@@ -217,6 +233,7 @@ import {
   IonLabel,
   IonList,
   IonListHeader,
+  IonModal,
   IonNote,
   IonPage,
   IonSearchbar,
@@ -257,6 +274,7 @@ export default defineComponent ({
     IonCheckbox,
     IonChip,
     IonContent,
+    IonDatetime,
     IonHeader,
     IonIcon,
     IonInfiniteScroll,
@@ -265,6 +283,7 @@ export default defineComponent ({
     IonLabel,
     IonList,
     IonListHeader,
+    IonModal,
     IonNote,
     IonPage,
     IonSearchbar,
@@ -305,7 +324,8 @@ export default defineComponent ({
             "group": true,
             "group.field": "orderId",
             "group.limit": 10000,
-            "group.ngroups": true
+            "group.ngroups": true,
+            "q.op": "AND"
           } as any,
           "query": "*:*",
           "filter": "docType: ORDER AND orderTypeId: SALES_ORDER",
@@ -331,12 +351,17 @@ export default defineComponent ({
       if (this.queryString) {
         payload.json.params.defType = 'edismax'
         payload.json.params.qf = 'orderId customerPartyName customerPartyId productId internalName'
-        payload.json.params['q.op'] = 'AND'
         payload.json.query = `*${this.queryString}*`
       }
 
+      // updating the filter value in json object as per the filters selected
+      // TODO: optimize this code
       if (this.appliedFilters.type.storePickup) {
         payload.json.filter = payload.json.filter.concat(' AND shipmentMethodTypeId: STOREPICKUP')
+      }
+
+      if (this.appliedFilters.type.shipFromStore) {
+        payload.json.filter = payload.json.filter.concat(' AND -shipmentMethodTypeId: STOREPICKUP AND facilityTypeId: RETAIL_STORE')
       }
 
       if (this.appliedFilters.type.preOrder) {
@@ -369,6 +394,19 @@ export default defineComponent ({
         payload.json.filter = payload.json.filter.concat(` AND shipmentMethodTypeId: ${this.appliedFilters.fulfillment.shippingMethod !== 'any' ? this.appliedFilters.fulfillment.shippingMethod : '*' }`)
       }
 
+      // TODO: improve logic to pass the date in the solr-query payload
+      if (this.appliedFilters.date.orderCreated) {
+        payload.json.filter = payload.json.filter.concat(` AND orderDate: {* TO ${this.appliedFilters.date.orderCreated.substring(0, this.appliedFilters.date.orderCreated.indexOf('T')) + 'T00:00:00Z'}}`)
+      }
+
+      if (this.appliedFilters.date.promiseDate) {
+        payload.json.filter = payload.json.filter.concat(` AND promiseDateTime: [* TO ${this.appliedFilters.date.promiseDate.substring(0, this.appliedFilters.date.promiseDate.indexOf('T')) + 'T00:00:00Z'}]`)
+      }
+
+      if (this.appliedFilters.date.autoCancelDate) {
+        payload.json.filter = payload.json.filter.concat(` AND autoCancelDate: [* TO ${this.appliedFilters.date.autoCancelDate.substring(0, this.appliedFilters.date.autoCancelDate.indexOf('T')) + 'T00:00:00Z'}]`)
+      }
+
       await this.store.dispatch("order/findOrders", payload).then(resp => {
         if (resp.status == 200 && resp.data.facets) {
           this.orderStatusOptions = this.orderStatusOptions.length > 1 || resp.data.facets?.orderStatusIdFacet?.buckets.length < this.orderStatusOptions.length ? this.orderStatusOptions : this.orderStatusOptions.concat(resp.data.facets?.orderStatusIdFacet?.buckets.map((status: any) => status.val))
@@ -396,6 +434,18 @@ export default defineComponent ({
         component: OrderFilterModal
       });
       return orderFilterModal.present();
+    },
+    orderCreationDateUpdated(ev: CustomEvent) {
+      this.appliedFilters.date.orderCreated = ev['detail'].value
+      this.getOrders();
+    },
+    orderAutoCancelDateUpdated(ev: CustomEvent) {
+      this.appliedFilters.date.autoCancelDate = ev['detail'].value
+      this.getOrders();
+    },
+    orderPromiseDateUpdated(ev: CustomEvent) {
+      this.appliedFilters.date.promiseDate = ev['detail'].value
+      this.getOrders();
     }
   },
   async mounted() {
