@@ -86,7 +86,7 @@
             <ion-item>
               <ion-label>{{ $t("Ship from location") }}</ion-label>
               <ion-select :value="appliedFilters.fulfillment.shipFromLocation" @ionChange="($event) => {appliedFilters.fulfillment.shipFromLocation = $event['detail'].value; getOrders()}" interface="popover">
-                <ion-select-option value="any" >{{ $t('Any') }}</ion-select-option>
+                <ion-select-option value="any" >{{ $t('any') }}</ion-select-option>
                 <ion-select-option value="store" >{{ $t('Store') }}</ion-select-option>
                 <ion-select-option value="warehouse" >{{ $t('Warehouse') }}</ion-select-option>
               </ion-select>
@@ -285,8 +285,8 @@ export default defineComponent ({
   },
   data() {
     return {
-      shippingMethodOptions: [],
-      orderStatusOptions: [],
+      shippingMethodOptions: ['any'],
+      orderStatusOptions: ['any'],
       poIds: []
     }
   },
@@ -362,17 +362,17 @@ export default defineComponent ({
       }
 
       if (this.appliedFilters.fulfillment.status) {
-        payload.json.filter = payload.json.filter.concat(` AND orderStatusId: ${this.appliedFilters.fulfillment.status}`)
+        payload.json.filter = payload.json.filter.concat(` AND orderStatusId: ${this.appliedFilters.fulfillment.status !== 'any' ? this.appliedFilters.fulfillment.status : '*'}`)
       }
 
       if (this.appliedFilters.fulfillment.shippingMethod) {
-        payload.json.filter = payload.json.filter.concat(` AND shipmentMethodTypeId: ${this.appliedFilters.fulfillment.shippingMethod}`)
+        payload.json.filter = payload.json.filter.concat(` AND shipmentMethodTypeId: ${this.appliedFilters.fulfillment.shippingMethod !== 'any' ? this.appliedFilters.fulfillment.shippingMethod : '*' }`)
       }
 
       await this.store.dispatch("order/findOrders", payload).then(resp => {
         if (resp.status == 200 && resp.data.facets) {
-          this.orderStatusOptions = resp.data.facets?.orderStatusIdFacet?.buckets.map((status: any) => status.val)
-          this.shippingMethodOptions = resp.data.facets?.shipmentMethodTypeIdFacet?.buckets.map((shippingMethod: any) => shippingMethod.val)
+          this.orderStatusOptions = this.orderStatusOptions.length > 1 || resp.data.facets?.orderStatusIdFacet?.buckets.length < this.orderStatusOptions.length ? this.orderStatusOptions : this.orderStatusOptions.concat(resp.data.facets?.orderStatusIdFacet?.buckets.map((status: any) => status.val))
+          this.shippingMethodOptions = this.shippingMethodOptions.length > 1 || resp.data.facets?.shipmentMethodTypeIdFacet?.buckets.length < this.shippingMethodOptions.length ? this.shippingMethodOptions : this.shippingMethodOptions.concat(resp.data.facets?.shipmentMethodTypeIdFacet?.buckets.map((shippingMethod: any) => shippingMethod.val))
         }
       })
     },
@@ -428,8 +428,8 @@ export default defineComponent ({
         'unfillable': false
       },
       'fulfillment': {
-        'status': '',
-        'shippingMethod': '',
+        'status': 'any',
+        'shippingMethod': 'any',
         'shipFromLocation': 'any'
       }
     })
