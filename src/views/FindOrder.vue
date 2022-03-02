@@ -396,15 +396,15 @@ export default defineComponent ({
 
       // TODO: improve logic to pass the date in the solr-query payload
       if (this.appliedFilters.date.orderCreated) {
-        payload.json.filter = payload.json.filter.concat(` AND orderDate: {* TO ${this.appliedFilters.date.orderCreated.substring(0, this.appliedFilters.date.orderCreated.indexOf('T')) + 'T00:00:00Z'}}`)
+        payload.json.filter = payload.json.filter.concat(` AND orderDate: [${this.appliedFilters.date.orderCreated.substring(0, this.appliedFilters.date.orderCreated.indexOf('T')) + 'T00:00:00Z'} TO ${this.appliedFilters.date.orderCreated.substring(0, this.appliedFilters.date.orderCreated.indexOf('T')) + 'T23:59:59Z'}]`)
       }
 
       if (this.appliedFilters.date.promiseDate) {
-        payload.json.filter = payload.json.filter.concat(` AND promiseDateTime: [* TO ${this.appliedFilters.date.promiseDate.substring(0, this.appliedFilters.date.promiseDate.indexOf('T')) + 'T00:00:00Z'}]`)
+        payload.json.filter = payload.json.filter.concat(` AND promiseDateTime: [${this.appliedFilters.date.promiseDate.substring(0, this.appliedFilters.date.promiseDate.indexOf('T')) + 'T00:00:00Z'} TO ${this.appliedFilters.date.promiseDate.substring(0, this.appliedFilters.date.promiseDate.indexOf('T')) + 'T23:59:59Z'}]`)
       }
 
       if (this.appliedFilters.date.autoCancelDate) {
-        payload.json.filter = payload.json.filter.concat(` AND autoCancelDate: [* TO ${this.appliedFilters.date.autoCancelDate.substring(0, this.appliedFilters.date.autoCancelDate.indexOf('T')) + 'T00:00:00Z'}]`)
+        payload.json.filter = payload.json.filter.concat(` AND autoCancelDate: [${this.appliedFilters.date.autoCancelDate.substring(0, this.appliedFilters.date.autoCancelDate.indexOf('T')) + 'T00:00:00Z'} TO ${this.appliedFilters.date.autoCancelDate.substring(0, this.appliedFilters.date.autoCancelDate.indexOf('T')) + 'T23:59:59Z'}]`)
       }
 
       await this.store.dispatch("order/findOrders", payload).then(resp => {
