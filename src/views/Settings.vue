@@ -2,57 +2,127 @@
   <ion-page>
     <ion-header :translucent="true">
       <ion-toolbar>
+        <ion-back-button slot="start" default-href="/" />
         <ion-title>{{ $t("Settings") }}</ion-title>
       </ion-toolbar>
     </ion-header>
-    
-    <ion-content :fullscreen="true">
-      <!-- Profile of user logged in -->
-      <ion-item>
-        <ion-icon :icon="personCircleOutline" slot="start" />
-        <ion-label>{{ userProfile !== null ? userProfile.partyName : '' }}</ion-label>
-        <ion-button slot="end" fill="outline" color="dark" @click="logout()">{{ $t("Logout") }}</ion-button>
-      </ion-item>
 
-      <!-- Select store -->
-       <ion-item>
-        <ion-icon :icon="storefrontOutline" slot="start" />
-        <ion-label>{{ currentFacility.facilityId ? currentFacility.facilityId : '' }}</ion-label>
-      <ion-select interface="popover" :placeholder="$t('store name')" :selected-text="currentFacility.facilityId" @ionChange="setFacility($event)">
-        <ion-select-option v-for="facility in userProfile.facilities" :key="facility.facilityId" :value="facility.facilityId" >{{ facility.facilityId }}</ion-select-option>
-      </ion-select>
-      </ion-item>
+    <ion-content>
+      <main>
+        <ion-card>
+          <ion-item lines="none">
+            <ion-icon :icon="personCircleOutline" slot="start" />
+            <ion-label>{{ $t("Profile") }}</ion-label>
+          </ion-item>
+          <ion-item>
+            <ion-label>{{ userProfile !== null ? userProfile.partyName : '' }}</ion-label>
+            <ion-label slot="end">User data</ion-label>
+          </ion-item>
+          <ion-item lines="full">
+            <ion-label>{{ $t("OMS") }}</ion-label>
+            <ion-label slot="end">{{ instanceUrl }}</ion-label>
+          </ion-item>
+          <ion-button fill="clear">{{ $t("Details") }}</ion-button>
+        </ion-card>
 
+        <ion-card>
+          <ion-item lines="none">
+            <ion-icon :icon="businessOutline" slot="start" />
+            <ion-label>{{ $t("Locations")}}</ion-label>
+          </ion-item>
+          <ion-item>
+            <ion-label>{{ $t("Locations")}}</ion-label>
+            <ion-note slot="end">number of locations</ion-note>
+          </ion-item>
+          <ion-item lines="full">
+            <ion-label>{{ $t("Shops") }}</ion-label>
+            <ion-note slot="end">sales channels</ion-note>
+          </ion-item>
+          <ion-button fill="clear">{{ $t("Details") }}</ion-button>
+        </ion-card>
+
+        <ion-card>
+          <ion-item lines="none">
+            <ion-icon :icon="peopleCircleOutline" slot="start" />
+            <ion-label>{{ $t("Users") }}</ion-label>
+          </ion-item>
+          <ion-item>
+            <ion-label>{{ $t("Staff") }}</ion-label>
+            <ion-note slot="end">user count</ion-note>
+          </ion-item>
+          <ion-item lines="full"></ion-item>
+          <ion-button fill="clear">{{ $t("Details") }}</ion-button>
+        </ion-card>
+
+        <ion-card>
+          <ion-item lines="none">
+            <ion-icon :icon="codeWorkingOutline" slot="start" />
+            <ion-label>{{ $t("Connections") }}</ion-label>
+          </ion-item>
+          <ion-item>
+            <ion-label>Shopify store name</ion-label>
+            <ion-badge color="success" slot="end">active</ion-badge>
+          </ion-item>
+          <ion-item lines="full">
+            <ion-label>Ship station</ion-label>
+            <ion-badge color="success" slot="end">active</ion-badge>
+          </ion-item>
+          <ion-button fill="clear">{{ $t("Details") }}</ion-button>
+        </ion-card>
+      </main>
     </ion-content>
   </ion-page>
 </template>
 
 <script lang="ts">
-import { alertController, IonButton, IonContent, IonHeader,IonIcon, IonItem, IonLabel, IonPage, IonSelect, IonSelectOption, IonTitle, IonToolbar, popoverController } from '@ionic/vue';
+import {
+  IonBackButton,
+  IonBadge,
+  IonButton,
+  IonContent,
+  IonCard,
+  IonHeader,
+  IonIcon,
+  IonItem,
+  IonLabel,
+  IonNote,
+  IonPage,
+  IonTitle,
+  IonToolbar
+} from '@ionic/vue';
 import { defineComponent } from 'vue';
-import { ellipsisVertical, personCircleOutline, storefrontOutline} from 'ionicons/icons'
+import {
+  businessOutline,
+  codeWorkingOutline,
+  ellipsisVertical,
+  peopleCircleOutline,
+  personCircleOutline
+} from 'ionicons/icons';
 import { mapGetters, useStore } from 'vuex';
 import { useRouter } from 'vue-router';
 
 export default defineComponent({
   name: 'Settings',
   components: {
-    IonButton, 
-    IonContent, 
-    IonHeader, 
+    IonBackButton,
+    IonBadge,
+    IonButton,
+    IonContent,
+    IonCard,
+    IonHeader,
     IonIcon,
-    IonItem, 
-    IonLabel, 
-    IonPage, 
-    IonSelect, 
-    IonSelectOption,
-    IonTitle, 
+    IonItem,
+    IonLabel,
+    IonNote,
+    IonPage,
+    IonTitle,
     IonToolbar
   },
   computed: {
     ...mapGetters({
       userProfile: 'user/getUserProfile',
       currentFacility: 'user/getCurrentFacility',
+      instanceUrl: 'user/getInstanceUrl'
     })
   },
   methods: {
@@ -70,17 +140,27 @@ export default defineComponent({
       })
     }
   },
-  setup(){
+  setup() {
     const store = useStore();
     const router = useRouter();
 
     return {
+      businessOutline,
+      codeWorkingOutline,
       ellipsisVertical,
+      peopleCircleOutline,
       personCircleOutline,
-      storefrontOutline,
       store,
       router
     }
   }
 });
 </script>
+<style scoped>
+main {
+  display: grid;
+  grid-template-columns: repeat(auto-fill,minmax(343px, 1fr));
+  max-width: 720px;
+  margin: var(--spacer-base) auto 0;
+}
+</style>

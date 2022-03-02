@@ -50,17 +50,18 @@ const actions: ActionTree<ProductState, RootState> = {
   async fetchProducts({ commit, state }, { productIds }) {
     const cachedProductIds = Object.keys(state.cached);
     const productIdFilter = productIds.reduce((filter: string, productId: any) => {
-      if (filter !== '') filter += ' OR '
       if (cachedProductIds.includes(productId)) {
         return filter;
       } else {
+        if (filter !== '') filter += ' OR '
         return filter += productId;
       }
     }, '');
 
     if (productIdFilter === '') return;
     const resp = await ProductService.fetchProducts({
-      "filters": ['productId: (' + productIdFilter + ')']
+      "filters": ['productId: (' + productIdFilter + ')'],
+      "viewSize": productIds.length
     })
     if (resp.status === 200 && !hasError(resp)) {
       const products = resp.data.response.docs;
@@ -72,7 +73,7 @@ const actions: ActionTree<ProductState, RootState> = {
   // Get product related information
   async getProductInformation(context, { orders }) {
     let productIds: any = new Set();
-    orders.groups.forEach((order: any) => {
+    orders.forEach((order: any) => {
       order.doclist.docs.forEach((item: any) => {
         if (item.productId) productIds.add(item.productId);
       })
@@ -80,6 +81,7 @@ const actions: ActionTree<ProductState, RootState> = {
     productIds = [...productIds]
     if (productIds.length) {
       this.dispatch('product/fetchProducts', { productIds })
+      this.dispatch('stock/addProducts', { productIds })
     }
   }
 }

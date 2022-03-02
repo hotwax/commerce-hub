@@ -3,8 +3,11 @@ import OrderState from './OrderState'
 import RootState from '../../RootState'
 
 const getters: GetterTree <OrderState, RootState> = {
-  getList (state) {
-    return state.list.items
+  getOrders (state) {
+    return state.list.orders
+  },
+  isScrollable: (state) => {
+    return state.list.orders.length > 0 && state.list.orders.length < state.list.total
   },
   getOrderDetails (state) {
     return state.order

@@ -48,14 +48,14 @@
               <ion-label>{{ $t("Arrival date") }}</ion-label>
               <ion-chip>
                 <ion-icon :icon="calendarOutline" />
-                <ion-datetime value="12/01/2021" />
+                <ion-input type="date" />
                 <ion-icon :icon="closeCircle" />
               </ion-chip>
             </ion-item>
           </ion-list>
         </aside>
 
-        <main class="main">
+        <main>
           <section class="sort">
             <ion-item lines="none">
               <ion-icon :icon="documentTextOutline" slot="start" />
@@ -123,16 +123,15 @@
 
                   <div>
                     <ion-chip outline>
-                      <!-- TODO -->
+                      <!-- TODO, Update icon -->
                       <ion-icon :icon="pricetag" />
                       <ion-label>Shopify ID</ion-label>
                     </ion-chip>
                   </div>
 
-                  <div>
-                    <ion-item lines="none">
-                      <ion-note slot="end">ATP Ordered</ion-note>
-                    </ion-item>
+                  <div class="items-metadata">
+                    <ion-note>ATP</ion-note>
+                    <ion-note>Ordered</ion-note>
                   </div>
                 </div>
                 <hr />
@@ -152,9 +151,9 @@ import {
   IonButtons,
   IonChip,
   IonContent,
-  IonDatetime,
   IonHeader,
   IonIcon,
+  IonInput,
   IonItem,
   IonLabel,
   IonList,
@@ -191,9 +190,9 @@ export default {
     IonButtons,
     IonChip,
     IonContent,
-    IonDatetime,
     IonHeader,
     IonIcon,
+    IonInput,
     IonItem,
     IonLabel,
     IonList,
@@ -228,6 +227,14 @@ export default {
 </script>
 
 <style scoped>
+.items-metadata {
+  text-align: end;
+}
+
+.items-metadata > ion-note {
+  display: block;
+}
+
 @media (min-width: 991px) {
   .list-item {
     --columns-desktop: 3;

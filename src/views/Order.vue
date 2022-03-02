@@ -12,14 +12,18 @@
       </ion-toolbar>
     </ion-header>
     <ion-content>
-      <main class="main-content">
+      <main>
         <section class="header">
           <div class="id">
             <ion-item lines="none">
               <ion-icon slot="start" :icon="ticketOutline" />
-              <ion-label> {{ order.id }} </ion-label>
-              <ion-badge slot="end"> {{ order.statusDescription }} </ion-badge>
-              <ion-icon slot="end" :icon="caretDown" />
+              <ion-label>{{ order.id }}</ion-label>
+              <ion-badge slot="end">{{ order.statusDescription }}</ion-badge>
+              <ion-select :value="status" @ionChange="changeStatus($event)" slot="end">
+                <ion-select-option value="Approved">Approved</ion-select-option>
+                <ion-select-option value="Completed">Completed</ion-select-option>
+                <ion-select-option value="Shipped">Shipped</ion-select-option>
+              </ion-select>
             </ion-item>
           </div>
 
@@ -31,8 +35,7 @@
               <ion-note slot="end">1:07pm 6th Dec 2021</ion-note>
             </ion-item>
 
-            <!-- TODO: Implement this functionality -->
-            <div class="desktop-only">
+            <ion-list class="desktop-only">
               <ion-item v-for="item in 7" :key="item">
                 <ion-icon :icon="ticketOutline" slot="start" />
                 <ion-label>
@@ -41,7 +44,7 @@
                 </ion-label>
                 <ion-icon slot="end" :icon="informationCircleOutline" />
               </ion-item>
-            </div>
+            </ion-list>
           </div>
 
           <div class="info">
@@ -102,17 +105,16 @@
             <ion-label>{{ $t("Products") }}</ion-label>
           </ion-item>
 
-          <div class="product-detail" v-for="(shipGroup, index) of order.shipGroup" :key="index">
-            <div class="product-image desktop-only" v-for="(item, index) of shipGroup.items" :key="index">
-              <Image :src="getProduct(item.productId).mainImageUrl" />
-              <!-- TODO: work on this functionality -->
-              <ion-button color="secondary" fill="outline">
+          <div class="product">
+            <div class="product-image desktop-only">
+              <Image src="https://cdn.shopify.com/s/files/1/0069/7384/9727/products/test-track.jpg?v=1626255137" />
+              <ion-button expand="block" color="secondary" fill="outline">
                 {{ $t("Product inventory") }}
                 <ion-icon :icon="openOutline" slot="end" />
               </ion-button>
             </div>
 
-            <div class="product-info" v-for="(item, index) of shipGroup.items" :key="index">
+            <div v-for="(item, index) of shipGroup.items" :key="index">
               <hr />
 
               <div class="product-header">
@@ -259,6 +261,8 @@ import {
   IonListHeader,
   IonNote,
   IonPage,
+  IonSelect,
+  IonSelectOption,
   IonThumbnail,
   IonTitle,
   IonToolbar
@@ -286,13 +290,16 @@ export default defineComponent({
     IonListHeader,
     IonNote,
     IonPage,
+    IonSelect,
+    IonSelectOption,
     IonThumbnail,
     IonTitle,
     IonToolbar
   },
   data(){
     return {
-      goodIdentificationTypeId: process.env.VUE_APP_PRDT_IDENT_TYPE_ID
+      goodIdentificationTypeId: process.env.VUE_APP_PRDT_IDENT_TYPE_ID,
+      status: "Approved" // default value
     }
   },
   computed: {
@@ -304,6 +311,9 @@ export default defineComponent({
   methods:{
     orderDetails(orderId?: any){
       this.store.dispatch("order/getOrderDetails", orderId);
+    },
+    changeStatus (ev) {
+      this.status = ev['detail'].value
     }
   },
   mounted(){
@@ -332,6 +342,16 @@ export default defineComponent({
 </script>
 
 <style scoped>
+/* To hide selected text which appear after selecting any option*/
+ion-select::part(text) {
+  display: none;
+}
+
+/* To remove margin between badge and ion-select */
+ion-select {
+  margin-inline-start: 0;
+}
+
 .product-header {
   display: grid;
   grid-template-columns: max-content 1fr max-content;
@@ -350,23 +370,21 @@ export default defineComponent({
 
 @media (min-width: 991px) {
 
-  .product-detail {
+  .product {
     display: grid;
-    grid: "image product"
-          / 240px 1fr;
+    grid-template-columns: 250px 1fr;
+    gap: var(--spacer-lg);     
+    align-items: start;
   }
 
   .product-image {
-    grid-area: image;
     height: 362px;
-    border: 1px solid var(--ion-color-medium);
-    border-radius: 10px;
-    margin-top: var(--spacer-xs);
+    margin: var(--spacer-xs) 0 0 var(--spacer-xs);
   }
 
-  .product-info {
-    grid-area: product;
-    margin-left: var(--spacer-lg);
+  .product-image > img {
+    border: 1px solid var(--ion-color-medium);
+    border-radius: 10px;
   }
 }
 </style>

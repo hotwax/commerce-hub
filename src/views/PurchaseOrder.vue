@@ -13,27 +13,31 @@
       </ion-toolbar>
     </ion-header>
 
-    <ion-content :fullscreen="true">
-      <main class="main-content">
+    <ion-content>
+      <main>
         <section class="header">
           <div class="id">
             <ion-item lines="none">
               <ion-icon slot="start" :icon="ticketOutline" />
               <ion-label>External Purchase Order ID</ion-label>
-              <ion-badge slot="end">Approved</ion-badge>
+              <ion-badge slot="end">{{ status }}</ion-badge>
+              <ion-select :value="status" @ionChange="changeStatus($event)" slot="end">
+                <ion-select-option value="Approved">Approved</ion-select-option>
+                <ion-select-option value="Completed">Completed</ion-select-option>
+                <ion-select-option value="Shipped">Shipped</ion-select-option>
+              </ion-select>
             </ion-item>
           </div>
 
           <div class="timeline">
-            <div>
-              <ion-item lines="none" detail>
-                <ion-icon slot="start" :icon="timeOutline" class="mobile-only" />
-                <ion-label>{{ $t("Timeline") }}</ion-label>
-                <ion-note slot="end">1:07pm 6th Dec 2021</ion-note>
-              </ion-item>
-            </div>
-            <div v-for="item in 3" :key="item" class="desktop-only">
-              <ion-item>
+            <ion-item lines="none" detail>
+              <ion-icon slot="start" :icon="timeOutline" class="mobile-only" />
+              <ion-label>{{ $t("Timeline") }}</ion-label>
+              <ion-note slot="end">1:07pm 6th Dec 2021</ion-note>
+            </ion-item>
+            
+            <ion-list class="desktop-only">
+              <ion-item v-for="item in 3" :key="item">
                 <ion-icon slot="start" :icon="ticketOutline" />
                 <ion-label>
                   <p class="overline">+ 10 minutes</p>
@@ -41,64 +45,70 @@
                 </ion-label>
                 <ion-icon :icon="informationCircleOutline" />
               </ion-item>
-            </div>
+            </ion-list>
           </div>
 
           <div class="info">
-            <div>
-              <ion-card>
-                <ion-card-header>
-                  <ion-card-title>Facility name</ion-card-title>
-                </ion-card-header>
-                <ion-item>
-                  <ion-icon :icon="locationOutline" slot="start" />
-                  <ion-label>
-                    Address1
-                    <p>Address2</p>
-                    <p>City, Zipcode</p>
-                    <p>State, Country</p>
-                  </ion-label>
-                </ion-item>
-              </ion-card>
-            </div>
-
-            <div>
-              <ion-card>
-                <ion-card-header>
-                  <ion-card-title>{{ $t("Allocations") }}</ion-card-title>
-                </ion-card-header>
-                <ion-item>
-                  <ion-label>{{ $t("All orders") }}</ion-label>
-                  <ion-button color="dark" fill="outline">
-                    40 {{ $t("orders") }}
-                    <ion-icon slot="end" :icon="downloadOutline" />
-                  </ion-button>
-                </ion-item>
-                <ion-item>
-                  <ion-label>{{ $t("Pre orders") }}</ion-label>
-                  <ion-button color="dark" fill="outline">
-                    30 {{ $t("orders") }}
-                    <ion-icon slot="end" :icon="downloadOutline" />
-                  </ion-button>
-                </ion-item>
-                <ion-item lines="none">
-                  <ion-label>{{ $t("Back orders") }}</ion-label>
-                  <ion-button color="dark" fill="outline">
-                    10 {{ $t("orders") }}
-                    <ion-icon slot="end" :icon="downloadOutline" />
-                  </ion-button>
-                </ion-item>
-              </ion-card>
-            </div>
+            <ion-card>
+              <ion-card-header>
+                <ion-card-title>Facility name</ion-card-title>
+              </ion-card-header>
+              <ion-item>
+                <ion-icon :icon="locationOutline" slot="start" />
+                <ion-label>
+                  Address1
+                  <p>Address2</p>
+                  <p>City, Zipcode</p>
+                  <p>State, Country</p>
+                </ion-label>
+              </ion-item>
+            </ion-card>
+          
+            <ion-card>
+              <ion-card-header>
+                <ion-card-title>{{ $t("Allocations") }}</ion-card-title>
+              </ion-card-header>
+              <ion-item>
+                <ion-label>{{ $t("All orders") }}</ion-label>
+                <ion-button color="dark" fill="outline">
+                  40 {{ $t("orders") }}
+                  <ion-icon slot="end" :icon="downloadOutline" />
+                </ion-button>
+              </ion-item>
+              <ion-item>
+                <ion-label>{{ $t("Pre orders") }}</ion-label>
+                <ion-button color="dark" fill="outline">
+                  30 {{ $t("orders") }}
+                  <ion-icon slot="end" :icon="downloadOutline" />
+                </ion-button>
+              </ion-item>
+              <ion-item lines="none">
+                <ion-label>{{ $t("Back orders") }}</ion-label>
+                <ion-button color="dark" fill="outline">
+                  10 {{ $t("orders") }}
+                  <ion-icon slot="end" :icon="downloadOutline" />
+                </ion-button>
+              </ion-item>
+            </ion-card>
           </div>
         </section>
 
         <section class="products">
           <ion-item lines="none">
             <ion-icon slot="start" :icon="shirtOutline" />
-            <ion-label>Products</ion-label>
+            <ion-label>{{ $t("Products") }}</ion-label>
+
+            <ion-button slot="end" fill="outline" color="medium" class="desktop-only">
+              <ion-icon :icon="addOutline" slot="start" />
+              {{ $t("Add item to order") }}
+            </ion-button>
+            <ion-button slot="end" fill="clear" class="mobile-only">
+              {{ $t("Add") }}
+              <ion-icon :icon="addCircleOutline" slot="end"/>
+            </ion-button>
           </ion-item>
-          <div class="product-detail">
+          
+          <div class="product">
             <div class="product-image desktop-only">
               <Image src="https://cdn.shopify.com/s/files/1/0069/7384/9727/products/test-track.jpg?v=1626255137"/>
             </div>
@@ -263,6 +273,8 @@ import {
   IonListHeader,
   IonNote,
   IonPage,
+  IonSelect,
+  IonSelectOption,
   IonThumbnail,
   IonTitle,
   IonToolbar,
@@ -270,6 +282,8 @@ import {
 } from '@ionic/vue';
 import { defineComponent } from 'vue';
 import {
+  addOutline,
+  addCircleOutline,
   businessOutline,
   downloadOutline,
   ellipsisVerticalOutline,
@@ -304,12 +318,22 @@ export default defineComponent({
     IonListHeader,
     IonNote,
     IonPage,
+    IonSelect,
+    IonSelectOption,
     IonThumbnail,
     IonTitle,
     IonToolbar,
     Image
   },
+  data() {
+    return {
+      status: "Approved" // default value
+    }
+  },
   methods: {
+    changeStatus (ev: any) {
+      this.status = ev['detail'].value
+    },
     async openProductPopover(ev: Event) {
       const popover = await popoverController.create({
         component: ProductPopover,
@@ -322,6 +346,8 @@ export default defineComponent({
   },
   setup() {
     return {
+      addOutline,
+      addCircleOutline,
       businessOutline,
       downloadOutline,
       ellipsisVerticalOutline,
@@ -337,19 +363,28 @@ export default defineComponent({
 </script>
 
 <style scoped>
+/* To hide selected text which appear after selecting any option*/
+ion-select::part(text) {
+  display: none;
+}
+
+/* To remove margin between badge and ion-select */
+ion-select {
+  margin-inline-start: 0;
+}
+
 @media (min-width: 991px) {
-  .product-detail {
+  .product {
     display: grid;
     grid-template-columns: 250px 1fr;
-    align-items: center;
-  }
-  .product-image {
-    border: 1px solid var(--ion-color-medium);
-    border-radius: 10px;
+    gap: var(--spacer-lg);
+    align-items: start;
   }
 
-  .product-info {
-    margin-left: var(--spacer-lg);
+  .product-image {
+    margin: var(--spacer-xs) 0 0 var(--spacer-xs);
+    border: 1px solid var(--ion-color-medium);
+    border-radius: 10px;
   }
 }
 </style>

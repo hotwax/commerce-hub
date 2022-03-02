@@ -30,7 +30,9 @@ import i18n from './i18n'
 import store from './store'
 
 const app = createApp(App)
-  .use(IonicVue)
+  .use(IonicVue, {
+    mode: 'md'
+  })
   .use(router)
   .use(i18n)
   .use(store);
@@ -58,15 +60,6 @@ app.config.globalProperties.$filters = {
     }
     return featureValue;
   },
-  getOrderIdentificationId(identifications: any, id: string) {
-    let externalId = ''
-    if (identifications) {
-      const externalIdentification = identifications.find((identification: any) => identification.startsWith(id))
-      const externalIdentificationSplit = externalIdentification ? externalIdentification.split('/') : [];
-      externalId = externalIdentificationSplit[1] ? externalIdentificationSplit[1] : '';
-    }
-    return externalId;
-  },
   getCustomerLoyalty(orderNotes: any, cusotmerLoyaltyOptions: any) {
     let customerLoyalty = '' as any
     if (orderNotes && cusotmerLoyaltyOptions) {
@@ -77,15 +70,6 @@ app.config.globalProperties.$filters = {
       }
     }
     return customerLoyalty;
-  },
-  getShippingFrom(orderRoles: any, shippingOption: any) {
-    let shippingFrom = ''
-    if (orderRoles) {
-      const role = orderRoles.find((roleItem: any) => roleItem.startsWith(shippingOption));
-      const roleSplit = role ? role.split('/') : [];
-      shippingFrom = roleSplit[2] ? roleSplit[2] : '';
-    }
-    return shippingFrom;
   }
 }
 

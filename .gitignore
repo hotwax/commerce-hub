@@ -29,3 +29,10 @@ npm-debug.log*
 /platforms
 /plugins
 /www
+.firebase
+.history
+.env
+.env.*
+
+# Excluding the .env.example file from .gitignore
+!.env.example
