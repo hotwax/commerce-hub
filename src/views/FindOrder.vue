@@ -294,6 +294,8 @@ export default defineComponent ({
     async getOrders(vSize?: any, vIndex?: any) {
       const viewSize = vSize ? vSize : process.env.VUE_APP_VIEW_SIZE;
       const viewIndex = vIndex ? vIndex : 0;
+      let typeFilterSelected = [];
+
       const payload = {
         "json": {
           "params": {
@@ -338,16 +340,20 @@ export default defineComponent ({
       }
 
       if (this.appliedFilters.type.preOrder) {
-        payload.json.filter = payload.json.filter.concat(' AND facilityId: PRE_ORDER_PARKING')
+        typeFilterSelected.push('PRE_ORDER_PARKING')
       }
 
       if (this.appliedFilters.type.backOrder) {
-        payload.json.filter = payload.json.filter.concat(' AND facilityId: BACKORDER_PARKING')
+        typeFilterSelected.push('BACKORDER_PARKING')
       }
 
       if (this.appliedFilters.type.unfillable) {
-        payload.json.filter = payload.json.filter.concat(' AND facilityId: _NA_')
+        typeFilterSelected.push('_NA_')
       }
+
+      const typeFilterSelectedValues = typeFilterSelected.toString().replaceAll(",", " OR ")
+
+      payload.json.filter = payload.json.filter.concat(` AND facilityId: (${typeFilterSelectedValues ? typeFilterSelectedValues : '*'})`)
 
       if (this.appliedFilters.fulfillment.shipFromLocation === 'store') {
         payload.json.filter = payload.json.filter.concat(' AND facilityTypeId: RETAIL_STORE')
