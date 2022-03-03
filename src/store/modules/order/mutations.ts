@@ -7,8 +7,8 @@ const mutations: MutationTree <OrderState> = {
     state.list.orders = payload.orders
     state.list.total = payload.total
   },
-  [types.ORDER_DETAILS_UPDATED] (state, payload) {
-    state.order = payload.orderDetails
+  [types.ORDER_CURRENT_UPDATED] (state, payload) {
+    state.current = payload.orderDetails
   }
 }
 export default mutations;

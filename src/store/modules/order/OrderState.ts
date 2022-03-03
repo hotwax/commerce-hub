@@ -3,5 +3,5 @@ export default interface OrderState {
     orders: any[],
     total: number
   },
-  order: any
+  current: any
 }

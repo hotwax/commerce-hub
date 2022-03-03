@@ -12,7 +12,7 @@ const orderModule: Module<OrderState, RootState> ={
       orders: [],
       total: 0
     },
-    order: {}
+    current: {}
   },
   getters,
   actions,

@@ -5,6 +5,7 @@ import OrderState from './OrderState'
 import * as types from './mutation-types'
 import { hasError, showToast } from '@/utils'
 import { translate } from '@/i18n'
+import { Order, OrderItem } from '@/types'
 
 const actions: ActionTree<OrderState, RootState> = {
   
@@ -37,11 +38,63 @@ const actions: ActionTree<OrderState, RootState> = {
     }
     return resp;
   },
-  async getOrderDetails({commit}, payload){
+  async getOrderDetails({ commit }, orderId) {
     let resp;
-    try{
+
+    const payload = {
+      "json": {
+        "params": {
+          "group": true,
+          "group.field": "orderId",
+          "group.limit": 10000,
+          "q.op": "AND"
+        } as any,
+        "query": "*:*",
+        "filter": `docType: ORDER AND orderTypeId: SALES_ORDER AND orderId: ${orderId}`
+      }
+    }
+
+    try {
       resp = await OrderService.findOrderDetails(payload);
-      commit(types.ORDER_DETAILS_UPDATED, { orderDetails: resp.data })
+
+      if (resp.status == 200 && !hasError(resp)) {
+        const orderDetails: Order = {
+          orderId: '',
+          orderName: '',
+          customer: {},
+          /** An array containing the items purchased in this order */
+          items: [],
+          statusId: '',
+          identifications: []
+        }
+
+        resp.data.grouped.orderId.groups.map((order: any) => {
+          orderDetails.orderId = order.doclist.docs[0].orderId
+          orderDetails.customer = {
+            name: order.doclist.docs[0].customerPartyName,
+            emailId: order.doclist.docs[0].customerEmailId,
+            phoneNumber: order.doclist.docs[0].customerPhoneNumber,
+            toName: order.doclist.docs[0].customerPartyName,
+            city: order.doclist.docs[0].shipToCity,
+            state: order.doclist.docs[0].shipToState,
+            zipCode: order.doclist.docs[0].postalCode,
+            country: order.doclist.docs[0].shipToCountry,
+            addressLine1: order.doclist.docs[0].address1,
+            addressLine2: order.doclist.docs[0].address2,
+          },
+          orderDetails.orderName = order.doclist.docs[0].orderName
+          orderDetails.identifications = order.doclist.docs[0].orderNotes
+          orderDetails.statusId = order.doclist.docs[0].orderStatusId
+          orderDetails.items = order.doclist.docs
+        })
+
+        const productIds = orderDetails.items?.map((item: OrderItem) => item.productId)
+
+        commit(types.ORDER_CURRENT_UPDATED, { orderDetails })
+        this.dispatch('product/fetchProducts', { productIds });
+      } else {
+        showToast(translate("Something went wrong"));
+      }
     } catch(error) {
       showToast(translate("Something went wrong"));
     }
