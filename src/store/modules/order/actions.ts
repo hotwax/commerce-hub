@@ -66,6 +66,11 @@ const actions: ActionTree<OrderState, RootState> = {
     }
 
     return resp;
+  },
+
+  async appliedFiltersUpdated({ commit }, payload) {
+    commit(types.ORDER_FILTERS_UPDATED, payload)
+    return payload;
   }
 } 
 
