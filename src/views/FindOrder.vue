@@ -65,23 +65,23 @@
             <ion-list-header>{{ $t("Type") }}</ion-list-header>
             <ion-item>
               <ion-label>{{ $t("Store pickup") }}</ion-label>
-              <ion-checkbox v-model="appliedFilters.type.storePickup" @click="getOrders()"/>
+              <ion-checkbox v-model="appliedFilters.type.storePickup" @ionChange="getOrders()"/>
             </ion-item>
             <ion-item>
               <ion-label>{{ $t("Ship from store") }}</ion-label>
-              <ion-checkbox v-model="appliedFilters.type.shipFromStore" @click="getOrders()"/>
+              <ion-checkbox v-model="appliedFilters.type.shipFromStore" @ionChange="getOrders()"/>
             </ion-item>
             <ion-item>
               <ion-label>{{ $t("Pre-order") }}</ion-label>
-              <ion-checkbox v-model="appliedFilters.type.preOrder" @click="getOrders()"/>
+              <ion-checkbox v-model="appliedFilters.type.preOrder" @ionChange="getOrders()"/>
             </ion-item>
             <ion-item>
               <ion-label>{{ $t("Back order") }}</ion-label>
-              <ion-checkbox v-model="appliedFilters.type.backOrder" @click="getOrders()"/>
+              <ion-checkbox v-model="appliedFilters.type.backOrder" @ionChange="getOrders()"/>
             </ion-item>
             <ion-item>
               <ion-label>{{ $t("Unfillable") }}</ion-label>
-              <ion-checkbox v-model="appliedFilters.type.unfillable" @click="getOrders()"/>
+              <ion-checkbox v-model="appliedFilters.type.unfillable" @ionChange="getOrders()"/>
             </ion-item>
           </ion-list>
           <ion-list>
