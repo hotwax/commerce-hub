@@ -72,8 +72,8 @@
                     {{ order.customer?.toName }}
                     <p>{{ order.customer?.address1 }}</p>
                     <p>{{ order.customer?.address2 }}</p>
-                    <p>{{ order.customer?.city }}, {{ order.customer?.zipCode }}</p>
-                    <p>{{ order.customer?.state }}, {{ order.customer?.country }}</p>
+                    <p>{{ order.customer?.city }} {{ order.customer?.zipCode && ',' }} {{ order.customer?.zipCode }}</p>
+                    <p>{{ order.customer?.state }} {{ order.customer?.country && ',' }} {{ order.customer?.country }}</p>
                   </ion-label>
                 </ion-item>
               </ion-list>
@@ -160,13 +160,14 @@
                           {{ item.customerPartyName }}
                           <p>{{ item.address1 }}</p>
                           <p>{{ item.address2 }}</p>
-                          <p>{{ item.shipToCity }}, {{ item.postalCode }}</p>
-                          <p>{{ item.shipToState }}, {{ item.shipToCountry }}</p>
+                          <p>{{ item.shipToCity }} {{ item.postalCode && ',' }} {{ item.postalCode }}</p>
+                          <p>{{ item.shipToState }} {{ item.shipToCountry && ',' }} {{ item.shipToCountry }}</p>
                         </ion-label>
                       </ion-item>
-                      <ion-buttons>
+                      <!-- TODO: make edit address button functional, also add UI for same -->
+                      <!-- <ion-buttons>
                         <ion-button color="primary" fill="clear">{{ $t("Edit address") }}</ion-button>
-                      </ion-buttons>
+                      </ion-buttons> -->
                     </ion-list>
                   </ion-card>
                   <ion-card v-if="item.facilityId === orderPreOrderId || item.facilityId === orderBackOrderId">
@@ -192,10 +193,10 @@
                         <ion-label> {{ $t("Auto cancel") }} </ion-label>
                         <p slot="end">{{ item.autoCancelDate ? $filters.formatUtcDate(item.autoCancelDate, 'YYYY-MM-DDTHH:mm:ssZ', 'D MMM YYYY') : "-" }}</p>
                       </ion-item>
-                      <ion-buttons>
-                        <!-- TODO: work on this functionality -->
+                      <!-- TODO: make edit date button functional, also add UI for same -->
+                      <!-- <ion-buttons>
                         <ion-button color="primary" fill="clear">{{ $t("Edit dates") }}</ion-button>
-                      </ion-buttons>
+                      </ion-buttons> -->
                     </ion-list>
                   </ion-card>
                   <ion-card>
@@ -211,13 +212,12 @@
                       </ion-item>
                       <ion-item>
                         <ion-label>{{ $t("Location Inventory") }}</ion-label>
-                        <!-- TODO: handle this property -->
                         <p>{{ getProductStock(item.productId) }}</p>
                       </ion-item>
-                      <ion-buttons>
-                        <!-- TODO: work on this functionality -->
+                      <!-- TODO: make changing location button functional, also add UI for same -->
+                      <!-- <ion-buttons>
                         <ion-button color="primary" fill="clear">{{ $t("Change fulfillment location") }}</ion-button>
-                      </ion-buttons>
+                      </ion-buttons> -->
                     </ion-list>
                   </ion-card>
                 </div>
