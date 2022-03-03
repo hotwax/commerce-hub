@@ -119,7 +119,6 @@
               <hr />
 
               <div class="product-header">
-                <div>
                   <ion-item lines="none">
                     <ion-thumbnail slot="start" class="mobile-only">
                       <Image :src="getProduct(item.productId).mainImageUrl" />
@@ -131,7 +130,6 @@
                       <p v-if="$filters.getFeature(getProduct(item.productId).featureHierarchy, '1/SIZE/')">{{ $t("Size") }}: {{ $filters.getFeature(getProduct(item.productId).featureHierarchy, '1/SIZE/') }}</p>
                     </ion-label>
                   </ion-item>
-                </div>
 
                 <div class="product-tags desktop-only">
                   <ion-chip v-if="item.internalName">
@@ -141,11 +139,9 @@
                   </ion-chip>
                 </div>
 
-                <div>
                   <ion-item lines="none">
                     <ion-badge slot="end" :color="itemStatus[item.orderItemStatusId]?.color ? itemStatus[item.orderItemStatusId]?.color : 'primary'">{{ itemStatus[item.orderItemStatusId]?.label ? itemStatus[item.orderItemStatusId]?.label : item.orderItemStatusId }}</ion-badge>
                   </ion-item>
-                </div>
               </div>
 
               <hr />
