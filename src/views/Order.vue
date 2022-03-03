@@ -312,7 +312,7 @@ export default defineComponent({
     orderDetails(orderId?: any){
       this.store.dispatch("order/getOrderDetails", orderId);
     },
-    changeStatus (ev) {
+    changeStatus(ev: CustomEvent) {
       this.status = ev['detail'].value
     }
   },
