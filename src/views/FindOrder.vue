@@ -5,12 +5,13 @@
         <ion-back-button default-href="/" slot="start" />
         <ion-title>{{ $t("Orders") }}</ion-title>
         <ion-buttons slot="end">
-          <ion-button fill="clear">
+          <!-- TODO: make download csv and sync button functional -->
+          <!-- <ion-button fill="clear">
             <ion-icon slot="icon-only" :icon="syncOutline" />
           </ion-button>
           <ion-button fill="clear">
             <ion-icon slot="icon-only" :icon="downloadOutline" />
-          </ion-button>
+          </ion-button> -->
           <ion-button fill="clear" class="mobile-only" @click="openOrderFilterModal()">
             <ion-icon slot="icon-only" :icon="filterOutline" />
           </ion-button>
