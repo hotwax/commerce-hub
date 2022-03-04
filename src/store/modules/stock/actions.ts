@@ -27,7 +27,7 @@ const actions: ActionTree<StockState, RootState> = {
 
     const count = productIds.length / 100;
 
-    for(let i=0; i < count; i++) {
+    for(let i = 0; i < count; i++) {
       const resp: any = await StockService.checkInventory({
         "filters": {
           "productId": productIds.splice(0, 100),

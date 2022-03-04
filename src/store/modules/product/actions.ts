@@ -88,7 +88,7 @@ const actions: ActionTree<ProductState, RootState> = {
     /**
    * Get Product Inventory
    */
-  async getProductInventory({ commit, state, dispatch }, payload) {
+  async getProductInventory({ commit, state }, payload) {
     let resp;
     
     try{
@@ -115,13 +115,13 @@ const actions: ActionTree<ProductState, RootState> = {
         })
         productIds = [...productIds]
 
-        dispatch("fetchProducts", { productIds });
+        this.dispatch("product/fetchProducts", { productIds });
         this.dispatch("stock/addProducts", { productIds });
         
         if(payload.json.params.start && payload.json.params.start > 0) products = state.products.list.concat(products);
         commit(types.PRODUCT_LIST_UPDATED, { products, totalProductsCount: products.length });
       } else {
-        showToast(translate("Shipments not found"));
+        showToast(translate("Products not found"));
       }
     } catch(error) {
       console.error(error);
