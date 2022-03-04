@@ -32,7 +32,7 @@ const actions: ActionTree<ProductState, RootState> = {
         const totalProductsCount = resp.data.response.numFound;
 
         if (payload.viewIndex && payload.viewIndex > 0) products = state.products.list.concat(products)
-        commit(types.PRODUCT_SEARCH_UPDATED, { products: products, totalProductsCount: totalProductsCount })
+        commit(types.PRODUCT_LIST_UPDATED, { products: products, totalProductsCount: totalProductsCount })
       } else {
         //showing error whenever getting no products in the response or having any other error
         showToast(translate("Product not found"));
@@ -83,6 +83,51 @@ const actions: ActionTree<ProductState, RootState> = {
       this.dispatch('product/fetchProducts', { productIds })
       this.dispatch('stock/addProducts', { productIds })
     }
+  },
+
+    /**
+   * Get Product Inventory
+   */
+  async getProductInventory({ commit, state, dispatch }, payload) {
+    let resp;
+    
+    try{
+      resp = await ProductService.getProductInventory(payload);
+      if(resp.status === 200 && resp.data.grouped.groupId?.ngroups > 0 && !hasError(resp)) {
+        let products = resp.data.grouped.groupId?.groups;
+        
+        products = products.map((product: any) => {
+          return {
+            productId: product.doclist.docs[0]?.productId,
+            productName: product.doclist.docs[0]?.parentProductName,
+            brand: product.doclist.docs[0]?.brandName,
+            mainImage: product.doclist.docs[0]?.mainImageUrl,
+            externalId: product.doclist.docs[0]?.internalName,
+            variants: product.doclist.docs
+          }
+        })
+
+        let productIds: any = new Set();
+        products.forEach((product: any) => {
+          product.variants.forEach((item: any) => {
+            if (item.productId) productIds.add(item.productId);
+          })
+        })
+        productIds = [...productIds]
+
+        dispatch("fetchProducts", { productIds });
+        this.dispatch("stock/addProducts", { productIds });
+        
+        if(payload.json.params.start && payload.json.params.start > 0) products = state.products.list.concat(products);
+        commit(types.PRODUCT_LIST_UPDATED, { products, totalProductsCount: products.length });
+      } else {
+        showToast(translate("Shipments not found"));
+      }
+    } catch(error) {
+      console.error(error);
+      showToast(translate("Something went wrong"));
+    }
+    return resp;
   }
 }
 
