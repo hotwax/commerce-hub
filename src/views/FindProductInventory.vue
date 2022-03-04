@@ -213,7 +213,7 @@
   </ion-page>
 </template>
 
-<script>
+<script lang="ts">
 import Image from '../components/Image.vue';
 import {
   IonBackButton,
@@ -290,20 +290,20 @@ export default {
     })
   },
   methods: {
-    async getProductInventory() {
-      // const viewSize = vSize ? vSize : process.env.VUE_APP_VIEW_SIZE;
-      // const viewIndex = vIndex ? vIndex : 0;
+    async getProductInventory(vSize?: any, vIndex?: any) {
+      const viewSize = vSize ? vSize : process.env.VUE_APP_VIEW_SIZE;
+      const viewIndex = vIndex ? vIndex : 0;
 
       const payload = {
         "json": {
           "params": {
-            "rows": 10,
-            "start": 0,
+            "rows": viewSize,
+            "start": viewIndex,
             "group": true,
             "group.field": "groupId",
             "group.limit": 10000,
             "group.ngroups": true,
-          },
+          } as any,
           "query": "*:*",
           "filter": "docType: PRODUCT"
         }
