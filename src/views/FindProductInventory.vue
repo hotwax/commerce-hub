@@ -249,9 +249,8 @@ import {
   sync,
   swapVerticalOutline  
 } from 'ionicons/icons';
-
-import { useRouter } from "vue-router";
 import { mapGetters, useStore } from "vuex";
+import { useRouter } from "vue-router";
 
 export default {
   name: 'ProductInventory',
@@ -308,11 +307,11 @@ export default {
           "filter": "docType: PRODUCT"
         }
       }
-      await this.store.dispatch("product/getProductInventory", payload);
+      await (this as any).store.dispatch("product/getProductInventory", payload);
     }
   },
   mounted() {
-    this.getProductInventory();
+    (this as any).getProductInventory();
   },
   setup() {
     const router = useRouter();
