@@ -83,6 +83,13 @@ const actions: ActionTree<ProductState, RootState> = {
       this.dispatch('product/fetchProducts', { productIds })
       this.dispatch('stock/addProducts', { productIds })
     }
+  },
+
+  /**
+   * Get Product-inventory details
+   */
+  async setCurrent({  commit }, payload) {
+
   }
 }
 

@@ -641,6 +641,7 @@ import EditQuantityModal from '@/components/EditQuantityModal.vue';
 import LocationPopover from '@/components/LocationPopover.vue';
 import PurchaseOrderPopover from '@/components/PurchaseOrderPopover.vue';
 import FulfillmentSettingsPopover from '@/components/FulfillmentSettingsPopover.vue';
+import { useStore, mapGetters } from 'vuex';
 
 export default defineComponent({
   name: 'ProductInventory',
@@ -709,8 +710,12 @@ export default defineComponent({
       return popover.present();
     },
   },
+  mounted() {
+    this.store.dispatch('product/setCurrent', { productId: this.$route.params.id })
+  },
   setup() {
     const router = useRouter();
+    const store = useStore();
     const segment = ref("locations");
 
     return {
@@ -728,7 +733,8 @@ export default defineComponent({
       syncOutline,
       ticketOutline,
       router,
-      segment
+      segment,
+      store
     }
   }
 });
