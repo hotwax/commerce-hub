@@ -34,7 +34,7 @@
               </ion-chip>
               <ion-modal trigger="open-order-created-date-modal">
                 <ion-content force-overscroll="false">
-                  <ion-datetime :value="currentOrderFiltersSelected.orderCreated" presentation="date" @ionChange="appliedFiltersUpdated($event, 'orderCreated')"/>
+                  <ion-datetime :value="currentOrderFiltersSelected.orderCreated" presentation="date" @ionChange="appliedFiltersUpdated($event['detail'].value, 'orderCreated')"/>
                 </ion-content>
               </ion-modal>
             </ion-item>
@@ -45,7 +45,7 @@
               </ion-chip>
               <ion-modal trigger="open-order-promise-date-modal">
                 <ion-content force-overscroll="false">
-                  <ion-datetime :value="currentOrderFiltersSelected.promiseDate" presentation="date" @ionChange="appliedFiltersUpdated($event, 'promiseDate')"/>
+                  <ion-datetime :value="currentOrderFiltersSelected.promiseDate" presentation="date" @ionChange="appliedFiltersUpdated($event['detail'].value, 'promiseDate')"/>
                 </ion-content>
               </ion-modal>
             </ion-item>
@@ -56,7 +56,7 @@
               </ion-chip>
               <ion-modal trigger="open-order-auto-cancel-date-modal">
                 <ion-content force-overscroll="false">
-                  <ion-datetime :value="currentOrderFiltersSelected.autoCancelDate" presentation="date" @ionChange="appliedFiltersUpdated($event, 'autoCancelDate')"/>
+                  <ion-datetime :value="currentOrderFiltersSelected.autoCancelDate" presentation="date" @ionChange="appliedFiltersUpdated($event['detail'].value, 'autoCancelDate')"/>
                 </ion-content>
               </ion-modal>
             </ion-item>
@@ -65,42 +65,42 @@
             <ion-list-header>{{ $t("Type") }}</ion-list-header>
             <ion-item>
               <ion-label>{{ $t("Store pickup") }}</ion-label>
-              <ion-checkbox :checked="currentOrderFiltersSelected.storePickup" @ionChange="appliedFiltersUpdated($event, 'storePickup')"/>
+              <ion-checkbox :checked="currentOrderFiltersSelected.storePickup" @ionChange="appliedFiltersUpdated($event['detail'].checked, 'storePickup')"/>
             </ion-item>
             <ion-item>
               <ion-label>{{ $t("Ship from store") }}</ion-label>
-              <ion-checkbox v-model="currentOrderFiltersSelected.shipFromStore" @ionChange="appliedFiltersUpdated($event, 'shipFromStore')"/>
+              <ion-checkbox v-model="currentOrderFiltersSelected.shipFromStore" @ionChange="appliedFiltersUpdated($event['detail'].checked, 'shipFromStore')"/>
             </ion-item>
             <ion-item>
               <ion-label>{{ $t("Pre-order") }}</ion-label>
-              <ion-checkbox v-model="currentOrderFiltersSelected.preOrder" @ionChange="appliedFiltersUpdated($event, 'preOrder')"/>
+              <ion-checkbox v-model="currentOrderFiltersSelected.preOrder" @ionChange="appliedFiltersUpdated($event['detail'].checked, 'preOrder')"/>
             </ion-item>
             <ion-item>
               <ion-label>{{ $t("Back order") }}</ion-label>
-              <ion-checkbox v-model="currentOrderFiltersSelected.backOrder" @ionChange="appliedFiltersUpdated($event, 'backOrder')"/>
+              <ion-checkbox v-model="currentOrderFiltersSelected.backOrder" @ionChange="appliedFiltersUpdated($event['detail'].checked, 'backOrder')"/>
             </ion-item>
             <ion-item>
               <ion-label>{{ $t("Unfillable") }}</ion-label>
-              <ion-checkbox v-model="currentOrderFiltersSelected.unfillable" @ionChange="appliedFiltersUpdated($event, 'unfillable')"/>
+              <ion-checkbox v-model="currentOrderFiltersSelected.unfillable" @ionChange="appliedFiltersUpdated($event['detail'].checked, 'unfillable')"/>
             </ion-item>
           </ion-list>
           <ion-list>
             <ion-list-header>{{ $t("Fulfillment") }}</ion-list-header>
             <ion-item>
               <ion-label>{{ $t("Status") }}</ion-label>
-              <ion-select :value="currentOrderFiltersSelected.status" @ionChange.stop="appliedFiltersUpdated($event, 'status')" interface="popover">
+              <ion-select :value="currentOrderFiltersSelected.status" @ionChange="appliedFiltersUpdated($event['detail'].value, 'status')" interface="popover">
                 <ion-select-option v-for="status in orderStatusOptions" :key="status" :value="status">{{ status }}</ion-select-option>
               </ion-select>
             </ion-item>
             <ion-item>
               <ion-label>{{ $t("Shipping method") }}</ion-label>
-              <ion-select :value="currentOrderFiltersSelected.shippingMethod" @ionChange.stop="appliedFiltersUpdated($event, 'shippingMethod')" interface="popover">
+              <ion-select :value="currentOrderFiltersSelected.shippingMethod" @ionChange="appliedFiltersUpdated($event['detail'].value, 'shippingMethod')" interface="popover">
                 <ion-select-option v-for="method in shippingMethodOptions" :key="method" :value="method">{{ method }}</ion-select-option>
               </ion-select>
             </ion-item>
             <ion-item>
               <ion-label>{{ $t("Ship from location") }}</ion-label>
-              <ion-select :value="currentOrderFiltersSelected.shipFromLocation" @ionChange.stop="appliedFiltersUpdated($event, 'shipFromLocation')" interface="popover">
+              <ion-select :value="currentOrderFiltersSelected.shipFromLocation" @ionChange="appliedFiltersUpdated($event['detail'].value, 'shipFromLocation')" interface="popover">
                 <ion-select-option value="any" >{{ $t('any') }}</ion-select-option>
                 <ion-select-option value="store" >{{ $t('Store') }}</ion-select-option>
                 <ion-select-option value="warehouse" >{{ $t('Warehouse') }}</ion-select-option>
@@ -345,8 +345,8 @@ export default defineComponent ({
       });
       return orderFilterModal.present();
     },
-    async appliedFiltersUpdated(ev: CustomEvent, filterName: string) {
-      await this.store.dispatch('order/appliedFiltersUpdated', { filterName, value: ev['detail'].value}).then(() => {
+    async appliedFiltersUpdated(value: string, filterName: string) {
+      await this.store.dispatch('order/appliedFiltersUpdated', { value, filterName }).then(() => {
         this.getOrders();
       })
     }
