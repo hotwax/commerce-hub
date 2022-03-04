@@ -30,33 +30,33 @@
             <ion-item>
               <ion-label>{{ $t("Order created") }}</ion-label>
               <ion-chip id="open-order-created-date-modal" slot="end">
-                <ion-label>{{ appliedFilters.date.orderCreated ? $filters.formatDate(appliedFilters.date.orderCreated, 'YYYY-MM-DDTHH:mm:ssTZD', 'D MMM YYYY') : 'any' }}</ion-label>
+                <ion-label>{{ currentOrderFiltersSelected.orderCreated ? $filters.formatDate(currentOrderFiltersSelected.orderCreated, 'YYYY-MM-DDTHH:mm:ssTZD', 'D MMM YYYY') : 'any' }}</ion-label>
               </ion-chip>
               <ion-modal trigger="open-order-created-date-modal">
                 <ion-content force-overscroll="false">
-                  <ion-datetime :value="appliedFilters.date.orderCreated" presentation="date" @ionChange="orderCreationDateUpdated($event)"/>
+                  <ion-datetime :value="currentOrderFiltersSelected.orderCreated" presentation="date" @ionChange="appliedFiltersUpdated($event, 'orderCreated')"/>
                 </ion-content>
               </ion-modal>
             </ion-item>
             <ion-item>
               <ion-label>{{ $t("Promise date") }}</ion-label>
               <ion-chip id="open-order-promise-date-modal" slot="end">
-                <ion-label>{{ appliedFilters.date.promiseDate ? $filters.formatDate(appliedFilters.date.promiseDate, 'YYYY-MM-DDTHH:mm:ssTZD', 'D MMM YYYY') : 'any' }}</ion-label>
+                <ion-label>{{ currentOrderFiltersSelected.promiseDate ? $filters.formatDate(currentOrderFiltersSelected.promiseDate, 'YYYY-MM-DDTHH:mm:ssTZD', 'D MMM YYYY') : 'any' }}</ion-label>
               </ion-chip>
               <ion-modal trigger="open-order-promise-date-modal">
                 <ion-content force-overscroll="false">
-                  <ion-datetime :value="appliedFilters.date.promiseDate" presentation="date" @ionChange="orderPromiseDateUpdated($event)"/>
+                  <ion-datetime :value="currentOrderFiltersSelected.promiseDate" presentation="date" @ionChange="appliedFiltersUpdated($event, 'promiseDate')"/>
                 </ion-content>
               </ion-modal>
             </ion-item>
             <ion-item>
               <ion-label>{{ $t("Auto cancel date") }}</ion-label>
               <ion-chip id="open-order-auto-cancel-date-modal" slot="end">
-                <ion-label>{{ appliedFilters.date.autoCancelDate ? $filters.formatDate(appliedFilters.date.autoCancelDate, 'YYYY-MM-DDTHH:mm:ssTZD', 'D MMM YYYY') : 'any' }}</ion-label>
+                <ion-label>{{ currentOrderFiltersSelected.autoCancelDate ? $filters.formatDate(currentOrderFiltersSelected.autoCancelDate, 'YYYY-MM-DDTHH:mm:ssTZD', 'D MMM YYYY') : 'any' }}</ion-label>
               </ion-chip>
               <ion-modal trigger="open-order-auto-cancel-date-modal">
                 <ion-content force-overscroll="false">
-                  <ion-datetime :value="appliedFilters.date.autoCancelDate" presentation="date" @ionChange="orderAutoCancelDateUpdated($event)"/>
+                  <ion-datetime :value="currentOrderFiltersSelected.autoCancelDate" presentation="date" @ionChange="appliedFiltersUpdated($event, 'autoCancelDate')"/>
                 </ion-content>
               </ion-modal>
             </ion-item>
@@ -65,42 +65,42 @@
             <ion-list-header>{{ $t("Type") }}</ion-list-header>
             <ion-item>
               <ion-label>{{ $t("Store pickup") }}</ion-label>
-              <ion-checkbox v-model="appliedFilters.type.storePickup" @ionChange="getOrders()"/>
+              <ion-checkbox :checked="currentOrderFiltersSelected.storePickup" @ionChange="appliedFiltersUpdated($event, 'storePickup')"/>
             </ion-item>
             <ion-item>
               <ion-label>{{ $t("Ship from store") }}</ion-label>
-              <ion-checkbox v-model="appliedFilters.type.shipFromStore" @ionChange="getOrders()"/>
+              <ion-checkbox v-model="currentOrderFiltersSelected.shipFromStore" @ionChange="appliedFiltersUpdated($event, 'shipFromStore')"/>
             </ion-item>
             <ion-item>
               <ion-label>{{ $t("Pre-order") }}</ion-label>
-              <ion-checkbox v-model="appliedFilters.type.preOrder" @ionChange="getOrders()"/>
+              <ion-checkbox v-model="currentOrderFiltersSelected.preOrder" @ionChange="appliedFiltersUpdated($event, 'preOrder')"/>
             </ion-item>
             <ion-item>
               <ion-label>{{ $t("Back order") }}</ion-label>
-              <ion-checkbox v-model="appliedFilters.type.backOrder" @ionChange="getOrders()"/>
+              <ion-checkbox v-model="currentOrderFiltersSelected.backOrder" @ionChange="appliedFiltersUpdated($event, 'backOrder')"/>
             </ion-item>
             <ion-item>
               <ion-label>{{ $t("Unfillable") }}</ion-label>
-              <ion-checkbox v-model="appliedFilters.type.unfillable" @ionChange="getOrders()"/>
+              <ion-checkbox v-model="currentOrderFiltersSelected.unfillable" @ionChange="appliedFiltersUpdated($event, 'unfillable')"/>
             </ion-item>
           </ion-list>
           <ion-list>
             <ion-list-header>{{ $t("Fulfillment") }}</ion-list-header>
             <ion-item>
               <ion-label>{{ $t("Status") }}</ion-label>
-              <ion-select :value="appliedFilters.fulfillment.status" @ionChange.prevent="($event) => {appliedFilters.fulfillment.status = $event['detail'].value; getOrders()}" interface="popover">
+              <ion-select :value="currentOrderFiltersSelected.status" @ionChange.stop="appliedFiltersUpdated($event, 'status')" interface="popover">
                 <ion-select-option v-for="status in orderStatusOptions" :key="status" :value="status">{{ status }}</ion-select-option>
               </ion-select>
             </ion-item>
             <ion-item>
               <ion-label>{{ $t("Shipping method") }}</ion-label>
-              <ion-select :value="appliedFilters.fulfillment.shippingMethod" @ionChange.prevent="($event) => {appliedFilters.fulfillment.shippingMethod = $event['detail'].value; getOrders()}" interface="popover">
+              <ion-select :value="currentOrderFiltersSelected.shippingMethod" @ionChange.stop="appliedFiltersUpdated($event, 'shippingMethod')" interface="popover">
                 <ion-select-option v-for="method in shippingMethodOptions" :key="method" :value="method">{{ method }}</ion-select-option>
               </ion-select>
             </ion-item>
             <ion-item>
               <ion-label>{{ $t("Ship from location") }}</ion-label>
-              <ion-select :value="appliedFilters.fulfillment.shipFromLocation" @ionChange="($event) => {appliedFilters.fulfillment.shipFromLocation = $event['detail'].value; getOrders()}" interface="popover">
+              <ion-select :value="currentOrderFiltersSelected.shipFromLocation" @ionChange.stop="appliedFiltersUpdated($event, 'shipFromLocation')" interface="popover">
                 <ion-select-option value="any" >{{ $t('any') }}</ion-select-option>
                 <ion-select-option value="store" >{{ $t('Store') }}</ion-select-option>
                 <ion-select-option value="warehouse" >{{ $t('Warehouse') }}</ion-select-option>
@@ -299,7 +299,8 @@ export default defineComponent ({
       getProduct: 'product/getProduct',
       currentFacilityId: 'user/getCurrentFacility',
       getProductStock: 'stock/getProductStock',
-      isScrollable: 'order/isScrollable'
+      isScrollable: 'order/isScrollable',
+      currentOrderFiltersSelected: 'order/getCurrentOrderFiltersSelected'
     })
   },
   data() {
@@ -313,99 +314,8 @@ export default defineComponent ({
     async getOrders(vSize?: any, vIndex?: any) {
       const viewSize = vSize ? vSize : process.env.VUE_APP_VIEW_SIZE;
       const viewIndex = vIndex ? vIndex : 0;
-      let typeFilterSelected = [];
 
-      const payload = {
-        "json": {
-          "params": {
-            "sort": "orderDate desc",
-            "rows": viewSize,
-            "start": viewSize * viewIndex,
-            "group": true,
-            "group.field": "orderId",
-            "group.limit": 10000,
-            "group.ngroups": true,
-            "q.op": "AND"
-          } as any,
-          "query": "*:*",
-          "filter": "docType: ORDER AND orderTypeId: SALES_ORDER",
-          "facet": {
-            "orderStatusIdFacet": {
-                "field": "orderStatusId",
-                "mincount": 0,
-                "limit": -1,
-                "sort": "index",
-                "type": "terms"
-            },
-            "shipmentMethodTypeIdFacet": {
-              "excludeTags": "shipmentMethodTypeIdFilter",
-              "field": "shipmentMethodTypeId",
-              "mincount": 0,
-              "limit": -1,
-              "sort": "index",
-              "type": "terms"
-            }
-          }
-        }
-      }
-      if (this.queryString) {
-        payload.json.params.defType = 'edismax'
-        payload.json.params.qf = 'orderId customerPartyName customerPartyId productId internalName'
-        payload.json.query = `*${this.queryString}*`
-      }
-
-      // updating the filter value in json object as per the filters selected
-      // TODO: optimize this code
-      if (this.appliedFilters.type.storePickup) {
-        payload.json.filter = payload.json.filter.concat(' AND shipmentMethodTypeId: STOREPICKUP')
-      }
-
-      if (this.appliedFilters.type.shipFromStore) {
-        payload.json.filter = payload.json.filter.concat(' AND -shipmentMethodTypeId: STOREPICKUP AND facilityTypeId: RETAIL_STORE')
-      }
-
-      if (this.appliedFilters.type.preOrder) {
-        typeFilterSelected.push('PRE_ORDER_PARKING')
-      }
-
-      if (this.appliedFilters.type.backOrder) {
-        typeFilterSelected.push('BACKORDER_PARKING')
-      }
-
-      if (this.appliedFilters.type.unfillable) {
-        typeFilterSelected.push('_NA_')
-      }
-
-      const typeFilterSelectedValues = typeFilterSelected.toString().replaceAll(",", " OR ")
-
-      payload.json.filter = payload.json.filter.concat(` AND facilityId: (${typeFilterSelectedValues ? typeFilterSelectedValues : '*'})`)
-
-      if (this.appliedFilters.fulfillment.shipFromLocation === 'store') {
-        payload.json.filter = payload.json.filter.concat(' AND facilityTypeId: RETAIL_STORE')
-      } else if (this.appliedFilters.fulfillment.shipFromLocation === 'warehouse') {
-        payload.json.filter = payload.json.filter.concat(' AND facilityTypeId: WAREHOUSE')
-      }
-
-      if (this.appliedFilters.fulfillment.status) {
-        payload.json.filter = payload.json.filter.concat(` AND orderStatusId: ${this.appliedFilters.fulfillment.status !== 'any' ? this.appliedFilters.fulfillment.status : '*'}`)
-      }
-
-      if (this.appliedFilters.fulfillment.shippingMethod) {
-        payload.json.filter = payload.json.filter.concat(` AND shipmentMethodTypeId: ${this.appliedFilters.fulfillment.shippingMethod !== 'any' ? this.appliedFilters.fulfillment.shippingMethod : '*' }`)
-      }
-
-      // TODO: improve logic to pass the date in the solr-query payload
-      if (this.appliedFilters.date.orderCreated) {
-        payload.json.filter = payload.json.filter.concat(` AND orderDate: [${this.appliedFilters.date.orderCreated.substring(0, this.appliedFilters.date.orderCreated.indexOf('T')) + 'T00:00:00Z'} TO ${this.appliedFilters.date.orderCreated.substring(0, this.appliedFilters.date.orderCreated.indexOf('T')) + 'T23:59:59Z'}]`)
-      }
-
-      if (this.appliedFilters.date.promiseDate) {
-        payload.json.filter = payload.json.filter.concat(` AND promiseDateTime: [${this.appliedFilters.date.promiseDate.substring(0, this.appliedFilters.date.promiseDate.indexOf('T')) + 'T00:00:00Z'} TO ${this.appliedFilters.date.promiseDate.substring(0, this.appliedFilters.date.promiseDate.indexOf('T')) + 'T23:59:59Z'}]`)
-      }
-
-      if (this.appliedFilters.date.autoCancelDate) {
-        payload.json.filter = payload.json.filter.concat(` AND autoCancelDate: [${this.appliedFilters.date.autoCancelDate.substring(0, this.appliedFilters.date.autoCancelDate.indexOf('T')) + 'T00:00:00Z'} TO ${this.appliedFilters.date.autoCancelDate.substring(0, this.appliedFilters.date.autoCancelDate.indexOf('T')) + 'T23:59:59Z'}]`)
-      }
+      const payload = await this.store.dispatch('order/updateQuery', { viewSize, viewIndex, queryString: this.queryString })
 
       await this.store.dispatch("order/findOrders", payload).then(resp => {
         if (resp.status == 200 && resp.data.facets) {
@@ -435,21 +345,14 @@ export default defineComponent ({
       });
       return orderFilterModal.present();
     },
-    orderCreationDateUpdated(ev: CustomEvent) {
-      this.appliedFilters.date.orderCreated = ev['detail'].value
-      this.getOrders();
-    },
-    orderAutoCancelDateUpdated(ev: CustomEvent) {
-      this.appliedFilters.date.autoCancelDate = ev['detail'].value
-      this.getOrders();
-    },
-    orderPromiseDateUpdated(ev: CustomEvent) {
-      this.appliedFilters.date.promiseDate = ev['detail'].value
-      this.getOrders();
+    async appliedFiltersUpdated(ev: CustomEvent, filterName: string) {
+      await this.store.dispatch('order/appliedFiltersUpdated', { filterName, value: ev['detail'].value}).then(() => {
+        this.getOrders();
+      })
     }
   },
   async mounted() {
-    this.getOrders();
+    await this.getOrders();
     await this.store.dispatch('order/getPurchaseOrderIds').then(ids => {
       if(ids.length > 0) {
         this.poIds = ids
@@ -464,25 +367,6 @@ export default defineComponent ({
     const itemStatus = JSON.parse(process.env.VUE_APP_ITEM_STATUS)
     const orderPreOrderId = process.env.VUE_APP_PRE_ORDER_IDNT_ID
     const orderBackOrderId = process.env.VUE_APP_BACKORDER_IDNT_ID
-    const appliedFilters = reactive({
-      'date': {
-        'orderCreated': '',
-        'promiseDate': '',
-        'autoCancelDate': ''
-      },
-      'type': {
-        'storePickup': false,
-        'shipFromStore': false,
-        'preOrder': false,
-        'backOrder': false,
-        'unfillable': false
-      },
-      'fulfillment': {
-        'status': 'any',
-        'shippingMethod': 'any',
-        'shipFromLocation': 'any'
-      }
-    })
 
     return {
       downloadOutline,
@@ -495,7 +379,6 @@ export default defineComponent ({
       ribbon,
       syncOutline,
       router,
-      appliedFilters,
       store,
       queryString
     };

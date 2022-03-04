@@ -71,6 +71,105 @@ const actions: ActionTree<OrderState, RootState> = {
   async appliedFiltersUpdated({ commit }, payload) {
     commit(types.ORDER_FILTERS_UPDATED, payload)
     return payload;
+  },
+
+  async updateQuery({ state }, params) {
+    const typeFilterSelected = [];
+
+    const payload = {
+      "json": {
+        "params": {
+          "sort": "orderDate desc",
+          "rows": params.viewSize,
+          "start": params.viewSize * params.viewIndex,
+          "group": true,
+          "group.field": "orderId",
+          "group.limit": 10000,
+          "group.ngroups": true,
+          "q.op": "AND"
+        } as any,
+        "query": "*:*",
+        "filter": "docType: ORDER AND orderTypeId: SALES_ORDER",
+        "facet": {
+          "orderStatusIdFacet": {
+              "field": "orderStatusId",
+              "mincount": 0,
+              "limit": -1,
+              "sort": "index",
+              "type": "terms"
+          },
+          "shipmentMethodTypeIdFacet": {
+            "excludeTags": "shipmentMethodTypeIdFilter",
+            "field": "shipmentMethodTypeId",
+            "mincount": 0,
+            "limit": -1,
+            "sort": "index",
+            "type": "terms"
+          }
+        }
+      }
+    }
+
+    if (params.queryString) {
+      payload.json.params.defType = 'edismax'
+      payload.json.params.qf = 'orderId customerPartyName customerPartyId productId internalName'
+      payload.json.query = `*${params.queryString}*`
+    }
+
+    // updating the filter value in json object as per the filters selected
+    // TODO: optimize this code
+    if (state.currentOrderFiltersSelected.storePickup) {
+      payload.json.filter = payload.json.filter.concat(' AND shipmentMethodTypeId: STOREPICKUP')
+    }
+
+    if (state.currentOrderFiltersSelected.shipFromStore) {
+      payload.json.filter = payload.json.filter.concat(' AND -shipmentMethodTypeId: STOREPICKUP AND facilityTypeId: RETAIL_STORE')
+    }
+
+    if (state.currentOrderFiltersSelected.preOrder) {
+      typeFilterSelected.push('PRE_ORDER_PARKING')
+    }
+
+    if (state.currentOrderFiltersSelected.backOrder) {
+      typeFilterSelected.push('BACKORDER_PARKING')
+    }
+
+    if (state.currentOrderFiltersSelected.unfillable) {
+      typeFilterSelected.push('_NA_')
+    }
+
+    const typeFilterValues = typeFilterSelected.toString().replaceAll(",", " OR ")
+
+    payload.json.filter = payload.json.filter.concat(` AND facilityId: (${typeFilterValues ? typeFilterValues : '*'})`)
+
+    if (state.currentOrderFiltersSelected.shipFromLocation === 'store') {
+      payload.json.filter = payload.json.filter.concat(' AND facilityTypeId: RETAIL_STORE')
+    } else if (state.currentOrderFiltersSelected.shipFromLocation === 'warehouse') {
+      payload.json.filter = payload.json.filter.concat(' AND facilityTypeId: WAREHOUSE')
+    }
+
+    if (state.currentOrderFiltersSelected.status) {
+      payload.json.filter = payload.json.filter.concat(` AND orderStatusId: ${state.currentOrderFiltersSelected.status !== 'any' ? state.currentOrderFiltersSelected.status : '*'}`)
+    }
+
+    if (state.currentOrderFiltersSelected.shippingMethod) {
+      payload.json.filter = payload.json.filter.concat(` AND shipmentMethodTypeId: ${state.currentOrderFiltersSelected.shippingMethod !== 'any' ? state.currentOrderFiltersSelected.shippingMethod : '*' }`)
+    }
+
+    // TODO: improve logic to pass the date in the solr-query payload
+    if (state.currentOrderFiltersSelected.orderCreated) {
+      payload.json.filter = payload.json.filter.concat(` AND orderDate: [${state.currentOrderFiltersSelected.orderCreated.substring(0, state.currentOrderFiltersSelected.orderCreated.indexOf('T')) + 'T00:00:00Z'} TO ${state.currentOrderFiltersSelected.orderCreated.substring(0, state.currentOrderFiltersSelected.orderCreated.indexOf('T')) + 'T23:59:59Z'}]`)
+    }
+
+    if (state.currentOrderFiltersSelected.promiseDate) {
+      payload.json.filter = payload.json.filter.concat(` AND promiseDateTime: [${state.currentOrderFiltersSelected.promiseDate.substring(0, state.currentOrderFiltersSelected.promiseDate.indexOf('T')) + 'T00:00:00Z'} TO ${state.currentOrderFiltersSelected.promiseDate.substring(0, state.currentOrderFiltersSelected.promiseDate.indexOf('T')) + 'T23:59:59Z'}]`)
+    }
+
+    if (state.currentOrderFiltersSelected.autoCancelDate) {
+      payload.json.filter = payload.json.filter.concat(` AND autoCancelDate: [${state.currentOrderFiltersSelected.autoCancelDate.substring(0, state.currentOrderFiltersSelected.autoCancelDate.indexOf('T')) + 'T00:00:00Z'} TO ${state.currentOrderFiltersSelected.autoCancelDate.substring(0, state.currentOrderFiltersSelected.autoCancelDate.indexOf('T')) + 'T23:59:59Z'}]`)
+    }
+
+    return payload;
   }
 } 
 
