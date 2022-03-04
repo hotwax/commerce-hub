@@ -178,18 +178,22 @@
                           <ion-label>PO#</ion-label>
                         </ion-chip>
                       </ion-item>
-                      <ion-item>
+                      <ion-item v-if="item.orderItemStatusId !== 'ORDER_COMPLETED'">
                         <ion-label>{{ $t("Estimated arrival") }}</ion-label>
                         <!-- TODO: handle it property again -->
                         <p slot="end">{{ item.promiseOrderArrivalDate ? $filters.formatUtcDate(item.promiseOrderArrivalDate, 'YYYY-MM-DDTHH:mm:ssZ', 'D MMM YYYY') : '-' }}</p>
                       </ion-item>
-                      <ion-item>
+                      <ion-item v-if="item.orderItemStatusId !== 'ORDER_COMPLETED'">
                         <ion-label> {{ $t("Promise date") }} </ion-label>
                         <p slot="end">{{ item.promisedDatetime ? $filters.formatUtcDate(item.promisedDatetime, 'YYYY-MM-DDTHH:mm:ssZ', 'D MMM YYYY') : '-'  }}</p>
                       </ion-item>
-                      <ion-item>
+                      <ion-item v-if="item.orderItemStatusId !== 'ORDER_COMPLETED'">
                         <ion-label> {{ $t("Auto cancel") }} </ion-label>
                         <p slot="end">{{ item.autoCancelDate ? $filters.formatUtcDate(item.autoCancelDate, 'YYYY-MM-DDTHH:mm:ssZ', 'D MMM YYYY') : "-" }}</p>
+                      </ion-item>
+                      <ion-item v-if="item.orderItemStatusId === 'ORDER_COMPLETED'">
+                        <ion-label> {{ $t("Received Date") }} </ion-label>
+                        <p slot="end">{{ item.receivedDate ? $filters.formatUtcDate(item.receivedDate, 'YYYY-MM-DDTHH:mm:ssZ', 'D MMM YYYY') : "-" }}</p>
                       </ion-item>
                       <!-- TODO: make edit date button functional, also add UI for same -->
                       <!-- <ion-buttons>
