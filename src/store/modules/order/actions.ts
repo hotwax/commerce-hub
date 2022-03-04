@@ -83,7 +83,7 @@ const actions: ActionTree<OrderState, RootState> = {
             addressLine2: order.doclist.docs[0].address2,
           },
           orderDetails.orderName = order.doclist.docs[0].orderName
-          orderDetails.identifications = order.doclist.docs[0].orderNotes
+          orderDetails.identifications = order.doclist.docs[0].orderIdentifications
           orderDetails.statusId = order.doclist.docs[0].orderStatusId
           orderDetails.items = order.doclist.docs
         })

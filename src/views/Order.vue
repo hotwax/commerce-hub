@@ -4,11 +4,12 @@
       <ion-toolbar>
         <ion-back-button default-href="/" slot="start" />
         <ion-title>{{ $t("Order detail") }}</ion-title>
-        <ion-buttons slot="end">
+        <!-- TODO: implement functionality for the sync button -->
+        <!-- <ion-buttons slot="end">
           <ion-button>
             <ion-icon slot="icon-only" :icon="syncOutline" />
           </ion-button>
-        </ion-buttons>
+        </ion-buttons> -->
       </ion-toolbar>
     </ion-header>
     <ion-content>
@@ -17,18 +18,19 @@
           <div class="id">
             <ion-item lines="none">
               <ion-icon slot="start" :icon="ticketOutline" />
-              <ion-label>{{ order.orderId }}</ion-label>
+              <ion-label>{{ order.orderName }}</ion-label>
               <ion-badge :color="orderStatus[order.statusId]?.color ? orderStatus[order.statusId]?.color : 'primary'" slot="end">{{ orderStatus[order.statusId]?.label ? orderStatus[order.statusId]?.label : order.statusId }}</ion-badge>
-              <ion-select :value="status" @ionChange="changeStatus($event)" slot="end">
+              <!-- TODO: implement functionality to change the orderStatus -->
+              <!-- <ion-select :value="status" @ionChange="changeStatus($event)" slot="end">
                 <ion-select-option value="Approved">Approved</ion-select-option>
                 <ion-select-option value="Completed">Completed</ion-select-option>
                 <ion-select-option value="Shipped">Shipped</ion-select-option>
-              </ion-select>
+              </ion-select> -->
             </ion-item>
           </div>
 
-          <!-- TODO: Updated timeline to display the orderCreatedDate, orderCompletedDate, brokeredDate and entryDate -->
-          <div class="timeline">
+          <!-- TODO: Update timeline to display the orderCreatedDate, orderCompletedDate, brokeredDate and entryDate -->
+          <!-- <div class="timeline">
             <ion-item lines="none">
               <ion-icon slot="start" :icon="timeOutline" class="mobile-only" />
               <ion-label>{{ $t("Timeline") }}</ion-label>
@@ -45,7 +47,7 @@
                 <ion-icon slot="end" :icon="informationCircleOutline" />
               </ion-item>
             </ion-list>
-          </div>
+          </div> -->
 
           <div class="info">
             <ion-card>
@@ -83,15 +85,15 @@
                 <ion-list-header>{{ $t("Shopify IDs") }}</ion-list-header>
                 <ion-item>
                   <ion-label> {{ $t("Order Number") }} </ion-label>
-                  <p slot="end"> {{ order.orderName ? order.orderName : "-" }} </p>
+                  <p slot="end">{{ $filters.getIdentification(order.identifications, orderNo) ? $filters.getIdentification(order.identifications, orderNo) : "-" }}</p>
                 </ion-item>
                 <ion-item>
                   <ion-label> {{ $t("Order ID") }} </ion-label>
-                  <p slot="end"> {{ order.orderId ? order.orderId : "-" }} </p>
+                  <p slot="end">{{ $filters.getIdentification(order.identifications, orderId) ? $filters.getIdentification(order.identifications, orderId) : "-" }}</p>
                 </ion-item>
                 <ion-item lines="none">
                   <ion-label> {{ $t("Order Name") }} </ion-label>
-                  <p slot="end"> {{ order.orderName ? order.orderName : "-" }} </p>
+                  <p slot="end">{{ $filters.getIdentification(order.identifications, orderName) ? $filters.getIdentification(order.identifications, orderName) : "-" }} </p>
                 </ion-item>
               </ion-list>
             </ion-card>
@@ -105,7 +107,7 @@
             <ion-label>{{ $t("Products") }}</ion-label>
           </ion-item>
 
-          <div class="product" v-for="item of order.items" :key="item.productId">
+          <div class="product" v-for="(item, index) of order.items" :key="index">
             <div class="product-image desktop-only">
               <Image :src="getProduct(item.productId).mainImageUrl" />
               <!-- TODO: handle navigation to product inventory page -->
@@ -168,7 +170,7 @@
                   </ion-card>
                   <ion-card v-if="item.facilityId === orderPreOrderId || item.facilityId === orderBackOrderId">
                     <ion-list>
-                      <ion-list-header>{{ $t("Pre-order") }}</ion-list-header>
+                      <ion-list-header>{{ item.facilityId === orderPreOrderId ? $t("Pre-order") : $t("BackOrder") }}</ion-list-header>
                       <ion-item>
                         <ion-label>{{ $t("Purchase order") }}</ion-label>
                         <ion-chip slot="end">
@@ -244,8 +246,6 @@ import {
 import {
   IonBackButton,
   IonBadge,
-  IonButton,
-  IonButtons,
   IonCard,
   IonChip,
   IonContent,
@@ -255,10 +255,7 @@ import {
   IonLabel,
   IonList,
   IonListHeader,
-  IonNote,
   IonPage,
-  IonSelect,
-  IonSelectOption,
   IonThumbnail,
   IonTitle,
   IonToolbar
@@ -273,8 +270,6 @@ export default defineComponent({
     Image,
     IonBackButton,
     IonBadge,
-    IonButton,
-    IonButtons,
     IonCard,
     IonChip,
     IonContent,
@@ -284,17 +279,17 @@ export default defineComponent({
     IonLabel,
     IonList,
     IonListHeader,
-    IonNote,
     IonPage,
-    IonSelect,
-    IonSelectOption,
     IonThumbnail,
     IonTitle,
     IonToolbar
   },
   data() {
     return {
-      status: "Approved" // default value
+      status: "Approved", // default value
+      orderName: process.env.VUE_APP_ORD_IDENT_TYPE_NAME,
+      orderId: process.env.VUE_APP_ORD_IDENT_TYPE_ID,
+      orderNo: process.env.VUE_APP_ORD_IDENT_TYPE_NO
     }
   },
   computed: {
