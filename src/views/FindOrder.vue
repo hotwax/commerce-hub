@@ -31,6 +31,7 @@
               <ion-label>{{ $t("Order created") }}</ion-label>
               <ion-chip id="open-order-created-date-modal" slot="end">
                 <ion-label>{{ currentOrderFiltersSelected.orderCreated ? $filters.formatDate(currentOrderFiltersSelected.orderCreated, 'YYYY-MM-DDTHH:mm:ssTZD', 'D MMM YYYY') : 'any' }}</ion-label>
+                <ion-icon :icon="close" v-if="currentOrderFiltersSelected.orderCreated" @click.stop="appliedFiltersUpdated('', 'orderCreated')"/>
               </ion-chip>
               <ion-modal trigger="open-order-created-date-modal">
                 <ion-content force-overscroll="false">
@@ -42,6 +43,7 @@
               <ion-label>{{ $t("Promise date") }}</ion-label>
               <ion-chip id="open-order-promise-date-modal" slot="end">
                 <ion-label>{{ currentOrderFiltersSelected.promiseDate ? $filters.formatDate(currentOrderFiltersSelected.promiseDate, 'YYYY-MM-DDTHH:mm:ssTZD', 'D MMM YYYY') : 'any' }}</ion-label>
+                <ion-icon :icon="close" v-if="currentOrderFiltersSelected.promiseDate" @click.stop="appliedFiltersUpdated('', 'promiseDate')"/>
               </ion-chip>
               <ion-modal trigger="open-order-promise-date-modal">
                 <ion-content force-overscroll="false">
@@ -53,6 +55,7 @@
               <ion-label>{{ $t("Auto cancel date") }}</ion-label>
               <ion-chip id="open-order-auto-cancel-date-modal" slot="end">
                 <ion-label>{{ currentOrderFiltersSelected.autoCancelDate ? $filters.formatDate(currentOrderFiltersSelected.autoCancelDate, 'YYYY-MM-DDTHH:mm:ssTZD', 'D MMM YYYY') : 'any' }}</ion-label>
+                <ion-icon :icon="close" v-if="currentOrderFiltersSelected.autoCancelDate" @click.stop="appliedFiltersUpdated('', 'autoCancelDate')"/>
               </ion-chip>
               <ion-modal trigger="open-order-auto-cancel-date-modal">
                 <ion-content force-overscroll="false">
@@ -250,8 +253,9 @@ import {
   pricetag,
   ribbon,
   syncOutline,
+  close
 } from 'ionicons/icons';
-import { defineComponent, reactive, ref } from "vue";
+import { defineComponent, ref } from "vue";
 import { mapGetters, useStore } from "vuex";
 import { showToast } from '@/utils'
 import { Plugins } from '@capacitor/core';
@@ -369,6 +373,7 @@ export default defineComponent ({
     const orderBackOrderId = process.env.VUE_APP_BACKORDER_IDNT_ID
 
     return {
+      close,
       downloadOutline,
       filterOutline,
       itemStatus,
@@ -397,6 +402,12 @@ export default defineComponent ({
 
 .metadata > ion-note {
   display: block;
+}
+
+ion-modal {
+  --width: 290px;
+  --height: 382px;
+  --border-radius: 8px;
 }
 
 @media (min-width: 991px) {
