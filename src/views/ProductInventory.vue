@@ -13,14 +13,15 @@
     </ion-header>
 
     <ion-content>
+      {{product}}
       <main>
         <section class="product">
           <ion-card class="product-image desktop-only">
-            <Image src="https://cdn.shopify.com/s/files/1/0069/7384/9727/products/test-track.jpg?v=1626255137" />
+            <Image :src="product.mainImage" />
           </ion-card>
         
           <div class="product-info desktop-only">
-            <ion-label>Parent product name</ion-label>
+            <ion-label>{{ product.productName }}</ion-label>
             <ion-card>
               <ion-card-header>
                 <ion-card-title>{{ $t("General information") }}</ion-card-title>
@@ -47,11 +48,11 @@
 
         <ion-item class="mobile-only" lines="none">
           <ion-thumbnail>
-            <Image src="https://cdn.shopify.com/s/files/1/0069/7384/9727/products/test-track.jpg?v=1626255137" />
+            <Image :src="product.mainImage" />
           </ion-thumbnail>
           <ion-label>
-            Virtual name
-            <p>Shopify ID</p>
+            {{ product.productName }}
+            <p>{{ product.externalId }}</p>
           </ion-label>
           <ion-chip>
             <ion-label>Shopify logo</ion-label>
@@ -671,6 +672,11 @@ export default defineComponent({
     IonToggle,
     IonToolbar,
     Image
+  },
+  computed: {
+    ...mapGetters({
+      product: 'product/getProductDetail'
+    })
   },
   methods: {
     segmentChanged(ev: CustomEvent) {

@@ -93,12 +93,13 @@ const actions: ActionTree<ProductState, RootState> = {
 
     try {
       resp = await ProductService.getProducts(payload);
+
       if (resp.status === 200 && resp.data.grouped.groupId?.ngroups > 0 && !hasError(resp)) {
         let products = resp.data.grouped.groupId?.groups;
 
         products = products.map((product: any) => {
           return {
-            productId: product.doclist.docs[0]?.productId,
+            productId: product.groupValue,
             productName: product.doclist.docs[0]?.parentProductName,
             brand: product.doclist.docs[0]?.brandName,
             mainImage: product.doclist.docs[0]?.mainImageUrl,
@@ -109,6 +110,7 @@ const actions: ActionTree<ProductState, RootState> = {
 
         let productIds: any = new Set();
         products.forEach((product: any) => {
+          productIds.add(product.productId);
           product.variants.forEach((item: any) => {
             if (item.productId) productIds.add(item.productId);
           })
@@ -133,16 +135,16 @@ const actions: ActionTree<ProductState, RootState> = {
   /**
   * Get Product-inventory details
   */
-  async getProductDetail({ commit, state }, { productId }) {
+  async getProductDetail({ dispatch, state }, { productId }) {
     const current = state.current as any
     const products = state.products.list as any
-
+    
     if(current && current.productId === productId) { return current }
 
     if(products.length > 0) {
       return products.some((product: any) => {
         if(product.productId === productId) {
-          commit(types.PRODUCT_CURRENT_UPDATED, { product });
+          dispatch('updateCurrent', { product });
           return current;
         }
       })
@@ -159,14 +161,14 @@ const actions: ActionTree<ProductState, RootState> = {
             "group.ngroups": true,
           } as any,
           "query": "*:*",
-          "filter": `docType: PRODUCT AND productId: ${10128}`
+          "filter": `docType: PRODUCT AND productId: ${productId}`
         }
       }
       resp = await ProductService.getProductDetail(payload);
 
       if(resp.status === 200 && resp.data.grouped.groupId?.groups.length > 0 && !hasError(resp)) {
         let product = resp.data.grouped.groupId?.groups[0].doclist.docs[0]
-
+        console.log(product)
         product = {
           productId: product.productId,
           productName: product.productName,
@@ -176,13 +178,7 @@ const actions: ActionTree<ProductState, RootState> = {
           variants: product.variantProductIds
         }
 
-        let variantProductIds: any = new Set();
-        product.variants.forEach((variant: any) => {
-          variantProductIds.add(variant);
-        })
-        variantProductIds = [...variantProductIds]
-
-        commit(types.PRODUCT_CURRENT_UPDATED, { product });
+        dispatch('updateCurrent', { product });
       } else {
         showToast(translate("Product not found"));
       }
@@ -191,7 +187,10 @@ const actions: ActionTree<ProductState, RootState> = {
       showToast(translate("Something went wrong"));
     }
     return resp;
-  }
+  },
+  updateCurrent({ commit }, payload) {
+    commit(types.PRODUCT_CURRENT_UPDATED, { product: payload.product })
+  },
 }
 
 export default actions;

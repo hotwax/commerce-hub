@@ -139,7 +139,7 @@
 
           <hr />
 
-          <div class="product" v-for="product in products" :key="product.groupValue" @click="() => router.push('/product-inventory')">
+          <div class="product" v-for="product in products" :key="product.groupValue" @click.prevent="viewProduct(product)">
             <div class="product-image desktop-only">
               <Image :src="product.mainImage" />
             </div>
@@ -309,6 +309,11 @@ export default defineComponent({
         }
       }
       this.store.dispatch("product/getProducts", payload);
+    },
+    async viewProduct(product: any) {
+      await this.store.dispatch('product/updateCurrent', { product }).then(() => {
+        this.router.push(`/product-inventory/${product.productId}`)
+      })
     }
   },
   mounted() {
