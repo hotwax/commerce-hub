@@ -12,116 +12,33 @@
           <ion-button fill="clear">
             <ion-icon slot="icon-only" :icon="downloadOutline" />
           </ion-button> -->
-          <ion-button fill="clear" class="mobile-only" @click="openOrderFilterModal()">
+          <ion-button fill="clear" class="mobile-only" @click="openOrderFilterMenu()">
             <ion-icon slot="icon-only" :icon="filterOutline" />
           </ion-button>
         </ion-buttons>
       </ion-toolbar>
     </ion-header>
 
-    <ion-content>
+    <ion-menu content-id="content" type="overlay" side="end">
+      <ion-header>
+        <ion-toolbar>
+          <ion-title>{{ $t("Filters")}}</ion-title>
+        </ion-toolbar>
+      </ion-header>
+
+      <ion-content>
+        <OrderFilters :poIds="poIds" :shippingMethodOptions="shippingMethodOptions" :orderStatusOptions="orderStatusOptions"/>
+      </ion-content>
+    </ion-menu>
+
+    <ion-content id="content">
       <div class="find">
         <section class="search">
           <ion-searchbar v-model="queryString" @keyup.enter="getOrders()"/>
         </section>
 
         <aside class="filters desktop-only">
-          <ion-list>
-            <ion-list-header>{{ $t("Date") }}</ion-list-header>
-            <ion-item>
-              <ion-label>{{ $t("Order created") }}</ion-label>
-              <ion-chip id="open-order-created-date-modal" slot="end">
-                <ion-label>{{ currentOrderFiltersSelected.orderCreated ? $filters.formatDate(currentOrderFiltersSelected.orderCreated, 'YYYY-MM-DDTHH:mm:ssTZD', 'D MMM YYYY') : 'any' }}</ion-label>
-                <ion-icon :icon="close" v-if="currentOrderFiltersSelected.orderCreated" @click.stop="appliedFiltersUpdated('', 'orderCreated')"/>
-              </ion-chip>
-              <ion-modal trigger="open-order-created-date-modal">
-                <ion-content force-overscroll="false">
-                  <ion-datetime :value="currentOrderFiltersSelected.orderCreated" presentation="date" @ionChange="appliedFiltersUpdated($event['detail'].value, 'orderCreated')"/>
-                </ion-content>
-              </ion-modal>
-            </ion-item>
-            <ion-item>
-              <ion-label>{{ $t("Promise date") }}</ion-label>
-              <ion-chip id="open-order-promise-date-modal" slot="end">
-                <ion-label>{{ currentOrderFiltersSelected.promiseDate ? $filters.formatDate(currentOrderFiltersSelected.promiseDate, 'YYYY-MM-DDTHH:mm:ssTZD', 'D MMM YYYY') : 'any' }}</ion-label>
-                <ion-icon :icon="close" v-if="currentOrderFiltersSelected.promiseDate" @click.stop="appliedFiltersUpdated('', 'promiseDate')"/>
-              </ion-chip>
-              <ion-modal trigger="open-order-promise-date-modal">
-                <ion-content force-overscroll="false">
-                  <ion-datetime :value="currentOrderFiltersSelected.promiseDate" presentation="date" @ionChange="appliedFiltersUpdated($event['detail'].value, 'promiseDate')"/>
-                </ion-content>
-              </ion-modal>
-            </ion-item>
-            <ion-item>
-              <ion-label>{{ $t("Auto cancel date") }}</ion-label>
-              <ion-chip id="open-order-auto-cancel-date-modal" slot="end">
-                <ion-label>{{ currentOrderFiltersSelected.autoCancelDate ? $filters.formatDate(currentOrderFiltersSelected.autoCancelDate, 'YYYY-MM-DDTHH:mm:ssTZD', 'D MMM YYYY') : 'any' }}</ion-label>
-                <ion-icon :icon="close" v-if="currentOrderFiltersSelected.autoCancelDate" @click.stop="appliedFiltersUpdated('', 'autoCancelDate')"/>
-              </ion-chip>
-              <ion-modal trigger="open-order-auto-cancel-date-modal">
-                <ion-content force-overscroll="false">
-                  <ion-datetime :value="currentOrderFiltersSelected.autoCancelDate" presentation="date" @ionChange="appliedFiltersUpdated($event['detail'].value, 'autoCancelDate')"/>
-                </ion-content>
-              </ion-modal>
-            </ion-item>
-          </ion-list>
-          <ion-list>
-            <ion-list-header>{{ $t("Type") }}</ion-list-header>
-            <ion-item>
-              <ion-label>{{ $t("Store pickup") }}</ion-label>
-              <ion-checkbox :checked="currentOrderFiltersSelected.storePickup" @ionChange="appliedFiltersUpdated($event['detail'].checked, 'storePickup')"/>
-            </ion-item>
-            <ion-item>
-              <ion-label>{{ $t("Ship from store") }}</ion-label>
-              <ion-checkbox v-model="currentOrderFiltersSelected.shipFromStore" @ionChange="appliedFiltersUpdated($event['detail'].checked, 'shipFromStore')"/>
-            </ion-item>
-            <ion-item>
-              <ion-label>{{ $t("Pre-order") }}</ion-label>
-              <ion-checkbox v-model="currentOrderFiltersSelected.preOrder" @ionChange="appliedFiltersUpdated($event['detail'].checked, 'preOrder')"/>
-            </ion-item>
-            <ion-item>
-              <ion-label>{{ $t("Back order") }}</ion-label>
-              <ion-checkbox v-model="currentOrderFiltersSelected.backOrder" @ionChange="appliedFiltersUpdated($event['detail'].checked, 'backOrder')"/>
-            </ion-item>
-            <ion-item>
-              <ion-label>{{ $t("Unfillable") }}</ion-label>
-              <ion-checkbox v-model="currentOrderFiltersSelected.unfillable" @ionChange="appliedFiltersUpdated($event['detail'].checked, 'unfillable')"/>
-            </ion-item>
-          </ion-list>
-          <ion-list>
-            <ion-list-header>{{ $t("Fulfillment") }}</ion-list-header>
-            <ion-item>
-              <ion-label>{{ $t("Status") }}</ion-label>
-              <ion-select :value="currentOrderFiltersSelected.status" @ionChange="appliedFiltersUpdated($event['detail'].value, 'status')" interface="popover">
-                <ion-select-option v-for="status in orderStatusOptions" :key="status" :value="status">{{ status }}</ion-select-option>
-              </ion-select>
-            </ion-item>
-            <ion-item>
-              <ion-label>{{ $t("Shipping method") }}</ion-label>
-              <ion-select :value="currentOrderFiltersSelected.shippingMethod" @ionChange="appliedFiltersUpdated($event['detail'].value, 'shippingMethod')" interface="popover">
-                <ion-select-option v-for="method in shippingMethodOptions" :key="method" :value="method">{{ method }}</ion-select-option>
-              </ion-select>
-            </ion-item>
-            <ion-item>
-              <ion-label>{{ $t("Ship from location") }}</ion-label>
-              <ion-select :value="currentOrderFiltersSelected.shipFromLocation" @ionChange="appliedFiltersUpdated($event['detail'].value, 'shipFromLocation')" interface="popover">
-                <ion-select-option value="any" >{{ $t('any') }}</ion-select-option>
-                <ion-select-option value="store" >{{ $t('Store') }}</ion-select-option>
-                <ion-select-option value="warehouse" >{{ $t('Warehouse') }}</ion-select-option>
-              </ion-select>
-            </ion-item>
-          </ion-list>
-
-          <ion-card>
-            <ion-toolbar>
-              <ion-title>{{ $t("Purchase orders") }}</ion-title>
-            </ion-toolbar>
-            <ion-card-content>
-              <ion-chip v-for="(id, index) in poIds" :key="index">
-                <ion-label>{{ id }}</ion-label>
-              </ion-chip>
-            </ion-card-content>
-          </ion-card>
+          <OrderFilters :poIds="poIds" :shippingMethodOptions="shippingMethodOptions" :orderStatusOptions="orderStatusOptions"/>
         </aside>
 
         <main>
@@ -224,29 +141,22 @@ import {
   IonButtons,
   IonButton,
   IonCard,
-  IonCardContent,
-  IonCheckbox,
   IonChip,
   IonContent,
-  IonDatetime,
   IonHeader,
   IonIcon,
   IonInfiniteScroll,
   IonInfiniteScrollContent,
   IonItem,
   IonLabel,
-  IonList,
-  IonListHeader,
-  IonModal,
+  IonMenu,
   IonNote,
   IonPage,
   IonSearchbar,
-  IonSelect,
-  IonSelectOption,
   IonThumbnail,
   IonTitle,
   IonToolbar,
-  modalController
+  menuController
 } from '@ionic/vue';
 import {
   downloadOutline,
@@ -261,8 +171,9 @@ import { mapGetters, useStore } from "vuex";
 import { showToast } from '@/utils'
 import { Plugins } from '@capacitor/core';
 import Image from '@/components/Image.vue';
-import OrderFilterModal from '@/components/OrderFilterModal.vue';
 import { useRouter } from 'vue-router';
+import OrderFilters from '@/components/OrderFilters.vue'
+import emitter from '@/event-bus';
 
 const { Clipboard } = Plugins;
 
@@ -275,28 +186,22 @@ export default defineComponent ({
     IonButtons,
     IonButton,
     IonCard,
-    IonCardContent,
-    IonCheckbox,
     IonChip,
     IonContent,
-    IonDatetime,
     IonHeader,
     IonIcon,
     IonInfiniteScroll,
     IonInfiniteScrollContent,
     IonItem,
     IonLabel,
-    IonList,
-    IonListHeader,
-    IonModal,
+    IonMenu,
     IonNote,
     IonPage,
     IonSearchbar,
-    IonSelect,
-    IonSelectOption,
     IonThumbnail,
     IonTitle,
-    IonToolbar
+    IonToolbar,
+    OrderFilters
   },
   computed: {
     ...mapGetters({
@@ -307,6 +212,9 @@ export default defineComponent ({
       isScrollable: 'order/isScrollable',
       currentOrderFiltersSelected: 'order/getCurrentOrderFiltersSelected'
     })
+  },
+  created() {
+    emitter.on('filterUpdated', this.getOrders)
   },
   data() {
     return {
@@ -344,16 +252,8 @@ export default defineComponent ({
         event.target.complete();
       })
     },
-    async openOrderFilterModal() {
-      const orderFilterModal = await modalController.create({
-        component: OrderFilterModal
-      });
-      return orderFilterModal.present();
-    },
-    async appliedFiltersUpdated(value: string, filterName: string) {
-      await this.store.dispatch('order/appliedFiltersUpdated', { value, filterName }).then(() => {
-        this.getOrders();
-      })
+    async openOrderFilterMenu() {
+      await menuController.open();
     }
   },
   async mounted() {

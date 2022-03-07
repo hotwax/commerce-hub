@@ -158,15 +158,15 @@ const actions: ActionTree<OrderState, RootState> = {
 
     // TODO: improve logic to pass the date in the solr-query payload
     if (state.currentOrderFiltersSelected.orderCreated) {
-      payload.json.filter = payload.json.filter.concat(` AND orderDate: [${state.currentOrderFiltersSelected.orderCreated.substring(0, state.currentOrderFiltersSelected.orderCreated.indexOf('T')) + 'T00:00:00Z'} TO ${state.currentOrderFiltersSelected.orderCreated.substring(0, state.currentOrderFiltersSelected.orderCreated.indexOf('T')) + 'T23:59:59Z'}]`)
+      payload.json.filter = payload.json.filter.concat(` AND orderDate: [${state.currentOrderFiltersSelected.orderCreated + 'T00:00:00Z'} TO ${state.currentOrderFiltersSelected.orderCreated + 'T23:59:59Z'}]`)
     }
 
     if (state.currentOrderFiltersSelected.promiseDate) {
-      payload.json.filter = payload.json.filter.concat(` AND promiseDateTime: [${state.currentOrderFiltersSelected.promiseDate.substring(0, state.currentOrderFiltersSelected.promiseDate.indexOf('T')) + 'T00:00:00Z'} TO ${state.currentOrderFiltersSelected.promiseDate.substring(0, state.currentOrderFiltersSelected.promiseDate.indexOf('T')) + 'T23:59:59Z'}]`)
+      payload.json.filter = payload.json.filter.concat(` AND promiseDateTime: [${state.currentOrderFiltersSelected.promiseDate + 'T00:00:00Z'} TO ${state.currentOrderFiltersSelected.promiseDate + 'T23:59:59Z'}]`)
     }
 
     if (state.currentOrderFiltersSelected.autoCancelDate) {
-      payload.json.filter = payload.json.filter.concat(` AND autoCancelDate: [${state.currentOrderFiltersSelected.autoCancelDate.substring(0, state.currentOrderFiltersSelected.autoCancelDate.indexOf('T')) + 'T00:00:00Z'} TO ${state.currentOrderFiltersSelected.autoCancelDate.substring(0, state.currentOrderFiltersSelected.autoCancelDate.indexOf('T')) + 'T23:59:59Z'}]`)
+      payload.json.filter = payload.json.filter.concat(` AND autoCancelDate: [${state.currentOrderFiltersSelected.autoCancelDate + 'T00:00:00Z'} TO ${state.currentOrderFiltersSelected.autoCancelDate + 'T23:59:59Z'}]`)
     }
 
     return payload;
