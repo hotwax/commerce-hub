@@ -88,11 +88,11 @@ const actions: ActionTree<ProductState, RootState> = {
     /**
    * Get Product Inventory
    */
-  async getProductInventory({ commit, state }, payload) {
+  async getProducts({ commit, state }, payload) {
     let resp;
     
     try{
-      resp = await ProductService.getProductInventory(payload);
+      resp = await ProductService.getProducts(payload);
       if(resp.status === 200 && resp.data.grouped.groupId?.ngroups > 0 && !hasError(resp)) {
         let products = resp.data.grouped.groupId?.groups;
         

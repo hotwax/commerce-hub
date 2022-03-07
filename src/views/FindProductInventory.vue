@@ -154,7 +154,7 @@
                     <ion-label>
                       <p>{{ product.brand }}</p>
                       {{ product.productName }}
-                      <p>{{ $t("Color") }} : {{ $filters.getFeature(getProduct(product.productId).featureHierarchy, '1/COLOR/') }}</p>
+                      <p>{{ $t("Color") }}: {{ $filters.getFeature(getProduct(product.productId).featureHierarchy, '1/COLOR/') }}</p>
                       <p>{{ $t("Size") }}: {{ $filters.getFeature(getProduct(product.productId).featureHierarchy, '1/SIZE/') }}</p>
                     </ion-label>
                   </ion-item>
@@ -183,7 +183,7 @@
                       <ion-item lines="none">
                         <ion-label>
                           {{ item.sku }}
-                          <p>{{ $t("Color") }} : {{ $filters.getFeature(getProduct(item.productId).featureHierarchy, '1/COLOR/') }}</p>
+                          <p>{{ $t("Color") }}: {{ $filters.getFeature(getProduct(item.productId).featureHierarchy, '1/COLOR/') }}</p>
                           <p>{{ $t("Size") }}: {{ $filters.getFeature(getProduct(item.productId).featureHierarchy, '1/SIZE/') }}</p>
                         </ion-label>
                       </ion-item>
@@ -249,10 +249,11 @@ import {
   sync,
   swapVerticalOutline  
 } from 'ionicons/icons';
+import { defineComponent } from 'vue';
 import { mapGetters, useStore } from "vuex";
 import { useRouter } from "vue-router";
 
-export default {
+export default defineComponent({
   name: 'ProductInventory',
   components: {
     Image,
@@ -289,7 +290,7 @@ export default {
     })
   },
   methods: {
-    async getProductInventory(vSize?: any, vIndex?: any) {
+    async getProducts(vSize?: any, vIndex?: any) {
       const viewSize = vSize ? vSize : process.env.VUE_APP_VIEW_SIZE;
       const viewIndex = vIndex ? vIndex : 0;
 
@@ -307,11 +308,11 @@ export default {
           "filter": "docType: PRODUCT"
         }
       }
-      await (this as any).store.dispatch("product/getProductInventory", payload);
+      this.store.dispatch("product/getProducts", payload);
     }
   },
   mounted() {
-    (this as any).getProductInventory();
+    this.getProducts();
   },
   setup() {
     const router = useRouter();
@@ -328,7 +329,7 @@ export default {
       store
     };
   },
-};
+});
 </script>
 
 <style scoped>

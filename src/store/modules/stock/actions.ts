@@ -25,6 +25,9 @@ const actions: ActionTree<StockState, RootState> = {
     // but as we will always fetch data for the fetched records which will be as per the viewSize
     // assuming that the value will never be 100 to show
 
+    // Implemented this loop to check productInventory and find product ATP
+    // because we were only getting maximum 100 records at a time.
+
     const count = productIds.length / 100;
 
     for(let i = 0; i < count; i++) {
