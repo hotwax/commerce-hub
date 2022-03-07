@@ -20,7 +20,7 @@ const state: any = {
 }
 
 const persistState = createPersistedState({
-    paths: ['user', 'product'],
+    paths: ['user'],
     fetchBeforeUse: true
 })
 
