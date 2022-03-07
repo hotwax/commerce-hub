@@ -88,8 +88,64 @@ const actions: ActionTree<ProductState, RootState> = {
   /**
    * Get Product-inventory details
    */
-  async setCurrent({  commit }, payload) {
+  async getProductDetail({ commit, state }, { productId }) {
+    const current = state.current as any
+    const products = state.products.list as any
 
+    if(current && current.productId === productId) { return current }
+
+    if(products.length > 0) {
+      return products.some((product: any) => {
+        if(product.productId === productId) {
+          commit(types.PRODUCT_CURRENT_UPDATED, { product });
+          return current;
+        }
+      })
+    }
+
+    let resp;
+    try {
+      const payload = {
+        "json": {
+          "params": {
+            "group": true,
+            "group.field": "groupId",
+            "group.limit": 10000,
+            "group.ngroups": true,
+          } as any,
+          "query": "*:*",
+          "filter": `docType: PRODUCT AND productId: ${10128}`
+        }
+      }
+      resp = await ProductService.getProductDetail(payload);
+
+      if(resp.status === 200 && resp.data.grouped.groupId?.groups.length > 0 && !hasError(resp)) {
+        let product = resp.data.grouped.groupId?.groups[0].doclist.docs[0]
+
+        product = {
+          productId: product.productId,
+          productName: product.productName,
+          brand: product.brandName,
+          mainImage: product.mainImageUrl,
+          externalId: product.internalName,
+          variants: product.variantProductIds
+        }
+
+        let variantProductIds: any = new Set();
+        product.variants.forEach((variant: any) => {
+          variantProductIds.add(variant);
+        })
+        variantProductIds = [...variantProductIds]
+
+        commit(types.PRODUCT_CURRENT_UPDATED, { product });
+      } else {
+        showToast(translate("Product not found"));
+      }
+    } catch(err) {
+      console.error(err);
+      showToast(translate("Something went wrong"));
+    }
+    return resp;
   }
 }
 

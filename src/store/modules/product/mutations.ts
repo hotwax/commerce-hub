@@ -14,5 +14,8 @@ const mutations: MutationTree <ProductState> = {
       });
     }
   },
+  [types.PRODUCT_CURRENT_UPDATED](state, payload) {
+    state.current = payload.product
+  }
 }
 export default mutations;

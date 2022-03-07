@@ -68,9 +68,10 @@ const routes: Array<RouteRecordRaw> = [
     beforeEnter: authGuard
   },
   {
-    path: '/product-inventory',
+    path: '/product-inventory/:slug',
     name: 'ProductInventory',
     component: ProductInventory,
+    props: true
   },
   {
     path: '/find-purchase-order',
