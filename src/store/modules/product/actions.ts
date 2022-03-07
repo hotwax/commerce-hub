@@ -95,28 +95,31 @@ const actions: ActionTree<ProductState, RootState> = {
       resp = await ProductService.getProducts(payload);
       if(resp.status === 200 && resp.data.grouped.groupId?.ngroups > 0 && !hasError(resp)) {
         let products = resp.data.grouped.groupId?.groups;
+        console.log(products)
         
         products = products.map((product: any) => {
           return {
-            productId: product.doclist.docs[0]?.productId,
+            productId: product.groupValue,
             productName: product.doclist.docs[0]?.parentProductName,
-            brand: product.doclist.docs[0]?.brandName,
-            mainImage: product.doclist.docs[0]?.mainImageUrl,
-            externalId: product.doclist.docs[0]?.internalName,
             variants: product.doclist.docs
           }
         })
 
         let productIds: any = new Set();
         products.forEach((product: any) => {
-          product.variants.forEach((item: any) => {
-            if (item.productId) productIds.add(item.productId);
-          })
+          if(product.productId) productIds.add(product.productId);
         })
         productIds = [...productIds]
-
         this.dispatch("product/fetchProducts", { productIds });
-        this.dispatch("stock/addProducts", { productIds });
+
+        let variantIds: any = new Set();
+        products.forEach((product: any) => {
+          product.variants.forEach((variant: any) => {
+            if(variant.productId) variantIds.add(variant.productId);
+          })
+        })
+        variantIds = [...variantIds]
+        this.dispatch("stock/addProducts", { variantIds });
         
         if(payload.json.params.start && payload.json.params.start > 0) products = state.products.list.concat(products);
         commit(types.PRODUCT_LIST_UPDATED, { products, totalProductsCount: products.length });
