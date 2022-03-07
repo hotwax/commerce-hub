@@ -1,4 +1,5 @@
 {
+  "Activate": "Activate",
   "Add": "Add",
   "Add item to order": "Add item to order",
   "Add item to shipment": "Add item to shipment",
@@ -17,8 +18,15 @@
   "Click the backdrop to dismiss.": "Click the backdrop to dismiss.",
   "Color": "Color",
   "Connections": "Connections",
+  "Contact information": "Contact information",
+  "created": "created",
+  "Create user": "Create user",
   "Date": "Date",
   "Deactivate": "Deactivate",
+<<<<<<< HEAD
+  "Deactivate user": "Deactivate user",
+=======
+>>>>>>> fc66e62a2c49477b1dd39d4eca13b428a11a9717
   "Details": "Details",
   "Current QOH": "Current QOH",
   "delivery": "delivery",
@@ -36,6 +44,12 @@
   "Edit safety stock": "Edit safety stock",
   "Edit shipped quantity": "Edit shipped quantity",
   "Edit threshold": "Edit threshold",
+<<<<<<< HEAD
+  "Edit quantity on hand": "Edit quantity on hand",
+  "Edit qoh": "Edit qoh",
+  "Email": "Email",
+=======
+>>>>>>> fc66e62a2c49477b1dd39d4eca13b428a11a9717
   "Estimated arrival": "Estimated arrival",
   "Expedited": "Expedited",
   "Facility": "Facility",
@@ -49,8 +63,11 @@
   "In stock": "In stock",
   "Internal ID": "Internal ID",
   "Items": "Items",
+<<<<<<< HEAD
+=======
   "items": "items",
   "Last brokered": "Last brokered",
+>>>>>>> fc66e62a2c49477b1dd39d4eca13b428a11a9717
   "Last name": "Last name",
   "Location": "Location",
   "Location Inventory": "Location Inventory",
@@ -76,6 +93,7 @@
   "Orders": "Orders",
   "orders": "orders",
   "Overwrite": "Overwrite",
+  "Phone": "Phone",
   "password": "password",
   "Password": "Password",
   "pickup": "pickup",
@@ -95,6 +113,7 @@
   "purchase order ATP": "purchase order ATP",
   "Purchase order detail": "Purchase order detail",
   "Purchase orders": "Purchase orders",
+  "Reset password": "Reset password",
   "QOH": "QOH",
   "QTY": "QTY",
   "Ready to create an app?": "Ready to create an app?",
@@ -104,13 +123,14 @@
   "Remove": "Remove",
   "Retail": "Retail",
   "Role": "Role",
+  "safety stock": "safety stock",
+  "Save": "Save",
   "Search locations": "Search locations",
-  "Shop": "Shop",
   "Shops": "Shops",
   "Staff": "Staff",
-  "safety stock": "safety stock",
   "Search purchase orders and products": "Search purchase orders and products",
   "Search shipments and products": "Search shipments and products",
+  "Search users": "Search users",
   "Settings": "Settings",
   "Shipping from": "Shipping from",
   "Ship from Facility name": "Ship from Facility name",
@@ -119,6 +139,7 @@
   "shipped": "shipped",
   "Shipments": "Shipments",
   "Shipping method": "Shipping method",
+  "Shop": "Shop",
   "Shopify": "Shopify",
   "Shopify ID": "Shopify ID",
   "Show shipment items": "Show shipment items",
@@ -129,6 +150,7 @@
   "Sort": "Sort",
   "Sort by": "Sort by",
   "Standard": "Standard",
+  "Status": "Status",
   "Start with Ionic": "Start with Ionic",
   "Store": "Store",
   "store name": "store name",
