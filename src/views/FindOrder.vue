@@ -29,10 +29,10 @@
             <ion-list-header>{{ $t("Date") }}</ion-list-header>
             <ion-item>
               <ion-label>{{ $t("Order created") }}</ion-label>
-              <ion-chip id="open-order-created-date-modal" slot="end">
+              <ion-chip id="order-created-date-modal" slot="end">
                 <ion-label>{{ appliedFilters.date.orderCreated ? $filters.formatDate(appliedFilters.date.orderCreated, 'YYYY-MM-DDTHH:mm:ssTZD', 'D MMM YYYY') : 'any' }}</ion-label>
               </ion-chip>
-              <ion-modal trigger="open-order-created-date-modal">
+              <ion-modal trigger="order-created-date-modal">
                 <ion-content force-overscroll="false">
                   <ion-datetime :value="appliedFilters.date.orderCreated" presentation="date" @ionChange="orderCreationDateUpdated($event)"/>
                 </ion-content>
@@ -40,10 +40,10 @@
             </ion-item>
             <ion-item>
               <ion-label>{{ $t("Promise date") }}</ion-label>
-              <ion-chip id="open-order-promise-date-modal" slot="end">
+              <ion-chip id="order-promise-date-modal" slot="end">
                 <ion-label>{{ appliedFilters.date.promiseDate ? $filters.formatDate(appliedFilters.date.promiseDate, 'YYYY-MM-DDTHH:mm:ssTZD', 'D MMM YYYY') : 'any' }}</ion-label>
               </ion-chip>
-              <ion-modal trigger="open-order-promise-date-modal">
+              <ion-modal trigger="order-promise-date-modal">
                 <ion-content force-overscroll="false">
                   <ion-datetime :value="appliedFilters.date.promiseDate" presentation="date" @ionChange="orderPromiseDateUpdated($event)"/>
                 </ion-content>
@@ -51,10 +51,10 @@
             </ion-item>
             <ion-item>
               <ion-label>{{ $t("Auto cancel date") }}</ion-label>
-              <ion-chip id="open-order-auto-cancel-date-modal" slot="end">
+              <ion-chip id="order-auto-cancel-date-modal" slot="end">
                 <ion-label>{{ appliedFilters.date.autoCancelDate ? $filters.formatDate(appliedFilters.date.autoCancelDate, 'YYYY-MM-DDTHH:mm:ssTZD', 'D MMM YYYY') : 'any' }}</ion-label>
               </ion-chip>
-              <ion-modal trigger="open-order-auto-cancel-date-modal">
+              <ion-modal trigger="order-auto-cancel-date-modal">
                 <ion-content force-overscroll="false">
                   <ion-datetime :value="appliedFilters.date.autoCancelDate" presentation="date" @ionChange="orderAutoCancelDateUpdated($event)"/>
                 </ion-content>
@@ -253,11 +253,12 @@ import {
 } from 'ionicons/icons';
 import { defineComponent, reactive, ref } from "vue";
 import { mapGetters, useStore } from "vuex";
-import { showToast } from '@/utils'
+import { hasError, showToast } from '@/utils'
 import { Plugins } from '@capacitor/core';
 import Image from '@/components/Image.vue';
 import OrderFilterModal from '@/components/OrderFilterModal.vue';
 import { useRouter } from 'vue-router';
+import { OrderService } from '@/services/OrderService';
 
 const { Clipboard } = Plugins;
 
@@ -450,11 +451,27 @@ export default defineComponent ({
   },
   async mounted() {
     this.getOrders();
-    await this.store.dispatch('order/getPurchaseOrderIds').then(ids => {
-      if(ids.length > 0) {
-        this.poIds = ids
+    let resp;
+
+    const payload = {
+      "json": {
+        "params": {
+          "rows": 1000,
+          "group": true,
+          "group.field": "externalOrderId"
+        },
+        "filter": "docType: ORDER AND orderTypeId: PURCHASE_ORDER",
+        "fields": "externalOrderId",
+        "query": "*:*"
       }
-    })
+    }
+
+    resp = await OrderService.getPOIds(payload);
+    if (resp.status == 200 && !hasError(resp)) {
+      this.poIds = resp.data.grouped.externalOrderId.groups.map((group: any) => group.groupValue).filter((id: string) => id);
+    } else {
+      console.error('Something went wrong')
+    }
   },
   setup() {
     const router = useRouter();
