@@ -40,7 +40,7 @@ const actions: ActionTree<ProductState, RootState> = {
       // Remove added loader only when new query and not the infinite scroll
       if (payload.viewIndex === 0) emitter.emit("dismissLoader");
     } catch(error){
-      console.log(error)
+      console.error(error)
       showToast(translate("Something went wrong"));
     }
     // TODO Handle specific error
@@ -95,7 +95,6 @@ const actions: ActionTree<ProductState, RootState> = {
       resp = await ProductService.getProducts(payload);
       if(resp.status === 200 && resp.data.grouped.groupId?.ngroups > 0 && !hasError(resp)) {
         let products = resp.data.grouped.groupId?.groups;
-        console.log(products)
         
         products = products.map((product: any) => {
           return {
