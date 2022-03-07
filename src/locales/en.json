@@ -23,10 +23,7 @@
   "Create user": "Create user",
   "Date": "Date",
   "Deactivate": "Deactivate",
-<<<<<<< HEAD
   "Deactivate user": "Deactivate user",
-=======
->>>>>>> fc66e62a2c49477b1dd39d4eca13b428a11a9717
   "Details": "Details",
   "Current QOH": "Current QOH",
   "delivery": "delivery",
@@ -44,12 +41,7 @@
   "Edit safety stock": "Edit safety stock",
   "Edit shipped quantity": "Edit shipped quantity",
   "Edit threshold": "Edit threshold",
-<<<<<<< HEAD
-  "Edit quantity on hand": "Edit quantity on hand",
-  "Edit qoh": "Edit qoh",
   "Email": "Email",
-=======
->>>>>>> fc66e62a2c49477b1dd39d4eca13b428a11a9717
   "Estimated arrival": "Estimated arrival",
   "Expedited": "Expedited",
   "Facility": "Facility",
@@ -63,11 +55,8 @@
   "In stock": "In stock",
   "Internal ID": "Internal ID",
   "Items": "Items",
-<<<<<<< HEAD
-=======
   "items": "items",
   "Last brokered": "Last brokered",
->>>>>>> fc66e62a2c49477b1dd39d4eca13b428a11a9717
   "Last name": "Last name",
   "Location": "Location",
   "Location Inventory": "Location Inventory",
