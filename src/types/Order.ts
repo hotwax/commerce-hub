@@ -9,6 +9,7 @@ export interface Order {
     total?: number;
     statusId?: String;
     identifications?: Array<any>;
+    notes?: Array<any>;
 }
 export interface OrderItem {
     orderItemGroupId?: String;
