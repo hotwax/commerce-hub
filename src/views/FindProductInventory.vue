@@ -141,7 +141,7 @@
 
           <div class="product" v-for="product in products" :key="product.groupValue" @click.prevent="viewProduct(product)">
             <div class="product-image desktop-only">
-              <Image :src="product.mainImage" />
+              <Image :src="getProduct(product.productId).mainImageUrl" />
             </div>
 
             <div>
@@ -149,10 +149,10 @@
                 <div class="primary-info">
                   <ion-item lines="none">
                     <ion-thumbnail slot="start" class="mobile-only">
-                      <Image :src="product.mainImage" />
+                      <Image :src="getProduct(product.productId).mainImageUrl" />
                     </ion-thumbnail>
                     <ion-label>
-                      <p>{{ product.brand }}</p>
+                      <p>{{ getProduct(product.productId).brandName }}</p>
                       {{ product.productName }}
                       <p>{{ $t("Color") }}: {{ $filters.getFeature(getProduct(product.productId).featureHierarchy, '1/COLOR/') }}</p>
                       <p>{{ $t("Size") }}: {{ $filters.getFeature(getProduct(product.productId).featureHierarchy, '1/SIZE/') }}</p>
@@ -162,7 +162,7 @@
                 <div class="tags desktop-only">
                   <ion-chip>
                     <ion-icon :icon="pricetag" />
-                    <ion-label>{{ product.externalId }}</ion-label>
+                    <ion-label>{{ getProduct(product.productId).internalName }}</ion-label>
                   </ion-chip>
                 </div>
                 <div class="metadata">
@@ -183,8 +183,8 @@
                       <ion-item lines="none">
                         <ion-label>
                           {{ item.sku }}
-                          <p>{{ $t("Color") }}: {{ $filters.getFeature(getProduct(item.productId).featureHierarchy, '1/COLOR/') }}</p>
-                          <p>{{ $t("Size") }}: {{ $filters.getFeature(getProduct(item.productId).featureHierarchy, '1/SIZE/') }}</p>
+                          <p>{{ $t("Color") }}: {{ $filters.getFeature(item.featureHierarchy, '1/COLOR/') }}</p>
+                          <p>{{ $t("Size") }}: {{ $filters.getFeature(item.featureHierarchy, '1/SIZE/') }}</p>
                         </ion-label>
                       </ion-item>
                     </div>
@@ -311,6 +311,16 @@ export default defineComponent({
       this.store.dispatch("product/getProducts", payload);
     },
     async viewProduct(product: any) {
+      product = {
+        productId: product.productId,
+        productName: product.productName,
+        brand: this.getProduct(product.productId).brandName,
+        externalId: this.getProduct(product.productId).internalName,
+        mainImage: this.getProduct(product.productId).mainImageUrl,
+        feature: this.getProduct(product.productId).productFeatures,
+        variants: product.variants
+      }
+
       await this.store.dispatch('product/updateCurrent', { product }).then(() => {
         this.router.push(`/product-inventory/${product.productId}`)
       })

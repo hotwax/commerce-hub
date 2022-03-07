@@ -70,7 +70,18 @@ app.config.globalProperties.$filters = {
       }
     }
     return customerLoyalty;
-  }
+  },
+  getFeaturesList(featureHierarchy: any, featureKey: string) {
+    let featuresList = []
+    if (featureHierarchy) {
+      featuresList = featureHierarchy.filter((featureItem: any) => featureItem.startsWith(featureKey)).map((feature: any) => {
+        const featureSplit = feature ? feature.split('/') : [];
+        const featureValue = featureSplit[1] ? featureSplit[1] : '';
+        return featureValue;
+      })
+    }
+    return featuresList;
+  },
 }
 
 

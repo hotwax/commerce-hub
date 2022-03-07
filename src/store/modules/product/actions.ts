@@ -40,7 +40,7 @@ const actions: ActionTree<ProductState, RootState> = {
       // Remove added loader only when new query and not the infinite scroll
       if (payload.viewIndex === 0) emitter.emit("dismissLoader");
     } catch(error){
-      console.log(error)
+      console.error(error)
       showToast(translate("Something went wrong"));
     }
     // TODO Handle specific error
@@ -96,31 +96,31 @@ const actions: ActionTree<ProductState, RootState> = {
 
       if (resp.status === 200 && resp.data.grouped.groupId?.ngroups > 0 && !hasError(resp)) {
         let products = resp.data.grouped.groupId?.groups;
-
         products = products.map((product: any) => {
           return {
             productId: product.groupValue,
             productName: product.doclist.docs[0]?.parentProductName,
-            brand: product.doclist.docs[0]?.brandName,
-            mainImage: product.doclist.docs[0]?.mainImageUrl,
-            externalId: product.doclist.docs[0]?.internalName,
             variants: product.doclist.docs
           }
         })
 
         let productIds: any = new Set();
         products.forEach((product: any) => {
-          productIds.add(product.productId);
-          product.variants.forEach((item: any) => {
-            if (item.productId) productIds.add(item.productId);
-          })
+          if(product.productId) productIds.add(product.productId);
         })
         productIds = [...productIds]
-
         this.dispatch("product/fetchProducts", { productIds });
-        this.dispatch("stock/addProducts", { productIds });
 
-        if (payload.json.params.start && payload.json.params.start > 0) products = state.products.list.concat(products);
+        let variantIds: any = new Set();
+        products.forEach((product: any) => {
+          product.variants.forEach((variant: any) => {
+            if(variant.productId) variantIds.add(variant.productId);
+          })
+        })
+        variantIds = [...variantIds]
+        this.dispatch("stock/addProducts", { variantIds });
+        
+        if(payload.json.params.start && payload.json.params.start > 0) products = state.products.list.concat(products);
         commit(types.PRODUCT_LIST_UPDATED, { products, totalProductsCount: products.length });
       } else {
         showToast(translate("Products not found"));
@@ -137,18 +137,8 @@ const actions: ActionTree<ProductState, RootState> = {
   */
   async getProductDetail({ dispatch, state }, { productId }) {
     const current = state.current as any
-    const products = state.products.list as any
     
     if(current && current.productId === productId) { return current }
-
-    if(products.length > 0) {
-      return products.some((product: any) => {
-        if(product.productId === productId) {
-          dispatch('updateCurrent', { product });
-          return current;
-        }
-      })
-    }
 
     let resp;
     try {
@@ -168,13 +158,14 @@ const actions: ActionTree<ProductState, RootState> = {
 
       if(resp.status === 200 && resp.data.grouped.groupId?.groups.length > 0 && !hasError(resp)) {
         let product = resp.data.grouped.groupId?.groups[0].doclist.docs[0]
-        console.log(product)
+
         product = {
           productId: product.productId,
           productName: product.productName,
           brand: product.brandName,
-          mainImage: product.mainImageUrl,
           externalId: product.internalName,
+          mainImage:product.mainImageUrl,
+          feature: product.productFeatures,
           variants: product.variantProductIds
         }
 

@@ -2,7 +2,7 @@
   <ion-page>
     <ion-header :translucent="true">
       <ion-toolbar>
-        <ion-back-button slot="start" default-href="/" />
+        <ion-back-button slot="start" default-href="/find-product-inventory" />
         <ion-title>{{ $t("Product inventory detail") }}</ion-title>
         <ion-buttons slot="end">
           <ion-button fill="clear">
@@ -13,7 +13,6 @@
     </ion-header>
 
     <ion-content>
-      {{product}}
       <main>
         <section class="product">
           <ion-card class="product-image desktop-only">
@@ -27,12 +26,8 @@
                 <ion-card-title>{{ $t("General information") }}</ion-card-title>
               </ion-card-header>
               <ion-item>
-                <ion-label>{{ $t("Shopify ID") }}</ion-label>
-                <ion-label slot="end">external ID</ion-label>
-              </ion-item>
-              <ion-item>
                 <ion-label>{{ $t("Internal ID") }}</ion-label>
-                <ion-label slot="end">internal ID</ion-label>
+                <ion-label slot="end">{{ product.productId }}</ion-label>
               </ion-item>
               <ion-item>
                 <ion-label>{{ $t("In stock") }}</ion-label>
@@ -73,12 +68,9 @@
                 <ion-chip>
                   <ion-label>All</ion-label>
                 </ion-chip>
-                <ion-chip>
-                  <ion-label>Color 1</ion-label>
-                </ion-chip>
-                <ion-chip>
+                <ion-chip v-for="(feature, index) in $filters.getFeaturesList(product.feature, 'Color')" :key="index">
                   <ion-icon :icon="checkmarkOutline" />
-                  <ion-label>Color 2</ion-label>
+                  <ion-label>{{ feature }}</ion-label>
                 </ion-chip>
               </ion-item>
             </ion-list>
@@ -88,12 +80,9 @@
                 <ion-chip>
                   <ion-label>All</ion-label>
                 </ion-chip>
-                <ion-chip>
-                  <ion-label>Size 1</ion-label>
-                </ion-chip>
-                <ion-chip>
+                <ion-chip v-for="(feature, index) in $filters.getFeaturesList(product.feature, 'Size')" :key="index">
                   <ion-icon :icon="checkmarkOutline" />
-                  <ion-label>Size 2</ion-label>
+                  <ion-label>{{ feature }}</ion-label>
                 </ion-chip>
               </ion-item>
             </ion-list>

@@ -20,7 +20,7 @@ const actions: ActionTree<StockState, RootState> = {
   /**
    * Add stocks of list of products
    */
-   async addProducts  ( { commit }, { productIds }) {
+  async addProducts({ commit }, { variantIds }) {
     // There is a limitation at API level to handle only 100 records
     // but as we will always fetch data for the fetched records which will be as per the viewSize
     // assuming that the value will never be 100 to show
@@ -28,12 +28,12 @@ const actions: ActionTree<StockState, RootState> = {
     // Implemented this loop to check productInventory and find product ATP
     // because we were only getting maximum 100 records at a time.
 
-    const count = productIds.length / 100;
+    const count = variantIds.length / 100;
 
     for(let i = 0; i < count; i++) {
       const resp: any = await StockService.checkInventory({
         "filters": {
-          "productId": productIds.splice(0, 100),
+          "productId": variantIds.splice(0, 100),
           "productId_op": "in",
           "facilityId": this.state.user.currentFacility.facilityId
         },
