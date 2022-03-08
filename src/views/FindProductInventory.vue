@@ -50,13 +50,13 @@
 
             <ion-item>
               <ion-label>{{ $t("Size") }}</ion-label>
-              <ion-select value="any">
+              <ion-select value="any" interface="popover">
                 <ion-select-option value="any">all</ion-select-option>
               </ion-select>
             </ion-item>
             <ion-item>
               <ion-label>{{ $t("Color") }}</ion-label>
-              <ion-select value="any">
+              <ion-select value="any" interface="popover">
                 <ion-select-option value="any">all</ion-select-option>
               </ion-select>
             </ion-item>
@@ -106,13 +106,13 @@
             <ion-list-header>{{ $t("Location") }}</ion-list-header>
             <ion-item>
               <ion-label>{{ $t("Product Store") }}</ion-label>
-              <ion-select value="any">
+              <ion-select value="any" interface="popover">
                 <ion-select-option value="any">Australia</ion-select-option>
               </ion-select>
             </ion-item>
             <ion-item>
               <ion-label>{{ $t("Facility") }}</ion-label>
-              <ion-select value="any">
+              <ion-select value="any" interface="popover">
                 <ion-select-option value="any">California Warehouse</ion-select-option>
               </ion-select>
             </ion-item>
