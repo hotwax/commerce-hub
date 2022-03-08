@@ -85,15 +85,15 @@
                 <ion-list-header>{{ $t("Shopify IDs") }}</ion-list-header>
                 <ion-item>
                   <ion-label> {{ $t("Order Number") }} </ion-label>
-                  <p slot="end">{{ $filters.getIdentification(order.identifications, orderNo) ? $filters.getIdentification(order.identifications, orderNo) : "-" }}</p>
+                  <p slot="end">{{ order.identifications?.orderNo ? order.identifications.orderNo : "-" }}</p>
                 </ion-item>
                 <ion-item>
                   <ion-label> {{ $t("Order ID") }} </ion-label>
-                  <p slot="end">{{ $filters.getIdentification(order.identifications, orderId) ? $filters.getIdentification(order.identifications, orderId) : "-" }}</p>
+                  <p slot="end">{{ order.identifications?.orderId ? order.identifications.orderId : "-" }}</p>
                 </ion-item>
                 <ion-item lines="none">
                   <ion-label> {{ $t("Order Name") }} </ion-label>
-                  <p slot="end">{{ $filters.getIdentification(order.identifications, orderName) ? $filters.getIdentification(order.identifications, orderName) : "-" }} </p>
+                  <p slot="end">{{ order.identifications?.orderName ? order.identifications.orderName : "-" }} </p>
                 </ion-item>
               </ion-list>
             </ion-card>
@@ -290,10 +290,7 @@ export default defineComponent({
   },
   data() {
     return {
-      status: "Approved", // default value
-      orderName: process.env.VUE_APP_ORD_IDENT_TYPE_NAME,
-      orderId: process.env.VUE_APP_ORD_IDENT_TYPE_ID,
-      orderNo: process.env.VUE_APP_ORD_IDENT_TYPE_NO
+      status: "Approved" // default value
     }
   },
   computed: {

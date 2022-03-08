@@ -3,7 +3,7 @@ import { ActionTree } from 'vuex'
 import RootState from '@/store/RootState'
 import OrderState from './OrderState'
 import * as types from './mutation-types'
-import { hasError, showToast } from '@/utils'
+import { getIdentification, hasError, showToast } from '@/utils'
 import { translate } from '@/i18n'
 import { Order, OrderItem } from '@/types'
 
@@ -65,9 +65,13 @@ const actions: ActionTree<OrderState, RootState> = {
           /** An array containing the items purchased in this order */
           items: [],
           statusId: '',
-          identifications: [],
+          identifications: {},
           notes: []
         }
+
+        const orderName = process.env.VUE_APP_ORD_IDENT_TYPE_NAME
+        const orderId = process.env.VUE_APP_ORD_IDENT_TYPE_ID
+        const orderNo = process.env.VUE_APP_ORD_IDENT_TYPE_NO
 
         resp.data.grouped.orderId.groups.map((group: any) => {
           order.orderId = group.doclist.docs[0].orderId
@@ -84,7 +88,11 @@ const actions: ActionTree<OrderState, RootState> = {
             addressLine2: group.doclist.docs[0].address2,
           },
           order.orderName = group.doclist.docs[0].orderName
-          order.identifications = group.doclist.docs[0].orderIdentifications
+          order.identifications = {
+            'orderName': getIdentification(group.doclist.docs[0]?.orderIdentifications, orderName),
+            'orderId': getIdentification(group.doclist.docs[0]?.orderIdentifications, orderId),
+            'orderNo': getIdentification(group.doclist.docs[0]?.orderIdentifications, orderNo),
+          }
           order.statusId = group.doclist.docs[0].orderStatusId
           order.items = group.doclist.docs
           order.notes = group.doclist.docs[0].orderNotes
