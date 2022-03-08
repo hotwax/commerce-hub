@@ -2,7 +2,7 @@
   <ion-page>
     <ion-header :translucent="true">
       <ion-toolbar>
-        <ion-back-button default-href="/" slot="start" />
+        <ion-back-button default-href="/find-order" slot="start" />
         <ion-title>{{ $t("Order detail") }}</ion-title>
         <!-- TODO: implement functionality for the sync button -->
         <!-- <ion-buttons slot="end">
