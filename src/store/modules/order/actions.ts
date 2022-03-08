@@ -58,25 +58,17 @@ const actions: ActionTree<OrderState, RootState> = {
       resp = await OrderService.findOrderDetails(payload);
 
       if (resp.status == 200 && !hasError(resp)) {
-        const order: Order = {
-          orderId: '',
-          orderName: '',
-          customer: {},
-          /** An array containing the items purchased in this order */
-          items: [],
-          statusId: '',
-          identifications: {},
-          notes: []
-        }
-
         const orderName = process.env.VUE_APP_ORD_IDENT_TYPE_NAME
         const orderId = process.env.VUE_APP_ORD_IDENT_TYPE_ID
         const orderNo = process.env.VUE_APP_ORD_IDENT_TYPE_NO
         const customerLoyaltyOptions = process.env.VUE_APP_CUST_LOYALTY_OPTIONS
 
-        resp.data.grouped.orderId.groups.map((group: any) => {
-          order.orderId = group.doclist.docs[0].orderId
-          order.customer = {
+        const group = resp.data.grouped.orderId.groups.length > 0 && resp.data.grouped.orderId.groups[0]
+
+        const order: Order = {
+          orderId: group.doclist.docs[0].orderId,
+          orderName: group.doclist.docs[0].orderName,
+          customer: {
             name: group.doclist.docs[0].customerPartyName,
             emailId: group.doclist.docs[0].customerEmailId,
             phoneNumber: group.doclist.docs[0].customerPhoneNumber,
@@ -89,16 +81,16 @@ const actions: ActionTree<OrderState, RootState> = {
             addressLine2: group.doclist.docs[0].address2,
             loyaltyOptions: getCustomerLoyalty(group.doclist.docs[0].orderNotes, customerLoyaltyOptions)
           },
-          order.orderName = group.doclist.docs[0].orderName
-          order.identifications = {
+          /** An array containing the items purchased in this order */
+          items: group.doclist.docs,
+          statusId: group.doclist.docs[0].orderStatusId,
+          identifications: {
             'orderName': getIdentification(group.doclist.docs[0]?.orderIdentifications, orderName),
             'orderId': getIdentification(group.doclist.docs[0]?.orderIdentifications, orderId),
             'orderNo': getIdentification(group.doclist.docs[0]?.orderIdentifications, orderNo),
-          }
-          order.statusId = group.doclist.docs[0].orderStatusId
-          order.items = group.doclist.docs
-          order.notes = group.doclist.docs[0].orderNotes
-        })
+          },
+          notes: group.doclist.docs[0].orderNotes
+        }
 
         const productIds = order.items?.map((item: OrderItem) => item.productId)
 
