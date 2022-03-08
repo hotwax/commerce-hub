@@ -29,7 +29,7 @@
             <ion-list-header>{{ $t("Catalog") }}</ion-list-header>
             <ion-item>
               <ion-label>{{ $t("Categories") }}</ion-label>
-              <ion-select value="any">
+              <ion-select value="any" interface="popover">
                 <ion-select-option value="any">all</ion-select-option>
               </ion-select>
             </ion-item>
@@ -124,14 +124,14 @@
             <ion-item lines="none">
               <ion-icon slot="start" :icon="folderOutline" />
               <ion-label>{{ "Group by" }}</ion-label>
-              <ion-select value="any">
+              <ion-select value="any" interface="popover">
                 <ion-select-option value="any">Partent</ion-select-option>
               </ion-select>
             </ion-item>
             <ion-item lines="none">
               <ion-icon slot="start" :icon="swapVerticalOutline" />
               <ion-label>{{ $t("Sort") }}</ion-label>
-              <ion-select value="any">
+              <ion-select value="any" interface="popover">
                 <ion-select-option value="any">{{ $t("Product name") }}</ion-select-option>
               </ion-select>
             </ion-item>
