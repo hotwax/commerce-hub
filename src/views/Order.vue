@@ -18,7 +18,7 @@
           <div class="id">
             <ion-item lines="none">
               <ion-icon slot="start" :icon="ticketOutline" />
-              <ion-label>{{ order.orderName }}</ion-label>
+              <ion-label>{{ order.orderName ? order.orderName : order.orderId }}</ion-label>
               <ion-badge :color="orderStatus[order.statusId]?.color ? orderStatus[order.statusId]?.color : 'primary'" slot="end">{{ orderStatus[order.statusId]?.label ? orderStatus[order.statusId]?.label : order.statusId }}</ion-badge>
               <!-- TODO: implement functionality to change the orderStatus -->
               <!-- <ion-select :value="status" @ionChange="changeStatus($event)" slot="end">
