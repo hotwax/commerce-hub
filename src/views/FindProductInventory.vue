@@ -139,9 +139,9 @@
 
           <hr />
 
-          <div class="product" @click="() => router.push('/product-inventory')">
+          <div class="product" v-for="product in products" :key="product.groupValue" @click="() => router.push('/product-inventory')">
             <div class="product-image desktop-only">
-              <Image src="https://cdn.shopify.com/s/files/1/0069/7384/9727/products/test-track.jpg?v=1626255137" />
+              <Image :src="getProduct(product.productId).mainImageUrl" />
             </div>
 
             <div>
@@ -149,25 +149,25 @@
                 <div class="primary-info">
                   <ion-item lines="none">
                     <ion-thumbnail slot="start" class="mobile-only">
-                      <Image src="https://cdn.shopify.com/s/files/1/0069/7384/9727/products/test-track.jpg?v=1626255137" />
+                      <Image :src="getProduct(product.productId).mainImageUrl" />
                     </ion-thumbnail>
                     <ion-label>
-                      <p>Brand</p>
-                      Virtual Name
-                      <p>{{ $t("Color") }} : color</p>
-                      <p>{{ $t("Size") }}: size</p>
+                      <p>{{ getProduct(product.productId).brandName }}</p>
+                      {{ product.productName }}
+                      <p>{{ $t("Color") }}: {{ $filters.getFeaturesList(getProduct(product.productId).featureHierarchy, '1/COLOR/').join(", ") }}</p>
+                      <p>{{ $t("Size") }}: {{ $filters.getFeaturesList(getProduct(product.productId).featureHierarchy, '1/SIZE/').join(", ") }}</p>
                     </ion-label>
                   </ion-item>
                 </div>
                 <div class="tags desktop-only">
                   <ion-chip>
                     <ion-icon :icon="pricetag" />
-                    <ion-label>Shopify ID</ion-label>
+                    <ion-label>{{ getProduct(product.productId).internalName }}</ion-label>
                   </ion-chip>
                 </div>
                 <div class="metadata">
                   <ion-item lines="none" detail>
-                    <ion-note slot="end">3 variants</ion-note>
+                    <ion-note slot="end">{{ product.variants.length }} {{ $t("variants") }}</ion-note>
                   </ion-item>
                 </div>
               </section>
@@ -175,16 +175,16 @@
               <div class="desktop-only">
                 <ion-list>
                   <ion-list-header>
-                    Variants
+                    {{ $t("variants") }}
                     <hr />
                   </ion-list-header>
-                  <div v-for="item in 2" :key="item" class="list-item">
+                  <div v-for="item in product.variants" :key="item.productId" class="list-item">
                     <div>
                       <ion-item lines="none">
                         <ion-label>
-                          SKU
-                          <p>{{ $t("Color") }} : color</p>
-                          <p>{{ $t("Size") }}: size</p>
+                          {{ item.sku }}
+                          <p>{{ $t("Color") }}: {{ $filters.getFeature(item.featureHierarchy, '1/COLOR/') }}</p>
+                          <p>{{ $t("Size") }}: {{ $filters.getFeature(item.featureHierarchy, '1/SIZE/') }}</p>
                         </ion-label>
                       </ion-item>
                     </div>
@@ -192,13 +192,13 @@
                     <div>
                       <ion-chip>
                         <ion-icon :icon="pricetag" />
-                        <ion-label>{{ $t("Shopify ID") }}</ion-label>
+                        <ion-label>{{ item.internalName }}</ion-label>
                       </ion-chip>
                     </div>
 
                     <div>
                       <ion-item lines="none" detail>
-                        <ion-note slot="end">3 variants</ion-note>
+                        <ion-note slot="end">{{ getProductStock(item.productId) }}</ion-note>
                       </ion-item>
                     </div>
                   </div>
@@ -213,7 +213,7 @@
   </ion-page>
 </template>
 
-<script>
+<script lang="ts">
 import Image from '../components/Image.vue';
 import {
   IonBackButton,
@@ -249,10 +249,11 @@ import {
   sync,
   swapVerticalOutline  
 } from 'ionicons/icons';
-
+import { defineComponent } from 'vue';
+import { mapGetters, useStore } from "vuex";
 import { useRouter } from "vue-router";
 
-export default {
+export default defineComponent({
   name: 'ProductInventory',
   components: {
     Image,
@@ -281,8 +282,41 @@ export default {
     IonTitle,
     IonToolbar
   },
+  computed: {
+    ...mapGetters({
+      products: "product/getProducts",
+      getProduct: "product/getProduct",
+      getProductStock: "stock/getProductStock"
+    })
+  },
+  methods: {
+    async getProducts(vSize?: any, vIndex?: any) {
+      const viewSize = vSize ? vSize : process.env.VUE_APP_VIEW_SIZE;
+      const viewIndex = vIndex ? vIndex : 0;
+
+      const payload = {
+        "json": {
+          "params": {
+            "rows": viewSize,
+            "start": viewIndex,
+            "group": true,
+            "group.field": "groupId",
+            "group.limit": 10000,
+            "group.ngroups": true,
+          } as any,
+          "query": "*:*",
+          "filter": "docType: PRODUCT"
+        }
+      }
+      this.store.dispatch("product/getProducts", payload);
+    }
+  },
+  mounted() {
+    this.getProducts();
+  },
   setup() {
     const router = useRouter();
+    const store = useStore();
 
     return {
       downloadOutline,
@@ -291,10 +325,11 @@ export default {
       sync,
       pricetag,
       swapVerticalOutline, 
-      router
+      router,
+      store
     };
   },
-};
+});
 </script>
 
 <style scoped>
