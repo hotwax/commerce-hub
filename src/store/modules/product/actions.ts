@@ -95,6 +95,7 @@ const actions: ActionTree<ProductState, RootState> = {
       resp = await ProductService.getProducts(payload);
       if(resp.status === 200 && resp.data.grouped.groupId?.ngroups > 0 && !hasError(resp)) {
         let products = resp.data.grouped.groupId?.groups;
+        const totalProductsCount = resp.data.grouped.groupId.ngroups;
         
         products = products.map((product: any) => {
           return {
@@ -121,7 +122,7 @@ const actions: ActionTree<ProductState, RootState> = {
         this.dispatch("stock/addProducts", { variantIds });
         
         if(payload.json.params.start && payload.json.params.start > 0) products = state.products.list.concat(products);
-        commit(types.PRODUCT_LIST_UPDATED, { products, totalProductsCount: products.length });
+        commit(types.PRODUCT_LIST_UPDATED, { products, totalProductsCount });
       } else {
         showToast(translate("Products not found"));
       }

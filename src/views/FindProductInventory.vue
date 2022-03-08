@@ -207,6 +207,9 @@
               </div>
             </div>
           </div>
+          <ion-infinite-scroll @ionInfinite="loadMoreProducts($event)" threshold="100px" :disabled="!isScrollable">
+            <ion-infinite-scroll-content loading-spinner="crescent" :loading-text="$t('Loading')"/>
+          </ion-infinite-scroll>
         </main>
       </div>
     </ion-content>
@@ -228,6 +231,8 @@ import {
   IonContent,
   IonHeader,
   IonIcon,
+  IonInfiniteScroll,
+  IonInfiniteScrollContent,
   IonItem,
   IonLabel,
   IonList,
@@ -269,6 +274,8 @@ export default defineComponent({
     IonContent,
     IonHeader,
     IonIcon,
+    IonInfiniteScroll,
+    IonInfiniteScrollContent,
     IonItem,
     IonLabel,
     IonList,
@@ -291,7 +298,8 @@ export default defineComponent({
     ...mapGetters({
       products: "product/getProducts",
       getProduct: "product/getProduct",
-      getProductStock: "stock/getProductStock"
+      getProductStock: "stock/getProductStock",
+      isScrollable: 'product/isScrollable'
     })
   },
   methods: {
@@ -303,7 +311,7 @@ export default defineComponent({
         "json": {
           "params": {
             "rows": viewSize,
-            "start": viewSize * viewIndex,
+            "start": viewIndex * viewSize,
             "group": true,
             "group.field": "groupId",
             "group.limit": 10000,
@@ -320,6 +328,14 @@ export default defineComponent({
         payload.json.query = `*${this.queryString}*`
       }
       this.store.dispatch("product/getProducts", payload);
+    },
+    async loadMoreProducts(event: any){
+      this.getProducts(
+        undefined,
+        Math.ceil(this.products.length / process.env.VUE_APP_VIEW_SIZE).toString()
+      ).then(() => {
+        event.target.complete();
+      })
     }
   },
   mounted() {
