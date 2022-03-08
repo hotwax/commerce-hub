@@ -132,7 +132,7 @@
                 <ion-item lines="none">
                   <ion-label>
                     {{ order.orderId }}
-                    <p> {{ order.customerPartyName }} </p>
+                    <p> {{ order.customer.name }} </p>
                   </ion-label>
                 </ion-item>
               </div>

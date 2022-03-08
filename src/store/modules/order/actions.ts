@@ -16,7 +16,18 @@ const actions: ActionTree<OrderState, RootState> = {
       if (resp && resp.status === 200 && !hasError(resp)) {
         let orders = resp.data.grouped.orderId.groups.map((order: any) => {
           order.orderId = order.doclist.docs[0].orderId
-          order.customerPartyName = order.doclist.docs[0].customerPartyName
+          order.customer = {
+            name: order.doclist.docs[0].customerPartyName,
+            emailId: order.doclist.docs[0].customerEmailId,
+            phoneNumber: order.doclist.docs[0].customerPhoneNumber,
+            toName: order.doclist.docs[0].customerPartyName,
+            city: order.doclist.docs[0].shipToCity,
+            state: order.doclist.docs[0].shipToState,
+            zipCode: order.doclist.docs[0].postalCode,
+            country: order.doclist.docs[0].shipToCountry,
+            addressLine1: order.doclist.docs[0].address1,
+            addressLine2: order.doclist.docs[0].address2,
+          },
           order.orderName = order.doclist.docs[0].orderName
           order.orderNotes = order.doclist.docs[0].orderNotes
           order.orderDate = order.doclist.docs[0].orderDate
