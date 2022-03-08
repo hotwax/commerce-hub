@@ -154,8 +154,8 @@
                     <ion-label>
                       <p>{{ getProduct(product.productId).brandName }}</p>
                       {{ product.productName }}
-                      <p>{{ $t("Color") }}: {{ $filters.getFeature(getProduct(product.productId).featureHierarchy, '1/COLOR/') }}</p>
-                      <p>{{ $t("Size") }}: {{ $filters.getFeature(getProduct(product.productId).featureHierarchy, '1/SIZE/') }}</p>
+                      <p>{{ $t("Color") }}: {{ $filters.getFeaturesList(getProduct(product.productId).featureHierarchy, '1/COLOR/').join(", ") }}</p>
+                      <p>{{ $t("Size") }}: {{ $filters.getFeaturesList(getProduct(product.productId).featureHierarchy, '1/SIZE/').join(", ") }}</p>
                     </ion-label>
                   </ion-item>
                 </div>
