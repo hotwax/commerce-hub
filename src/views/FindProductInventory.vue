@@ -21,7 +21,7 @@
     <ion-content>
       <div class="find">
         <section class="search">
-          <ion-searchbar />
+          <ion-searchbar v-model="queryString" @keyup.enter="getProducts()" />
         </section>
 
         <aside class="filters desktop-only">
@@ -282,6 +282,11 @@ export default defineComponent({
     IonTitle,
     IonToolbar
   },
+  data() {
+    return {
+      queryString: ''
+    }
+  },
   computed: {
     ...mapGetters({
       products: "product/getProducts",
@@ -298,7 +303,7 @@ export default defineComponent({
         "json": {
           "params": {
             "rows": viewSize,
-            "start": viewIndex,
+            "start": viewSize * viewIndex,
             "group": true,
             "group.field": "groupId",
             "group.limit": 10000,
@@ -307,6 +312,12 @@ export default defineComponent({
           "query": "*:*",
           "filter": "docType: PRODUCT"
         }
+      }
+      if(this.queryString) {
+        payload.json.params.defType = 'edismax'
+        payload.json.params.qf = 'productId productName sku internalName brandName'
+        payload.json.params['q.op'] = 'AND'
+        payload.json.query = `*${this.queryString}*`
       }
       this.store.dispatch("product/getProducts", payload);
     }
