@@ -6,6 +6,7 @@ import * as types from './mutation-types'
 import { getCustomerLoyalty, getIdentification, hasError, showToast } from '@/utils'
 import { translate } from '@/i18n'
 import { Order, OrderItem } from '@/types'
+import { UtilService } from '@/services/UtilService'
 
 const actions: ActionTree<OrderState, RootState> = {
   

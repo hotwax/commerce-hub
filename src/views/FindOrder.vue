@@ -318,6 +318,7 @@ export default defineComponent ({
   },
   mounted() {
     this.getOrders();
+    this.store.dispatch('util/fetchShipmentMethods')
   },
   setup() {
     const router = useRouter();
