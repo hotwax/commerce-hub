@@ -27,4 +27,16 @@ const getIdentification = (identifications: any, id: string) => {
   return externalId;
 }
 
-export { showToast, hasError, getIdentification }
+const getCustomerLoyalty = (orderNotes: any, customerLoyaltyOptions: any) => {
+  let customerLoyalty = '' as any
+  if (orderNotes && customerLoyaltyOptions) {
+    for (const customerLoyaltyOption of Object.entries(customerLoyaltyOptions)) {
+      if (orderNotes.includes(customerLoyaltyOption[0])) {
+        customerLoyalty = customerLoyaltyOption[1];
+      }
+    }
+  }
+  return customerLoyalty;
+}
+
+export { showToast, hasError, getCustomerLoyalty, getIdentification }

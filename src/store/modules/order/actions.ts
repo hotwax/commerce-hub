@@ -3,7 +3,7 @@ import { ActionTree } from 'vuex'
 import RootState from '@/store/RootState'
 import OrderState from './OrderState'
 import * as types from './mutation-types'
-import { getIdentification, hasError, showToast } from '@/utils'
+import { getCustomerLoyalty, getIdentification, hasError, showToast } from '@/utils'
 import { translate } from '@/i18n'
 import { Order, OrderItem } from '@/types'
 
@@ -72,6 +72,7 @@ const actions: ActionTree<OrderState, RootState> = {
         const orderName = process.env.VUE_APP_ORD_IDENT_TYPE_NAME
         const orderId = process.env.VUE_APP_ORD_IDENT_TYPE_ID
         const orderNo = process.env.VUE_APP_ORD_IDENT_TYPE_NO
+        const customerLoyaltyOptions = process.env.VUE_APP_CUST_LOYALTY_OPTIONS
 
         resp.data.grouped.orderId.groups.map((group: any) => {
           order.orderId = group.doclist.docs[0].orderId
@@ -86,6 +87,7 @@ const actions: ActionTree<OrderState, RootState> = {
             country: group.doclist.docs[0].shipToCountry,
             addressLine1: group.doclist.docs[0].address1,
             addressLine2: group.doclist.docs[0].address2,
+            loyaltyOptions: getCustomerLoyalty(group.doclist.docs[0].orderNotes, customerLoyaltyOptions)
           },
           order.orderName = group.doclist.docs[0].orderName
           order.identifications = {

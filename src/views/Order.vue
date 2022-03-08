@@ -55,9 +55,9 @@
                 <ion-item lines="none">
                   <ion-label> {{ order.customer?.name }} </ion-label>
                   <!-- TODO: handle this property to display loyalty options -->
-                  <ion-chip slot="end" v-if="$filters.getCustomerLoyalty(order.orderNotes, cusotmerLoyaltyOptions)">
+                  <ion-chip slot="end" v-if="order.customer?.loyaltyOptions">
                     <ion-icon :icon="ribbon" />
-                    <ion-label>{{ $filters.getCustomerLoyalty(order.orderNotes, cusotmerLoyaltyOptions) }}</ion-label>
+                    <ion-label>{{ order.customer?.loyaltyOptions }}</ion-label>
                   </ion-chip>
                 </ion-item>
                 <ion-item v-if="order.customer?.emailId">
@@ -317,13 +317,11 @@ export default defineComponent({
     const itemStatus = JSON.parse(process.env.VUE_APP_ITEM_STATUS)
     const orderPreOrderId = process.env.VUE_APP_PRE_ORDER_IDNT_ID
     const orderBackOrderId = process.env.VUE_APP_BACKORDER_IDNT_ID
-    const cusotmerLoyaltyOptions = process.env.VUE_APP_CUST_LOYALTY_OPTIONS
 
     return {
       callOutline,
       caretDown,
       cashOutline,
-      cusotmerLoyaltyOptions,
       informationCircleOutline,
       itemStatus,
       mailOutline,
