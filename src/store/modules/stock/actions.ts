@@ -28,7 +28,7 @@ const actions: ActionTree<StockState, RootState> = {
     // Implemented this loop to check productInventory and find product ATP
     // because we were only getting maximum 100 records at a time.
 
-    const count = variantIds.length / 100;
+    const count = variantIds?.length / 100;
 
     for(let i = 0; i < count; i++) {
       const resp: any = await StockService.checkInventory({
