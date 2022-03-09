@@ -27,9 +27,10 @@
         <aside class="filters desktop-only">
           <ion-list>
             <ion-list-header>{{ $t("Catalog") }}</ion-list-header>
+            <!-- TODO: Work tomorrow on this -->
             <ion-item>
               <ion-label>{{ $t("Categories") }}</ion-label>
-              <ion-select value="any" interface="popover">
+              <ion-select multiple="true" :value="categories" interface="popover">
                 <ion-select-option value="any">all</ion-select-option>
               </ion-select>
             </ion-item>
@@ -299,7 +300,8 @@ export default defineComponent({
       products: "product/getProducts",
       getProduct: "product/getProduct",
       getProductStock: "stock/getProductStock",
-      isScrollable: 'product/isScrollable'
+      isScrollable: 'product/isScrollable',
+      categories: 'product/getCategories'
     })
   },
   methods: {
@@ -336,10 +338,24 @@ export default defineComponent({
       ).then(() => {
         event.target.complete();
       })
+    },
+    async getCategories() {
+      const payload = {
+        "inputFields": {
+          "parentProductCategoryId": "NN_CATALOG_CAT"
+        },
+        viewSize: 50,
+        "fieldList": ["categoryName"],
+        "entityName": "ProductCategoryAndRollup",
+        "distinct": "Y",
+        "noConditionFind": "Y",
+      }
+      this.store.dispatch("product/getCategories", payload);
     }
   },
   mounted() {
     this.getProducts();
+    this.getCategories();
   },
   setup() {
     const router = useRouter();

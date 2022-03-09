@@ -131,6 +131,24 @@ const actions: ActionTree<ProductState, RootState> = {
       showToast(translate("Something went wrong"));
     }
     return resp;
+  },
+
+  /**
+   * Get Categories
+   */
+  async getCategories({ commit }, payload) {
+    let resp;
+
+    try{
+      resp = await ProductService.getCategories(payload);
+      if (resp.status === 200 && resp.data.docs?.length > 0 && !hasError(resp)) {
+        const categories = resp.data.docs;
+        commit(types.PRODUCT_CATEGORIES_UPDATED, { categories });
+      }
+    } catch (err) {
+      console.error(err);
+    }
+    return resp;
   }
 }
 
