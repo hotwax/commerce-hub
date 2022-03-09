@@ -9,7 +9,7 @@
 
     <ion-content>
       <main>
-        <ion-card>
+        <ion-card @click="() => router.push('/profile')">
           <ion-item lines="none">
             <ion-icon :icon="personCircleOutline" slot="start" />
             <ion-label>{{ $t("Profile") }}</ion-label>
@@ -25,7 +25,7 @@
           <ion-button fill="clear">{{ $t("Details") }}</ion-button>
         </ion-card>
 
-        <ion-card>
+        <ion-card @click="() => router.push('/locations')">
           <ion-item lines="none">
             <ion-icon :icon="businessOutline" slot="start" />
             <ion-label>{{ $t("Locations")}}</ion-label>
@@ -41,7 +41,7 @@
           <ion-button fill="clear">{{ $t("Details") }}</ion-button>
         </ion-card>
 
-        <ion-card>
+        <ion-card @click="() => router.push('/users')">
           <ion-item lines="none">
             <ion-icon :icon="peopleCircleOutline" slot="start" />
             <ion-label>{{ $t("Users") }}</ion-label>
