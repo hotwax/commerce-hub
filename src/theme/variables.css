@@ -454,3 +454,9 @@ ion-list-header > hr {
     border-left: 1px solid var(--ion-color-medium);
   }
 }
+
+@media (prefers-color-scheme: dark) {
+  ion-chip > ion-icon {
+    color: var(--ion-text-color);
+  }
+}
