@@ -120,9 +120,9 @@
                   <ion-icon :icon="pricetag" />
                   <ion-label> {{ order.orderName }} </ion-label>
                 </ion-chip>
-                <ion-chip outline v-if="$filters.getCustomerLoyalty(order.orderNotes, 'cusotmerLoyaltyOptions')">
+                <ion-chip outline v-if="$filters.getCustomerLoyalty(order.notes, cusotmerLoyaltyOptions)">
                   <ion-icon :icon="ribbon" />
-                  <ion-label> {{ $filters.getCustomerLoyalty(order.orderNotes, 'cusotmerLoyaltyOptions') }} </ion-label>
+                  <ion-label>{{ $filters.getCustomerLoyalty(order.notes, cusotmerLoyaltyOptions) }}</ion-label>
                 </ion-chip>
               </div>
 
@@ -318,6 +318,7 @@ export default defineComponent ({
   },
   mounted() {
     this.getOrders();
+    this.store.dispatch('util/fetchShipmentMethods')
   },
   setup() {
     const router = useRouter();
@@ -327,8 +328,10 @@ export default defineComponent ({
     const itemStatus = JSON.parse(process.env.VUE_APP_ITEM_STATUS)
     const orderPreOrderId = process.env.VUE_APP_PRE_ORDER_IDNT_ID
     const orderBackOrderId = process.env.VUE_APP_BACKORDER_IDNT_ID
+    const cusotmerLoyaltyOptions = process.env.VUE_APP_CUST_LOYALTY_OPTIONS
 
     return {
+      cusotmerLoyaltyOptions,
       downloadOutline,
       filterOutline,
       itemStatus,
