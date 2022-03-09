@@ -206,7 +206,7 @@
                       <ion-list-header>{{ $t("Fulfillment") }}</ion-list-header>
                       <ion-item>
                         <ion-label> {{ $t("Shipping method") }} </ion-label>
-                        <p>{{ getShipmentMethodDescription(item.shipmentMethodTypeId).description ? getShipmentMethodDescription(item.shipmentMethodTypeId).description : "-"}}</p>
+                        <p>{{ getShipmentMethod(item.shipmentMethodTypeId) ? getShipmentMethod(item.shipmentMethodTypeId) : "-"}}</p>
                       </ion-item>
                       <ion-item>
                         <ion-label>{{ $t("Shipping from") }}</ion-label>
@@ -298,7 +298,7 @@ export default defineComponent({
       order: 'order/getCurrentOrder',
       getProduct: 'product/getProduct',
       getProductStock: 'stock/getProductStock',
-      getShipmentMethodDescription: 'util/getShipmentMethodDesc'
+      getShipmentMethod: 'util/getShipmentMethod'
     })
   },
   methods:{
