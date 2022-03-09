@@ -27,11 +27,11 @@
         <aside class="filters desktop-only">
           <ion-list>
             <ion-list-header>{{ $t("Catalog") }}</ion-list-header>
-            <!-- TODO: Work tomorrow on this -->
+            <!-- TODO: Filter can be implemented for selecting multiple categories at a time. -->
             <ion-item>
               <ion-label>{{ $t("Categories") }}</ion-label>
-              <ion-select multiple="true" :value="categories" interface="popover">
-                <ion-select-option value="any">all</ion-select-option>
+              <ion-select :value="appliedFilters.category.categoryName" @ionChange.prevent="($event) => {appliedFilters.category.categoryName = $event['detail'].value; }" interface="popover">
+                <ion-select-option v-for="category in categories" :key="category" :value="category.categoryName">{{ category.categoryName }}</ion-select-option>
               </ion-select>
             </ion-item>
 
@@ -255,7 +255,7 @@ import {
   sync,
   swapVerticalOutline  
 } from 'ionicons/icons';
-import { defineComponent } from 'vue';
+import { defineComponent, reactive } from 'vue';
 import { mapGetters, useStore } from "vuex";
 import { useRouter } from "vue-router";
 
@@ -360,8 +360,14 @@ export default defineComponent({
   setup() {
     const router = useRouter();
     const store = useStore();
+    const appliedFilters = reactive({
+      'category': {
+        'categoryName': 'any'
+      }
+    })
 
     return {
+      appliedFilters,
       downloadOutline,
       filterOutline,
       folderOutline,
