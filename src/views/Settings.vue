@@ -9,7 +9,7 @@
 
     <ion-content>
       <main>
-        <ion-card @click="() => router.push('/profile')">
+        <ion-card>
           <ion-item lines="none">
             <ion-icon :icon="personCircleOutline" slot="start" />
             <ion-label>{{ $t("Profile") }}</ion-label>
@@ -22,10 +22,10 @@
             <ion-label>{{ $t("OMS") }}</ion-label>
             <ion-label slot="end">{{ instanceUrl }}</ion-label>
           </ion-item>
-          <ion-button fill="clear">{{ $t("Details") }}</ion-button>
+          <ion-button fill="clear" @click="() => router.push('/profile')">{{ $t("Details") }}</ion-button>
         </ion-card>
 
-        <ion-card @click="() => router.push('/locations')">
+        <ion-card>
           <ion-item lines="none">
             <ion-icon :icon="businessOutline" slot="start" />
             <ion-label>{{ $t("Locations")}}</ion-label>
@@ -38,10 +38,10 @@
             <ion-label>{{ $t("Shops") }}</ion-label>
             <ion-note slot="end">sales channels</ion-note>
           </ion-item>
-          <ion-button fill="clear">{{ $t("Details") }}</ion-button>
+          <ion-button fill="clear" @click="() => router.push('/locations')">{{ $t("Details") }}</ion-button>
         </ion-card>
 
-        <ion-card @click="() => router.push('/users')">
+        <ion-card>
           <ion-item lines="none">
             <ion-icon :icon="peopleCircleOutline" slot="start" />
             <ion-label>{{ $t("Users") }}</ion-label>
@@ -51,7 +51,7 @@
             <ion-note slot="end">user count</ion-note>
           </ion-item>
           <ion-item lines="full"></ion-item>
-          <ion-button fill="clear">{{ $t("Details") }}</ion-button>
+          <ion-button fill="clear" @click="() => router.push('/users')">{{ $t("Details") }}</ion-button>
         </ion-card>
 
         <ion-card>
