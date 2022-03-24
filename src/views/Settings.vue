@@ -15,8 +15,8 @@
             <ion-label>{{ $t("Profile") }}</ion-label>
           </ion-item>
           <ion-item>
-            <ion-label>{{ userProfile !== null ? userProfile.partyName : '' }}</ion-label>
-            <ion-label slot="end">User data</ion-label>
+            <ion-label>{{ $t("User") }}</ion-label>
+            <ion-label slot="end">{{ userProfile !== null ? userProfile.partyName : '' }}</ion-label>
           </ion-item>
           <ion-item lines="full">
             <ion-label>{{ $t("OMS") }}</ion-label>
