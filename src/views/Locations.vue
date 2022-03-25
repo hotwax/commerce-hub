@@ -15,7 +15,7 @@
     <ion-content>
       <div class="find">
         <section class="search">
-          <ion-searchbar :placeholder="$t('Search locations')" />
+          <ion-searchbar @ionFocus="selectSearchBarText($event)" :placeholder="$t('Search locations')" v-model="queryString" @keyup.enter="getFacilityLocations()" />
         </section>
 
         <aside class="filters">
@@ -142,6 +142,11 @@ export default defineComponent({
     IonToolbar,
     IonTitle,
   },
+  data() {
+    return {
+      queryString: ""
+    }
+  },
   computed: {
     ...mapGetters({
       currentFacility: 'user/getCurrentFacility',
@@ -149,6 +154,11 @@ export default defineComponent({
     })
   },
   methods: {
+    selectSearchBarText(event: any) {
+      event.target.getInputElement().then((element: any) => {
+        element.select();
+      })
+    },
     async openFacilityPopover(ev: Event) {
       const popover = await popoverController.create({
         component: FacilityPopover,
@@ -158,14 +168,16 @@ export default defineComponent({
       });
       return popover.present();
     },
-    async getFacilityLocations() {
+    async getFacilityLocations(vSize?: any) {
+      const viewSize = vSize ? vSize : process.env.VUE_APP_VIEW_SIZE;
+
       const payload = {
-        "inputFields": {},
+        "inputFields": {} as any,
         "fieldList": [],
-        "viewSize": 20,
+        "viewSize": viewSize,
         "entityName": "ProductStoreFacility",
-        "distinct": "Y",
-        "noConditionFind": "Y"
+        "noConditionFind": "Y",
+        "distinct": "Y"
       }
 
       this.store.dispatch('util/getFacilityLocations', payload);
