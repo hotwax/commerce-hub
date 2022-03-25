@@ -277,6 +277,9 @@ body {
 
 .filters {
   grid-area: filters;
+  position: sticky;
+  top: 6.25rem;
+  align-self: start;   
 }
 
 .section-header {
@@ -378,6 +381,12 @@ ion-list-header > hr {
           "filters main" 1fr 
           / 375px; 
     margin: var(--spacer-lg);                            
+  }
+
+  .search {
+    position: sticky;
+    top: 2rem;
+    margin-bottom: unset;
   }
   
   .section-header {
