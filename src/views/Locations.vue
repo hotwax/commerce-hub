@@ -118,6 +118,7 @@ import {
   storefrontOutline,
 } from 'ionicons/icons';
 import FacilityPopover from '@/components/FacilityPopover.vue';
+import { mapGetters, useStore } from 'vuex';
 
 export default defineComponent({
   name: 'Locations',
@@ -141,6 +142,11 @@ export default defineComponent({
     IonToolbar,
     IonTitle,
   },
+  computed: {
+    ...mapGetters({
+      currentFacility: 'user/getCurrentFacility',
+    })
+  },
   methods: {
     async openFacilityPopover(ev: Event) {
       const popover = await popoverController.create({
@@ -151,14 +157,32 @@ export default defineComponent({
       });
       return popover.present();
     },
+    async getFacilityLocations() {
+      const payload = {
+        "inputFields": {},
+        "fieldList": [],
+        "viewSize": 20,
+        "entityName": "ProductStoreFacility",
+        "distinct": "Y",
+        "noConditionFind": "Y"
+      }
+
+      this.store.dispatch('util/getFacilityLocations', payload);
+    }
+  },
+  mounted() {
+    this.getFacilityLocations();
   },
   setup() {
+    const store = useStore();
+
     return {
       addOutline,
       businessOutline,
       ellipsisVerticalOutline,
       filterOutline,
       globeOutline,
+      store,
       storefrontOutline
     };
   },
