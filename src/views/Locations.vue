@@ -145,6 +145,7 @@ export default defineComponent({
   computed: {
     ...mapGetters({
       currentFacility: 'user/getCurrentFacility',
+      facilityLocations: 'util/getFacilityLocations'
     })
   },
   methods: {
