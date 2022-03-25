@@ -61,8 +61,8 @@ const actions: ActionTree<UtilState, RootState> = {
       showToast(translate("Something went wrong"));
       console.error(error);
     }
+    return resp;
   },
-
   async getfacilitiesInfo({ commit }, payload) {
     let resp;
 
@@ -78,6 +78,7 @@ const actions: ActionTree<UtilState, RootState> = {
       showToast(translate("Something went wrong"));
       console.error(error);
     }
+    return resp;
   }
 }
 

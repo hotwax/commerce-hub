@@ -146,7 +146,8 @@ export default defineComponent({
   },
   data() {
     return {
-      queryString: ""
+      queryString: "",
+      facilities: []
     }
   },
   computed: {
@@ -183,12 +184,19 @@ export default defineComponent({
       this.store.dispatch('util/getFacilityLocations', payload);
     },
     async searchFacility() {
-      if(this.queryString) this.store.dispatch('util/searchFacility', { facilityId: this.queryString });
-      else showToast(translate("Please enter a facilityId"));
+      if(this.queryString.length > 0) {
+        this.facilities = this.facilityLocations.filter((facility: any) => {
+          return (facility.facilityId.toLowerCase().includes(this.queryString.toLowerCase()) || facility.facilityName.toLowerCase().includes(this.queryString.toLowerCase()));
+        })
+      } else {
+        this.facilities = this.facilityLocations;
+      }
     }
   },
   mounted() {
-    this.getFacilityLocations();
+    this.getFacilityLocations().then(() => {
+      this.searchFacility();
+    })
   },
   setup() {
     const store = useStore();
