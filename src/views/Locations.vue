@@ -15,7 +15,7 @@
     <ion-content>
       <div class="find">
         <section class="search">
-          <ion-searchbar @ionFocus="selectSearchBarText($event)" :placeholder="$t('Search locations')" v-model="queryString" @keyup.enter="getFacilityLocations()" />
+          <ion-searchbar @ionFocus="selectSearchBarText($event)" :placeholder="$t('Search locations')" v-model="queryString" @keyup.enter="searchFacility()" />
         </section>
 
         <aside class="filters">
@@ -119,6 +119,8 @@ import {
 } from 'ionicons/icons';
 import FacilityPopover from '@/components/FacilityPopover.vue';
 import { mapGetters, useStore } from 'vuex';
+import { showToast } from '@/utils';
+import { translate } from '@/i18n';
 
 export default defineComponent({
   name: 'Locations',
@@ -168,19 +170,21 @@ export default defineComponent({
       });
       return popover.present();
     },
-    async getFacilityLocations(vSize?: any) {
-      const viewSize = vSize ? vSize : process.env.VUE_APP_VIEW_SIZE;
-
+    async getFacilityLocations() {
       const payload = {
-        "inputFields": {} as any,
+        "inputFields": {},
         "fieldList": [],
-        "viewSize": viewSize,
+        "viewSize": 20,
         "entityName": "ProductStoreFacility",
         "noConditionFind": "Y",
         "distinct": "Y"
       }
 
       this.store.dispatch('util/getFacilityLocations', payload);
+    },
+    async searchFacility() {
+      if(this.queryString) this.store.dispatch('util/searchFacility', { facilityId: this.queryString });
+      else showToast(translate("Please enter a facilityId"));
     }
   },
   mounted() {
