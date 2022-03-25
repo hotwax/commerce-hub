@@ -19,7 +19,7 @@
           <div class="id">
             <ion-item lines="none">
               <ion-icon slot="start" :icon="ticketOutline" />
-              <ion-label>External Purchase Order ID</ion-label>
+              <h2>External Purchase Order ID</h2>
               <ion-badge slot="end">{{ status }}</ion-badge>
               <ion-select :value="status" @ionChange="changeStatus($event)" slot="end">
                 <ion-select-option value="Approved">Approved</ion-select-option>
@@ -96,7 +96,7 @@
         <section class="products">
           <ion-item lines="none">
             <ion-icon slot="start" :icon="shirtOutline" />
-            <ion-label>{{ $t("Products") }}</ion-label>
+            <h2>{{ $t("Products") }}</h2>
 
             <ion-button slot="end" fill="outline" color="medium" class="desktop-only">
               <ion-icon :icon="addOutline" slot="start" />
@@ -383,7 +383,7 @@ ion-select {
 
   .product-image {
     margin: var(--spacer-xs) 0 0 var(--spacer-xs);
-    border: 1px solid var(--ion-color-medium);
+    border: var(--border-medium);
     border-radius: 10px;
   }
 }

@@ -18,7 +18,7 @@
           <div class="id">
             <ion-item lines="none">
               <ion-icon slot="start" :icon="ticketOutline" />
-              <ion-label>{{ order.orderName ? order.orderName : order.orderId }}</ion-label>
+              <h2>{{ order.orderName ? order.orderName : order.orderId }}</h2>
               <ion-badge :color="orderStatus[order.statusId]?.color ? orderStatus[order.statusId]?.color : 'primary'" slot="end">{{ orderStatus[order.statusId]?.label ? orderStatus[order.statusId]?.label : order.statusId }}</ion-badge>
               <!-- TODO: implement functionality to change the orderStatus -->
               <!-- <ion-select :value="status" @ionChange="changeStatus($event)" slot="end">
@@ -104,7 +104,7 @@
         <section>
           <ion-item lines="none">
             <ion-icon slot="start" :icon="shirtOutline" />
-            <ion-label>{{ $t("Products") }}</ion-label>
+            <h2>{{ $t("Products") }}</h2>
           </ion-item>
 
           <div class="product" v-for="(item, index) of order.items" :key="index">
@@ -384,7 +384,7 @@ ion-select {
   }
 
   .product-image > img {
-    border: 1px solid var(--ion-color-medium);
+    border: var(--border-medium);
     border-radius: 10px;
   }
 }

@@ -20,7 +20,7 @@
           </ion-card>
         
           <div class="product-info desktop-only">
-            <ion-label>Parent product name</ion-label>
+            <h2>Parent product name</h2>
             <ion-card>
               <ion-card-header>
                 <ion-card-title>{{ $t("General information") }}</ion-card-title>
@@ -64,7 +64,7 @@
           <div class="variant-info">
             <ion-item class="desktop-only" lines="none">
               <ion-icon slot="start" :icon="shirtOutline" />
-              <ion-label>{{ $t("Variant") }}</ion-label>
+              <h2>{{ $t("Variant") }}</h2>
             </ion-item>
             <ion-list>
               <ion-list-header>{{ $t("Color") }}</ion-list-header>
@@ -122,7 +122,7 @@
         <section>
           <ion-item lines="none">
             <ion-icon slot="start" :icon="ticketOutline" />
-            <ion-label>Orders</ion-label>
+            <h2>Orders</h2>
           </ion-item>
           
           <div class="orders">
@@ -741,6 +741,7 @@ export default defineComponent({
   grid-template-columns: 254px auto;
   justify-items: start;
   align-items: center;
+  margin-bottom: var(--spacer-base);
 }
 
 .product-info,
@@ -755,11 +756,13 @@ export default defineComponent({
   grid-template-columns: repeat(2, auto);
   justify-content: space-between;
   align-items: center;
+  margin-bottom: var(--spacer-base);
 }
 
 /*Height of segment is defined now since their are less list items. Will remove it later */
 .segments {
   height: 400px;
+  margin: 0 var(--spacer-sm);
 }
 
 ion-segment {
@@ -774,6 +777,10 @@ ion-segment {
   .orders {
     display: grid;
     grid-template-columns: 343px 570px;
+  }
+
+  ion-segment {
+    margin: var(--spacer-xl) 0;
   }
 }
 </style>

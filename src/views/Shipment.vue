@@ -19,7 +19,7 @@
           <div class="id">
             <ion-item lines="none">
               <ion-icon slot="start" :icon="ticketOutline" />
-              <ion-label>External Shipment ID</ion-label>
+              <h2>External Shipment ID</h2>
               <ion-badge slot="end">{{ status }}</ion-badge>
               <ion-select :value="status" @ionChange="changeStatus($event)" slot="end">
                 <ion-select-option value="Approved">Approved</ion-select-option>
@@ -61,7 +61,7 @@
               </ion-card-header>
               <ion-item lines="none">
                 <ion-icon :icon="locationOutline" slot="start" />
-                <ion-label>
+                <ion-label class="ion-text-wrap">
                   Address1
                   <p>Address2</p>
                   <p>City, Zipcode</p>
@@ -70,7 +70,7 @@
               </ion-item>
               <ion-item lines="none">
                 <ion-icon :icon=" calendarOutline" slot="start" />
-                <ion-label>12th December 2021</ion-label>
+                <ion-label class="ion-text-wrap">12th December 2021</ion-label>
                 <ion-badge slot="end" color="success">Shipped</ion-badge>
               </ion-item>
             </ion-card>
@@ -81,7 +81,7 @@
               </ion-card-header>
               <ion-item lines="none"> 
                 <ion-icon :icon="locationOutline" slot="start" />
-                <ion-label>
+                <ion-label class="ion-text-wrap">
                   Address1
                   <p>Address2</p>
                   <p>City, Zipcode</p>
@@ -90,7 +90,7 @@
               </ion-item>
               <ion-item lines="none">
                 <ion-icon :icon=" calendarOutline" slot="start" />
-                <ion-label>14th December 2021</ion-label>
+                <ion-label class="ion-text-wrap">14th December 2021</ion-label>
                 <ion-badge slot="end" color="medium">ETA</ion-badge>
               </ion-item>
             </ion-card>
@@ -100,7 +100,7 @@
         <section class="products">       
           <ion-item lines="none">
             <ion-icon slot="start" :icon="shirtOutline" />
-            <ion-label>{{ $t("Products") }}</ion-label>
+            <h2>{{ $t("Products") }}</h2>
 
             <ion-button slot="end" fill="outline" color="medium" class="desktop-only">
               <ion-icon :icon="addOutline" slot="start" />
@@ -366,7 +366,7 @@ ion-select {
   }
 
   .product-image > img {
-    border: 1px solid var(--ion-color-medium);
+    border: var(--border-medium);
     border-radius: 10px;
   }
 }

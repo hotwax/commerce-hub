@@ -235,8 +235,8 @@ http://ionicframework.com/docs/theming/ */
   }
 }
 
-/** Spacer variables **/
 body {
+  /** Spacer variables **/
   --spacer-2xs: 0.25rem; /* 4px */
   --spacer-xs: 0.5rem;   /* 8px */
   --spacer-sm: 1rem;     /* 16px */
@@ -245,6 +245,9 @@ body {
   --spacer-xl: 2.5rem;   /* 40px */
   --spacer-2xl: 5rem;    /* 80px */
   --spacer-3xl: 10rem;   /* 160px */
+
+  /** Border variable **/
+  --border-medium: 1px solid var(--ion-color-medium);
 }
 
 .overline {
@@ -254,6 +257,10 @@ body {
   letter-spacing: 1.5px;
   color: #666;
   text-transform: uppercase !important;
+}
+
+h2 {
+  font-size: 16px;
 }
 
 .find {
@@ -373,6 +380,11 @@ ion-list-header > hr {
 }
 
 @media (min-width: 991px) {
+  h2 {
+    font-size: 24px;
+    margin: var(--spacer-xs);
+  }
+
   .find {
     grid: "search  main" min-content
           "filters main" 1fr 
@@ -391,7 +403,7 @@ ion-list-header > hr {
 
   .sort > ion-item {
     max-width: 308px;
-    border-left: 1px solid var(--ion-color-medium);
+    border-left: var(--border-medium);
   }
 
   .desktop-only {
@@ -414,7 +426,7 @@ ion-list-header > hr {
     margin-bottom: var(--spacer-lg);
   }
 
-  .main-content {
+  ion-content > main {
     margin: var(--spacer-lg);
   }
 
@@ -436,6 +448,7 @@ ion-list-header > hr {
           "cards    timeline" 1fr
           / 1fr 500px;
     justify-content: space-between;  
+    margin-bottom: var(--spacer-base);
   }
 
   .id {
@@ -451,7 +464,7 @@ ion-list-header > hr {
   
   .timeline {
     grid-area: timeline;
-    border-left: 1px solid var(--ion-color-medium);
+    border-left: var(--border-medium);
   }
 }
 
