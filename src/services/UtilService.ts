@@ -8,7 +8,7 @@ const getShipmentMethods = async (payload: any): Promise<any> => {
   });
 }
 
-const getFacilityLocations = async (payload: any): Promise<any> => {
+const getFacilities = async (payload: any): Promise<any> => {
   return api({
     url: "/performFind",
     method: "POST",
@@ -16,7 +16,43 @@ const getFacilityLocations = async (payload: any): Promise<any> => {
   });
 }
 
+const fetchEcomStores = async (payload: any): Promise<any> => {
+  return api({
+    url: "/performFind",
+    method: "POST",
+    data: payload
+  });
+}
+
+const fetchFacilityTypes = async (payload: any): Promise<any> => {
+  return api({
+    url: "/performFind",
+    method: "post",
+    data: payload
+  });
+}
+
+const getFacilityIdentifications = async (payload: any): Promise<any> => {
+  return api({
+    url: "/performFind",
+    method: "post",
+    data: payload
+  });
+}
+
+const getFacilityAddress = async (payload: any): Promise<any> => {
+  return api({
+    url: "/performFind",
+    method: "post",
+    data: payload
+  });
+}
+
 export const UtilService = {
   getShipmentMethods,
-  getFacilityLocations
+  getFacilities,
+  fetchEcomStores,
+  fetchFacilityTypes,
+  getFacilityIdentifications,
+  getFacilityAddress
 }

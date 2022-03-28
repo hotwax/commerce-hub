@@ -7,7 +7,8 @@ const mutations: MutationTree <UtilState> = {
         state.shipmentMethod = payload
     },
     [types.UTIL_FACILITY_LOCATIONS_UPDATED](state, payload) {
-        state.facilityLocations = payload
+        state.facilityLocations.list = payload.facilities;
+        state.facilityLocations.total = payload.total;
     }
 }
 export default mutations;

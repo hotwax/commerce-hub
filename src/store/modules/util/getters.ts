@@ -7,7 +7,10 @@ const getters: GetterTree <UtilState, RootState> = {
         return state.shipmentMethod.find((data: any) => data.shipmentMethodTypeId === shipmentMethodTypeId)?.description
     },
     getFacilityLocations(state) {
-        return state.facilityLocations;
-    }
+        return state.facilityLocations.list;
+    },
+    isScrollable: (state) => {
+        return state.facilityLocations.list?.length > 0 && state.facilityLocations.list?.length < state.facilityLocations.total
+    },
 }
 export default getters;

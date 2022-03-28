@@ -15,7 +15,7 @@
     <ion-content>
       <div class="find">
         <section class="search">
-          <ion-searchbar @ionFocus="selectSearchBarText($event)" :placeholder="$t('Search locations')" v-model="queryString" @keyup.enter="searchFacility()" />
+          <ion-searchbar @ionFocus="selectSearchBarText($event)" :placeholder="$t('Search locations')" v-model="queryString" @keyup.enter="getFacilities()" />
         </section>
 
         <aside class="filters">
@@ -23,17 +23,15 @@
             <ion-item lines="none">
               <ion-icon :icon="globeOutline" slot="start" />
               <ion-label>{{ $t("Shop") }}</ion-label>
-              <ion-select value="p">
-                <ion-select-option value="p">Product store</ion-select-option>
-                <ion-select-option value="d">Department store</ion-select-option>
+              <ion-select interface="popover" :value="appliedFilters.shop.productStoreId" @ionChange="updateStore($event)">
+                <ion-select-option v-for="store in eComStores" :key="store.productStoreId" :value="store.productStoreId">{{ store.storeName }}</ion-select-option>
               </ion-select>
             </ion-item>
             <ion-item lines="none">
               <ion-icon :icon="businessOutline" slot="start" />
               <ion-label>{{ $t("Type") }}</ion-label>
-              <ion-select value="r">
-                <ion-select-option value="r">Retail</ion-select-option>
-                <ion-select-option value="w">Wholesale</ion-select-option>
+              <ion-select interface="popover" :value="appliedFilters.type.facilityTypeId" @ionChange="updateFacilityType($event)">
+                <ion-select-option v-for="type in facilityTypes" :key="type.facilityTypeId" :value="type.facilityTypeId">{{ type.description }}</ion-select-option>
               </ion-select>
             </ion-item>
           </ion-list>
@@ -50,18 +48,18 @@
             </ion-item>
 
             <ion-label class="tablet">
-              shopify id
+              {{ facility.shopifyId ? facility.shopifyId : '-' }}
               <p>{{ $t("Shopify") }}</p>
             </ion-label>
 
             <ion-label class="tablet">
-              netsuite id
+              {{ facility.netsuiteId ? facility.netsuiteId : '-' }}
               <p>{{ $t("Netsuite") }}</p>
             </ion-label>
 
             <ion-label class="tablet">
-              175 Cherry Ln
-              <p>Amherst MA, 01002</p>
+              {{ facility.address1 }}{{ facility.address2 }}
+              <p>{{ facility.city }} {{ facility.stateGeoCode }}, {{ facility.postalCode }}</p>
             </ion-label>
 
             <ion-button fill="clear" color="medium" @click="openFacilityPopover">
@@ -70,6 +68,9 @@
           </div>
 
           <hr />
+          <ion-infinite-scroll @ionInfinite="loadMoreFacilities($event)" threshold="100px" :disabled="!isScrollable">
+            <ion-infinite-scroll-content loading-spinner="crescent" :loading-text="$t('Loading')"/>
+          </ion-infinite-scroll>
         </main>
       </div>
 
@@ -97,6 +98,8 @@ import {
   IonFabList,
   IonHeader,
   IonIcon,
+  IonInfiniteScroll,
+  IonInfiniteScrollContent,
   IonItem,
   IonLabel,
   IonList,
@@ -108,7 +111,7 @@ import {
   IonTitle,
   popoverController,
 } from '@ionic/vue';
-import { defineComponent } from 'vue';
+import { defineComponent, reactive } from 'vue';
 import {
   addOutline,
   businessOutline,
@@ -119,7 +122,8 @@ import {
 } from 'ionicons/icons';
 import FacilityPopover from '@/components/FacilityPopover.vue';
 import { mapGetters, useStore } from 'vuex';
-import { showToast } from '@/utils';
+import { UtilService } from '@/services/UtilService'
+import { hasError, showToast } from '@/utils';
 import { translate } from '@/i18n';
 
 export default defineComponent({
@@ -135,6 +139,8 @@ export default defineComponent({
     IonHeader,
     IonIcon,
     IonItem,
+    IonInfiniteScroll,
+    IonInfiniteScrollContent,
     IonLabel,
     IonList,
     IonPage,
@@ -147,16 +153,26 @@ export default defineComponent({
   data() {
     return {
       queryString: "",
-      facilities: []
+      facilityTypes: [{ description: 'All', facilityTypeId: 'All'}],
+      eComStores: [{ productStoreId: 'All', storeName: 'All' }]
     }
   },
   computed: {
     ...mapGetters({
       currentFacility: 'user/getCurrentFacility',
-      facilityLocations: 'util/getFacilityLocations'
+      facilities: 'util/getFacilityLocations',
+      isScrollable: 'util/isScrollable'
     })
   },
   methods: {
+    loadMoreFacilities(eve: any) {
+      this.getFacilities(
+        undefined,
+        Math.ceil(this.facilities.length / process.env.VUE_APP_VIEW_SIZE).toString()
+      ).then(() => {
+        eve.target.complete();
+      })
+    },
     selectSearchBarText(event: any) {
       event.target.getInputElement().then((element: any) => {
         element.select();
@@ -171,39 +187,116 @@ export default defineComponent({
       });
       return popover.present();
     },
-    async getFacilityLocations() {
+    async getFacilities(vSize?: any, vIndex?: any) {
+      const viewSize = vSize ? vSize : process.env.VUE_APP_VIEW_SIZE;
+      const viewIndex = vIndex ? vIndex : '0';
+
       const payload = {
-        "inputFields": {},
+        "inputFields": {
+          "facilityId_value": `%${this.queryString}%`,
+          "facilityId_op": "like",
+          "facilityId_ic": "Y",
+          "facilityId_grp": "1",
+          "facilityName_value": `%${this.queryString}%`,
+          "facilityName_op": "like",
+          "facilityName_ic": "Y",
+          "facilityName_grp": "2",
+        } as any,
         "fieldList": [],
-        "viewSize": 20,
-        "entityName": "ProductStoreFacility",
+        viewSize,
+        viewIndex,
+        "entityName": "ProductStoreFacilityDetail",
         "noConditionFind": "Y",
         "distinct": "Y"
       }
 
-      this.store.dispatch('util/getFacilityLocations', payload);
+      if(this.appliedFilters.shop.productStoreId !== 'All') payload.inputFields.productStoreId = this.appliedFilters.shop.productStoreId;
+      if(this.appliedFilters.type.facilityTypeId !== 'All') payload.inputFields.facilityTypeId = this.appliedFilters.type.facilityTypeId;
+
+      this.store.dispatch('util/getFacilities', payload);
     },
-    async searchFacility() {
-      if(this.queryString.length > 0) {
-        this.facilities = this.facilityLocations.filter((facility: any) => {
-          return (facility.facilityId.toLowerCase().includes(this.queryString.toLowerCase()) || facility.facilityName.toLowerCase().includes(this.queryString.toLowerCase()));
-        })
-      } else {
-        this.facilities = this.facilityLocations;
-        console.log(this.facilities);
+    async fetchFacilityTypes() {
+      let resp;
+      try{
+        const payload = {
+          "inputFields": {
+            "parentTypeId": "VIRTUAL_FACILITY",
+            "parentTypeId_op": "notEqual",
+            "facilityTypeId": "VIRTUAL_FACILITY",
+            "facilityTypeId_op": "notEqual",
+          },
+          "fieldList": ["description", "facilityTypeId"],
+          "viewSize": 100,
+          "entityName": "FacilityType",
+          "noConditionFind": "Y",
+          "distinct": "Y"
+        }
+
+        resp = await UtilService.fetchFacilityTypes(payload);
+        if(resp.status === 200 && resp.data.docs?.length && resp.data.docs?.length > 0 && !hasError(resp)) {
+          this.facilityTypes = this.facilityTypes.concat(resp.data.docs);
+        }
+      } catch(error) {
+        console.error(error);
+        showToast(translate("Something went wrong"));
       }
+    },
+    async fetchEcomStores() {
+      let resp;
+
+      try{
+        const payload = {
+          "fieldList": ["productStoreId", "storeName"],
+          "entityName": "ProductStore",
+          "distinct": "Y",
+          "noConditionFind": "Y"
+        }
+
+        resp = await UtilService.fetchEcomStores(payload);
+        if(resp.status === 200 && resp.data.docs?.length && resp.data.docs?.length > 0 && !hasError(resp)) {
+          this.eComStores = this.eComStores.concat(resp.data.docs);
+        }
+      } catch(error) {
+        console.error(error);
+        showToast(translate("Something went wrong"));
+      }
+    },
+    updateFacilityType(event: CustomEvent) {
+      const facilityType: any = this.facilityTypes.find((facType: any) => facType.facilityTypeId === event['detail'].value);
+
+      this.appliedFilters.type = facilityType;
+      this.getFacilities();
+    },
+    updateStore(event: CustomEvent) {
+      const store: any = this.eComStores.find((store: any) => store.productStoreId === event['detail'].value);
+
+      this.appliedFilters.shop = store
+      this.getFacilities();
     }
   },
   mounted() {
-    this.getFacilityLocations().then(() => {
-      this.searchFacility();
+    this.getFacilities()
+    .then(() => {
+      this.fetchFacilityTypes();
+      this.fetchEcomStores();
     })
   },
   setup() {
     const store = useStore();
+    const appliedFilters = reactive({
+      'shop': {
+        'productStoreId': 'All',
+        'storeName': 'All'
+      },
+      'type': {
+        'facilityTypeId': 'All',
+        'description': 'All'
+      }
+    })
 
     return {
       addOutline,
+      appliedFilters,
       businessOutline,
       ellipsisVerticalOutline,
       filterOutline,

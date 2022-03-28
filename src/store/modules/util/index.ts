@@ -9,7 +9,10 @@ const utilModule: Module<UtilState, RootState> = {
     namespaced: true,
     state: {
       shipmentMethod: {},
-      facilityLocations: []
+      facilityLocations: {
+        list: [],
+        total: 0
+      }
     },
     getters,
     actions,
