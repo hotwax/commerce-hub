@@ -40,12 +40,12 @@
         </aside>
 
         <main>
-          <div class="list-item">
+          <div class="list-item" v-for="(facility, index) in facilities" :key="index">
             <ion-item lines="none">
               <ion-icon :icon="storefrontOutline" slot="start" />
               <ion-label>
-                <p class="overline">Retail</p>
-                Store 1 name
+                <p class="overline">{{ facility.facilityTypeId }}</p>
+                {{ facility.facilityName }}
               </ion-label>
             </ion-item>
 
@@ -190,6 +190,7 @@ export default defineComponent({
         })
       } else {
         this.facilities = this.facilityLocations;
+        console.log(this.facilities);
       }
     }
   },
