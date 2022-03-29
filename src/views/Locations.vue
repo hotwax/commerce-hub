@@ -5,36 +5,32 @@
         <ion-back-button default-href="/" slot="start" />
         <ion-title>{{ $t("Locations") }}</ion-title>
         <ion-buttons slot="end">
-          <ion-button fill="clear" class="mobile-only">
+          <ion-button fill="clear" class="mobile-only" @click="openLocationFilterMenu()">
             <ion-icon slot="icon-only" :icon="filterOutline" />
           </ion-button>
         </ion-buttons>
       </ion-toolbar>
     </ion-header>
 
-    <ion-content>
+    <ion-menu content-id="content" type="overlay" side="end">
+      <ion-header>
+        <ion-toolbar>
+          <ion-title>{{ $t('Filters') }}</ion-title>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content>
+        <LocationFilters :facilityTypes="facilityTypes" :eComStores="eComStores" />
+      </ion-content>
+    </ion-menu>
+
+    <ion-content id="content">
       <div class="find">
         <section class="search">
           <ion-searchbar @ionFocus="selectSearchBarText($event)" :placeholder="$t('Search locations')" v-model="queryString" @keyup.enter="getFacilities()" />
         </section>
 
         <aside class="filters">
-          <ion-list>
-            <ion-item lines="none">
-              <ion-icon :icon="globeOutline" slot="start" />
-              <ion-label>{{ $t("Shop") }}</ion-label>
-              <ion-select interface="popover" :value="appliedFilters.shop.productStoreId" @ionChange="updateStore($event)">
-                <ion-select-option v-for="store in eComStores" :key="store.productStoreId" :value="store.productStoreId">{{ store.storeName }}</ion-select-option>
-              </ion-select>
-            </ion-item>
-            <ion-item lines="none">
-              <ion-icon :icon="businessOutline" slot="start" />
-              <ion-label>{{ $t("Type") }}</ion-label>
-              <ion-select interface="popover" :value="appliedFilters.type.facilityTypeId" @ionChange="updateFacilityType($event)">
-                <ion-select-option v-for="type in facilityTypes" :key="type.facilityTypeId" :value="type.facilityTypeId">{{ type.description }}</ion-select-option>
-              </ion-select>
-            </ion-item>
-          </ion-list>
+          <LocationFilters :facilityTypes="facilityTypes" :eComStores="eComStores" />
         </aside>
 
         <main>
@@ -102,22 +98,20 @@ import {
   IonInfiniteScrollContent,
   IonItem,
   IonLabel,
-  IonList,
+  IonMenu,
   IonPage,
   IonSearchbar,
-  IonSelect,
-  IonSelectOption,
   IonToolbar,
   IonTitle,
   popoverController,
+  menuController,
 } from '@ionic/vue';
-import { defineComponent, reactive } from 'vue';
+import { defineComponent } from 'vue';
 import {
   addOutline,
   businessOutline,
   ellipsisVerticalOutline,
   filterOutline,
-  globeOutline,
   storefrontOutline,
 } from 'ionicons/icons';
 import FacilityPopover from '@/components/FacilityPopover.vue';
@@ -125,6 +119,8 @@ import { mapGetters, useStore } from 'vuex';
 import { UtilService } from '@/services/UtilService'
 import { hasError, showToast } from '@/utils';
 import { translate } from '@/i18n';
+import LocationFilters from '@/components/LocationFilters.vue'
+import emitter from '@/event-bus';
 
 export default defineComponent({
   name: 'Locations',
@@ -142,13 +138,12 @@ export default defineComponent({
     IonInfiniteScroll,
     IonInfiniteScrollContent,
     IonLabel,
-    IonList,
+    IonMenu,
     IonPage,
     IonSearchbar,
-    IonSelect,
-    IonSelectOption,
     IonToolbar,
     IonTitle,
+    LocationFilters
   },
   data() {
     return {
@@ -164,7 +159,13 @@ export default defineComponent({
       isScrollable: 'util/isScrollable'
     })
   },
+  created() {
+    emitter.on('filtersUpdated', this.getFacilities)
+  },
   methods: {
+    async openLocationFilterMenu() {
+      await menuController.open();
+    },
     loadMoreFacilities(eve: any) {
       this.getFacilities(
         undefined,
@@ -209,9 +210,6 @@ export default defineComponent({
         "noConditionFind": "Y",
         "distinct": "Y"
       }
-
-      if(this.appliedFilters.shop.productStoreId !== 'All') payload.inputFields.productStoreId = this.appliedFilters.shop.productStoreId;
-      if(this.appliedFilters.type.facilityTypeId !== 'All') payload.inputFields.facilityTypeId = this.appliedFilters.type.facilityTypeId;
 
       this.store.dispatch('util/getFacilities', payload);
     },
@@ -260,18 +258,6 @@ export default defineComponent({
         console.error(error);
         showToast(translate("Something went wrong"));
       }
-    },
-    updateFacilityType(event: CustomEvent) {
-      const facilityType: any = this.facilityTypes.find((facType: any) => facType.facilityTypeId === event['detail'].value);
-
-      this.appliedFilters.type = facilityType;
-      this.getFacilities();
-    },
-    updateStore(event: CustomEvent) {
-      const store: any = this.eComStores.find((store: any) => store.productStoreId === event['detail'].value);
-
-      this.appliedFilters.shop = store
-      this.getFacilities();
     }
   },
   mounted() {
@@ -283,24 +269,12 @@ export default defineComponent({
   },
   setup() {
     const store = useStore();
-    const appliedFilters = reactive({
-      'shop': {
-        'productStoreId': 'All',
-        'storeName': 'All'
-      },
-      'type': {
-        'facilityTypeId': 'All',
-        'description': 'All'
-      }
-    })
 
     return {
       addOutline,
-      appliedFilters,
       businessOutline,
       ellipsisVerticalOutline,
       filterOutline,
-      globeOutline,
       store,
       storefrontOutline
     };

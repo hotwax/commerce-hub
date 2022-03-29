@@ -12,5 +12,8 @@ const getters: GetterTree <UtilState, RootState> = {
     isScrollable: (state) => {
         return state.facilityLocations.list?.length > 0 && state.facilityLocations.list?.length < state.facilityLocations.total
     },
+    getcurrentLocationFilterSelected: (state) => {
+        return state.currentLocationFilterSelected;
+    }
 }
 export default getters;

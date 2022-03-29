@@ -32,6 +32,10 @@ const actions: ActionTree<UtilState, RootState> = {
     let resp;
 
     try{
+      const filters = state.currentLocationFilterSelected;
+      if (filters.productStoreId !== 'All') payload.inputFields.productStoreId = filters.productStoreId;
+      if (filters.facilityTypeId !== 'All') payload.inputFields.facilityTypeId = filters.facilityTypeId;
+
       resp = await UtilService.getFacilities(payload);
 
       if(resp.status === 200 && resp.data.docs?.length && resp.data.docs?.length > 0 && !hasError(resp)) {
@@ -94,7 +98,7 @@ const actions: ActionTree<UtilState, RootState> = {
         "noConditionFind": "Y",
         "distinct": "Y"
       }
-      
+
       resp = await UtilService.getFacilityIdentifications(params);
       if (resp.status === 200 && resp.data.docs?.length && resp.data.docs?.length > 0 && !hasError(resp)) {
         return resp.data.docs;
@@ -129,6 +133,10 @@ const actions: ActionTree<UtilState, RootState> = {
       console.error(error);
     }
     return [];
+  },
+  async locationFiltersUpdated({ commit }, payload) {
+    commit(types.UTIL_LOCATION_FILTERS_UPDATED, payload)
+    return payload;
   }
 }
 

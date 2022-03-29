@@ -12,6 +12,10 @@ const utilModule: Module<UtilState, RootState> = {
       facilityLocations: {
         list: [],
         total: 0
+      },
+      currentLocationFilterSelected: {
+        productStoreId: 'All',
+        facilityTypeId: 'All'
       }
     },
     getters,
