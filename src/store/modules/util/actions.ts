@@ -93,6 +93,7 @@ const actions: ActionTree<UtilState, RootState> = {
           "facilityIdenTypeId": ["SHOPIFY_FAC_ID", "NETSUITE_FAC_ID"],
           "facilityIdenTypeId_op": "in"
         },
+        "viewSize": payload.length,
         "fieldList": ["facilityId", "facilityIdenTypeId", "idValue"],
         "entityName": "FacilityIdentification",
         "noConditionFind": "Y",
@@ -118,6 +119,7 @@ const actions: ActionTree<UtilState, RootState> = {
           "facilityId": payload,
           "facilityId_op": "in"
         },
+        "viewSize": payload.length,
         "fieldList": ["address1", "address2", "city", "postalCode", "stateGeoCode", "facilityId"],
         "entityName": "FacilityContactDetailByPurpose",
         "noConditionFind": "Y",

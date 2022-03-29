@@ -244,6 +244,7 @@ export default defineComponent({
 
       try{
         const payload = {
+          "viewSize": 100,
           "fieldList": ["productStoreId", "storeName"],
           "entityName": "ProductStore",
           "distinct": "Y",
