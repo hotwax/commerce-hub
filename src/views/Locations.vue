@@ -236,7 +236,6 @@ export default defineComponent({
         }
       } catch(error) {
         console.error(error);
-        showToast(translate("Something went wrong"));
       }
     },
     async fetchEcomStores() {
@@ -257,7 +256,6 @@ export default defineComponent({
         }
       } catch(error) {
         console.error(error);
-        showToast(translate("Something went wrong"));
       }
     }
   },
