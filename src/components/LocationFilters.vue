@@ -49,7 +49,7 @@ export default defineComponent({
   },
   methods: {
     async updateFilters(value: string, filterName: string) {
-      await this.store.dispatch('util/locationFiltersUpdated', { value, filterName }).then(() => {
+      await this.store.dispatch('util/updateLocationFilters', { value, filterName }).then(() => {
         emitter.emit('filtersUpdated');
       })
     }

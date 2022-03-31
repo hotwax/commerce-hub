@@ -136,7 +136,7 @@ const actions: ActionTree<UtilState, RootState> = {
     }
     return [];
   },
-  async locationFiltersUpdated({ commit }, payload) {
+  async updateLocationFilters({ commit }, payload) {
     commit(types.UTIL_LOCATION_FILTERS_UPDATED, payload)
     return payload;
   }
