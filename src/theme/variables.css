@@ -353,8 +353,7 @@ ion-select {
 }
 
 hr {
-  border-width: 1px 0 0;
-  color: var(--ion-color-medium);
+  border-top: var(--border-medium);
 }
 
 ion-list-header > hr {
