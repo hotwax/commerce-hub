@@ -203,7 +203,7 @@ export default defineComponent({
           "facilityName_ic": "Y",
           "facilityName_grp": "2",
         } as any,
-        "fieldList": [],
+        "fieldList": ["facilityId", "facilityName", "facilityTypeId"],
         viewSize,
         viewIndex,
         "entityName": "ProductStoreFacilityDetail",
