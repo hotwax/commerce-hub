@@ -93,7 +93,7 @@ const actions: ActionTree<UtilState, RootState> = {
           "facilityIdenTypeId": ["SHOPIFY_FAC_ID", "NETSUITE_FAC_ID"],
           "facilityIdenTypeId_op": "in"
         },
-        "viewSize": payload.length,
+        "viewSize": 2 * payload.length,
         "fieldList": ["facilityId", "facilityIdenTypeId", "idValue"],
         "entityName": "FacilityIdentification",
         "noConditionFind": "Y",
