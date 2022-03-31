@@ -256,6 +256,10 @@ body {
   text-transform: uppercase !important;
 }
 
+abbr {
+  text-decoration: none;
+}
+
 .find {
   display: grid;
   grid-template-areas: "search"

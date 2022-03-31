@@ -104,11 +104,11 @@
                 <ion-card-title>{{ $t("Shopify IDs") }}</ion-card-title>
               </ion-card-header>
               <ion-item>
-                <ion-label>{{ $t("SKU") }}</ion-label>
+                <ion-label><abbr title="Stock keeping unit">{{ $t("SKU") }}</abbr></ion-label>
                 <ion-label slot="end">SKU</ion-label>
               </ion-item>
               <ion-item>
-                <ion-label>{{ $t("UPC") }}</ion-label>
+                <ion-label><abbr title="Universal product code">{{ $t("UPC") }}</abbr></ion-label>
                 <ion-label slot="end">order id</ion-label>
               </ion-item>
               <ion-item>
@@ -262,7 +262,7 @@
 
               <ion-label class="tablet">
                 400
-                <p>{{ $t("QOH") }}</p>
+                <p><abbr title="Quantity on hand">{{ $t("QOH") }}</abbr></p>
               </ion-label>
 
               <ion-label>
@@ -272,7 +272,7 @@
 
               <ion-label class="tablet">
                 400
-                <p>{{ $t("ATP") }}</p>
+                <p><abbr title="Available to promise">{{ $t("ATP") }}</abbr></p>
               </ion-label>
 
               <ion-checkbox />
@@ -310,7 +310,7 @@
 
               <ion-label class="tablet">
                 400
-                <p>{{ $t("QOH") }}</p>
+                <p><abbr title="Quantity on hand">{{ $t("QOH") }}</abbr></p>
               </ion-label>
 
               <ion-label>
@@ -320,7 +320,7 @@
 
               <ion-label class="tablet">
                 400
-                <p>{{ $t("ATP") }}</p>
+                <p><abbr title="Available to promise">{{ $t("ATP") }}</abbr></p>
               </ion-label>
 
               <ion-checkbox />
@@ -354,7 +354,7 @@
 
               <ion-label class="tablet">
                 400
-                <p>{{ $t("QOH") }}</p>
+                <p><abbr title="Quantity on hand">{{ $t("QOH") }}</abbr></p>
               </ion-label>
 
               <ion-label>
@@ -364,7 +364,7 @@
 
               <ion-label class="tablet">
                 400
-                <p>{{ $t("ATP") }}</p>
+                <p><abbr title="Available to promise">{{ $t("ATP") }}</abbr></p>
               </ion-label>
 
               <ion-checkbox />
@@ -411,7 +411,7 @@
 
               <ion-label class="tablet">
                 400
-                <p>{{ $t("ATP") }}</p>
+                <p><abbr title="Available to promise">{{ $t("ATP") }}</abbr></p>
               </ion-label>
 
               <ion-label>
@@ -473,7 +473,7 @@
               </ion-label>
 
               <ion-chip class="tablet" outline>
-                <ion-label>93 {{ $t("ATP") }}</ion-label>
+                <ion-label>93 <abbr title="Available to promise">{{ $t("ATP") }}</abbr></ion-label>
                 <ion-icon :icon="shareOutline" />
               </ion-chip>
 
@@ -516,7 +516,7 @@
               </ion-label>
 
               <ion-chip class="tablet" outline>
-                <ion-label>93 {{ $t("ATP") }}</ion-label>
+                <ion-label>93 <abbr title="Available to promise">{{ $t("ATP") }}</abbr></ion-label>
                 <ion-icon :icon="shareOutline" />
               </ion-chip>
 
@@ -559,7 +559,7 @@
               </ion-label>
 
               <ion-chip class="tablet" outline>
-                <ion-label>93 {{ $t("ATP") }}</ion-label>
+                <ion-label>93 <abbr title="Available to promise">{{ $t("ATP") }}</abbr></ion-label>
                 <ion-icon :icon="shareOutline" />
               </ion-chip>
 
