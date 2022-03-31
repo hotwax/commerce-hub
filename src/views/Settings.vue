@@ -19,7 +19,7 @@
             <ion-label slot="end">User data</ion-label>
           </ion-item>
           <ion-item lines="full">
-            <ion-label>{{ $t("OMS") }}</ion-label>
+            <ion-label><abbr title="Order management system">{{ $t("OMS") }}</abbr></ion-label>
             <ion-label slot="end">{{ instanceUrl }}</ion-label>
           </ion-item>
           <ion-button fill="clear" @click="() => router.push('/profile')">{{ $t("Details") }}</ion-button>
