@@ -259,10 +259,6 @@ body {
   text-transform: uppercase !important;
 }
 
-h2 {
-  font-size: 16px;
-}
-
 .find {
   display: grid;
   grid-template-areas: "search"
@@ -284,6 +280,10 @@ h2 {
 
 .filters {
   grid-area: filters;
+}
+
+.filters > ion-list > ion-list-header {
+  font-size: 22px;
 }
 
 .section-header {
@@ -360,6 +360,11 @@ ion-list-header > hr {
   width: 90%;
 }
 
+h1,h2 {
+  font-size: 16px;
+  margin: var(--spacer-xs);
+}
+
 .desktop-only {
   display: none;
 }
@@ -379,9 +384,8 @@ ion-list-header > hr {
 }
 
 @media (min-width: 991px) {
-  h2 {
-    font-size: 24px;
-    margin: var(--spacer-xs);
+  h1,h2 {
+    font-size: revert;
   }
 
   .find {

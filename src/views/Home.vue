@@ -223,5 +223,14 @@ ion-card > ion-card-header {
     --page-width: 1040px;
     margin: unset;
   }
+
+  ion-card-title {
+    font-size: 16px;
+    font-weight: bold;
+  }
+
+  h2 {
+    font-weight: bold;
+  }
 }
 </style>

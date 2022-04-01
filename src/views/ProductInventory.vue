@@ -20,7 +20,7 @@
           </ion-card>
         
           <div class="product-info desktop-only">
-            <h2>Parent product name</h2>
+            <h1>Parent product name</h1>
             <ion-card>
               <ion-card-header>
                 <ion-card-title>{{ $t("General information") }}</ion-card-title>
@@ -64,7 +64,7 @@
           <div class="variant-info">
             <ion-item class="desktop-only" lines="none">
               <ion-icon slot="start" :icon="shirtOutline" />
-              <h2>{{ $t("Variant") }}</h2>
+              <h1>{{ $t("Variant") }}</h1>
             </ion-item>
             <ion-list>
               <ion-list-header>{{ $t("Color") }}</ion-list-header>
@@ -122,7 +122,7 @@
         <section>
           <ion-item lines="none">
             <ion-icon slot="start" :icon="ticketOutline" />
-            <h2>Orders</h2>
+            <h1>Orders</h1>
           </ion-item>
           
           <div class="orders">

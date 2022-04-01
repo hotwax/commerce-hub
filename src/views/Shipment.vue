@@ -19,7 +19,7 @@
           <div class="id">
             <ion-item lines="none">
               <ion-icon slot="start" :icon="ticketOutline" />
-              <h2>External Shipment ID</h2>
+              <h1>External Shipment ID</h1>
               <ion-badge slot="end">{{ status }}</ion-badge>
               <ion-select :value="status" @ionChange="changeStatus($event)" slot="end">
                 <ion-select-option value="Approved">Approved</ion-select-option>
@@ -38,7 +38,7 @@
           <div class="timeline">
             <ion-item lines="none" detail>
               <ion-icon slot="start" :icon="timeOutline" class="mobile-only" />
-              <ion-label>{{ $t("Timeline") }}</ion-label>
+              <h2>{{ $t("Timeline") }}</h2>
               <ion-note slot="end">1:07pm 6th Dec 2021</ion-note>
             </ion-item>
           
@@ -100,7 +100,7 @@
         <section class="products">       
           <ion-item lines="none">
             <ion-icon slot="start" :icon="shirtOutline" />
-            <h2>{{ $t("Products") }}</h2>
+            <h1>{{ $t("Products") }}</h1>
 
             <ion-button slot="end" fill="outline" color="medium" class="desktop-only">
               <ion-icon :icon="addOutline" slot="start" />

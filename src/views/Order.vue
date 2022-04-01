@@ -18,7 +18,7 @@
           <div class="id">
             <ion-item lines="none">
               <ion-icon slot="start" :icon="ticketOutline" />
-              <h2>{{ order.orderName ? order.orderName : order.orderId }}</h2>
+              <h1>{{ order.orderName ? order.orderName : order.orderId }}</h1>
               <ion-badge :color="orderStatus[order.statusId]?.color ? orderStatus[order.statusId]?.color : 'primary'" slot="end">{{ orderStatus[order.statusId]?.label ? orderStatus[order.statusId]?.label : order.statusId }}</ion-badge>
               <!-- TODO: implement functionality to change the orderStatus -->
               <!-- <ion-select :value="status" @ionChange="changeStatus($event)" slot="end">
@@ -33,7 +33,7 @@
           <!-- <div class="timeline">
             <ion-item lines="none">
               <ion-icon slot="start" :icon="timeOutline" class="mobile-only" />
-              <ion-label>{{ $t("Timeline") }}</ion-label>
+              <h2>{{ $t("Timeline") }}</h2>
               <ion-note slot="end">1:07pm 6th Dec 2021</ion-note>
             </ion-item>
 
@@ -104,7 +104,7 @@
         <section>
           <ion-item lines="none">
             <ion-icon slot="start" :icon="shirtOutline" />
-            <h2>{{ $t("Products") }}</h2>
+            <h1>{{ $t("Products") }}</h1>
           </ion-item>
 
           <div class="product" v-for="(item, index) of order.items" :key="index">
