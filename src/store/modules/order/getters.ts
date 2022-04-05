@@ -14,6 +14,9 @@ const getters: GetterTree <OrderState, RootState> = {
   },
   getCurrentOrderFiltersSelected: (state) => {
     return state.currentOrderFiltersSelected
+  },
+  getCurrentOrder(state) {
+    return state.current
   }
 }
 export default getters;

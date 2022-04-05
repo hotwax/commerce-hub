@@ -53,7 +53,7 @@
                 <ion-item lines="none">
                   <ion-label>
                     {{ order.orderId }}
-                    <p> {{ order.customerPartyName }} </p>
+                    <p> {{ order.customer.name }} </p>
                   </ion-label>
                 </ion-item>
               </div>
@@ -63,9 +63,9 @@
                   <ion-icon :icon="pricetag" />
                   <ion-label> {{ order.orderName }} </ion-label>
                 </ion-chip>
-                <ion-chip outline v-if="$filters.getCustomerLoyalty(order.orderNotes, 'cusotmerLoyaltyOptions')">
+                <ion-chip outline v-if="$filters.getCustomerLoyalty(order.notes, cusotmerLoyaltyOptions)">
                   <ion-icon :icon="ribbon" />
-                  <ion-label> {{ $filters.getCustomerLoyalty(order.orderNotes, 'cusotmerLoyaltyOptions') }} </ion-label>
+                  <ion-label>{{ $filters.getCustomerLoyalty(order.notes, cusotmerLoyaltyOptions) }}</ion-label>
                 </ion-chip>
               </div>
 
@@ -168,12 +168,13 @@ import {
 } from 'ionicons/icons';
 import { defineComponent, ref } from "vue";
 import { mapGetters, useStore } from "vuex";
-import { showToast } from '@/utils'
+import { hasError, showToast } from '@/utils'
 import { Plugins } from '@capacitor/core';
 import Image from '@/components/Image.vue';
 import { useRouter } from 'vue-router';
 import OrderFilters from '@/components/OrderFilters.vue'
 import emitter from '@/event-bus';
+import { OrderService } from '@/services/OrderService';
 
 const { Clipboard } = Plugins;
 

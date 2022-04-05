@@ -9,6 +9,9 @@ const mutations: MutationTree <OrderState> = {
   },
   [types.ORDER_FILTERS_UPDATED] (state, payload) {
     state.currentOrderFiltersSelected[payload.filterName] = payload.value
+  },
+  [types.ORDER_CURRENT_UPDATED] (state, payload) {
+    state.current = payload.order
   }
 }
 export default mutations;

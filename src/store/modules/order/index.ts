@@ -43,7 +43,8 @@ const orderModule: Module<OrderState, RootState> ={
       'orderCreated': '',
       'promiseDate': '',
       'autoCancelDate': ''
-    }
+    },
+    current: {}
   },
   getters,
   actions,

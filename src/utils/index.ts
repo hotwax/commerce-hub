@@ -17,4 +17,26 @@ const showToast = async (message: string) => {
       return toast.present();
 }
 
-export { showToast, hasError }
+const getIdentification = (identifications: any, id: string) => {
+  let externalId = ''
+  if (identifications) {
+    const externalIdentification = identifications.find((identification: any) => identification.startsWith(id))
+    const externalIdentificationSplit = externalIdentification ? externalIdentification.split('/') : [];
+    externalId = externalIdentificationSplit[1] ? externalIdentificationSplit[1] : '';
+  }
+  return externalId;
+}
+
+const getCustomerLoyalty = (orderNotes: any, customerLoyaltyOptions: any) => {
+  let customerLoyalty = '' as any
+  if (orderNotes && customerLoyaltyOptions) {
+    for (const customerLoyaltyOption of Object.entries(customerLoyaltyOptions)) {
+      if (orderNotes.includes(customerLoyaltyOption[0])) {
+        customerLoyalty = customerLoyaltyOption[1];
+      }
+    }
+  }
+  return customerLoyalty;
+}
+
+export { showToast, hasError, getCustomerLoyalty, getIdentification }
