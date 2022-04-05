@@ -1,0 +1,7 @@
+---
+title: 'Implemented: order filters for mobile device and updated the logic to store
+  the filters in the state'
+ticket_id: "#22xecka"
+merge_request: 71
+author: Yash Maheshwari
+type: added

@@ -3,5 +3,7 @@ export default interface OrderState {
     orders: any[],
     total: number
   },
+  availableOrderFilterOptions: any,
+  currentOrderFiltersSelected: any,
   current: any
 }

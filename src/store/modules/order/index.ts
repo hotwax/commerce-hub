@@ -12,6 +12,38 @@ const orderModule: Module<OrderState, RootState> ={
       orders: [],
       total: 0
     },
+    availableOrderFilterOptions: {
+      'date': {
+        'orderCreated': '',
+        'promiseDate': '',
+        'autoCancelDate': ''
+      },
+      'type': {
+        'storePickup': false,
+        'shipFromStore': false,
+        'preOrder': false,
+        'backOrder': false,
+        'unfillable': false
+      },
+      'fulfillment': {
+        'status': 'any',
+        'shippingMethod': 'any',
+        'shipFromLocation': 'any'
+      }
+    },
+    currentOrderFiltersSelected: {
+      'status': 'any',
+      'shippingMethod': 'any',
+      'shipFromLocation': 'any',
+      'storePickup': false,
+      'shipFromStore': false,
+      'preOrder': false,
+      'backOrder': false,
+      'unfillable': false,
+      'orderCreated': '',
+      'promiseDate': '',
+      'autoCancelDate': ''
+    },
     current: {}
   },
   getters,
