@@ -164,31 +164,31 @@
                 <!-- TODO: Need to handle this property -->
                 <div v-if="item.facilityId === orderPreOrderId || item.facilityId === orderBackOrderId">
                   <ion-item>
-                    <ion-label> {{ $t("Promise date") }} </ion-label>
+                    <ion-label>{{ $t("Promise date") }}</ion-label>
                     <p slot="end"> {{ item.promisedDatetime ? $filters.formatUtcDate(item.promisedDatetime, 'YYYY-MM-DDTHH:mm:ssZ', 'D MMM YYYY') : '-'  }} </p>
                   </ion-item>
                   <ion-item>
-                    <ion-label> {{ $t("PO arrival date") }} </ion-label>
+                    <ion-label>{{ $t("PO arrival date") }}</ion-label>
                     <!-- TODO: Need to handle this property -->
                     <p slot="end"> {{ item.promiseOrderArrivalDate ? $filters.formatUtcDate(item.promiseOrderArrivalDate, 'YYYY-MM-DDTHH:mm:ssZ', 'D MMM YYYY') : '-' }} </p>
                   </ion-item>
                   <ion-item>
-                    <ion-label> {{ $t("Location") }} </ion-label>
+                    <ion-label>{{ $t("Location") }}</ion-label>
                     <!-- TODO: Need to handle this property -->
                     <p slot="end"> {{ item.facilityName ? item.facilityName : '-' }} </p>
                   </ion-item>
                 </div>
                 <div v-else>
                   <ion-item>
-                    <ion-label> {{ $t("Shipping method") }} </ion-label>
+                    <ion-label>{{ $t("Shipping method") }}</ion-label>
                     <p slot="end"> {{ item.shipmentMethodTypeId }} </p>
                   </ion-item>
                   <ion-item>
-                    <ion-label> {{ $t("Shipping from") }} </ion-label>
+                    <ion-label>{{ $t("Shipping from") }}</ion-label>
                     <p slot="end"> {{ item.facilityName ? item.facilityName : "-" }} </p>
                   </ion-item>
-                  <ion-item>
-                    <ion-label> {{ $t("Location inventory") }} </ion-label>
+                  <ion-item lines="none">
+                    <ion-label>{{ $t("Location inventory") }}</ion-label>
                     <p slot="end">{{ getProductStock(item.productId) }}</p>
                   </ion-item>
                 </div>

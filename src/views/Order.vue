@@ -153,7 +153,7 @@
                   <ion-card>
                     <ion-list>
                       <ion-list-header>{{ $t("Destination") }}</ion-list-header>
-                      <ion-item>
+                      <ion-item lines="none">
                         <ion-label>
                           {{ item.customerPartyName }}
                           <p>{{ item.address1 }}</p>
@@ -212,7 +212,7 @@
                         <ion-label>{{ $t("Shipping from") }}</ion-label>
                         <p>{{ item.facilityName ? item.facilityName : "-" }}</p>
                       </ion-item>
-                      <ion-item>
+                      <ion-item lines="none">
                         <ion-label>{{ $t("Location Inventory") }}</ion-label>
                         <p>{{ getProductStock(item.productId) }}</p>
                       </ion-item>

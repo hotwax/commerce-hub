@@ -53,7 +53,7 @@
               <ion-card-header>
                 <ion-card-title>Facility name</ion-card-title>
               </ion-card-header>
-              <ion-item>
+              <ion-item lines="none">
                 <ion-icon :icon="locationOutline" slot="start" />
                 <ion-label>
                   Address1

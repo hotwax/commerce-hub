@@ -37,7 +37,7 @@
                 <ion-label>{{ $t("In stock") }}</ion-label>
                 <ion-label slot="end">QOH</ion-label>
               </ion-item>
-              <ion-item>
+              <ion-item lines="none">
                 <ion-label>{{ $t("On order") }}</ion-label>
                 <ion-label slot="end">ordered</ion-label>
               </ion-item>
@@ -111,7 +111,7 @@
                 <ion-label>{{ $t("UPC") }}</ion-label>
                 <ion-label slot="end">order id</ion-label>
               </ion-item>
-              <ion-item>
+              <ion-item lines="none">
                 <ion-label>{{ $t("Internal ID") }}</ion-label>
                 <ion-label slot="end">internal id</ion-label>
               </ion-item>
@@ -138,7 +138,7 @@
                 <ion-label>{{ $t("Standard") }}</ion-label>
                 <ion-note slot="end">orders</ion-note>
               </ion-item>
-              <ion-item detail>
+              <ion-item lines="none" detail>
                 <ion-label>{{ $t("Expedited") }}</ion-label>
                 <ion-note slot="end">orders</ion-note>
               </ion-item>
@@ -169,7 +169,7 @@
                 </ion-label>
               </ion-item>
 
-              <ion-item>
+              <ion-item lines="none">
                 <ion-label>
                   <p>{{ $t("Back orders") }}</p>
                 </ion-label>

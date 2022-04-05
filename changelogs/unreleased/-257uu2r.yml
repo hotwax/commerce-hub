@@ -1,0 +1,6 @@
+---
+title: Removed lines from statically rendered last ion-item
+ticket_id: "#257uu2r"
+merge_request: 90
+author: Azkya Khan
+type: fixed
