@@ -10,14 +10,14 @@
 
     <ion-card>
       <ion-card-header>
-        <ion-card-title>{{ $t("Purchase date") }}</ion-card-title>
+        <ion-card-title>{{ $t("Child categories") }}</ion-card-title>
       </ion-card-header>
       <ion-card-content>
         <ion-chip>
-          <ion-label>PO #</ion-label>
+          <ion-label>Tag 1</ion-label>
         </ion-chip>
         <ion-chip>
-          <ion-label>PO #</ion-label>
+          <ion-label>Tag 2</ion-label>
         </ion-chip>
       </ion-card-content>
     </ion-card>
@@ -37,14 +37,14 @@
 
     <ion-card>
       <ion-card-header>
-        <ion-card-title>{{ $t("Purchase date") }}</ion-card-title>
+        <ion-card-title>{{ $t("Tags") }}</ion-card-title>
       </ion-card-header>
       <ion-card-content>
         <ion-chip>
-          <ion-label>PO #</ion-label>
+          <ion-label>Tag 1</ion-label>
         </ion-chip>
         <ion-chip>
-          <ion-label>PO #</ion-label>
+          <ion-label>Tag 2</ion-label>
         </ion-chip>
       </ion-card-content>
     </ion-card>
@@ -53,24 +53,24 @@
   <ion-list>
     <ion-list-header>{{ $t("Order") }}</ion-list-header>
     <ion-item>
-      <ion-label>{{ $t("order created") }}</ion-label>
+      <ion-label>{{ $t("Pre-order") }}</ion-label>
       <ion-checkbox />
     </ion-item>
     <ion-item>
-      <ion-label>{{ $t("order created") }}</ion-label>
+      <ion-label>{{ $t("Back-order") }}</ion-label>
       <ion-checkbox />
     </ion-item>
 
     <ion-card>
       <ion-card-header>
-        <ion-card-title>{{ $t("Purchase date") }}</ion-card-title>
+        <ion-card-title>{{ $t("Purchase orders") }}</ion-card-title>
       </ion-card-header>
       <ion-card-content>
         <ion-chip>
-          <ion-label>PO #</ion-label>
+          <ion-label>PO #1</ion-label>
         </ion-chip>
         <ion-chip>
-          <ion-label>PO #</ion-label>
+          <ion-label>PO #2</ion-label>
         </ion-chip>
       </ion-card-content>
     </ion-card>
