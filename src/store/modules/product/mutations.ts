@@ -15,7 +15,7 @@ const mutations: MutationTree <ProductState> = {
     }
   },
   [types.PRODUCT_CATEGORIES_UPDATED](state, payload) {
-    state.categories = payload.categories;
+    state.filters.list.categories = state.filters.list.categories.concat(payload);
   }
 }
 export default mutations;

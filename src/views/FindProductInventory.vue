@@ -25,99 +25,7 @@
         </section>
 
         <aside class="filters desktop-only">
-          <ion-list>
-            <ion-list-header>{{ $t("Catalog") }}</ion-list-header>
-            <!-- TODO: Filter can be implemented for selecting multiple categories at a time. -->
-            <ion-item>
-              <ion-label>{{ $t("Categories") }}</ion-label>
-              <ion-select :value="appliedFilters.category.categoryName" @ionChange.prevent="($event) => {appliedFilters.category.categoryName = $event['detail'].value; }" interface="popover">
-                <ion-select-option v-for="category in categories" :key="category" :value="category.categoryName">{{ category.categoryName }}</ion-select-option>
-              </ion-select>
-            </ion-item>
-
-            <ion-card>
-              <ion-card-header>
-                <ion-card-title>{{ $t("Purchase date") }}</ion-card-title>
-              </ion-card-header>
-              <ion-card-content>
-                <ion-chip>
-                  <ion-label>PO #</ion-label>
-                </ion-chip>
-                <ion-chip>
-                  <ion-label>PO #</ion-label>
-                </ion-chip>
-              </ion-card-content>
-            </ion-card>
-
-            <ion-item>
-              <ion-label>{{ $t("Size") }}</ion-label>
-              <ion-select value="any" interface="popover">
-                <ion-select-option value="any">all</ion-select-option>
-              </ion-select>
-            </ion-item>
-            <ion-item>
-              <ion-label>{{ $t("Color") }}</ion-label>
-              <ion-select value="any" interface="popover">
-                <ion-select-option value="any">all</ion-select-option>
-              </ion-select>
-            </ion-item>
-
-            <ion-card>
-              <ion-card-header>
-                <ion-card-title>{{ $t("Purchase date") }}</ion-card-title>
-              </ion-card-header>
-              <ion-card-content>
-                <ion-chip>
-                  <ion-label>PO #</ion-label>
-                </ion-chip>
-                <ion-chip>
-                  <ion-label>PO #</ion-label>
-                </ion-chip>
-              </ion-card-content>
-            </ion-card>
-          </ion-list>
-
-          <ion-list>
-            <ion-list-header>{{ $t("Order") }}</ion-list-header>
-            <ion-item>
-              <ion-label>{{ $t("order created") }}</ion-label>
-              <ion-checkbox />
-            </ion-item>
-            <ion-item>
-              <ion-label>{{ $t("order created") }}</ion-label>
-              <ion-checkbox />
-            </ion-item>
-
-            <ion-card>
-              <ion-card-header>
-                <ion-card-title>{{ $t("Purchase date") }}</ion-card-title>
-              </ion-card-header>
-              <ion-card-content>
-                <ion-chip>
-                  <ion-label>PO #</ion-label>
-                </ion-chip>
-                <ion-chip>
-                  <ion-label>PO #</ion-label>
-                </ion-chip>
-              </ion-card-content>
-            </ion-card>
-          </ion-list>
-
-          <ion-list>
-            <ion-list-header>{{ $t("Location") }}</ion-list-header>
-            <ion-item>
-              <ion-label>{{ $t("Product Store") }}</ion-label>
-              <ion-select value="any" interface="popover">
-                <ion-select-option value="any">Australia</ion-select-option>
-              </ion-select>
-            </ion-item>
-            <ion-item>
-              <ion-label>{{ $t("Facility") }}</ion-label>
-              <ion-select value="any" interface="popover">
-                <ion-select-option value="any">California Warehouse</ion-select-option>
-              </ion-select>
-            </ion-item>
-          </ion-list>
+          <ProductFilters />
         </aside>
 
         <main>
@@ -223,11 +131,6 @@ import {
   IonBackButton,
   IonButton,
   IonButtons,
-  IonCard,
-  IonCardContent,
-  IonCardHeader,
-  IonCardTitle,
-  IonCheckbox,
   IonChip,
   IonContent,
   IonHeader,
@@ -255,9 +158,10 @@ import {
   sync,
   swapVerticalOutline  
 } from 'ionicons/icons';
-import { defineComponent, reactive } from 'vue';
+import { defineComponent } from 'vue';
 import { mapGetters, useStore } from "vuex";
 import { useRouter } from "vue-router";
+import ProductFilters from "@/components/ProductFilters.vue"
 
 export default defineComponent({
   name: 'ProductInventory',
@@ -266,11 +170,6 @@ export default defineComponent({
     IonBackButton,
     IonButton,
     IonButtons,
-    IonCard,
-    IonCardContent,
-    IonCardHeader,
-    IonCardTitle,
-    IonCheckbox,
     IonChip,
     IonContent,
     IonHeader,
@@ -288,7 +187,8 @@ export default defineComponent({
     IonSelectOption,
     IonThumbnail,
     IonTitle,
-    IonToolbar
+    IonToolbar,
+    ProductFilters
   },
   data() {
     return {
@@ -300,8 +200,7 @@ export default defineComponent({
       products: "product/getProducts",
       getProduct: "product/getProduct",
       getProductStock: "stock/getProductStock",
-      isScrollable: 'product/isScrollable',
-      categories: 'product/getCategories'
+      isScrollable: 'product/isScrollable'
     })
   },
   methods: {
@@ -345,7 +244,7 @@ export default defineComponent({
           "parentProductCategoryId": "NN_CATALOG_CAT"
         },
         viewSize: 50,
-        "fieldList": ["categoryName"],
+        "fieldList": ["categoryName", "productCategoryId"],
         "entityName": "ProductCategoryAndRollup",
         "distinct": "Y",
         "noConditionFind": "Y",
@@ -360,14 +259,8 @@ export default defineComponent({
   setup() {
     const router = useRouter();
     const store = useStore();
-    const appliedFilters = reactive({
-      'category': {
-        'categoryName': 'any'
-      }
-    })
 
     return {
-      appliedFilters,
       downloadOutline,
       filterOutline,
       folderOutline,

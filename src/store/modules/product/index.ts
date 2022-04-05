@@ -13,7 +13,14 @@ const productModule: Module<ProductState, RootState> = {
         list: [],
         total: 0
       },
-      categories: []
+      filters: {
+        current: {
+          productCategoryId: 'All'
+        },
+        list: {
+          categories: [{ categoryName: 'All', productCategoryId: 'All' }]
+        }
+      }
     },
     getters,
     actions,

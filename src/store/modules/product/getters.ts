@@ -21,8 +21,11 @@ const getters: GetterTree<ProductState, RootState> = {
   getProducts(state) {
     return state.products.list;
   },
+  getcurrentProductFilters(state) {
+    return state.filters.current;
+  },
   getCategories(state) {
-    return state.categories;
+    return state.filters.list.categories;
   }
 };
 export default getters;

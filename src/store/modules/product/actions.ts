@@ -142,8 +142,7 @@ const actions: ActionTree<ProductState, RootState> = {
     try{
       resp = await ProductService.getCategories(payload);
       if (resp.status === 200 && resp.data.docs?.length > 0 && !hasError(resp)) {
-        const categories = resp.data.docs;
-        commit(types.PRODUCT_CATEGORIES_UPDATED, { categories });
+        commit(types.PRODUCT_CATEGORIES_UPDATED, resp.data.docs);
       }
     } catch (err) {
       console.error(err);
