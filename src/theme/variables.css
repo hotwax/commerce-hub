@@ -481,8 +481,11 @@ ion-card {
     border-left: var(--border-medium);
   }
 
-  .product-image > img {
+  .product-image {
     margin: var(--spacer-xs) 0 0 var(--spacer-xs);
+  }
+
+  .product-image > img {
     border: var(--border-medium);
     border-radius: 10px;
     padding: var(--spacer-base);
