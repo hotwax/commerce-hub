@@ -52,7 +52,7 @@
 
         <section class="scroller">
           <ion-item class="scroller-header" lines="none">
-            <ion-label>{{ $t("Stuck orders") }}</ion-label>
+            <h2>{{ $t("Stuck orders") }}</h2>
               <ion-button slot="end" fill="outline" size="small">{{ $t("View all") }}</ion-button>
           </ion-item>
     
@@ -138,7 +138,7 @@ export default defineComponent({
 <style scoped>
 figure {
   max-width: 375px;
-  margin: auto;
+  margin: var(--spacer-xl) auto;
 }
 
 .external {
@@ -159,12 +159,17 @@ figure {
   height: 200px;
 }
 
+ion-card-title {
+  font-size: 16px;
+  font-weight: bold;
+}
+
 .internal {
   margin: var(--spacer-base) 0 0;
 }
 
 .internal > ion-item {
-  border: 1px solid var(--ion-color-medium);
+  border: var(--border-medium);
   border-radius: 15px;
   margin: var(--spacer-xs) var(--spacer-xs) 0;
 }
@@ -175,7 +180,11 @@ ion-card > ion-card-header {
 
 .scroller > .scroller-header {
   width: var(--page-width);
-  margin: auto;
+  margin: var(--spacer-xl) auto 0;
+}
+
+h2 {
+  font-weight: bold;
 }
 
 .scroller-content {
@@ -215,12 +224,13 @@ ion-card > ion-card-header {
     margin: unset;
   }
 
-  .internal > ion-item {
-    margin-bottom: unset;
+  .scroller > .scroller-header {
+    margin-bottom: var(--spacer-sm);
   }
 
   main {
     --page-width: 1040px;
+    margin: unset;
   }
 }
 </style>
