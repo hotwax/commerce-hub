@@ -22,10 +22,7 @@ const getters: GetterTree<ProductState, RootState> = {
     return state.products.list;
   },
   getcurrentProductFilters(state) {
-    return state.filters.current;
-  },
-  getCategories(state) {
-    return state.filters.list.categories;
+    return state.currentProductFilterSelected;
   }
 };
 export default getters;

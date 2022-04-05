@@ -92,6 +92,10 @@ const actions: ActionTree<ProductState, RootState> = {
     let resp;
     
     try{
+      const filters = state.currentProductFilterSelected;
+      if(filters.category !== 'All') payload.json.filter.push(`productCategories: ${filters.category}`)
+      if (filters.color !== 'All' || filters.size !== 'All') payload.json.filter.push(`productFeatureIds: (${filters.color !== 'All' ? filters.color : ''} ${filters.color !== 'All' && filters.size !== 'All' ? 'AND' : '' } ${filters.size !== 'All' ? filters.size : ''})`)
+
       resp = await ProductService.getProducts(payload);
       if(resp.status === 200 && resp.data.grouped.groupId?.ngroups > 0 && !hasError(resp)) {
         let products = resp.data.grouped.groupId?.groups;
@@ -125,33 +129,18 @@ const actions: ActionTree<ProductState, RootState> = {
         commit(types.PRODUCT_LIST_UPDATED, { products, totalProductsCount });
       } else {
         showToast(translate("Products not found"));
+        commit(types.PRODUCT_LIST_UPDATED, { products: [], totalProductsCount: 0 });
       }
     } catch(error) {
       console.error(error);
+      commit(types.PRODUCT_LIST_UPDATED, { products: [], totalProductsCount: 0 });
       showToast(translate("Something went wrong"));
     }
     return resp;
   },
-
-  /**
-   * Get Categories
-   */
-  async getCategories({ commit }, payload) {
-    let resp;
-
-    try{
-      resp = await ProductService.getCategories(payload);
-      if (resp.status === 200 && resp.data.docs?.length > 0 && !hasError(resp)) {
-        commit(types.PRODUCT_CATEGORIES_UPDATED, resp.data.docs);
-      }
-    } catch (err) {
-      console.error(err);
-    }
-    return resp;
-  },
-
-  updateProductFilters({ commit }, payload) {
-    commit(types.PRODUCT_CATEGORY_CURRENT_UPDATED, payload);
+  
+  updateProductFilters({ commit, dispatch }, payload) {
+    commit(types.PRODUCT_FILTERS_CURRENT_UPDATED, payload);
     return payload;
   }
 }

@@ -25,7 +25,7 @@
         </section>
 
         <aside class="filters desktop-only">
-          <ProductFilters />
+          <ProductFilters :categories="categories" :colors="colors" :sizes="sizes" />
         </aside>
 
         <main>
@@ -162,6 +162,9 @@ import { defineComponent } from 'vue';
 import { mapGetters, useStore } from "vuex";
 import { useRouter } from "vue-router";
 import ProductFilters from "@/components/ProductFilters.vue"
+import { ProductService } from "@/services/ProductService";
+import { hasError } from '@/utils';
+import emitter from '@/event-bus';
 
 export default defineComponent({
   name: 'ProductInventory',
@@ -192,7 +195,10 @@ export default defineComponent({
   },
   data() {
     return {
-      queryString: ''
+      queryString: '',
+      categories: [{ categoryName: 'All', productCategoryId: 'All' }],
+      colors: [{ productFeatureTypeId: 'ALl', productFeatureId: 'All', description: 'All' }],
+      sizes: [{ productFeatureTypeId: 'ALl', productFeatureId: 'All', description: 'All' }]
     }
   },
   computed: {
@@ -202,6 +208,9 @@ export default defineComponent({
       getProductStock: "stock/getProductStock",
       isScrollable: 'product/isScrollable'
     })
+  },
+  created() {
+    emitter.on('filtersUpdated', this.getProducts)
   },
   methods: {
     async getProducts(vSize?: any, vIndex?: any) {
@@ -219,7 +228,7 @@ export default defineComponent({
             "group.ngroups": true,
           } as any,
           "query": "*:*",
-          "filter": "docType: PRODUCT"
+          "filter": [ "docType: PRODUCT" ]
         }
       }
       if(this.queryString) {
@@ -249,12 +258,46 @@ export default defineComponent({
         "distinct": "Y",
         "noConditionFind": "Y",
       }
-      this.store.dispatch("product/getCategories", payload);
+      let resp;
+
+      try{
+        resp = await ProductService.getCategories(payload);
+        if (resp.status === 200 && resp.data.docs?.length > 0 && !hasError(resp)) {
+          this.categories = this.categories.concat(resp.data.docs);
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    },
+    async getFeatures() {
+      const payload = {
+        "inputFields": {
+          "productFeatureTypeId": ['COLOR', 'SIZE'],
+          "productFeatureTypeId_op": 'in'
+        },
+        "viewSize": 50,
+        "fieldList": ['productFeatureId', 'description', 'productFeatureTypeId'],
+        "entityName": "ProductFeature",
+        "distinct": "Y",
+        "noConditionFind": "Y"
+      }
+      let resp;
+
+      try {
+        resp = await ProductService.getFeatures(payload);
+        if (resp.status === 200 && resp.data.docs?.length > 0 && !hasError(resp)) {
+          this.colors = this.colors.concat(resp.data.docs.filter((feature: any) => feature.productFeatureTypeId === 'COLOR'));
+          this.sizes = this.sizes.concat(resp.data.docs.filter((feature: any) => feature.productFeatureTypeId === 'SIZE'));
+        }
+      } catch(error) {
+        console.error(error);
+      }
     }
   },
   mounted() {
     this.getProducts();
     this.getCategories();
+    this.getFeatures();
   },
   setup() {
     const router = useRouter();

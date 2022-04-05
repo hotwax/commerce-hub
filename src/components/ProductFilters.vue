@@ -3,7 +3,7 @@
     <ion-list-header>{{ $t("Catalog") }}</ion-list-header>
     <ion-item>
       <ion-label>{{ $t("Categories") }}</ion-label>
-      <ion-select :value="appliedFilters.productCategoryId" @ionChange.prevent="updateFilters($event['detail'].value, 'productCategoryId')" interface="popover">
+      <ion-select :value="appliedFilters.category" @ionChange.prevent="updateFilters($event['detail'].value, 'category')" interface="popover">
         <ion-select-option v-for="category in categories" :key="category" :value="category.productCategoryId">{{ category.categoryName }}</ion-select-option>
       </ion-select>
     </ion-item>
@@ -24,14 +24,14 @@
 
     <ion-item>
       <ion-label>{{ $t("Size") }}</ion-label>
-      <ion-select value="any" interface="popover">
-        <ion-select-option value="any">all</ion-select-option>
+      <ion-select :value="appliedFilters.size" @ionChange.prevent="updateFilters($event['detail'].value, 'size')" interface="popover">
+        <ion-select-option v-for="size in sizes" :key="size" :value="size.productFeatureId">{{ size.description }}</ion-select-option>
       </ion-select>
     </ion-item>
     <ion-item>
       <ion-label>{{ $t("Color") }}</ion-label>
-      <ion-select value="any" interface="popover">
-        <ion-select-option value="any">all</ion-select-option>
+      <ion-select :value="appliedFilters.color" @ionChange.prevent="updateFilters($event['detail'].value, 'color')" interface="popover">
+        <ion-select-option v-for="color in colors" :key="color" :value="color.productFeatureId">{{ color.description }}</ion-select-option>
       </ion-select>
     </ion-item>
 
@@ -111,6 +111,7 @@ import {
 } from '@ionic/vue';
 import { close } from "ionicons/icons";
 import { mapGetters, useStore } from 'vuex';
+import emitter from '@/event-bus';
 
 export default defineComponent({
   name: 'ProductFilters',
@@ -130,14 +131,14 @@ export default defineComponent({
   },
   computed: {
     ...mapGetters({
-      appliedFilters: 'product/getcurrentProductFilters',
-      categories: 'product/getCategories'
+      appliedFilters: 'product/getcurrentProductFilters'
     })
   },
+  props: ["categories", "colors", "sizes"],
   methods: {
     async updateFilters(value: string, filterName: string) {
       await this.store.dispatch('product/updateProductFilters', { value, filterName }).then(() => {
-        console.log("filter changed");
+        emitter.emit('filtersUpdated');
       })
     }
   },
