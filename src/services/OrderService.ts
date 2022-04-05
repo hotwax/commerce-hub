@@ -8,6 +8,14 @@ const findOrder = async (payload: any): Promise<any> => {
   });
 }
 
+const getPOIds = async (payload: any): Promise<any> => {
+  return api({
+    url: "/solr-query",
+    method: "post",
+    data: payload
+  })
+}
+
 const findOrderDetails = async (payload: any): Promise<any> => {
   return api({
     url: "/solr-query",
@@ -18,5 +26,6 @@ const findOrderDetails = async (payload: any): Promise<any> => {
 
 export const OrderService = {
   findOrder,
-  findOrderDetails
+  findOrderDetails,
+  getPOIds
 }
