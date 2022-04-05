@@ -275,15 +275,18 @@ body {
 
 .search {
   grid-area: search;
-  margin-bottom: var(--spacer-lg);
 }
 
 .filters {
   grid-area: filters;
 }
 
-.filters > ion-list > ion-list-header {
-  font-size: 22px;
+.sort {
+  margin: var(--spacer-sm) 0;
+}
+
+.sort > :first-child{
+  border-bottom: var(--border-medium);
 }
 
 .section-header {
@@ -342,6 +345,9 @@ body {
   justify-self: start
 }
 
+h1,h2 {
+  font-size: 16px;
+}
 
 ion-avatar > img ,
 ion-thumbnail > img {
@@ -360,9 +366,8 @@ ion-list-header > hr {
   width: 90%;
 }
 
-h1,h2 {
-  font-size: 16px;
-  margin: var(--spacer-xs);
+ion-card {
+  border-radius: 8px;
 }
 
 .desktop-only {
@@ -392,6 +397,7 @@ h1,h2 {
     grid: "search  main" min-content
           "filters main" 1fr 
           / 375px; 
+    column-gap: var(--spacer-2xl);      
     margin: var(--spacer-lg);                            
   }
   
@@ -399,14 +405,23 @@ h1,h2 {
     grid: "info tags metadata" / max-content 1fr minmax(min-content, max-content);
   }
 
+  .filters {
+    margin-top: var(--spacer-lg);
+  }  
+
   .sort {
     display: flex;
     justify-content: flex-end;
+    margin-bottom: var(--spacer-lg);
   }
 
   .sort > ion-item {
     max-width: 308px;
     border-left: var(--border-medium);
+  }
+
+  .sort > :first-child{
+    border-bottom: unset;
   }
 
   .desktop-only {
@@ -421,12 +436,9 @@ h1,h2 {
     display: unset;
   }  
 
-  .find > main {
-    margin-left: var(--spacer-lg);
-  }
-
-  .products > ion-item {
-    margin-bottom: var(--spacer-lg);
+  .product,
+  .products {
+    margin-top: var(--spacer-lg);
   }
 
   ion-content > main {
@@ -451,7 +463,6 @@ h1,h2 {
           "cards    timeline" 1fr
           / 1fr 500px;
     justify-content: space-between;  
-    margin-bottom: var(--spacer-base);
   }
 
   .id {
@@ -468,6 +479,13 @@ h1,h2 {
   .timeline {
     grid-area: timeline;
     border-left: var(--border-medium);
+  }
+
+  .product-image > img {
+    margin: var(--spacer-xs) 0 0 var(--spacer-xs);
+    border: var(--border-medium);
+    border-radius: 10px;
+    padding: var(--spacer-base);
   }
 }
 

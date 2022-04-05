@@ -15,7 +15,7 @@
     <ion-content>
       <main>
         <section class="product">
-          <ion-card class="product-image desktop-only">
+          <ion-card class="desktop-only">
             <Image src="https://cdn.shopify.com/s/files/1/0069/7384/9727/products/test-track.jpg?v=1626255137" />
           </ion-card>
         
@@ -122,7 +122,7 @@
         <section>
           <ion-item lines="none">
             <ion-icon slot="start" :icon="ticketOutline" />
-            <h1>Orders</h1>
+            <h1>{{ $t("Orders") }}</h1>
           </ion-item>
           
           <div class="orders">
@@ -735,13 +735,31 @@ export default defineComponent({
 </script>
 
 <style scoped>
+section {
+  margin-top: var(--spacer-lg)
+}
 
 .product {
   display: grid;
-  grid-template-columns: 254px auto;
+  grid-template-columns: minmax(254px, auto) 1fr;
+  gap: var(--spacer-xl);
   justify-items: start;
-  align-items: center;
-  margin-bottom: var(--spacer-base);
+  margin: 0 0 var(--spacer-base);
+}
+
+.product > ion-card {
+  height: 360px;
+  border-radius: 20px;
+  padding: var(--spacer-base);
+}
+
+img {
+  max-width: unset;
+  height: 100%;
+}
+
+h1 {
+  margin-left: var(--spacer-xs);
 }
 
 .product-info,
@@ -756,13 +774,16 @@ export default defineComponent({
   grid-template-columns: repeat(2, auto);
   justify-content: space-between;
   align-items: center;
-  margin-bottom: var(--spacer-base);
+}
+
+.actions {
+  margin: var(--spacer-xl) 0 var(--spacer-base);
 }
 
 /*Height of segment is defined now since their are less list items. Will remove it later */
 .segments {
   height: 400px;
-  margin: 0 var(--spacer-sm);
+  margin-top: var(--spacer-2xl);
 }
 
 ion-segment {
@@ -777,10 +798,6 @@ ion-segment {
   .orders {
     display: grid;
     grid-template-columns: 343px 570px;
-  }
-
-  ion-segment {
-    margin: var(--spacer-xl) 0;
   }
 }
 </style>

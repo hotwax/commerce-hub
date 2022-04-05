@@ -80,6 +80,7 @@
                 </ion-item>
               </ion-list>
             </ion-card>
+
             <ion-card>
               <ion-list>
                 <ion-list-header>{{ $t("Shopify IDs") }}</ion-list-header>
@@ -100,8 +101,7 @@
           </div>
         </section>
 
-        <!-- Product section -->
-        <section>
+        <section class="products">
           <ion-item lines="none">
             <ion-icon slot="start" :icon="shirtOutline" />
             <h1>{{ $t("Products") }}</h1>
@@ -370,7 +370,6 @@ ion-select {
 }
 
 @media (min-width: 991px) {
-
   .product {
     display: grid;
     grid-template-columns: 250px 1fr;
@@ -380,12 +379,6 @@ ion-select {
 
   .product-image {
     height: 362px;
-    margin: var(--spacer-xs) 0 0 var(--spacer-xs);
-  }
-
-  .product-image > img {
-    border: var(--border-medium);
-    border-radius: 10px;
   }
 }
 </style>

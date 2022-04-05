@@ -159,6 +159,11 @@ figure {
   height: 200px;
 }
 
+ion-card-title {
+  font-size: 16px;
+  font-weight: bold;
+}
+
 .internal {
   margin: var(--spacer-base) 0 0;
 }
@@ -175,7 +180,11 @@ ion-card > ion-card-header {
 
 .scroller > .scroller-header {
   width: var(--page-width);
-  margin: var(--spacer-lg) auto var(--spacer-base);
+  margin: var(--spacer-xl) auto 0;
+}
+
+h2 {
+  font-weight: bold;
 }
 
 .scroller-content {
@@ -215,22 +224,13 @@ ion-card > ion-card-header {
     margin: unset;
   }
 
-  .internal > ion-item {
-    margin-bottom: unset;
+  .scroller > .scroller-header {
+    margin-bottom: var(--spacer-sm);
   }
 
   main {
     --page-width: 1040px;
     margin: unset;
-  }
-
-  ion-card-title {
-    font-size: 16px;
-    font-weight: bold;
-  }
-
-  h2 {
-    font-weight: bold;
   }
 }
 </style>

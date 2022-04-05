@@ -380,11 +380,5 @@ ion-select {
     gap: var(--spacer-lg);
     align-items: start;
   }
-
-  .product-image {
-    margin: var(--spacer-xs) 0 0 var(--spacer-xs);
-    border: var(--border-medium);
-    border-radius: 10px;
-  }
 }
 </style>
