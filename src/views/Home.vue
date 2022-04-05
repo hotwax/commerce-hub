@@ -52,7 +52,7 @@
 
         <section class="scroller">
           <ion-item class="scroller-header" lines="none">
-            <ion-label>{{ $t("Stuck orders") }}</ion-label>
+            <h2>{{ $t("Stuck orders") }}</h2>
               <ion-button slot="end" fill="outline" size="small">{{ $t("View all") }}</ion-button>
           </ion-item>
     
