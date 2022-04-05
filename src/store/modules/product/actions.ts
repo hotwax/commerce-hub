@@ -148,6 +148,11 @@ const actions: ActionTree<ProductState, RootState> = {
       console.error(err);
     }
     return resp;
+  },
+
+  updateProductFilters({ commit }, payload) {
+    commit(types.PRODUCT_CATEGORY_CURRENT_UPDATED, payload);
+    return payload;
   }
 }
 

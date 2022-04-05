@@ -136,12 +136,9 @@ export default defineComponent({
   },
   methods: {
     async updateFilters(value: string, filterName: string) {
-      console.log('value', value);
-      console.log('filterName', filterName);
-
-      // await this.store.dispatch('product/upodateProductFilters', { value, filterName }).then(() => {
-      //   console.log("filter changed");
-      // })
+      await this.store.dispatch('product/updateProductFilters', { value, filterName }).then(() => {
+        console.log("filter changed");
+      })
     }
   },
   setup() {
