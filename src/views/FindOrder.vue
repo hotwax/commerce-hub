@@ -173,7 +173,7 @@
                       <ion-label> {{ $t("Shipping from") }} </ion-label>
                       <p slot="end"> {{ item.facilityName ? item.facilityName : "-" }} </p>
                     </ion-item>
-                    <ion-item>
+                    <ion-item lines="none">
                       <ion-label> {{ $t("Location inventory") }} </ion-label>
                       <p slot="end">{{ getProductStock(item.productId) }}</p>
                     </ion-item>

@@ -83,8 +83,8 @@
                   <!-- TODO Replace 'p' tag with 'ion-label' after upgrading Ionic 5 to Ionic 6 -->
                   <p slot="end">California Warehouse</p>
                 </ion-item>
-                <ion-item>
-                  <ion-label>{{ $t("Rebrokered") }}</ion-label>
+                <ion-item lines="none">
+                  <ion-label>Rebrokered</ion-label>
                   <!-- TODO Replace 'p' tag with 'ion-label' after upgrading Ionic 5 to Ionic 6 -->
                   <p  slot="end">5 times</p>
                 </ion-item>
