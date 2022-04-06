@@ -8,6 +8,15 @@ const getShipmentMethods = async (payload: any): Promise<any> => {
   });
 }
 
+const getFacilitiesList = async (payload: any): Promise<any> => {
+  return api({
+    url: "/performFind",
+    method: "post",
+    data: payload
+  });
+}
+
 export const UtilService = {
-  getShipmentMethods
+  getShipmentMethods,
+  getFacilitiesList
 }

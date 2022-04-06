@@ -26,6 +26,22 @@ const actions: ActionTree<UtilState, RootState> = {
     } catch (err) {
       console.error("error", err);
     }
+  },
+
+  async fetchFacilitiesList({ commit }) {
+    try {
+      const resp = await UtilService.getFacilitiesList({
+        "entityName": "Facility",
+        "noConditionFind": "Y",
+        "viewSize": 50,
+        "fieldList": ["facilityId", "facilityName"],
+      });
+      if(resp.status === 200 && !hasError(resp)){
+        commit(types.UTIL_FACILITIES_LIST_UPDATED, resp.data.docs);
+      }
+    } catch (err) {
+      console.error("error", err);
+    }
   }
 }
 

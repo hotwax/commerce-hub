@@ -53,40 +53,88 @@
         <section class="scroller">
           <ion-item class="scroller-header" lines="none">
             <ion-label>Stuck orders</ion-label>
-              <ion-button slot="end" fill="outline" size="small">View all</ion-button>
+              <ion-button slot="end" fill="outline" size="small" @click.prevent="appliedFiltersUpdated([{value: 'ORDER_APPROVED', filterName: 'status'}, {value: true, filterName: 'unfillable'}])">View all</ion-button>
           </ion-item>
-    
           <div class="scroller-content">
-            <div class="scroller-item" v-for="i = 1 in 10" :key="i">  
+            <div class="scroller-item" v-for="order in stuckOrders" :key="order" @click.prevent="viewOrder(order)"> 
               <ion-card>
                 <ion-item lines="none">
                   <ion-label>
-                    Customer name
-                    <p>Order ID</p>
+                    {{ order.customerPartyName }}
+                    <p>{{ order.orderId }}</p>
                   </ion-label>
-                  <ion-note slot="end">auto cancel delta</ion-note>
+                  <ion-note slot="end">{{ getAutoCancelDate(order.autoCancelDate) }}</ion-note>
                 </ion-item>
                 <ion-item lines="full">
                   <ion-thumbnail slot="start">
-                    <img src="https://cdn.shopify.com/s/files/1/0069/7384/9727/products/test-track.jpg?v=1626255137" />
+                    <Image :src="getProduct(order.productId).mainImageUrl" />
                   </ion-thumbnail>
                   <ion-label>
-                    <p>Brand</p>
-                    Virtual name
-                    <p>Color: color</p>
-                    <p>Size: size</p>
+                    
+                    <p>{{ getProduct(order.productId).brandName }}</p>
+                    {{ order.productName }}
+                    <p>{{ $t("Color") }}: {{ $filters.getFeature(getProduct(order.productId).featureHierarchy, '1/COLOR/') }}</p>
+                    <p>{{ $t("Size") }}: {{ $filters.getFeature(getProduct(order.productId).featureHierarchy, '1/SIZE/') }}</p>
                   </ion-label>
-                  <ion-note slot="end" color="success">15 in stock</ion-note>
+                  <ion-note slot="end" color="success">{{getProductStock(order.productId)}} in stock</ion-note>
                 </ion-item>
                 <ion-item>
                   <ion-label>Last brokered</ion-label>
                   <!-- TODO Replace 'p' tag with 'ion-label' after upgrading Ionic 5 to Ionic 6 -->
-                  <p slot="end">California Warehouse</p>
+                  <p slot="end">{{ getStuckOrderChangeFacilityInformation(order.orderId)?.LastBrokeredFacility }}</p>
                 </ion-item>
                 <ion-item>
                   <ion-label>Rebrokered</ion-label>
                   <!-- TODO Replace 'p' tag with 'ion-label' after upgrading Ionic 5 to Ionic 6 -->
-                  <p  slot="end">5 times</p>
+                  <p  slot="end">{{ getStuckOrderChangeFacilityInformation(order.orderId)?.count }} times</p>
+                </ion-item>
+              </ion-card>
+            </div>   
+          </div>
+        </section>
+
+        <section class="scroller">
+          <ion-item class="scroller-header" lines="none">
+            <ion-label>Old expedited orders</ion-label>
+              <ion-button slot="end" fill="outline" size="small" @click.prevent="appliedFiltersUpdated([{value: '(NEXT_DAY OR SECOND_DAY)', filterName: 'shippingMethod'}])">View all</ion-button>
+          </ion-item>
+          <div class="scroller-content">
+            <div class="scroller-item" v-for="order in OldExpeditedOrders" :key="order" @click.prevent="viewOrder(order)"> 
+              <ion-card>
+                <ion-item lines="none">
+                  <ion-label>
+                    {{ order.customerPartyName }}
+                    <p>{{ order.orderId }}</p>
+                  </ion-label>
+                  <div class="metadata">
+                    <ion-note slot="end">order placed date</ion-note>
+                    <ion-badge slot="end" color="medium">{{ getAutoCancelDate(order.autoCancelDate) }}</ion-badge>
+                  </div>
+                  
+                  
+                </ion-item>
+                <ion-item lines="full">
+                  <ion-thumbnail slot="start">
+                    <Image :src="getProduct(order.productId).mainImageUrl" />
+                  </ion-thumbnail>
+                  <ion-label>
+                    
+                    <p>{{ getProduct(order.productId).brandName }}</p>
+                    {{ order.productName }}
+                    <p>{{ $t("Color") }}: {{ $filters.getFeature(getProduct(order.productId).featureHierarchy, '1/COLOR/') }}</p>
+                    <p>{{ $t("Size") }}: {{ $filters.getFeature(getProduct(order.productId).featureHierarchy, '1/SIZE/') }}</p>
+                  </ion-label>
+                  <ion-note slot="end" color="success">{{getProductStock(order.productId)}} in stock</ion-note>
+                </ion-item>
+                <ion-item>
+                  <ion-label>Last brokered</ion-label>
+                  <!-- TODO Replace 'p' tag with 'ion-label' after upgrading Ionic 5 to Ionic 6 -->
+                  <p slot="end">{{ getOldExpeditedOrderChangeFacilityInformation(order.orderId)?.LastBrokeredFacility }}</p>
+                </ion-item>
+                <ion-item>
+                  <ion-label>Rebrokered</ion-label>
+                  <!-- TODO Replace 'p' tag with 'ion-label' after upgrading Ionic 5 to Ionic 6 -->
+                  <p  slot="end">{{ getOldExpeditedOrderChangeFacilityInformation(order.orderId)?.count }} times</p>
                 </ion-item>
               </ion-card>
             </div>   
@@ -98,11 +146,14 @@
 </template>
 
 <script lang="ts">
-import { IonButton, IonCard, IonContent, IonCardHeader, IonCardTitle, IonIcon, IonItem, IonLabel, IonNote, IonPage, IonThumbnail } from '@ionic/vue';
+import { IonButton, IonCard, IonContent, IonCardHeader, IonCardTitle, IonIcon, IonItem, IonLabel, IonNote, IonPage, IonThumbnail, IonBadge } from '@ionic/vue';
 import { defineComponent } from 'vue';
 import { useRouter } from 'vue-router';
 import { ticketOutline, shirtOutline, sendOutline, calendarOutline, settingsOutline } from 'ionicons/icons'
 import Logo from '@/components/Logo.vue';
+import { mapGetters, useStore } from 'vuex';
+import Image from "@/components/Image.vue";
+import moment from 'moment'
 
 export default defineComponent({
   name: 'Home',
@@ -118,10 +169,46 @@ export default defineComponent({
     IonNote, 
     IonPage, 
     IonThumbnail,
-    Logo
+    Logo,
+    Image,
+    IonBadge
+  },
+  computed: {
+    ...mapGetters({
+      OldExpeditedOrders: 'order/getOldExpeditedOrders',
+      stuckOrders: 'order/getStuckOrders',
+      getProduct: 'product/getProduct',
+      getProductStock: 'stock/getProductStock',
+      getStuckOrderChangeFacilityInformation: 'order/getStuckOrderChangeFacilityInformation',
+      getOldExpeditedOrderChangeFacilityInformation: 'order/getOldExpeditedOrderChangeFacilityInformation'
+    })
+  },
+  methods: {
+    getAutoCancelDate(cancelDate: any){
+     return moment("03/02/2022", "MM-DD-YYYY").fromNow();
+    },
+    async viewOrder (order: any) {
+      await this.store.dispatch('order/updateCurrent', { order }).then(() => {
+        this.$router.push({ path: `/order/${order.orderId}` })
+      })
+    },
+    async appliedFiltersUpdated(filters: any) {
+      filters.forEach(async (filter: any) => {
+        await this.store.dispatch('order/appliedFiltersUpdated', { value: filter.value, filterName: filter.filterName  })
+      })
+      await this.store.dispatch('order/updateQuery', {viewSize: process.env.VUE_APP_VIEW_SIZE, viewIndex: 0}).then(async (payload) => {
+        this.store.dispatch('order/findOrders', payload);
+        this.router.push('/find-order');
+      })
+    }
+  },
+  mounted(){
+    this.store.dispatch('order/fetchStuckOrders');
+    this.store.dispatch('order/fetchOldExpeditedOrders');
   },
   setup() {
     const router = useRouter();
+    const store = useStore();
 
     return {
       router,
@@ -129,7 +216,8 @@ export default defineComponent({
       shirtOutline,
       sendOutline,
       calendarOutline,
-      settingsOutline
+      settingsOutline,
+      store
     }
   }
 });
@@ -152,6 +240,13 @@ figure {
   max-width: 200px;
   scroll-snap-align: center;
  }
+
+ .metadata {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  row-gap: 4px;
+}
 
 .external > ion-card > img {
   object-fit: cover;

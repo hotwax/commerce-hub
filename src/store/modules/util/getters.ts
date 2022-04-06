@@ -4,7 +4,12 @@ import UtilState from './UtilState';
 
 const getters: GetterTree <UtilState, RootState> = {
     getShipmentMethod: (state) => (shipmentMethodTypeId: string) => {
-        return state.shipmentMethod.find((data: any) => data.shipmentMethodTypeId === shipmentMethodTypeId)?.description
+        console.log(state.shipmentMethod)
+        // return state.shipmentMethod.find((data: any) => data.shipmentMethodTypeId === shipmentMethodTypeId)?.description
+    },
+    getFacilityName: (state) => (facilityId: any) => {
+        return state.facilityList.find((facility: any) => facility.facilityId === facilityId)
+        // return true;
     }
 }
 export default getters;

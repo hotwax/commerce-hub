@@ -11,6 +11,18 @@ const getters: GetterTree <OrderState, RootState> = {
   },
   getCurrentOrder(state) {
     return state.current
-  }
+  },
+  getStuckOrders(state) {
+    return state.stuck.orders;
+  },
+  getStuckOrderChangeFacilityInformation: (state) => (orderId: any) => {
+    return state.stuck.orderFacilityChangeInformation[orderId];
+  },
+  getOldExpeditedOrders(state) {
+    return state.oldExpedited.orders;
+  },
+  getOldExpeditedOrderChangeFacilityInformation: (state) => (orderId: any) => {
+    return state.oldExpedited.orderFacilityChangeInformation[orderId];
+  },
 }
 export default getters;
