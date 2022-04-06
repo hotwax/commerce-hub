@@ -52,7 +52,7 @@
           </ion-item>
         </div>
 
-        <ion-button expand="block" color="medium" fill="outline" @click="logout">{{ $t("Logout") }}</ion-button>
+        <ion-button expand="block" color="medium" fill="outline">{{ $t("Logout") }}</ion-button>
       </main>
     </ion-content>
   </ion-page>
@@ -75,7 +75,6 @@ import {
   IonToolbar,
   IonTitle,
 } from '@ionic/vue';
-import { useStore } from 'vuex';
 import { defineComponent } from 'vue';
 import Image from '@/components/Image.vue';
 
@@ -97,20 +96,6 @@ export default defineComponent({
     IonTitle,
     Image,
   },
-  methods:{
-   logout(){
-     this.store.dispatch('user/logout');
-   }
-  },
-  setup() {
-    
-    const store = useStore();
-
-    return {
-      
-      store
-    }
-  }
 });
 </script>
 
