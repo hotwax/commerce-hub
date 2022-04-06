@@ -37,6 +37,7 @@
                 <ion-select-option value="any">Partent</ion-select-option>
               </ion-select>
             </ion-item>
+
             <ion-item lines="none">
               <ion-icon slot="start" :icon="swapVerticalOutline" />
               <ion-label>{{ $t("Sort") }}</ion-label>
@@ -49,7 +50,7 @@
           <hr />
 
           <div class="product" v-for="product in products" :key="product.groupValue" @click="() => router.push('/product-inventory')">
-            <div class="product-image desktop-only">
+            <div class="desktop-only">
               <Image :src="getProduct(product.productId).mainImageUrl" />
             </div>
 

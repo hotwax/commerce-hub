@@ -1,6 +1,6 @@
 <template>
   <ion-list>
-    <ion-list-header>{{ $t("Catalog") }}</ion-list-header>
+    <ion-list-header><h3>{{ $t("Catalog") }}</h3></ion-list-header>
     <ion-item>
       <ion-label>{{ $t("Categories") }}</ion-label>
       <ion-select :value="appliedFilters.category" @ionChange.prevent="updateFilters($event['detail'].value, 'category')" interface="popover">
@@ -14,10 +14,10 @@
       </ion-card-header>
       <ion-card-content>
         <ion-chip>
-          <ion-label>Tag 1</ion-label>
+          <ion-label>PO #</ion-label>
         </ion-chip>
         <ion-chip>
-          <ion-label>Tag 2</ion-label>
+          <ion-label>PO #</ion-label>
         </ion-chip>
       </ion-card-content>
     </ion-card>
@@ -48,7 +48,7 @@
   </ion-list>
 
   <ion-list>
-    <ion-list-header>{{ $t("Order") }}</ion-list-header>
+    <ion-list-header><h3>{{ $t("Order") }}</h3></ion-list-header>
     <ion-item>
       <ion-label>{{ $t("Pre-order") }}</ion-label>
       <ion-checkbox v-model="appliedFilters.preOrder" @ionChange="updateFilters($event['detail'].checked, 'preOrder')" />
@@ -74,7 +74,7 @@
   </ion-list>
 
   <ion-list>
-    <ion-list-header>{{ $t("Location") }}</ion-list-header>
+    <ion-list-header><h3>{{ $t("Location") }}</h3></ion-list-header>
     <ion-item>
       <ion-label>{{ $t("Product Store") }}</ion-label>
       <ion-select value="any" interface="popover">

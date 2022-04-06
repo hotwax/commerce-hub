@@ -110,7 +110,7 @@ const actions: ActionTree<ProductState, RootState> = {
       payload.json.params['q.op'] = 'AND'
       payload.json.query = `*${params.queryString}*`
     }
-    console.log("aniket", state.currentProductFilterSelected.category)
+    
     // updating the filters value in json object as per the filters selected
     if(state.currentProductFilterSelected.category !== 'All') {
       payload.json.filter = payload.json.filter.concat(` AND productCategories: ${state.currentProductFilterSelected.category}`)
