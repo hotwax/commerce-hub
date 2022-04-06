@@ -13,7 +13,6 @@ const actions: ActionTree<OrderState, RootState> = {
   // Find Orders
   async findOrders ( { commit, state }, payload) {
     let resp;
-    console.log(payload)
     try {
       resp = await OrderService.findOrder(payload)
       if (resp && resp.status === 200 && !hasError(resp)) {
