@@ -134,17 +134,17 @@ const actions: ActionTree<ProductState, RootState> = {
     }
 
     if(state.currentProductFilterSelected.preOrder) {
-      typeFilterSelected.push('PRE_ORDER_PARKING')
+      typeFilterSelected.push('PRE-ORDER')
     }
 
     if(state.currentProductFilterSelected.backOrder) {
-      typeFilterSelected.push('BACKORDER_PARKING')
+      typeFilterSelected.push('BACKORDER')
     }
 
     const typeFilterValues = typeFilterSelected.toString().replaceAll(',', ' OR ')
 
     if(typeFilterValues) {
-      payload.json.filter = payload.json.filter.concat(` AND facilityId: (${typeFilterValues ? typeFilterValues : '*'})`)
+      payload.json.filter = payload.json.filter.concat(` AND keywordSearchText: (${typeFilterValues ? typeFilterValues : '*'})`)
     }
 
     return payload;
