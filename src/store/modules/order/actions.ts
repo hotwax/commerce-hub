@@ -19,7 +19,18 @@ const actions: ActionTree<OrderState, RootState> = {
       if (resp && resp.status === 200 && !hasError(resp)) {
         let orders = resp.data.grouped.orderId.groups.map((order: any) => {
           order.orderId = order.doclist.docs[0].orderId
-          order.customerName = order.doclist.docs[0].customerPartyName
+          order.customer = {
+            name: order.doclist.docs[0].customerPartyName,
+            emailId: order.doclist.docs[0].customerEmailId,
+            phoneNumber: order.doclist.docs[0].customerPhoneNumber,
+            toName: order.doclist.docs[0].customerPartyName,
+            city: order.doclist.docs[0].shipToCity,
+            state: order.doclist.docs[0].shipToState,
+            zipCode: order.doclist.docs[0].postalCode,
+            country: order.doclist.docs[0].shipToCountry,
+            addressLine1: order.doclist.docs[0].address1,
+            addressLine2: order.doclist.docs[0].address2,
+          },
           order.orderName = order.doclist.docs[0].orderName
           order.orderNotes = order.doclist.docs[0].orderNotes
           order.orderDate = order.doclist.docs[0].orderDate
@@ -155,8 +166,6 @@ const actions: ActionTree<OrderState, RootState> = {
       payload.json.query = `*${params.queryString}*`
     }
 
-    console.log(state.currentOrderFiltersSelected)
-
     // updating the filter value in json object as per the filters selected
     // TODO: optimize this code
     if (state.currentOrderFiltersSelected.storePickup) {
@@ -209,8 +218,6 @@ const actions: ActionTree<OrderState, RootState> = {
     if (state.currentOrderFiltersSelected.autoCancelDate) {
       payload.json.filter = payload.json.filter.concat(` AND autoCancelDate: [${state.currentOrderFiltersSelected.autoCancelDate + 'T00:00:00Z'} TO ${state.currentOrderFiltersSelected.autoCancelDate + 'T23:59:59Z'}]`)
     }
-
-    console.log(payload)
 
     return payload;
   },
