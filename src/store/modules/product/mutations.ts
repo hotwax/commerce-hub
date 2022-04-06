@@ -15,7 +15,11 @@ const mutations: MutationTree <ProductState> = {
     }
   },
   [types.PRODUCT_FILTERS_CURRENT_UPDATED](state, payload) {
-    state.currentProductFilterSelected[payload.filterName] = payload.value;
+    if(payload.filterName === 'tags'){
+      state.currentProductFilterSelected[payload.filterName].indexOf(payload.value) === -1 && state.currentProductFilterSelected[payload.filterName].push(payload.value);
+    }
+    else 
+      state.currentProductFilterSelected[payload.filterName] = payload.value;      
   }
 }
 export default mutations;

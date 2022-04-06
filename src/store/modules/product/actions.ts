@@ -85,6 +85,71 @@ const actions: ActionTree<ProductState, RootState> = {
     }
   },
 
+  // Update Query
+  async updateQuery({ state }, params) {
+    const typeFilterSelected = [] as any;
+
+    const payload = {
+      "json": {
+        "params": {
+          "rows": params.viewSize,
+          "start": params.viewIndex * params.viewSize,
+          "group": true,
+          "group.field": "groupId",
+          "group.limit": 10000,
+          "group.ngroups": true,
+        } as any,
+        "query": "*:*",
+        "filter": "docType: PRODUCT"
+      }
+    }
+
+    if (params.queryString) {
+      payload.json.params.defType = 'edismax'
+      payload.json.params.qf = 'productId productName sku internalName brandName'
+      payload.json.params['q.op'] = 'AND'
+      payload.json.query = `*${params.queryString}*`
+    }
+    console.log("aniket", state.currentProductFilterSelected.category)
+    // updating the filters value in json object as per the filters selected
+    if(state.currentProductFilterSelected.category !== 'All') {
+      payload.json.filter = payload.json.filter.concat(` AND productCategories: ${state.currentProductFilterSelected.category}`)
+    }
+
+    if(state.currentProductFilterSelected.color !== 'All') {
+      payload.json.filter = payload.json.filter.concat(` AND productFeatureIds: ${state.currentProductFilterSelected.color}`)
+    }
+
+    if(state.currentProductFilterSelected.size !== 'All') {
+      payload.json.filter = payload.json.filter.concat(` AND productFeatureIds: ${state.currentProductFilterSelected.size}`)
+    }
+
+    if(state.currentProductFilterSelected.tags.length > 0) {
+      const tagFilters = state.currentProductFilterSelected.tags.reduce((filter: string, tag: any) => {
+        if (filter !== '') filter += ' OR '
+        return filter += tag;
+      }, '');
+
+      payload.json.filter = payload.json.filter.concat(' AND keywordSearchText: ' + tagFilters + ')')
+    }
+
+    if(state.currentProductFilterSelected.preOrder) {
+      typeFilterSelected.push('PRE_ORDER_PARKING')
+    }
+
+    if(state.currentProductFilterSelected.backOrder) {
+      typeFilterSelected.push('BACKORDER_PARKING')
+    }
+
+    const typeFilterValues = typeFilterSelected.toString().replaceAll(',', ' OR ')
+
+    if(typeFilterValues) {
+      payload.json.filter = payload.json.filter.concat(` AND facilityId: (${typeFilterValues ? typeFilterValues : '*'})`)
+    }
+
+    return payload;
+  },
+
     /**
    * Get Product Inventory
    */
@@ -92,10 +157,6 @@ const actions: ActionTree<ProductState, RootState> = {
     let resp;
     
     try{
-      const filters = state.currentProductFilterSelected;
-      if(filters.category !== 'All') payload.json.filter.push(`productCategories: ${filters.category}`)
-      if (filters.color !== 'All' || filters.size !== 'All') payload.json.filter.push(`productFeatureIds: (${filters.color !== 'All' ? filters.color : ''} ${filters.color !== 'All' && filters.size !== 'All' ? 'AND' : '' } ${filters.size !== 'All' ? filters.size : ''})`)
-
       resp = await ProductService.getProducts(payload);
       if(resp.status === 200 && resp.data.grouped.groupId?.ngroups > 0 && !hasError(resp)) {
         let products = resp.data.grouped.groupId?.groups;

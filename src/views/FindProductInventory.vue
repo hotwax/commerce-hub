@@ -25,7 +25,7 @@
         </section>
 
         <aside class="filters desktop-only">
-          <ProductFilters :categories="categories" :colors="colors" :sizes="sizes" />
+          <ProductFilters :categories="categories" :colors="colors" :sizes="sizes" :tags="tags" />
         </aside>
 
         <main>
@@ -198,7 +198,8 @@ export default defineComponent({
       queryString: '',
       categories: [{ categoryName: 'All', productCategoryId: 'All' }],
       colors: [{ productFeatureTypeId: 'ALl', productFeatureId: 'All', description: 'All' }],
-      sizes: [{ productFeatureTypeId: 'ALl', productFeatureId: 'All', description: 'All' }]
+      sizes: [{ productFeatureTypeId: 'ALl', productFeatureId: 'All', description: 'All' }],
+      tags: []
     }
   },
   computed: {
@@ -210,33 +211,15 @@ export default defineComponent({
     })
   },
   created() {
-    emitter.on('filtersUpdated', this.getProducts)
+    emitter.on('productFiltersUpdated', this.getProducts)
   },
   methods: {
     async getProducts(vSize?: any, vIndex?: any) {
       const viewSize = vSize ? vSize : process.env.VUE_APP_VIEW_SIZE;
       const viewIndex = vIndex ? vIndex : 0;
 
-      const payload = {
-        "json": {
-          "params": {
-            "rows": viewSize,
-            "start": viewIndex * viewSize,
-            "group": true,
-            "group.field": "groupId",
-            "group.limit": 10000,
-            "group.ngroups": true,
-          } as any,
-          "query": "*:*",
-          "filter": [ "docType: PRODUCT" ]
-        }
-      }
-      if(this.queryString) {
-        payload.json.params.defType = 'edismax'
-        payload.json.params.qf = 'productId productName sku internalName brandName'
-        payload.json.params['q.op'] = 'AND'
-        payload.json.query = `*${this.queryString}*`
-      }
+      const payload = await this.store.dispatch('product/updateQuery', { viewSize, viewIndex, queryString: this.queryString })
+
       this.store.dispatch("product/getProducts", payload);
     },
     async loadMoreProducts(event: any){
@@ -292,12 +275,32 @@ export default defineComponent({
       } catch(error) {
         console.error(error);
       }
+    },
+    async getTags() {
+      const payload = {
+        "viewSize": 50,
+        "fieldList": ["keyword", "keywordTypeId"],
+        "entityName": "ProductKeyword",
+        "distinct": "Y",
+        "noConditionFind": "Y"
+      }
+      let resp;
+
+      try {
+        resp = await ProductService.getTags(payload);
+        if (resp.status === 200 && resp.data.docs?.length > 0 && !hasError(resp)) {
+          this.tags = resp.data.docs
+        }
+      } catch(error) {
+        console.error(error);
+      }
     }
   },
   mounted() {
     this.getProducts();
     this.getCategories();
     this.getFeatures();
+    this.getTags();
   },
   setup() {
     const router = useRouter();

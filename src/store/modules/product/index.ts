@@ -17,7 +17,9 @@ const productModule: Module<ProductState, RootState> = {
         category: 'All',
         color: 'All',
         size: 'All',
-        tags: []
+        tags: [],
+        preOrder: false,
+        backOrder: false
       }
     },
     getters,

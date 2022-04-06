@@ -40,11 +40,8 @@
         <ion-card-title>{{ $t("Tags") }}</ion-card-title>
       </ion-card-header>
       <ion-card-content>
-        <ion-chip>
-          <ion-label>Tag 1</ion-label>
-        </ion-chip>
-        <ion-chip>
-          <ion-label>Tag 2</ion-label>
+        <ion-chip v-for="tag in tags" :key="tag" @click="updateFilters(tag.keyword, 'tags')">
+          <ion-label>{{ tag.keyword }}</ion-label>
         </ion-chip>
       </ion-card-content>
     </ion-card>
@@ -54,11 +51,11 @@
     <ion-list-header>{{ $t("Order") }}</ion-list-header>
     <ion-item>
       <ion-label>{{ $t("Pre-order") }}</ion-label>
-      <ion-checkbox />
+      <ion-checkbox v-model="appliedFilters.preOrder" @ionChange="updateFilters($event['detail'].checked, 'preOrder')" />
     </ion-item>
     <ion-item>
       <ion-label>{{ $t("Back-order") }}</ion-label>
-      <ion-checkbox />
+      <ion-checkbox v-model="appliedFilters.backOrder" @ionChange="updateFilters($event['detail'].checked, 'backOrder')" />
     </ion-item>
 
     <ion-card>
@@ -134,11 +131,11 @@ export default defineComponent({
       appliedFilters: 'product/getcurrentProductFilters'
     })
   },
-  props: ["categories", "colors", "sizes"],
+  props: ["categories", "colors", "sizes", "tags"],
   methods: {
     async updateFilters(value: string, filterName: string) {
       await this.store.dispatch('product/updateProductFilters', { value, filterName }).then(() => {
-        emitter.emit('filtersUpdated');
+        emitter.emit('productFiltersUpdated');
       })
     }
   },
