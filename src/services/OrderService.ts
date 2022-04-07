@@ -16,16 +16,7 @@ const getPOIds = async (payload: any): Promise<any> => {
   })
 }
 
-const findPOFromSO = async (payload: any): Promise<any> => {
-  return api({
-    url: "/perform-find",
-    method: "post",
-    data: payload
-  })
-}
-
 export const OrderService = {
   findOrder,
-  findPOFromSO,
   getPOIds
 }
