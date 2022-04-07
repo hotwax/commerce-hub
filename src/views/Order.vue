@@ -235,108 +235,200 @@
             <h1>{{ $t("Products") }}</h1>
           </ion-item>
 
-          <div v-for="item in 2" :key="item" class="product-header">
-            <ion-item lines="none">
-              <ion-thumbnail slot="start">
-                <Image src="https://cdn.shopify.com/s/files/1/0069/7384/9727/products/test-track.jpg?v=1626255137" />
-              </ion-thumbnail>
-              <ion-label>
-                <p class="overline">Brand</p>
-                Virtual name
-                <p>{{ $t("Color") }}: color</p>
-                <p>{{ $t("Size") }}: size</p>
-              </ion-label>
-            </ion-item>
+          <div class="ship-group">
+            <!-- <div v-for="item in 2" :key="item"> -->
+              <div class="product-header">
+                <div class="product-info">
+                  <ion-item lines="none">
+                    <ion-thumbnail slot="start">
+                      <Image src="https://cdn.shopify.com/s/files/1/0069/7384/9727/products/test-track.jpg?v=1626255137" />
+                    </ion-thumbnail>
+                    <ion-label>
+                      <p class="overline">Brand</p>
+                      Virtual name
+                      <p>{{ $t("Color") }}: color</p>
+                      <p>{{ $t("Size") }}: size</p>
+                    </ion-label>
+                  </ion-item>
 
-            <div class="product-tags desktop-only">
-              <ion-chip outline>
-                <ion-icon :icon="shirtOutline" />
-                <ion-label>Internal name</ion-label>
-                <ion-icon :icon="openOutline" />
-              </ion-chip>
-            </div>
+                  <ion-chip outline>
+                    <ion-icon :icon="shirtOutline" />
+                    <ion-label>Internal name</ion-label>
+                    <ion-icon :icon="openOutline" />
+                  </ion-chip>
+                </div>
 
-            <ion-item lines="none">
-              <ion-badge slot="end">Approved</ion-badge>
-            </ion-item>
-          </div>
+                <div class="product-tags desktop-only">
+                  <div>
+                    <ion-chip>
+                      <ion-icon :icon="calendarClearOutline"/>
+                      <ion-label>EXT PO ID</ion-label>
+                    </ion-chip>
+                  </div>
 
-          <hr />
+                  <div>
+                    <ion-chip outline class="tablet">
+                      <ion-icon :icon="sendOutline" />
+                      <ion-label>7 Jan 2022</ion-label>
+                    </ion-chip>
 
-          <div class="list-item product-list">
-            <ion-item lines="none">
-              <ion-icon :icon="calendarClearOutline" slot="start" />
-              <ion-chip>
-                <ion-label>EXT PO ID</ion-label>
-              </ion-chip>
-            </ion-item>
+                    <ion-chip outline class="mobile">
+                      <ion-icon :icon="calendarClearOutline" />
+                      <ion-label>9 Jan 2022</ion-label>
+                    </ion-chip>
 
-            <ion-chip outline class="tablet">
-              <ion-icon :icon="sendOutline" />
-              <ion-label>7 Jan 2022</ion-label>
-            </ion-chip>
+                    <ion-chip outline class="tablet">
+                      <ion-icon :icon="timerOutline" />
+                      <ion-label>4 days</ion-label>
+                    </ion-chip>
+                  </div>
+                </div>
 
-            <ion-chip outline class="mobile">
-              <ion-icon :icon="calendarClearOutline" />
-              <ion-label>9 Jan 2022</ion-label>
-            </ion-chip>
+                <div class="product-metadata">
+                  <ion-badge slot="end">Approved</ion-badge>
+                  <ion-badge color="warning" class="tablet">pre-order</ion-badge>
+                </div>
+              </div>
 
-            <ion-chip outline class="tablet">
-              <ion-icon :icon="timerOutline" />
-              <ion-label>4 days</ion-label>
-            </ion-chip>
 
-            <ion-badge color="warning" class="tablet">pre-order</ion-badge>
+              <!-- <div class="related-info">
+                <hr /> -->
 
-            <ion-button fill="outline" color="medium">Edit dates</ion-button>
-          </div>
+                <!-- <div class="list-item po-details">
+                  <ion-item lines="none">
+                    <ion-icon :icon="calendarClearOutline" slot="start" />
+                    <ion-chip>
+                      <ion-label>EXT PO ID</ion-label>
+                    </ion-chip>
+                  </ion-item>
 
-          <hr />
+                  <ion-chip outline class="tablet">
+                    <ion-icon :icon="sendOutline" />
+                    <ion-label>7 Jan 2022</ion-label>
+                  </ion-chip>
 
-          <div class="product-card">
-            <ion-card>
-              <ion-list>
-                <ion-list-header>{{ $t("Destination") }}</ion-list-header>
-                <ion-item lines="full">
+                  <ion-chip outline class="mobile">
+                    <ion-icon :icon="calendarClearOutline" />
+                    <ion-label>9 Jan 2022</ion-label>
+                  </ion-chip>
+
+                  <ion-chip outline class="tablet">
+                    <ion-icon :icon="timerOutline" />
+                    <ion-label>4 days</ion-label>
+                  </ion-chip> -->
+
+
+                  <!-- <ion-button fill="outline" color="medium">{{ $t("Edit dates") }}</ion-button> -->
+                <!-- </div> -->
+              <!-- </div> -->
+
+              <hr />
+
+              <div class="product-header">
+                <ion-item lines="none">
+                  <ion-thumbnail slot="start">
+                    <Image src="https://cdn.shopify.com/s/files/1/0069/7384/9727/products/test-track.jpg?v=1626255137" />
+                  </ion-thumbnail>
                   <ion-label>
-                    Full name
-                    <p>Address 1</p>
-                    <p>Address 2</p>
-                    <p>City, Zipcode</p>
-                    <p>State, Country</p>
+                    <p class="overline">Brand</p>
+                    Virtual name
+                    <p>{{ $t("Color") }}: color</p>
+                    <p>{{ $t("Size") }}: size</p>
                   </ion-label>
                 </ion-item>
-                <ion-button fill="clear">{{ $t("Edit address") }}</ion-button>
-              </ion-list>
-            </ion-card>
 
-            <ion-card>
-              <ion-list>
-                <ion-list-header>{{ $t("Fulfillment") }}</ion-list-header>
-                <ion-item> 
-                  <ion-label>{{ $t("Shipping method") }}</ion-label>
-                  <ion-select value="standard">
-                    <ion-select-option value="standard">Standard</ion-select-option>
-                    <ion-select-option value="standard">Standard</ion-select-option>
-                    <ion-select-option value="standard">Standard</ion-select-option>
-                  </ion-select>
+                <div class="product-tags desktop-only">
+                  <ion-chip outline>
+                    <ion-icon :icon="shirtOutline" />
+                    <ion-label>Internal name</ion-label>
+                    <ion-icon :icon="openOutline" />
+                  </ion-chip>
+                </div>
+
+                <ion-item lines="none">
+                  <ion-badge slot="end">Approved</ion-badge>
                 </ion-item>
-                <ion-item>
-                  <ion-label>{{ $t("Shipping from") }}</ion-label>
-                  <ion-label slot="end">Pre-order parking</ion-label>
-                </ion-item>
-                <ion-item>
-                  <ion-label>{{ $t("Location Inventory") }}</ion-label>
-                  <ion-label slot="end">0</ion-label>
-                </ion-item>
-                <ion-item lines="full">
-                  <ion-label>{{ $t("Company ATP") }}</ion-label>
-                  <ion-label slot="end">0</ion-label>
-                </ion-item>
-                <ion-button color="primary" fill="clear">{{ $t("Change fulfillment location") }}</ion-button>
-              </ion-list>
-            </ion-card>
-          </div>
+              </div>
+
+
+              <div class="related-info">
+                <hr />
+
+                <div class="list-item po-details">
+                  <ion-item lines="none">
+                    <ion-icon :icon="calendarClearOutline" slot="start" />
+                    <ion-chip>
+                      <ion-label>EXT PO ID</ion-label>
+                    </ion-chip>
+                  </ion-item>
+
+                  <ion-chip outline class="tablet">
+                    <ion-icon :icon="sendOutline" />
+                    <ion-label>7 Jan 2022</ion-label>
+                  </ion-chip>
+
+                  <ion-chip outline class="mobile">
+                    <ion-icon :icon="calendarClearOutline" />
+                    <ion-label>9 Jan 2022</ion-label>
+                  </ion-chip>
+
+                  <ion-chip outline class="tablet">
+                    <ion-icon :icon="timerOutline" />
+                    <ion-label>4 days</ion-label>
+                  </ion-chip>
+
+                  <ion-badge color="warning" class="tablet">pre-order</ion-badge>
+
+                  <ion-button fill="outline" color="medium">{{ $t("Edit dates") }}</ion-button>
+                </div>
+              </div>
+              
+              <hr />
+            <!-- </div> -->
+
+            <div class="product-card">
+              <ion-card>
+                <ion-list>
+                  <ion-list-header>{{ $t("Destination") }}</ion-list-header>
+                  <ion-item lines="full">
+                    <ion-label>
+                      Full name
+                      <p>Address 1</p>
+                      <p>Address 2</p>
+                      <p>City, Zipcode</p>
+                      <p>State, Country</p>
+                    </ion-label>
+                  </ion-item>
+                  <ion-button fill="clear">{{ $t("Edit address") }}</ion-button>
+                </ion-list>
+              </ion-card>
+
+              <ion-card>
+                <ion-list>
+                  <ion-list-header>{{ $t("Fulfillment") }}</ion-list-header>
+                  <ion-item> 
+                    <ion-label>{{ $t("Shipping method") }}</ion-label>
+                    <ion-select value="standard">
+                      <ion-select-option value="standard">Standard</ion-select-option>
+                    </ion-select>
+                  </ion-item>
+                  <ion-item>
+                    <ion-label>{{ $t("Shipping from") }}</ion-label>
+                    <ion-label slot="end">Pre-order parking</ion-label>
+                  </ion-item>
+                  <ion-item>
+                    <ion-label>{{ $t("Location Inventory") }}</ion-label>
+                    <ion-label slot="end">0</ion-label>
+                  </ion-item>
+                  <ion-item lines="full">
+                    <ion-label>{{ $t("Company ATP") }}</ion-label>
+                    <ion-label slot="end">0</ion-label>
+                  </ion-item>
+                  <ion-button color="primary" fill="clear">{{ $t("Change fulfillment location") }}</ion-button>
+                </ion-list>
+              </ion-card>
+            </div>
+          </div> 
         </section>
       </main>
     </ion-content>
@@ -476,6 +568,42 @@ export default defineComponent({
   margin-inline-start: 0;
 } */
 
+.product-header {
+  display: grid;
+  grid-template-columns: max-content 1fr max-content;
+  align-items: center;
+}
+
+.product-info {
+  display: flex;
+  flex-direction: column;
+  row-gap: var(--spacer-xs);
+  align-items: start;
+}
+
+.product-metadata {
+    display: flex;
+    flex-direction: column;
+    align-items: end;
+    row-gap: var(--spacer-xs);
+  }
+
+.product-card {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(343px, 1fr));
+  align-items: start;
+}
+
+.ship-group {
+  border-top: 1.5px solid var(--ion-color-dark);
+  margin: var(--spacer-xl) 0;
+}
+
+.ship-group > div > hr {
+  border-top: 1px solid var(--ion-color-medium-tint);
+  margin: 0;
+}
+
 .mobile {
   display: unset;
 }
@@ -484,24 +612,15 @@ export default defineComponent({
   display: none;
 }
 
-.product-header {
-  display: grid;
-  grid-template-columns: max-content 1fr max-content;
-  align-items: center;
+.related-info > :first-child {
+  width: 90%;
+  margin: 0 0 0 auto;
+  border-top: 3px dotted var(--ion-color-medium-tint);
 }
 
-.product-tags {
-  justify-self: center;
-}
-
-.product-list {
+.po-details {
   --columns-desktop: 6;
-}
-
-.product-card {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(343px, 1fr));
-  align-items: start;
+  padding: var(--spacer-base);
 }
 
 @media (min-width: 991px) {
@@ -510,6 +629,14 @@ export default defineComponent({
     grid-template-columns: 250px 1fr;
     gap: var(--spacer-lg);     
     align-items: start;
+  }
+
+  .product-tags {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    row-gap: var(--spacer-sm);
+    justify-self: center;
   }
 
   .product-image {
