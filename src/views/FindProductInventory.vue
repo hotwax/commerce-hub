@@ -26,7 +26,7 @@
 
         <aside class="filters desktop-only">
           <ion-list>
-            <ion-list-header>{{ $t("Catalog") }}</ion-list-header>
+            <ion-list-header><h3>{{ $t("Catalog") }}</h3></ion-list-header>
             <ion-item>
               <ion-label>{{ $t("Categories") }}</ion-label>
               <ion-select value="any">
@@ -77,7 +77,7 @@
           </ion-list>
 
           <ion-list>
-            <ion-list-header>{{ $t("Order") }}</ion-list-header>
+            <ion-list-header><h3>{{ $t("Order") }}</h3></ion-list-header>
             <ion-item>
               <ion-label>{{ $t("order created") }}</ion-label>
               <ion-checkbox />
@@ -103,7 +103,7 @@
           </ion-list>
 
           <ion-list>
-            <ion-list-header>{{ $t("Location") }}</ion-list-header>
+            <ion-list-header><h3>{{ $t("Location") }}</h3></ion-list-header>
             <ion-item>
               <ion-label>{{ $t("Product Store") }}</ion-label>
               <ion-select value="any">
@@ -128,6 +128,7 @@
                 <ion-select-option value="any">Partent</ion-select-option>
               </ion-select>
             </ion-item>
+
             <ion-item lines="none">
               <ion-icon slot="start" :icon="swapVerticalOutline" />
               <ion-label>{{ $t("Sort") }}</ion-label>
@@ -140,7 +141,7 @@
           <hr />
 
           <div class="product" @click="() => router.push('/product-inventory')">
-            <div class="product-image desktop-only">
+            <div class="desktop-only">
               <Image src="https://cdn.shopify.com/s/files/1/0069/7384/9727/products/test-track.jpg?v=1626255137" />
             </div>
 

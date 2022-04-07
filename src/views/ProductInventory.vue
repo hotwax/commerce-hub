@@ -15,12 +15,12 @@
     <ion-content>
       <main>
         <section class="product">
-          <ion-card class="product-image desktop-only">
+          <ion-card class="desktop-only">
             <Image src="https://cdn.shopify.com/s/files/1/0069/7384/9727/products/test-track.jpg?v=1626255137" />
           </ion-card>
         
           <div class="product-info desktop-only">
-            <ion-label>Parent product name</ion-label>
+            <h1>Parent product name</h1>
             <ion-card>
               <ion-card-header>
                 <ion-card-title>{{ $t("General information") }}</ion-card-title>
@@ -37,7 +37,7 @@
                 <ion-label>{{ $t("In stock") }}</ion-label>
                 <ion-label slot="end">QOH</ion-label>
               </ion-item>
-              <ion-item>
+              <ion-item lines="none">
                 <ion-label>{{ $t("On order") }}</ion-label>
                 <ion-label slot="end">ordered</ion-label>
               </ion-item>
@@ -64,7 +64,7 @@
           <div class="variant-info">
             <ion-item class="desktop-only" lines="none">
               <ion-icon slot="start" :icon="shirtOutline" />
-              <ion-label>{{ $t("Variant") }}</ion-label>
+              <h1>{{ $t("Variant") }}</h1>
             </ion-item>
             <ion-list>
               <ion-list-header>{{ $t("Color") }}</ion-list-header>
@@ -111,7 +111,7 @@
                 <ion-label>{{ $t("UPC") }}</ion-label>
                 <ion-label slot="end">order id</ion-label>
               </ion-item>
-              <ion-item>
+              <ion-item lines="none">
                 <ion-label>{{ $t("Internal ID") }}</ion-label>
                 <ion-label slot="end">internal id</ion-label>
               </ion-item>
@@ -122,7 +122,7 @@
         <section>
           <ion-item lines="none">
             <ion-icon slot="start" :icon="ticketOutline" />
-            <ion-label>Orders</ion-label>
+            <h1>{{ $t("Orders") }}</h1>
           </ion-item>
           
           <div class="orders">
@@ -138,7 +138,7 @@
                 <ion-label>{{ $t("Standard") }}</ion-label>
                 <ion-note slot="end">orders</ion-note>
               </ion-item>
-              <ion-item detail>
+              <ion-item lines="none" detail>
                 <ion-label>{{ $t("Expedited") }}</ion-label>
                 <ion-note slot="end">orders</ion-note>
               </ion-item>
@@ -169,7 +169,7 @@
                 </ion-label>
               </ion-item>
 
-              <ion-item>
+              <ion-item lines="none">
                 <ion-label>
                   <p>{{ $t("Back orders") }}</p>
                 </ion-label>
@@ -735,12 +735,31 @@ export default defineComponent({
 </script>
 
 <style scoped>
+section {
+  margin-top: var(--spacer-lg)
+}
 
 .product {
   display: grid;
-  grid-template-columns: 254px auto;
+  grid-template-columns: minmax(254px, auto) 1fr;
+  gap: var(--spacer-xl);
   justify-items: start;
-  align-items: center;
+  margin: 0 0 var(--spacer-base);
+}
+
+.product > ion-card {
+  height: 360px;
+  border-radius: 20px;
+  padding: var(--spacer-base);
+}
+
+img {
+  max-width: unset;
+  height: 100%;
+}
+
+h1 {
+  margin-left: var(--spacer-xs);
 }
 
 .product-info,
@@ -757,9 +776,14 @@ export default defineComponent({
   align-items: center;
 }
 
+.actions {
+  margin: var(--spacer-xl) 0 var(--spacer-base);
+}
+
 /*Height of segment is defined now since their are less list items. Will remove it later */
 .segments {
   height: 400px;
+  margin-top: var(--spacer-2xl);
 }
 
 ion-segment {

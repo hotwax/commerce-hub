@@ -26,7 +26,7 @@
 
         <aside class="filters desktop-only">
           <ion-list>
-            <ion-list-header>{{ $t("Date") }}</ion-list-header>
+            <ion-list-header><h3>{{ $t("Date") }}</h3></ion-list-header>
             <ion-item>
               <ion-label>{{ $t("Order created") }}</ion-label>
               <ion-chip id="order-created-date-modal" slot="end">
@@ -62,7 +62,7 @@
             </ion-item>
           </ion-list>
           <ion-list>
-            <ion-list-header>{{ $t("Type") }}</ion-list-header>
+            <ion-list-header><h3>{{ $t("Type") }}</h3></ion-list-header>
             <ion-item>
               <ion-label>{{ $t("Store pickup") }}</ion-label>
               <ion-checkbox v-model="appliedFilters.type.storePickup" @ionChange="getOrders()"/>
@@ -85,7 +85,7 @@
             </ion-item>
           </ion-list>
           <ion-list>
-            <ion-list-header>{{ $t("Fulfillment") }}</ion-list-header>
+            <ion-list-header><h3>{{ $t("Fulfillment") }}</h3></ion-list-header>
             <ion-item>
               <ion-label>{{ $t("Status") }}</ion-label>
               <ion-select :value="appliedFilters.fulfillment.status" @ionChange.prevent="($event) => {appliedFilters.fulfillment.status = $event['detail'].value; getOrders()}" interface="popover">
@@ -122,7 +122,21 @@
         </aside>
 
         <main>
-          <section class="sort"></section>
+          <section class="sort">
+            <ion-item lines="none">
+              <ion-icon slot="start" :icon="documentTextOutline" />
+              <ion-label>{{ "Show order items" }}</ion-label>
+              <ion-toggle color="secondary" />
+            </ion-item>
+
+            <ion-item lines="none">
+              <ion-icon slot="start" :icon="swapVerticalOutline" />
+              <ion-label>{{ $t("Sort") }}</ion-label>
+              <ion-select value="any">
+                <ion-select-option value="any">Arrival date</ion-select-option>
+              </ion-select>
+            </ion-item>
+          </section>
 
           <!-- Order Item Section -->
           <hr />
@@ -143,9 +157,9 @@
                   <ion-icon :icon="pricetag" />
                   <ion-label> {{ order.orderName }} </ion-label>
                 </ion-chip>
-                <ion-chip outline v-if="$filters.getCustomerLoyalty(order.orderNotes, 'cusotmerLoyaltyOptions')">
+                <ion-chip outline v-if="$filters.getCustomerLoyalty(order.notes, cusotmerLoyaltyOptions)">
                   <ion-icon :icon="ribbon" />
-                  <ion-label> {{ $filters.getCustomerLoyalty(order.orderNotes, 'cusotmerLoyaltyOptions') }} </ion-label>
+                  <ion-label>{{ $filters.getCustomerLoyalty(order.notes, cusotmerLoyaltyOptions) }}</ion-label>
                 </ion-chip>
               </div>
 
@@ -156,52 +170,52 @@
             </section>
 
             <section class="section-grid">
-                <ion-card v-for="(item, index) in order.doclist.docs" :key="index" :item="item">
+              <ion-card v-for="(item, index) in order.doclist.docs" :key="index" :item="item">
+                <ion-item>
+                  <ion-thumbnail slot="start">
+                    <Image :src="getProduct(item.productId).mainImageUrl" />
+                  </ion-thumbnail>
+                  <ion-label>
+                    <p>{{ getProduct(item.productId).brandName }}</p>
+                    {{ item.parentProductName ? item.parentProductName : item.productName }}
+                    <!-- TODO: make the attribute displaying logic dynamic -->
+                    <p v-if="$filters.getFeature(getProduct(item.productId).featureHierarchy, '1/COLOR/')">{{ $t("Color") }}: {{ $filters.getFeature(getProduct(item.productId).featureHierarchy, '1/COLOR/') }}</p>
+                    <p v-if="$filters.getFeature(getProduct(item.productId).featureHierarchy, '1/SIZE/')">{{ $t("Size") }}: {{ $filters.getFeature(getProduct(item.productId).featureHierarchy, '1/SIZE/') }}</p>
+                  </ion-label>
+                  <ion-badge :color="itemStatus[item.orderItemStatusId]?.color ? itemStatus[item.orderItemStatusId]?.color : 'primary'" slot="end"> {{ itemStatus[item.orderItemStatusId]?.label ? itemStatus[item.orderItemStatusId]?.label : item.orderItemStatusId }} </ion-badge>
+                </ion-item>
+                <!-- TODO: Need to handle this property -->
+                <div v-if="item.facilityId === orderPreOrderId || item.facilityId === orderBackOrderId">
                   <ion-item>
-                    <ion-thumbnail slot="start">
-                      <Image :src="getProduct(item.productId).mainImageUrl" />
-                    </ion-thumbnail>
-                    <ion-label>
-                      <p>{{ getProduct(item.productId).brandName }}</p>
-                      {{ item.parentProductName ? item.parentProductName : item.productName }}
-                      <!-- TODO: make the attribute displaying logic dynamic -->
-                      <p v-if="$filters.getFeature(getProduct(item.productId).featureHierarchy, '1/COLOR/')">{{ $t("Color") }}: {{ $filters.getFeature(getProduct(item.productId).featureHierarchy, '1/COLOR/') }}</p>
-                      <p v-if="$filters.getFeature(getProduct(item.productId).featureHierarchy, '1/SIZE/')">{{ $t("Size") }}: {{ $filters.getFeature(getProduct(item.productId).featureHierarchy, '1/SIZE/') }}</p>
-                    </ion-label>
-                    <ion-badge :color="itemStatus[item.orderItemStatusId]?.color ? itemStatus[item.orderItemStatusId]?.color : 'primary'" slot="end"> {{ itemStatus[item.orderItemStatusId]?.label ? itemStatus[item.orderItemStatusId]?.label : item.orderItemStatusId }} </ion-badge>
+                    <ion-label>{{ $t("Promise date") }}</ion-label>
+                    <p slot="end"> {{ item.promisedDatetime ? $filters.formatUtcDate(item.promisedDatetime, 'YYYY-MM-DDTHH:mm:ssZ', 'D MMM YYYY') : '-'  }} </p>
                   </ion-item>
-                  <!-- TODO: Need to handle this property -->
-                  <div v-if="item.facilityId === orderPreOrderId || item.facilityId === orderBackOrderId">
-                    <ion-item>
-                      <ion-label> {{ $t("Promise date") }} </ion-label>
-                      <p slot="end"> {{ item.promisedDatetime ? $filters.formatUtcDate(item.promisedDatetime, 'YYYY-MM-DDTHH:mm:ssZ', 'D MMM YYYY') : '-'  }} </p>
-                    </ion-item>
-                    <ion-item>
-                      <ion-label> {{ $t("PO arrival date") }} </ion-label>
-                      <!-- TODO: Need to handle this property -->
-                      <p slot="end"> {{ item.promiseOrderArrivalDate ? $filters.formatUtcDate(item.promiseOrderArrivalDate, 'YYYY-MM-DDTHH:mm:ssZ', 'D MMM YYYY') : '-' }} </p>
-                    </ion-item>
-                    <ion-item>
-                      <ion-label> {{ $t("Location") }} </ion-label>
-                      <!-- TODO: Need to handle this property -->
-                      <p slot="end"> {{ item.facilityName ? item.facilityName : '-' }} </p>
-                    </ion-item>
-                  </div>
-                  <div v-else>
-                    <ion-item>
-                      <ion-label> {{ $t("Shipping method") }} </ion-label>
-                      <p slot="end"> {{ item.shipmentMethodTypeId }} </p>
-                    </ion-item>
-                    <ion-item>
-                      <ion-label> {{ $t("Shipping from") }} </ion-label>
-                      <p slot="end"> {{ item.facilityName ? item.facilityName : "-" }} </p>
-                    </ion-item>
-                    <ion-item>
-                      <ion-label> {{ $t("Location inventory") }} </ion-label>
-                      <p slot="end">{{ getProductStock(item.productId) }}</p>
-                    </ion-item>
-                  </div>
-                </ion-card>
+                  <ion-item>
+                    <ion-label>{{ $t("PO arrival date") }}</ion-label>
+                    <!-- TODO: Need to handle this property -->
+                    <p slot="end"> {{ item.promiseOrderArrivalDate ? $filters.formatUtcDate(item.promiseOrderArrivalDate, 'YYYY-MM-DDTHH:mm:ssZ', 'D MMM YYYY') : '-' }} </p>
+                  </ion-item>
+                  <ion-item>
+                    <ion-label>{{ $t("Location") }}</ion-label>
+                    <!-- TODO: Need to handle this property -->
+                    <p slot="end"> {{ item.facilityName ? item.facilityName : '-' }} </p>
+                  </ion-item>
+                </div>
+                <div v-else>
+                  <ion-item>
+                    <ion-label>{{ $t("Shipping method") }}</ion-label>
+                    <p slot="end"> {{ item.shipmentMethodTypeId }} </p>
+                  </ion-item>
+                  <ion-item>
+                    <ion-label>{{ $t("Shipping from") }}</ion-label>
+                    <p slot="end"> {{ item.facilityName ? item.facilityName : "-" }} </p>
+                  </ion-item>
+                  <ion-item lines="none">
+                    <ion-label>{{ $t("Location inventory") }}</ion-label>
+                    <p slot="end">{{ getProductStock(item.productId) }}</p>
+                  </ion-item>
+                </div>
+              </ion-card>
             </section>
             <hr />
           </div>
@@ -242,15 +256,18 @@ import {
   IonSelectOption,
   IonThumbnail,
   IonTitle,
+  IonToggle,
   IonToolbar,
   modalController
 } from '@ionic/vue';
 import {
   checkmarkOutline,
+  documentTextOutline,
   downloadOutline,
   filterOutline,
   pricetag,
   ribbon,
+  swapVerticalOutline,
   syncOutline,
 } from 'ionicons/icons';
 import { defineComponent, reactive, ref } from "vue";
@@ -294,7 +311,8 @@ export default defineComponent ({
     IonSelectOption,
     IonThumbnail,
     IonTitle,
-    IonToolbar
+    IonToggle,
+    IonToolbar,
   },
   computed: {
     ...mapGetters({
@@ -487,6 +505,7 @@ export default defineComponent ({
     } else {
       console.error('Something went wrong')
     }
+    this.store.dispatch('util/fetchShipmentMethods')
   },
   setup() {
     const router = useRouter();
@@ -496,6 +515,7 @@ export default defineComponent ({
     const itemStatus = JSON.parse(process.env.VUE_APP_ITEM_STATUS)
     const orderPreOrderId = process.env.VUE_APP_PRE_ORDER_IDNT_ID
     const orderBackOrderId = process.env.VUE_APP_BACKORDER_IDNT_ID
+    const cusotmerLoyaltyOptions = process.env.VUE_APP_CUST_LOYALTY_OPTIONS
     const appliedFilters = reactive({
       'date': {
         'orderCreated': '',
@@ -519,6 +539,8 @@ export default defineComponent ({
 
     return {
       checkmarkOutline,
+      cusotmerLoyaltyOptions,
+      documentTextOutline,
       downloadOutline,
       filterOutline,
       itemStatus,
@@ -527,6 +549,7 @@ export default defineComponent ({
       orderBackOrderId,
       orderPreOrderId,
       ribbon,
+      swapVerticalOutline,
       syncOutline,
       router,
       appliedFilters,
