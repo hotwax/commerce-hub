@@ -113,8 +113,9 @@
               <ion-title>{{ $t("Purchase orders") }}</ion-title>
             </ion-toolbar>
             <ion-card-content>
-              <ion-chip v-for="(id, index) in poIds" :key="index">
+              <ion-chip @click="poSelected(id)" v-for="(id, index) in Object.keys(poIds)" :key="index">
                 <ion-label>{{ id }}</ion-label>
+                <ion-icon v-if="appliedFilters.poIds.includes(id)" :icon="checkmarkOutline" />
               </ion-chip>
             </ion-card-content>
           </ion-card>
@@ -245,6 +246,7 @@ import {
   modalController
 } from '@ionic/vue';
 import {
+  checkmarkOutline,
   downloadOutline,
   filterOutline,
   pricetag,
@@ -307,7 +309,7 @@ export default defineComponent ({
     return {
       shippingMethodOptions: ['any'],
       orderStatusOptions: ['any'],
-      poIds: []
+      poIds: [] as any
     }
   },
   methods: {
@@ -408,12 +410,21 @@ export default defineComponent ({
         payload.json.filter = payload.json.filter.concat(` AND autoCancelDate: [${this.appliedFilters.date.autoCancelDate.substring(0, this.appliedFilters.date.autoCancelDate.indexOf('T')) + 'T00:00:00Z'} TO ${this.appliedFilters.date.autoCancelDate.substring(0, this.appliedFilters.date.autoCancelDate.indexOf('T')) + 'T23:59:59Z'}]`)
       }
 
+      const correspondingPoId = this.appliedFilters.poIds.map((id: string) => this.poIds[id]).toString().replaceAll(",", " OR ")
+      if (this.appliedFilters.poIds.length > 0) {
+        payload.json.filter = payload.json.filter.concat(` AND correspondingPoId: (${correspondingPoId})`)
+      }
+
       await this.store.dispatch("order/findOrders", payload).then(resp => {
         if (resp.status == 200 && resp.data.facets) {
           this.orderStatusOptions = this.orderStatusOptions.length > 1 || resp.data.facets?.orderStatusIdFacet?.buckets.length < this.orderStatusOptions.length ? this.orderStatusOptions : this.orderStatusOptions.concat(resp.data.facets?.orderStatusIdFacet?.buckets.map((status: any) => status.val))
           this.shippingMethodOptions = this.shippingMethodOptions.length > 1 || resp.data.facets?.shipmentMethodTypeIdFacet?.buckets.length < this.shippingMethodOptions.length ? this.shippingMethodOptions : this.shippingMethodOptions.concat(resp.data.facets?.shipmentMethodTypeIdFacet?.buckets.map((shippingMethod: any) => shippingMethod.val))
         }
       })
+    },
+    poSelected(poId: string) {
+      !this.appliedFilters.poIds.includes(poId) ? this.appliedFilters.poIds.push(poId) : this.appliedFilters.poIds.splice(this.appliedFilters.poIds.indexOf(poId), 1)
+      this.getOrders();
     },
     async copyToClipboard(text: any) {
       await Clipboard.write({
@@ -461,14 +472,18 @@ export default defineComponent ({
           "group.field": "externalOrderId"
         },
         "filter": "docType: ORDER AND orderTypeId: PURCHASE_ORDER",
-        "fields": "externalOrderId",
+        "fields": "externalOrderId orderId",
         "query": "*:*"
       }
     }
 
     resp = await OrderService.getPOIds(payload);
     if (resp.status == 200 && !hasError(resp)) {
-      this.poIds = resp.data.grouped.externalOrderId.groups.map((group: any) => group.groupValue).filter((id: string) => id);
+      resp.data.grouped.externalOrderId.groups.map((group: any) => {
+        if (group.groupValue) {
+          this.poIds[group.groupValue] = group.doclist.docs.map((order: any) => order.orderId)
+        }
+      })
     } else {
       console.error('Something went wrong')
     }
@@ -498,10 +513,12 @@ export default defineComponent ({
         'status': 'any',
         'shippingMethod': 'any',
         'shipFromLocation': 'any'
-      }
+      },
+      'poIds': [] as Array<string>
     })
 
     return {
+      checkmarkOutline,
       downloadOutline,
       filterOutline,
       itemStatus,
