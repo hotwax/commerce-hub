@@ -121,29 +121,29 @@
               <hr />
 
               <div class="product-header">
-                  <ion-item lines="none">
-                    <ion-thumbnail slot="start" class="mobile-only">
-                      <Image :src="getProduct(item.productId).mainImageUrl" />
-                    </ion-thumbnail>
-                    <ion-label>
-                      <p> {{ item.brandName }} </p>
-                      {{ item.parentProductName ? item.parentProductName : item.productName }}
-                      <p v-if="$filters.getFeature(getProduct(item.productId).featureHierarchy, '1/COLOR/')">{{ $t("Color") }}: {{ $filters.getFeature(getProduct(item.productId).featureHierarchy, '1/COLOR/') }}</p>
-                      <p v-if="$filters.getFeature(getProduct(item.productId).featureHierarchy, '1/SIZE/')">{{ $t("Size") }}: {{ $filters.getFeature(getProduct(item.productId).featureHierarchy, '1/SIZE/') }}</p>
-                    </ion-label>
-                  </ion-item>
+                <ion-item lines="none">
+                  <ion-thumbnail slot="start" class="mobile-only">
+                    <Image :src="getProduct(item.productId).mainImageUrl" />
+                  </ion-thumbnail>
+                  <ion-label>
+                    <p> {{ item.brandName }} </p>
+                    {{ item.parentProductName ? item.parentProductName : item.productName }}
+                    <p v-if="$filters.getFeature(getProduct(item.productId).featureHierarchy, '1/COLOR/')">{{ $t("Color") }}: {{ $filters.getFeature(getProduct(item.productId).featureHierarchy, '1/COLOR/') }}</p>
+                    <p v-if="$filters.getFeature(getProduct(item.productId).featureHierarchy, '1/SIZE/')">{{ $t("Size") }}: {{ $filters.getFeature(getProduct(item.productId).featureHierarchy, '1/SIZE/') }}</p>
+                  </ion-label>
+                </ion-item>
 
-                <div class="product-tags desktop-only">
-                  <ion-chip v-if="item.internalName">
-                    <!-- TODO update shopify icon later -->
-                    <ion-icon :icon="pricetag" />
-                    <ion-label>{{ item.internalName }}</ion-label>
-                  </ion-chip>
-                </div>
+              <div class="product-tags desktop-only">
+                <ion-chip v-if="item.internalName">
+                  <!-- TODO update shopify icon later -->
+                  <ion-icon :icon="pricetag" />
+                  <ion-label>{{ item.internalName }}</ion-label>
+                </ion-chip>
+              </div>
 
-                  <ion-item lines="none">
-                    <ion-badge slot="end" :color="itemStatus[item.orderItemStatusId]?.color ? itemStatus[item.orderItemStatusId]?.color : 'primary'">{{ itemStatus[item.orderItemStatusId]?.label ? itemStatus[item.orderItemStatusId]?.label : item.orderItemStatusId }}</ion-badge>
-                  </ion-item>
+                <ion-item lines="none">
+                  <ion-badge slot="end" :color="itemStatus[item.orderItemStatusId]?.color ? itemStatus[item.orderItemStatusId]?.color : 'primary'">{{ itemStatus[item.orderItemStatusId]?.label ? itemStatus[item.orderItemStatusId]?.label : item.orderItemStatusId }}</ion-badge>
+                </ion-item>
               </div>
 
               <hr />
@@ -227,6 +227,117 @@
             </div>
           </div>
         </section>
+
+        <!-- Updated UI -->
+        <section>
+          <ion-item lines="none">
+            <ion-icon slot="start" :icon="shirtOutline" />
+            <h1>{{ $t("Products") }}</h1>
+          </ion-item>
+
+          <div v-for="item in 2" :key="item" class="product-header">
+            <ion-item lines="none">
+              <ion-thumbnail slot="start">
+                <Image src="https://cdn.shopify.com/s/files/1/0069/7384/9727/products/test-track.jpg?v=1626255137" />
+              </ion-thumbnail>
+              <ion-label>
+                <p class="overline">Brand</p>
+                Virtual name
+                <p>{{ $t("Color") }}: color</p>
+                <p>{{ $t("Size") }}: size</p>
+              </ion-label>
+            </ion-item>
+
+            <div class="product-tags desktop-only">
+              <ion-chip outline>
+                <ion-icon :icon="shirtOutline" />
+                <ion-label>Internal name</ion-label>
+                <ion-icon :icon="openOutline" />
+              </ion-chip>
+            </div>
+
+            <ion-item lines="none">
+              <ion-badge slot="end">Approved</ion-badge>
+            </ion-item>
+          </div>
+
+          <hr />
+
+          <div class="list-item product-list">
+            <ion-item lines="none">
+              <ion-icon :icon="calendarClearOutline" slot="start" />
+              <ion-chip>
+                <ion-label>EXT PO ID</ion-label>
+              </ion-chip>
+            </ion-item>
+
+            <ion-chip outline class="tablet">
+              <ion-icon :icon="sendOutline" />
+              <ion-label>7 Jan 2022</ion-label>
+            </ion-chip>
+
+            <ion-chip outline class="mobile">
+              <ion-icon :icon="calendarClearOutline" />
+              <ion-label>9 Jan 2022</ion-label>
+            </ion-chip>
+
+            <ion-chip outline class="tablet">
+              <ion-icon :icon="timerOutline" />
+              <ion-label>4 days</ion-label>
+            </ion-chip>
+
+            <ion-badge color="warning" class="tablet">pre-order</ion-badge>
+
+            <ion-button fill="outline" color="medium">Edit dates</ion-button>
+          </div>
+
+          <hr />
+
+          <div class="product-card">
+            <ion-card>
+              <ion-list>
+                <ion-list-header>{{ $t("Destination") }}</ion-list-header>
+                <ion-item lines="full">
+                  <ion-label>
+                    Full name
+                    <p>Address 1</p>
+                    <p>Address 2</p>
+                    <p>City, Zipcode</p>
+                    <p>State, Country</p>
+                  </ion-label>
+                </ion-item>
+                <ion-button fill="clear">{{ $t("Edit address") }}</ion-button>
+              </ion-list>
+            </ion-card>
+
+            <ion-card>
+              <ion-list>
+                <ion-list-header>{{ $t("Fulfillment") }}</ion-list-header>
+                <ion-item> 
+                  <ion-label>{{ $t("Shipping method") }}</ion-label>
+                  <ion-select value="standard">
+                    <ion-select-option value="standard">Standard</ion-select-option>
+                    <ion-select-option value="standard">Standard</ion-select-option>
+                    <ion-select-option value="standard">Standard</ion-select-option>
+                  </ion-select>
+                </ion-item>
+                <ion-item>
+                  <ion-label>{{ $t("Shipping from") }}</ion-label>
+                  <ion-label slot="end">Pre-order parking</ion-label>
+                </ion-item>
+                <ion-item>
+                  <ion-label>{{ $t("Location Inventory") }}</ion-label>
+                  <ion-label slot="end">0</ion-label>
+                </ion-item>
+                <ion-item lines="full">
+                  <ion-label>{{ $t("Company ATP") }}</ion-label>
+                  <ion-label slot="end">0</ion-label>
+                </ion-item>
+                <ion-button color="primary" fill="clear">{{ $t("Change fulfillment location") }}</ion-button>
+              </ion-list>
+            </ion-card>
+          </div>
+        </section>
       </main>
     </ion-content>
   </ion-page>
@@ -234,6 +345,7 @@
 <script lang="ts">
 import Image from '@/components/Image.vue';
 import {
+  calendarClearOutline,
   callOutline,
   caretDown,
   cashOutline,
@@ -242,14 +354,17 @@ import {
   openOutline,
   pricetag,
   ribbon,
+  sendOutline,
   shirtOutline,
   syncOutline,
   ticketOutline,
-  timeOutline
+  timeOutline,
+  timerOutline
 } from 'ionicons/icons';
 import {
   IonBackButton,
   IonBadge,
+  IonButton,
   IonCard,
   IonChip,
   IonContent,
@@ -260,6 +375,8 @@ import {
   IonList,
   IonListHeader,
   IonPage,
+  IonSelect,
+  IonSelectOption,
   IonThumbnail,
   IonTitle,
   IonToolbar
@@ -274,6 +391,7 @@ export default defineComponent({
     Image,
     IonBackButton,
     IonBadge,
+    IonButton,
     IonCard,
     IonChip,
     IonContent,
@@ -284,6 +402,8 @@ export default defineComponent({
     IonList,
     IonListHeader,
     IonPage,
+    IonSelect,
+    IonSelectOption,
     IonThumbnail,
     IonTitle,
     IonToolbar
@@ -320,6 +440,7 @@ export default defineComponent({
     const orderBackOrderId = process.env.VUE_APP_BACKORDER_IDNT_ID
 
     return {
+      calendarClearOutline,
       callOutline,
       caretDown,
       cashOutline,
@@ -332,11 +453,13 @@ export default defineComponent({
       orderStatus,
       pricetag,
       ribbon,
+      sendOutline,
       shirtOutline,
       store,
       syncOutline,
       ticketOutline,
-      timeOutline
+      timeOutline,
+      timerOutline
     };
   },
 });
@@ -344,13 +467,21 @@ export default defineComponent({
 
 <style scoped>
 /* To hide selected text which appear after selecting any option*/
-ion-select::part(text) {
+/* ion-select::part(text) {
   display: none;
-}
+} */
 
 /* To remove margin between badge and ion-select */
-ion-select {
+/* ion-select {
   margin-inline-start: 0;
+} */
+
+.mobile {
+  display: unset;
+}
+
+.list-item > *:last-child {
+  display: none;
 }
 
 .product-header {
@@ -361,6 +492,10 @@ ion-select {
 
 .product-tags {
   justify-self: center;
+}
+
+.product-list {
+  --columns-desktop: 6;
 }
 
 .product-card {
@@ -379,6 +514,10 @@ ion-select {
 
   .product-image {
     height: 362px;
+  }
+
+  .list-item > *:last-child {
+    display: unset;
   }
 }
 </style>
