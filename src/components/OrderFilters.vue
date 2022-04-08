@@ -75,7 +75,7 @@
       <ion-title>{{ $t("Purchase orders") }}</ion-title>
     </ion-toolbar>
     <ion-card-content>
-      <ion-chip @click="appliedFiltersUpdated(id, 'poIds')" v-for="(id, index) in Object.keys(poIds)" :key="index">
+      <ion-chip @click="appliedFiltersUpdated(id, 'poIds')" v-for="(id, index) in Object.keys(poIds)" :key="index" :outline="!currentOrderFiltersSelected.poIds.includes(id)">
         <ion-label>{{ id }}</ion-label>
       </ion-chip>
     </ion-card-content>
