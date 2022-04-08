@@ -191,7 +191,7 @@ const actions: ActionTree<OrderState, RootState> = {
       typeFilterSelected.push('_NA_')
     }
 
-    const typeFilterValues = typeFilterSelected.toString().replaceAll(",", " OR ")
+    const typeFilterValues = typeFilterSelected.join(" OR ")
 
     payload.json.filter = payload.json.filter.concat(` AND facilityId: (${typeFilterValues ? typeFilterValues : '*'})`)
 
@@ -222,7 +222,7 @@ const actions: ActionTree<OrderState, RootState> = {
       payload.json.filter = payload.json.filter.concat(` AND autoCancelDate: [${state.currentOrderFiltersSelected.autoCancelDate + 'T00:00:00Z'} TO ${state.currentOrderFiltersSelected.autoCancelDate + 'T23:59:59Z'}]`)
     }
 
-    const correspondingPoId = state.currentOrderFiltersSelected.poIds.map((id: string) => state.availableOrderFilterOptions.poIds[id]).toString().replaceAll(",", " OR ")
+    const correspondingPoId = state.currentOrderFiltersSelected.poIds.map((id: string) => state.availableOrderFilterOptions.poIds[id]).join(" OR ")
     if (state.currentOrderFiltersSelected.poIds.length > 0) {
       payload.json.filter = payload.json.filter.concat(` AND correspondingPoId: (${correspondingPoId})`)
     }
