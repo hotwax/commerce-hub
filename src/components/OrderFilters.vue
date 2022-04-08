@@ -75,7 +75,7 @@
       <ion-title>{{ $t("Purchase orders") }}</ion-title>
     </ion-toolbar>
     <ion-card-content>
-      <ion-chip v-for="(id, index) in poIds" :key="index">
+      <ion-chip @click="appliedFiltersUpdated(id, 'poIds')" v-for="(id, index) in Object.keys(poIds)" :key="index">
         <ion-label>{{ id }}</ion-label>
       </ion-chip>
     </ion-card-content>
@@ -100,7 +100,7 @@ import {
   IonTitle,
   IonToolbar
 } from '@ionic/vue';
-import { close } from "ionicons/icons";
+import { close, checkmarkOutline } from "ionicons/icons";
 import { mapGetters, useStore } from "vuex";
 import emitter from '@/event-bus';
 
@@ -130,7 +130,11 @@ export default defineComponent({
   },
   methods: {
     async appliedFiltersUpdated(value: string, filterName: string) {
-      await this.store.dispatch('order/appliedFiltersUpdated', { value, filterName }).then(() => {
+      const poIds = this.currentOrderFiltersSelected.poIds;
+      if (filterName === 'poIds') {
+        !poIds.includes(value) ? poIds.push(value) : poIds.splice(poIds.indexOf(value), 1)
+      }
+      await this.store.dispatch('order/appliedFiltersUpdated', { value: poIds, filterName }).then(() => {
         emitter.emit('filterUpdated');
       })
     }
@@ -140,6 +144,7 @@ export default defineComponent({
 
     return {
       close,
+      checkmarkOutline,
       store
     }
   }

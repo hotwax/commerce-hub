@@ -6,7 +6,6 @@ import * as types from './mutation-types'
 import { getCustomerLoyalty, getIdentification, hasError, showToast } from '@/utils'
 import { translate } from '@/i18n'
 import { Order, OrderItem } from '@/types'
-import { UtilService } from '@/services/UtilService'
 
 const actions: ActionTree<OrderState, RootState> = {
   
@@ -122,6 +121,11 @@ const actions: ActionTree<OrderState, RootState> = {
     return payload;
   },
 
+  async availableFilterOptionsUpdated({ commit }, payload) {
+    commit(types.ORDER_FILTER_OPTIONS_UPDATED, payload)
+    return payload;
+  },
+
   async updateQuery({ state }, params) {
     const typeFilterSelected = [];
 
@@ -216,6 +220,11 @@ const actions: ActionTree<OrderState, RootState> = {
 
     if (state.currentOrderFiltersSelected.autoCancelDate) {
       payload.json.filter = payload.json.filter.concat(` AND autoCancelDate: [${state.currentOrderFiltersSelected.autoCancelDate + 'T00:00:00Z'} TO ${state.currentOrderFiltersSelected.autoCancelDate + 'T23:59:59Z'}]`)
+    }
+
+    const correspondingPoId = state.currentOrderFiltersSelected.poIds.map((id: string) => state.availableOrderFilterOptions.poIds[id]).toString().replaceAll(",", " OR ")
+    if (state.currentOrderFiltersSelected.poIds.length > 0) {
+      payload.json.filter = payload.json.filter.concat(` AND correspondingPoId: (${correspondingPoId})`)
     }
 
     return payload;
