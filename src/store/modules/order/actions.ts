@@ -126,7 +126,7 @@ const actions: ActionTree<OrderState, RootState> = {
     return payload;
   },
 
-  async availableFilterOptionsUpdated({ commit }, payload) {
+  async updateAvailableFilterOptions({ commit }, payload) {
     commit(types.ORDER_FILTER_OPTIONS_UPDATED, payload)
     return payload;
   },

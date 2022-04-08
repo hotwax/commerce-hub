@@ -280,7 +280,7 @@ export default defineComponent ({
           this.poIds[group.groupValue] = group.doclist.docs.map((order: any) => order.orderId)
         }
       })
-      this.store.dispatch('order/availableFilterOptionsUpdated', { value: this.poIds, filterName: 'poIds' })
+      this.store.dispatch('order/updateAvailableFilterOptions', { value: this.poIds, filterName: 'poIds' })
     } else {
       console.error('Something went wrong')
     }
