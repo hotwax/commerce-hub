@@ -133,8 +133,9 @@ export default defineComponent({
       const poIds = this.currentOrderFiltersSelected.poIds;
       if (filterName === 'poIds') {
         !poIds.includes(value) ? poIds.push(value) : poIds.splice(poIds.indexOf(value), 1)
+        value = poIds
       }
-      await this.store.dispatch('order/appliedFiltersUpdated', { value: poIds, filterName }).then(() => {
+      await this.store.dispatch('order/appliedFiltersUpdated', { value, filterName }).then(() => {
         emitter.emit('filterUpdated');
       })
     }
