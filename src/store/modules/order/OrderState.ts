@@ -5,5 +5,6 @@ export default interface OrderState {
   },
   availableOrderFilterOptions: any,
   currentOrderFiltersSelected: any,
+  sort: any,
   current: any
 }

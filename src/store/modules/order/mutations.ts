@@ -13,6 +13,9 @@ const mutations: MutationTree <OrderState> = {
   [types.ORDER_CURRENT_UPDATED] (state, payload) {
     state.current = payload.order
   },
+  [types.ORDER_SORT_UPDATED] (state, payload) {
+    state.sort = payload
+  },
   [types.ORDER_FILTER_OPTIONS_UPDATED] (state, payload) {
     state.availableOrderFilterOptions[payload.filterName] = payload.value
   }
