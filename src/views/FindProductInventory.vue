@@ -197,11 +197,12 @@
                       </ion-chip>
                     </div>
 
-                    <div>
+                    <!-- Commenting this code because we will be releasing this feature in next release. -->
+                    <!-- <div>
                       <ion-item lines="none" detail>
                         <ion-note slot="end">{{ getProductStock(item.productId) }}</ion-note>
                       </ion-item>
-                    </div>
+                    </div> -->
                   </div>
                   <hr />
                 </ion-list>
@@ -294,7 +295,8 @@ export default defineComponent({
     ...mapGetters({
       products: "product/getProducts",
       getProduct: "product/getProduct",
-      getProductStock: "stock/getProductStock",
+      // Commenting this code because we will be releasing this feature in next release.
+      // getProductStock: "stock/getProductStock",
       isScrollable: 'product/isScrollable'
     })
   },
