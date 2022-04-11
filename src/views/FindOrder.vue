@@ -269,16 +269,14 @@ export default defineComponent ({
         },
         "filter": "docType: ORDER AND orderTypeId: PURCHASE_ORDER",
         "fields": "externalOrderId orderId",
-        "query": "*:*"
+        "query": "*:* AND externalOrderId: *"
       }
     }
 
     const resp = await OrderService.getPOIds(payload);
     if (resp.status == 200 && !hasError(resp)) {
       resp.data.grouped.externalOrderId.groups.map((group: any) => {
-        if (group.groupValue) {
-          this.poIds[group.groupValue] = group.doclist.docs.map((order: any) => order.orderId)
-        }
+        this.poIds[group.groupValue] = group.doclist.docs.map((order: any) => order.orderId)
       })
       this.store.dispatch('order/updateAvailableFilterOptions', { value: this.poIds, filterName: 'poIds' })
     } else {
