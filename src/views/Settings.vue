@@ -22,7 +22,7 @@
             <ion-label>{{ $t("OMS") }}</ion-label>
             <ion-label slot="end">{{ instanceUrl }}</ion-label>
           </ion-item>
-          <ion-button fill="clear">{{ $t("Details") }}</ion-button>
+          <ion-button fill="clear" @click="() => router.push('/profile')">{{ $t("Details") }}</ion-button>
         </ion-card>
 
         <ion-card>
@@ -38,7 +38,7 @@
             <ion-label>{{ $t("Shops") }}</ion-label>
             <ion-note slot="end">sales channels</ion-note>
           </ion-item>
-          <ion-button fill="clear">{{ $t("Details") }}</ion-button>
+          <ion-button fill="clear" @click="() => router.push('/locations')">{{ $t("Details") }}</ion-button>
         </ion-card>
 
         <ion-card>
@@ -51,7 +51,7 @@
             <ion-note slot="end">user count</ion-note>
           </ion-item>
           <ion-item lines="full"></ion-item>
-          <ion-button fill="clear">{{ $t("Details") }}</ion-button>
+          <ion-button fill="clear" @click="() => router.push('/users')">{{ $t("Details") }}</ion-button>
         </ion-card>
 
         <ion-card>
