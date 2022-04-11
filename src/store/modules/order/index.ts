@@ -29,7 +29,8 @@ const orderModule: Module<OrderState, RootState> ={
         'status': 'any',
         'shippingMethod': 'any',
         'shipFromLocation': 'any'
-      }
+      },
+      'poIds': {}
     },
     currentOrderFiltersSelected: {
       'status': 'any',
@@ -42,7 +43,8 @@ const orderModule: Module<OrderState, RootState> ={
       'unfillable': false,
       'orderCreated': '',
       'promiseDate': '',
-      'autoCancelDate': ''
+      'autoCancelDate': '',
+      'poIds': [] as Array<string>
     },
     current: {}
   },
