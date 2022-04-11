@@ -223,8 +223,8 @@ const actions: ActionTree<OrderState, RootState> = {
       payload.json.filter = payload.json.filter.concat(` AND orderDate: [${state.currentOrderFiltersSelected.orderCreated + 'T00:00:00Z'} TO ${state.currentOrderFiltersSelected.orderCreated + 'T23:59:59Z'}]`)
     }
 
-    if (state.currentOrderFiltersSelected.promiseDate) {
-      payload.json.filter = payload.json.filter.concat(` AND promisedDatetime: [${state.currentOrderFiltersSelected.promiseDate + 'T00:00:00Z'} TO ${state.currentOrderFiltersSelected.promiseDate + 'T23:59:59Z'}]`)
+    if (state.currentOrderFiltersSelected.promisedDate) {
+      payload.json.filter = payload.json.filter.concat(` AND promisedDatetime: [${state.currentOrderFiltersSelected.promisedDate + 'T00:00:00Z'} TO ${state.currentOrderFiltersSelected.promisedDate + 'T23:59:59Z'}]`)
     }
 
     if (state.currentOrderFiltersSelected.autoCancelDate) {

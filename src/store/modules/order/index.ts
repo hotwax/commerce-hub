@@ -15,7 +15,7 @@ const orderModule: Module<OrderState, RootState> ={
     availableOrderFilterOptions: {
       'date': {
         'orderCreated': '',
-        'promiseDate': '',
+        'promisedDate': '',
         'autoCancelDate': ''
       },
       'type': {
@@ -42,7 +42,7 @@ const orderModule: Module<OrderState, RootState> ={
       'backOrder': false,
       'unfillable': false,
       'orderCreated': '',
-      'promiseDate': '',
+      'promisedDate': '',
       'autoCancelDate': '',
       'poIds': [] as Array<string>
     },
