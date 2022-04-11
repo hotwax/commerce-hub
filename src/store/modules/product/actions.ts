@@ -110,15 +110,11 @@ const actions: ActionTree<ProductState, RootState> = {
           if(product.productId) productIds.add(product.productId);
         })
         productIds = [...productIds]
-        this.dispatch("product/fetchProducts", { productIds });
+        await this.dispatch("product/fetchProducts", { productIds });
 
-        let variantIds: any = new Set();
-        products.forEach((product: any) => {
-          product.variants.forEach((variant: any) => {
-            if(variant.productId) variantIds.add(variant.productId);
-          })
-        })
-        variantIds = [...variantIds]
+        const variantIds = products.reduce((acc: any, product: any) => {
+          return acc.concat(product.variants.map((variant: any) => variant.productId ))
+        }, [])
         this.dispatch("stock/addProducts", { variantIds });
         
         if(payload.json.params.start && payload.json.params.start > 0) products = state.products.list.concat(products);
