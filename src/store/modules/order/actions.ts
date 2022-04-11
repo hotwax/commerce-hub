@@ -116,7 +116,7 @@ const actions: ActionTree<OrderState, RootState> = {
     return resp;
   },
 
-  async appliedFiltersUpdated({ state, commit }, payload) {
+  async updateAppliedFilters({ state, commit }, payload) {
     if (payload.filterName === 'poIds') {
       const poIds = state.currentOrderFiltersSelected.poIds;
       !poIds.includes(payload.value) ? poIds.push(payload.value) : poIds.splice(poIds.indexOf(payload.value), 1)
