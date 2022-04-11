@@ -183,7 +183,9 @@ import {
   pricetag,
   ribbon,
   syncOutline,
-  close
+  close,
+  swapVerticalOutline,
+  documentTextOutline
 } from 'ionicons/icons';
 import { defineComponent, ref } from "vue";
 import { mapGetters, useStore } from "vuex";
@@ -336,6 +338,8 @@ export default defineComponent ({
       syncOutline,
       router,
       store,
+      swapVerticalOutline,
+      documentTextOutline,
       queryString
     };
   },
