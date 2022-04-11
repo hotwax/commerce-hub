@@ -243,9 +243,9 @@ export default defineComponent ({
     return {
       shippingMethodOptions: ['any'],
       orderStatusOptions: ['any'],
-      poIds: [],
       sort: 'orderDate',
-      showOrderItems: true
+      showOrderItems: true,
+      poIds: {} as any
     }
   },
   methods: {
@@ -288,11 +288,29 @@ export default defineComponent ({
   },
   async mounted() {
     await this.getOrders();
-    await this.store.dispatch('order/getPurchaseOrderIds').then(ids => {
-      if(ids.length > 0) {
-        this.poIds = ids
+
+    const payload = {
+      "json": {
+        "params": {
+          "rows": 1000,
+          "group": true,
+          "group.field": "externalOrderId"
+        },
+        "filter": "docType: ORDER AND orderTypeId: PURCHASE_ORDER",
+        "fields": "externalOrderId orderId",
+        "query": "*:* AND externalOrderId: *"
       }
-    })
+    }
+
+    const resp = await OrderService.getPOIds(payload);
+    if (resp.status == 200 && !hasError(resp)) {
+      resp.data.grouped.externalOrderId.groups.map((group: any) => {
+        this.poIds[group.groupValue] = group.doclist.docs.map((order: any) => order.orderId)
+      })
+      this.store.dispatch('order/updateAvailableFilterOptions', { value: this.poIds, filterName: 'poIds' })
+    } else {
+      console.error('Something went wrong')
+    }
   },
   setup() {
     const router = useRouter();
@@ -302,9 +320,11 @@ export default defineComponent ({
     const itemStatus = JSON.parse(process.env.VUE_APP_ITEM_STATUS)
     const orderPreOrderId = process.env.VUE_APP_PRE_ORDER_IDNT_ID
     const orderBackOrderId = process.env.VUE_APP_BACKORDER_IDNT_ID
+    const cusotmerLoyaltyOptions = process.env.VUE_APP_CUST_LOYALTY_OPTIONS
 
     return {
       close,
+      cusotmerLoyaltyOptions,
       downloadOutline,
       filterOutline,
       itemStatus,

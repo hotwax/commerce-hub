@@ -6,7 +6,6 @@ import * as types from './mutation-types'
 import { getCustomerLoyalty, getIdentification, hasError, showToast } from '@/utils'
 import { translate } from '@/i18n'
 import { Order, OrderItem } from '@/types'
-import { UtilService } from '@/services/UtilService'
 
 const actions: ActionTree<OrderState, RootState> = {
   
@@ -117,13 +116,23 @@ const actions: ActionTree<OrderState, RootState> = {
     return resp;
   },
 
-  async appliedFiltersUpdated({ commit }, payload) {
+  async updateAppliedFilters({ state, commit }, payload) {
+    if (payload.filterName === 'poIds') {
+      const poIds = state.currentOrderFiltersSelected.poIds;
+      !poIds.includes(payload.value) ? poIds.push(payload.value) : poIds.splice(poIds.indexOf(payload.value), 1)
+      payload.value = poIds
+    }
     commit(types.ORDER_FILTERS_UPDATED, payload)
     return payload;
   },
 
   async updateSortOption({ commit }, payload) {
     commit(types.ORDER_SORT_UPDATED, payload)
+  },
+  
+  async updateAvailableFilterOptions({ commit }, payload) {
+    commit(types.ORDER_FILTER_OPTIONS_UPDATED, payload)
+    return payload;
   },
 
   async updateQuery({ state }, params) {
@@ -191,7 +200,7 @@ const actions: ActionTree<OrderState, RootState> = {
       typeFilterSelected.push('_NA_')
     }
 
-    const typeFilterValues = typeFilterSelected.toString().replaceAll(",", " OR ")
+    const typeFilterValues = typeFilterSelected.join(" OR ")
 
     payload.json.filter = payload.json.filter.concat(` AND facilityId: (${typeFilterValues ? typeFilterValues : '*'})`)
 
@@ -220,6 +229,11 @@ const actions: ActionTree<OrderState, RootState> = {
 
     if (state.currentOrderFiltersSelected.autoCancelDate) {
       payload.json.filter = payload.json.filter.concat(` AND autoCancelDate: [${state.currentOrderFiltersSelected.autoCancelDate + 'T00:00:00Z'} TO ${state.currentOrderFiltersSelected.autoCancelDate + 'T23:59:59Z'}]`)
+    }
+
+    const correspondingPoId = state.currentOrderFiltersSelected.poIds.map((id: string) => state.availableOrderFilterOptions.poIds[id]).join(" OR ")
+    if (state.currentOrderFiltersSelected.poIds.length > 0) {
+      payload.json.filter = payload.json.filter.concat(` AND correspondingPoId: (${correspondingPoId})`)
     }
 
     return payload;
