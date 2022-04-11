@@ -9,7 +9,7 @@
       </ion-chip>
     </ion-item>
     <ion-item>
-      <ion-label>{{ $t("Promise date") }}</ion-label>
+      <ion-label>{{ $t("Promised date") }}</ion-label>
       <ion-chip id="open-order-promise-date-modal" slot="end">
         <ion-input v-model="currentOrderFiltersSelected.promiseDate" @ionChange.prevent="appliedFiltersUpdated(currentOrderFiltersSelected.promiseDate, 'promiseDate')" type="date" />
         <ion-icon :icon="close" v-if="currentOrderFiltersSelected.promiseDate" @click.prevent="appliedFiltersUpdated('', 'promiseDate')"/>

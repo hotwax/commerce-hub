@@ -42,7 +42,23 @@
         </aside>
 
         <main>
-          <section class="sort"></section>
+          <section class="sort">
+            <ion-item lines="none">
+              <ion-icon slot="start" :icon="documentTextOutline" />
+              <ion-label>{{ $t("Show order items") }}</ion-label>
+              <ion-toggle color="secondary" :checked="showOrderItems" @ionChange="() => showOrderItems = !showOrderItems"/>
+            </ion-item>
+
+            <ion-item lines="none">
+              <ion-icon slot="start" :icon="swapVerticalOutline" />
+              <ion-label>{{ $t("Sort") }}</ion-label>
+              <ion-select :value="sort" @ionChange="sortOrders($event.detail.value)">
+                <ion-select-option value="orderDate">{{ $t('Order date') }}</ion-select-option>
+                <ion-select-option value="promisedDatetime">{{ $t('Promised date') }}</ion-select-option>
+                <ion-select-option value="autoCancelDate">{{ $t('Auto cancel date') }}</ion-select-option>
+              </ion-select>
+            </ion-item>
+          </section>
 
           <!-- Order Item Section -->
           <hr />
@@ -75,7 +91,7 @@
               </div>
             </section>
 
-            <section class="section-grid">
+            <section class="section-grid" v-if="showOrderItems">
                 <ion-card v-for="(item, index) in order.doclist.docs" :key="index" :item="item">
                   <ion-item>
                     <ion-thumbnail slot="start">
@@ -153,8 +169,11 @@ import {
   IonNote,
   IonPage,
   IonSearchbar,
+  IonSelect,
+  IonSelectOption,
   IonThumbnail,
   IonTitle,
+  IonToggle,
   IonToolbar,
   menuController
 } from '@ionic/vue';
@@ -198,9 +217,12 @@ export default defineComponent ({
     IonMenu,
     IonNote,
     IonPage,
+    IonSelect,
+    IonSelectOption,
     IonSearchbar,
     IonThumbnail,
     IonTitle,
+    IonToggle,
     IonToolbar,
     OrderFilters
   },
@@ -221,10 +243,17 @@ export default defineComponent ({
     return {
       shippingMethodOptions: ['any'],
       orderStatusOptions: ['any'],
-      poIds: []
+      poIds: [],
+      sort: 'orderDate',
+      showOrderItems: true
     }
   },
   methods: {
+    async sortOrders(value: string) {
+      this.sort = value
+      await this.store.dispatch('order/updateSortOption', this.sort)
+      this.getOrders();
+    },
     async getOrders(vSize?: any, vIndex?: any) {
       const viewSize = vSize ? vSize : process.env.VUE_APP_VIEW_SIZE;
       const viewIndex = vIndex ? vIndex : 0;

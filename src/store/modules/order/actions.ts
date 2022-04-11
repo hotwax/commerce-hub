@@ -122,13 +122,17 @@ const actions: ActionTree<OrderState, RootState> = {
     return payload;
   },
 
+  async updateSortOption({ commit }, payload) {
+    commit(types.ORDER_SORT_UPDATED, payload)
+  },
+
   async updateQuery({ state }, params) {
     const typeFilterSelected = [];
 
     const payload = {
       "json": {
         "params": {
-          "sort": "orderDate desc",
+          "sort": `${state.sort} ${state.sort === 'orderDate' ? 'desc' : 'asc'}`,
           "rows": params.viewSize,
           "start": params.viewSize * params.viewIndex,
           "group": true,
@@ -211,7 +215,7 @@ const actions: ActionTree<OrderState, RootState> = {
     }
 
     if (state.currentOrderFiltersSelected.promiseDate) {
-      payload.json.filter = payload.json.filter.concat(` AND promiseDateTime: [${state.currentOrderFiltersSelected.promiseDate + 'T00:00:00Z'} TO ${state.currentOrderFiltersSelected.promiseDate + 'T23:59:59Z'}]`)
+      payload.json.filter = payload.json.filter.concat(` AND promisedDatetime: [${state.currentOrderFiltersSelected.promiseDate + 'T00:00:00Z'} TO ${state.currentOrderFiltersSelected.promiseDate + 'T23:59:59Z'}]`)
     }
 
     if (state.currentOrderFiltersSelected.autoCancelDate) {
