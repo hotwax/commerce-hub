@@ -53,9 +53,9 @@
               <ion-icon slot="start" :icon="swapVerticalOutline" />
               <ion-label>{{ $t("Sort") }}</ion-label>
               <ion-select :value="sort" @ionChange="sortOrders($event.detail.value)">
-                <ion-select-option value="orderDate">{{ $t('Order date') }}</ion-select-option>
-                <ion-select-option value="promisedDatetime">{{ $t('Promised date') }}</ion-select-option>
-                <ion-select-option value="autoCancelDate">{{ $t('Auto cancel date') }}</ion-select-option>
+                <ion-select-option value="orderDate desc">{{ $t('Order date') }}</ion-select-option>
+                <ion-select-option value="promisedDatetime asc">{{ $t('Promised date') }}</ion-select-option>
+                <ion-select-option value="autoCancelDate asc">{{ $t('Auto cancel date') }}</ion-select-option>
               </ion-select>
             </ion-item>
           </section>
@@ -245,7 +245,7 @@ export default defineComponent ({
     return {
       shippingMethodOptions: ['any'],
       orderStatusOptions: ['any'],
-      sort: 'orderDate',
+      sort: 'orderDate desc',
       showOrderItems: true,
       poIds: {} as any
     }

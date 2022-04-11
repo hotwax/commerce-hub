@@ -46,7 +46,7 @@ const orderModule: Module<OrderState, RootState> ={
       'autoCancelDate': '',
       'poIds': [] as Array<string>
     },
-    sort: 'orderDate',
+    sort: 'orderDate desc',
     current: {}
   },
   getters,

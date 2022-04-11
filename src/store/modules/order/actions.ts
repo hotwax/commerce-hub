@@ -129,7 +129,7 @@ const actions: ActionTree<OrderState, RootState> = {
   async updateSortOption({ commit }, payload) {
     commit(types.ORDER_SORT_UPDATED, payload)
   },
-  
+
   async updateAvailableFilterOptions({ commit }, payload) {
     commit(types.ORDER_FILTER_OPTIONS_UPDATED, payload)
     return payload;
@@ -141,7 +141,7 @@ const actions: ActionTree<OrderState, RootState> = {
     const payload = {
       "json": {
         "params": {
-          "sort": `${state.sort} ${state.sort === 'orderDate' ? 'desc' : 'asc'}`,
+          "sort": `${state.sort}`,
           "rows": params.viewSize,
           "start": params.viewSize * params.viewIndex,
           "group": true,
