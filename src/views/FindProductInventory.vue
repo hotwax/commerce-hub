@@ -142,7 +142,7 @@
 
           <div class="product" v-for="product in products" :key="product.groupValue" @click="() => router.push('/product-inventory')">
             <div class="desktop-only">
-              <Image :src="getProduct(product.productId).mainImageUrl" />
+              <Image :src="product?.mainImageUrl" />
             </div>
 
             <div>
@@ -150,25 +150,25 @@
                 <div class="primary-info">
                   <ion-item lines="none">
                     <ion-thumbnail slot="start" class="mobile-only">
-                      <Image :src="getProduct(product.productId).mainImageUrl" />
+                      <Image :src="product.mainImageUrl" />
                     </ion-thumbnail>
                     <ion-label>
-                      <p>{{ getProduct(product.productId).brandName }}</p>
+                      <p>{{ product.brandName }}</p>
                       {{ product.productName }}
-                      <p>{{ $t("Color") }}: {{ $filters.getFeaturesList(getProduct(product.productId).featureHierarchy, '1/COLOR/').join(", ") }}</p>
-                      <p>{{ $t("Size") }}: {{ $filters.getFeaturesList(getProduct(product.productId).featureHierarchy, '1/SIZE/').join(", ") }}</p>
+                      <p>{{ $t("Color") }}: {{ $filters.getFeaturesList(product.featureHierarchy, '1/COLOR/').join(", ") }}</p>
+                      <p>{{ $t("Size") }}: {{ $filters.getFeaturesList(product.featureHierarchy, '1/SIZE/').join(", ") }}</p>
                     </ion-label>
                   </ion-item>
                 </div>
                 <div class="tags desktop-only">
                   <ion-chip>
                     <ion-icon :icon="pricetag" />
-                    <ion-label>{{ getProduct(product.productId).internalName }}</ion-label>
+                    <ion-label>{{ product.internalName }}</ion-label>
                   </ion-chip>
                 </div>
                 <div class="metadata">
                   <ion-item lines="none" detail>
-                    <ion-note slot="end">{{ product.variants.length }} {{ $t("variants") }}</ion-note>
+                    <ion-note slot="end">{{ product.variants?.length }} {{ $t("variants") }}</ion-note>
                   </ion-item>
                 </div>
               </section>

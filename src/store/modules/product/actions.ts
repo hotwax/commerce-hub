@@ -48,6 +48,7 @@ const actions: ActionTree<ProductState, RootState> = {
   },
   // Will fetch product information
   async fetchProducts({ commit, state }, { productIds }) {
+    const cachedProducts = JSON.parse(JSON.stringify(state.cached));
     const cachedProductIds = Object.keys(state.cached);
     const productIdFilter = productIds.reduce((filter: string, productId: any) => {
       if (cachedProductIds.includes(productId)) {
@@ -58,14 +59,21 @@ const actions: ActionTree<ProductState, RootState> = {
       }
     }, '');
 
-    if (productIdFilter === '') return;
+    if (productIdFilter === '') return cachedProducts;
+
     const resp = await ProductService.fetchProducts({
       "filters": ['productId: (' + productIdFilter + ')'],
       "viewSize": productIds.length
     })
     if (resp.status === 200 && !hasError(resp)) {
       const products = resp.data.response.docs;
-      if (resp.data) commit(types.PRODUCT_ADD_TO_CACHED_MULTIPLE, { products });
+      if (resp.data) {
+        products.forEach((product: any) => {
+          cachedProducts[product.productId] = product
+        });
+      }
+      commit(types.PRODUCT_ADD_TO_CACHED_MULTIPLE, { cached: cachedProducts });
+      return cachedProducts;
     }
     return resp;
   },
@@ -110,12 +118,25 @@ const actions: ActionTree<ProductState, RootState> = {
           if(product.productId) productIds.add(product.productId);
         })
         productIds = [...productIds]
-        await this.dispatch("product/fetchProducts", { productIds });
+        const productInformation = await this.dispatch("product/fetchProducts", { productIds });
 
-        const variantIds = products.reduce((acc: any, product: any) => {
-          return acc.concat(product.variants.map((variant: any) => variant.productId ))
-        }, [])
-        this.dispatch("stock/addProducts", { variantIds });
+        products = products.map((product: any) => {
+          return {
+            ...product,
+            brandName: productInformation[product.productId]?.brandName,
+            productName: productInformation[product.productId]?.productName,
+            internalName: productInformation[product.productId]?.internalName,
+            mainImageUrl: productInformation[product.productId]?.mainImageUrl,
+            featureHierarchy: productInformation[product.productId]?.featureHierarchy
+          }
+        })
+
+        // We are commenting this code because we will be releasing this feature in next release.
+
+        // const variantIds = products.reduce((acc: any, product: any) => {
+        //   return acc.concat(product.variants.map((variant: any) => variant.productId ))
+        // }, [])
+        // this.dispatch("stock/addProducts", { variantIds });
         
         if(payload.json.params.start && payload.json.params.start > 0) products = state.products.list.concat(products);
         commit(types.PRODUCT_LIST_UPDATED, { products, totalProductsCount });
