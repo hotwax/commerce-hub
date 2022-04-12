@@ -18,12 +18,7 @@ const mutations: MutationTree <ProductState> = {
     state.cached = payload.cached
   },
   [types.PRODUCT_FILTERS_CURRENT_UPDATED](state, payload) {
-    if(payload.filterName === 'tags'){
-      state.currentProductFilterSelected[payload.filterName].indexOf(payload.value) === -1 && state.currentProductFilterSelected[payload.filterName].push(payload.value);
-    }
-    else {
-      state.currentProductFilterSelected[payload.filterName] = payload.value;
-    }      
+    state.currentProductFilterSelected[payload.filterName] = payload.value;
   }
 }
 export default mutations;

@@ -219,7 +219,7 @@ const actions: ActionTree<ProductState, RootState> = {
     return resp;
   },
   
-  updateProductFilters({ commit, dispatch }, payload) {
+  updateProductFilters({ commit }, payload) {
     commit(types.PRODUCT_FILTERS_CURRENT_UPDATED, payload);
     return payload;
   }
