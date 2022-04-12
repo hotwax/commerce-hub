@@ -666,7 +666,7 @@ export default defineComponent({
   },
   computed: {
     ...mapGetters({
-      product: 'product/getProductDetail'
+      product: 'product/getCurrentProduct'
     })
   },
   methods: {

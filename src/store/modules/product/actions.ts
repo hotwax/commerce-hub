@@ -190,7 +190,7 @@ const actions: ActionTree<ProductState, RootState> = {
           variants: product.variantProductIds
         }
 
-        dispatch('updateCurrent', { product });
+        dispatch('updateCurrent', product);
       } else {
         showToast(translate("Product not found"));
       }
@@ -201,7 +201,7 @@ const actions: ActionTree<ProductState, RootState> = {
     return resp;
   },
   updateCurrent({ commit }, payload) {
-    commit(types.PRODUCT_CURRENT_UPDATED, { product: payload.product })
+    commit(types.PRODUCT_CURRENT_UPDATED, payload)
   },
 }
 

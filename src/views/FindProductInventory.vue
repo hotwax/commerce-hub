@@ -340,7 +340,7 @@ export default defineComponent({
         variants: product.variants
       }
 
-      await this.store.dispatch('product/updateCurrent', { product }).then(() => {
+      await this.store.dispatch('product/updateCurrent', product).then(() => {
         this.router.push(`/product-inventory/${product.productId}`)
       })
     }
