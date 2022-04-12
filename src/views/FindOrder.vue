@@ -235,7 +235,7 @@ export default defineComponent ({
       currentFacilityId: 'user/getCurrentFacility',
       getProductStock: 'stock/getProductStock',
       isScrollable: 'order/isScrollable',
-      currentOrderFiltersSelected: 'order/getCurrentOrderFiltersSelected'
+      query: 'order/getOrderQuery'
     })
   },
   created() {
@@ -260,14 +260,12 @@ export default defineComponent ({
       const viewSize = vSize ? vSize : process.env.VUE_APP_VIEW_SIZE;
       const viewIndex = vIndex ? vIndex : 0;
 
-      const payload = await this.store.dispatch('order/updateQuery', { viewSize, viewIndex, queryString: this.queryString })
+      const resp = await this.store.dispatch('order/updateQuery', { viewSize, viewIndex, queryString: this.queryString })
 
-      await this.store.dispatch("order/findOrders", payload).then(resp => {
-        if (resp.status == 200 && resp.data.facets) {
-          this.orderStatusOptions = this.orderStatusOptions.length > 1 || resp.data.facets?.orderStatusIdFacet?.buckets.length < this.orderStatusOptions.length ? this.orderStatusOptions : this.orderStatusOptions.concat(resp.data.facets?.orderStatusIdFacet?.buckets.map((status: any) => status.val))
-          this.shippingMethodOptions = this.shippingMethodOptions.length > 1 || resp.data.facets?.shipmentMethodTypeIdFacet?.buckets.length < this.shippingMethodOptions.length ? this.shippingMethodOptions : this.shippingMethodOptions.concat(resp.data.facets?.shipmentMethodTypeIdFacet?.buckets.map((shippingMethod: any) => shippingMethod.val))
-        }
-      })
+      if (resp.status == 200 && resp.data.facets) {
+        this.orderStatusOptions = this.orderStatusOptions.length > 1 || resp.data.facets?.orderStatusIdFacet?.buckets.length < this.orderStatusOptions.length ? this.orderStatusOptions : this.orderStatusOptions.concat(resp.data.facets?.orderStatusIdFacet?.buckets.map((status: any) => status.val))
+        this.shippingMethodOptions = this.shippingMethodOptions.length > 1 || resp.data.facets?.shipmentMethodTypeIdFacet?.buckets.length < this.shippingMethodOptions.length ? this.shippingMethodOptions : this.shippingMethodOptions.concat(resp.data.facets?.shipmentMethodTypeIdFacet?.buckets.map((shippingMethod: any) => shippingMethod.val))
+      }
     },
     async copyToClipboard(text: any) {
       await Clipboard.write({
