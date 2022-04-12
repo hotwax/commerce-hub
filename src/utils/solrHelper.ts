@@ -1,8 +1,6 @@
 const prepareOrderQuery = (query: any) => {
   const typeFilterSelected = [];
 
-  console.log(query)
-
   const payload = {
     "json": {
       "params": {
