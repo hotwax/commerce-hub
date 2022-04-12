@@ -9,11 +9,8 @@ const getters: GetterTree <OrderState, RootState> = {
   isScrollable: (state) => {
     return state.list.orders.length > 0 && state.list.orders.length < state.list.total
   },
-  getAvailableOrderFilterOptions: (state) => {
-    return state.availableOrderFilterOptions
-  },
-  getCurrentOrderFiltersSelected: (state) => {
-    return state.currentOrderFiltersSelected
+  getOrderQuery: (state) => {
+    return state.query
   },
   getCurrentOrder(state) {
     return state.current

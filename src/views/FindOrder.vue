@@ -235,11 +235,8 @@ export default defineComponent ({
       currentFacilityId: 'user/getCurrentFacility',
       getProductStock: 'stock/getProductStock',
       isScrollable: 'order/isScrollable',
-      currentOrderFiltersSelected: 'order/getCurrentOrderFiltersSelected'
+      query: 'order/getOrderQuery'
     })
-  },
-  created() {
-    emitter.on('filterUpdated', this.getOrders)
   },
   data() {
     return {
@@ -260,14 +257,12 @@ export default defineComponent ({
       const viewSize = vSize ? vSize : process.env.VUE_APP_VIEW_SIZE;
       const viewIndex = vIndex ? vIndex : 0;
 
-      const payload = await this.store.dispatch('order/updateQuery', { viewSize, viewIndex, queryString: this.queryString })
+      const resp = await this.store.dispatch('order/updateQuery', { viewSize, viewIndex, queryString: this.queryString })
 
-      await this.store.dispatch("order/findOrders", payload).then(resp => {
-        if (resp.status == 200 && resp.data.facets) {
-          this.orderStatusOptions = this.orderStatusOptions.length > 1 || resp.data.facets?.orderStatusIdFacet?.buckets.length < this.orderStatusOptions.length ? this.orderStatusOptions : this.orderStatusOptions.concat(resp.data.facets?.orderStatusIdFacet?.buckets.map((status: any) => status.val))
-          this.shippingMethodOptions = this.shippingMethodOptions.length > 1 || resp.data.facets?.shipmentMethodTypeIdFacet?.buckets.length < this.shippingMethodOptions.length ? this.shippingMethodOptions : this.shippingMethodOptions.concat(resp.data.facets?.shipmentMethodTypeIdFacet?.buckets.map((shippingMethod: any) => shippingMethod.val))
-        }
-      })
+      if (resp.status == 200 && resp.data.facets) {
+        this.orderStatusOptions = this.orderStatusOptions.length > 1 || resp.data.facets?.orderStatusIdFacet?.buckets.length < this.orderStatusOptions.length ? this.orderStatusOptions : this.orderStatusOptions.concat(resp.data.facets?.orderStatusIdFacet?.buckets.map((status: any) => status.val))
+        this.shippingMethodOptions = this.shippingMethodOptions.length > 1 || resp.data.facets?.shipmentMethodTypeIdFacet?.buckets.length < this.shippingMethodOptions.length ? this.shippingMethodOptions : this.shippingMethodOptions.concat(resp.data.facets?.shipmentMethodTypeIdFacet?.buckets.map((shippingMethod: any) => shippingMethod.val))
+      }
     },
     async copyToClipboard(text: any) {
       await Clipboard.write({
@@ -309,7 +304,7 @@ export default defineComponent ({
       resp.data.grouped.externalOrderId.groups.map((group: any) => {
         this.poIds[group.groupValue] = group.doclist.docs.map((order: any) => order.orderId)
       })
-      this.store.dispatch('order/updateAvailableFilterOptions', { value: this.poIds, filterName: 'poIds' })
+      this.store.dispatch('order/updatePoIds', this.poIds)
     } else {
       console.error('Something went wrong')
     }

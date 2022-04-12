@@ -6,6 +6,7 @@ import * as types from './mutation-types'
 import { getCustomerLoyalty, getIdentification, hasError, showToast } from '@/utils'
 import { translate } from '@/i18n'
 import { Order, OrderItem } from '@/types'
+import { prepareOrderQuery } from '@/utils/solrHelper'
 
 const actions: ActionTree<OrderState, RootState> = {
   
@@ -116,127 +117,35 @@ const actions: ActionTree<OrderState, RootState> = {
     return resp;
   },
 
-  async updateAppliedFilters({ state, commit }, payload) {
-    if (payload.filterName === 'poIds') {
-      const poIds = state.currentOrderFiltersSelected.poIds;
+  async updateAppliedFilters({ state, commit, dispatch }, payload) {
+    if (payload.filterName === 'selectedPoIds') {
+      const poIds = state.query.selectedPoIds;
       !poIds.includes(payload.value) ? poIds.push(payload.value) : poIds.splice(poIds.indexOf(payload.value), 1)
       payload.value = poIds
     }
     commit(types.ORDER_FILTERS_UPDATED, payload)
-    return payload;
+    const resp = await dispatch('updateQuery', { viewSize: process.env.VUE_APP_VIEW_SIZE, viewIndex: 0 })
+    return resp;
   },
 
   async updateSortOption({ commit }, payload) {
     commit(types.ORDER_SORT_UPDATED, payload)
   },
 
-  async updateAvailableFilterOptions({ commit }, payload) {
-    commit(types.ORDER_FILTER_OPTIONS_UPDATED, payload)
+  async updatePoIds({ commit }, payload) {
+    commit(types.ORDER_PO_ID_UPDATED, payload)
     return payload;
   },
 
-  async updateQuery({ state }, params) {
-    const typeFilterSelected = [];
+  async updateQuery({ state, dispatch }, params) {
+    await dispatch('updateQueryString', params.queryString)
+    const query = prepareOrderQuery({ ...(state.query), poIds: state.poIds, ...params})
+    const resp = await dispatch('findOrders', query)
+    return resp;
+  },
 
-    const payload = {
-      "json": {
-        "params": {
-          "sort": `${state.sort}`,
-          "rows": params.viewSize,
-          "start": params.viewSize * params.viewIndex,
-          "group": true,
-          "group.field": "orderId",
-          "group.limit": 10000,
-          "group.ngroups": true,
-          "q.op": "AND"
-        } as any,
-        "query": "*:*",
-        "filter": "docType: ORDER AND orderTypeId: SALES_ORDER",
-        "facet": {
-          "orderStatusIdFacet": {
-              "field": "orderStatusId",
-              "mincount": 0,
-              "limit": -1,
-              "sort": "index",
-              "type": "terms"
-          },
-          "shipmentMethodTypeIdFacet": {
-            "excludeTags": "shipmentMethodTypeIdFilter",
-            "field": "shipmentMethodTypeId",
-            "mincount": 0,
-            "limit": -1,
-            "sort": "index",
-            "type": "terms"
-          }
-        }
-      }
-    }
-
-    if (params.queryString) {
-      payload.json.params.defType = 'edismax'
-      payload.json.params.qf = 'orderId customerPartyName customerPartyId productId internalName'
-      payload.json.query = `*${params.queryString}*`
-    }
-
-    // updating the filter value in json object as per the filters selected
-    // TODO: optimize this code
-    if (state.currentOrderFiltersSelected.storePickup) {
-      payload.json.filter = payload.json.filter.concat(' AND shipmentMethodTypeId: STOREPICKUP')
-    }
-
-    if (state.currentOrderFiltersSelected.shipFromStore) {
-      payload.json.filter = payload.json.filter.concat(' AND -shipmentMethodTypeId: STOREPICKUP AND facilityTypeId: RETAIL_STORE')
-    }
-
-    if (state.currentOrderFiltersSelected.preOrder) {
-      typeFilterSelected.push('PRE_ORDER_PARKING')
-    }
-
-    if (state.currentOrderFiltersSelected.backOrder) {
-      typeFilterSelected.push('BACKORDER_PARKING')
-    }
-
-    if (state.currentOrderFiltersSelected.unfillable) {
-      typeFilterSelected.push('_NA_')
-    }
-
-    const typeFilterValues = typeFilterSelected.join(" OR ")
-
-    payload.json.filter = payload.json.filter.concat(` AND facilityId: (${typeFilterValues ? typeFilterValues : '*'})`)
-
-    if (state.currentOrderFiltersSelected.shipFromLocation === 'store') {
-      payload.json.filter = payload.json.filter.concat(' AND facilityTypeId: RETAIL_STORE')
-    } else if (state.currentOrderFiltersSelected.shipFromLocation === 'warehouse') {
-      payload.json.filter = payload.json.filter.concat(' AND facilityTypeId: WAREHOUSE')
-    }
-
-    if (state.currentOrderFiltersSelected.status) {
-      payload.json.filter = payload.json.filter.concat(` AND orderStatusId: ${state.currentOrderFiltersSelected.status !== 'any' ? state.currentOrderFiltersSelected.status : '*'}`)
-    }
-
-    if (state.currentOrderFiltersSelected.shippingMethod) {
-      payload.json.filter = payload.json.filter.concat(` AND shipmentMethodTypeId: ${state.currentOrderFiltersSelected.shippingMethod !== 'any' ? state.currentOrderFiltersSelected.shippingMethod : '*' }`)
-    }
-
-    // TODO: improve logic to pass the date in the solr-query payload
-    if (state.currentOrderFiltersSelected.orderCreated) {
-      payload.json.filter = payload.json.filter.concat(` AND orderDate: [${state.currentOrderFiltersSelected.orderCreated + 'T00:00:00Z'} TO ${state.currentOrderFiltersSelected.orderCreated + 'T23:59:59Z'}]`)
-    }
-
-    if (state.currentOrderFiltersSelected.promisedDate) {
-      payload.json.filter = payload.json.filter.concat(` AND promisedDatetime: [${state.currentOrderFiltersSelected.promisedDate + 'T00:00:00Z'} TO ${state.currentOrderFiltersSelected.promisedDate + 'T23:59:59Z'}]`)
-    }
-
-    if (state.currentOrderFiltersSelected.autoCancelDate) {
-      payload.json.filter = payload.json.filter.concat(` AND autoCancelDate: [${state.currentOrderFiltersSelected.autoCancelDate + 'T00:00:00Z'} TO ${state.currentOrderFiltersSelected.autoCancelDate + 'T23:59:59Z'}]`)
-    }
-
-    const correspondingPoId = state.currentOrderFiltersSelected.poIds.map((id: string) => state.availableOrderFilterOptions.poIds[id]).join(" OR ")
-    if (state.currentOrderFiltersSelected.poIds.length > 0) {
-      payload.json.filter = payload.json.filter.concat(` AND correspondingPoId: (${correspondingPoId})`)
-    }
-
-    return payload;
+  async updateQueryString({ commit }, queryString) {
+    commit(types.ORDER_FILTERS_UPDATED, { 'filterName': 'queryString', 'value': queryString })
   }
 } 
 
