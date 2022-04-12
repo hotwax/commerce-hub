@@ -29,7 +29,7 @@
             <ion-list-header><h3>{{ $t("Catalog") }}</h3></ion-list-header>
             <ion-item>
               <ion-label>{{ $t("Categories") }}</ion-label>
-              <ion-select value="any">
+              <ion-select value="any" interface="popover">
                 <ion-select-option value="any">all</ion-select-option>
               </ion-select>
             </ion-item>
@@ -50,13 +50,13 @@
 
             <ion-item>
               <ion-label>{{ $t("Size") }}</ion-label>
-              <ion-select value="any">
+              <ion-select value="any" interface="popover">
                 <ion-select-option value="any">all</ion-select-option>
               </ion-select>
             </ion-item>
             <ion-item>
               <ion-label>{{ $t("Color") }}</ion-label>
-              <ion-select value="any">
+              <ion-select value="any" interface="popover">
                 <ion-select-option value="any">all</ion-select-option>
               </ion-select>
             </ion-item>
@@ -106,13 +106,13 @@
             <ion-list-header><h3>{{ $t("Location") }}</h3></ion-list-header>
             <ion-item>
               <ion-label>{{ $t("Product Store") }}</ion-label>
-              <ion-select value="any">
+              <ion-select value="any" interface="popover">
                 <ion-select-option value="any">Australia</ion-select-option>
               </ion-select>
             </ion-item>
             <ion-item>
               <ion-label>{{ $t("Facility") }}</ion-label>
-              <ion-select value="any">
+              <ion-select value="any" interface="popover">
                 <ion-select-option value="any">California Warehouse</ion-select-option>
               </ion-select>
             </ion-item>
@@ -124,7 +124,7 @@
             <ion-item lines="none">
               <ion-icon slot="start" :icon="folderOutline" />
               <ion-label>{{ "Group by" }}</ion-label>
-              <ion-select value="any">
+              <ion-select value="any" interface="popover">
                 <ion-select-option value="any">Partent</ion-select-option>
               </ion-select>
             </ion-item>
@@ -132,7 +132,7 @@
             <ion-item lines="none">
               <ion-icon slot="start" :icon="swapVerticalOutline" />
               <ion-label>{{ $t("Sort") }}</ion-label>
-              <ion-select value="any">
+              <ion-select value="any" interface="popover">
                 <ion-select-option value="any">{{ $t("Product name") }}</ion-select-option>
               </ion-select>
             </ion-item>
