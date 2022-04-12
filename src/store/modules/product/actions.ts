@@ -161,7 +161,9 @@ const actions: ActionTree<ProductState, RootState> = {
       payload.json.filter = payload.json.filter.concat(` AND keywordSearchText: (${typeFilterValues ? typeFilterValues : '*'})`)
     }
 
-    return payload;
+    const resp = dispatch("getProducts", payload);
+
+    return resp;
   },
 
     /**
@@ -225,9 +227,9 @@ const actions: ActionTree<ProductState, RootState> = {
     return resp;
   },
   
-  updateProductFilters({ commit }, payload) {
+  async updateProductFilters({ commit, dispatch }, payload) {
     commit(types.PRODUCT_FILTERS_CURRENT_UPDATED, payload);
-    return payload;
+    await dispatch('updateQuery', { viewSize: process.env.VUE_APP_VIEW_SIZE, viewIndex: 0 });
   }
 }
 

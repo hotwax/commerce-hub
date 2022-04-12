@@ -213,8 +213,8 @@ export default defineComponent({
     return {
       queryString: '',
       categories: [{ categoryName: 'All', productCategoryId: 'All' }],
-      colors: [{ productFeatureTypeId: 'ALl', productFeatureId: 'All', description: 'All' }],
-      sizes: [{ productFeatureTypeId: 'ALl', productFeatureId: 'All', description: 'All' }],
+      colors: [{ productFeatureTypeId: 'All', productFeatureId: 'All', description: 'All' }],
+      sizes: [{ productFeatureTypeId: 'All', productFeatureId: 'All', description: 'All' }],
       tags: []
     }
   },
@@ -232,9 +232,7 @@ export default defineComponent({
       const viewSize = vSize ? vSize : process.env.VUE_APP_VIEW_SIZE;
       const viewIndex = vIndex ? vIndex : 0;
 
-      const payload = await this.store.dispatch('product/updateQuery', { viewSize, viewIndex, queryString: this.queryString })
-
-      this.store.dispatch("product/getProducts", payload);
+      await this.store.dispatch('product/updateQuery', { viewSize, viewIndex, queryString: this.queryString });
     },
     async loadMoreProducts(event: any){
       this.getProducts(
