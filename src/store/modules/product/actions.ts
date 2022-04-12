@@ -48,6 +48,7 @@ const actions: ActionTree<ProductState, RootState> = {
   },
   // Will fetch product information
   async fetchProducts({ commit, state }, { productIds }) {
+    const cachedProducts = JSON.parse(JSON.stringify(state.cached));
     const cachedProductIds = Object.keys(state.cached);
     const productIdFilter = productIds.reduce((filter: string, productId: any) => {
       if (cachedProductIds.includes(productId)) {
@@ -58,14 +59,21 @@ const actions: ActionTree<ProductState, RootState> = {
       }
     }, '');
 
-    if (productIdFilter === '') return;
+    if (productIdFilter === '') return cachedProducts;
+
     const resp = await ProductService.fetchProducts({
       "filters": ['productId: (' + productIdFilter + ')'],
       "viewSize": productIds.length
     })
     if (resp.status === 200 && !hasError(resp)) {
       const products = resp.data.response.docs;
-      if (resp.data) commit(types.PRODUCT_ADD_TO_CACHED_MULTIPLE, { products });
+      if (resp.data) {
+        products.forEach((product: any) => {
+          cachedProducts[product.productId] = product
+        });
+      }
+      commit(types.PRODUCT_CACHED_UPDATED, { cached: cachedProducts });
+      return cachedProducts;
     }
     return resp;
   },
@@ -96,6 +104,8 @@ const actions: ActionTree<ProductState, RootState> = {
 
       if (resp.status === 200 && resp.data.grouped.groupId?.ngroups > 0 && !hasError(resp)) {
         let products = resp.data.grouped.groupId?.groups;
+        const totalProductsCount = resp.data.grouped.groupId.ngroups;
+        
         products = products.map((product: any) => {
           return {
             productId: product.groupValue,
@@ -109,19 +119,30 @@ const actions: ActionTree<ProductState, RootState> = {
           if(product.productId) productIds.add(product.productId);
         })
         productIds = [...productIds]
-        this.dispatch("product/fetchProducts", { productIds });
+        const productInformation = await this.dispatch("product/fetchProducts", { productIds });
 
-        let variantIds: any = new Set();
-        products.forEach((product: any) => {
-          product.variants.forEach((variant: any) => {
-            if(variant.productId) variantIds.add(variant.productId);
-          })
+        products = products.map((product: any) => {
+          const virtual = productInformation[product.productId]
+
+          return {
+            ...product,
+            brandName: virtual?.brandName,
+            productName: virtual?.productName,
+            internalName: virtual?.internalName,
+            mainImageUrl: virtual?.mainImageUrl,
+            featureHierarchy: virtual?.featureHierarchy
+          }
         })
-        variantIds = [...variantIds]
-        this.dispatch("stock/addProducts", { variantIds });
+
+        // We are commenting this code because we will be releasing this feature in next release.
+
+        // const variantIds = products.reduce((acc: any, product: any) => {
+        //   return acc.concat(product.variants.map((variant: any) => variant.productId ))
+        // }, [])
+        // this.dispatch("stock/addProducts", { variantIds });
         
         if(payload.json.params.start && payload.json.params.start > 0) products = state.products.list.concat(products);
-        commit(types.PRODUCT_LIST_UPDATED, { products, totalProductsCount: products.length });
+        commit(types.PRODUCT_LIST_UPDATED, { products, totalProductsCount });
       } else {
         showToast(translate("Products not found"));
       }

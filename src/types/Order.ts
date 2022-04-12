@@ -8,7 +8,8 @@ export interface Order {
     itemGroup?: Array<OrderItemGroup>;
     total?: number;
     statusId?: String;
-    identifications?: Array<any>;
+    identifications?: any;
+    notes?: Array<any>;
 }
 export interface OrderItem {
     orderItemGroupId?: String;

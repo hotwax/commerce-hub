@@ -26,10 +26,10 @@
 
         <aside class="filters desktop-only">
           <ion-list>
-            <ion-list-header>{{ $t("Catalog") }}</ion-list-header>
+            <ion-list-header><h3>{{ $t("Catalog") }}</h3></ion-list-header>
             <ion-item>
               <ion-label>{{ $t("Categories") }}</ion-label>
-              <ion-select value="any">
+              <ion-select value="any" interface="popover">
                 <ion-select-option value="any">all</ion-select-option>
               </ion-select>
             </ion-item>
@@ -50,13 +50,13 @@
 
             <ion-item>
               <ion-label>{{ $t("Size") }}</ion-label>
-              <ion-select value="any">
+              <ion-select value="any" interface="popover">
                 <ion-select-option value="any">all</ion-select-option>
               </ion-select>
             </ion-item>
             <ion-item>
               <ion-label>{{ $t("Color") }}</ion-label>
-              <ion-select value="any">
+              <ion-select value="any" interface="popover">
                 <ion-select-option value="any">all</ion-select-option>
               </ion-select>
             </ion-item>
@@ -77,7 +77,7 @@
           </ion-list>
 
           <ion-list>
-            <ion-list-header>{{ $t("Order") }}</ion-list-header>
+            <ion-list-header><h3>{{ $t("Order") }}</h3></ion-list-header>
             <ion-item>
               <ion-label>{{ $t("order created") }}</ion-label>
               <ion-checkbox />
@@ -103,16 +103,16 @@
           </ion-list>
 
           <ion-list>
-            <ion-list-header>{{ $t("Location") }}</ion-list-header>
+            <ion-list-header><h3>{{ $t("Location") }}</h3></ion-list-header>
             <ion-item>
               <ion-label>{{ $t("Product Store") }}</ion-label>
-              <ion-select value="any">
+              <ion-select value="any" interface="popover">
                 <ion-select-option value="any">Australia</ion-select-option>
               </ion-select>
             </ion-item>
             <ion-item>
               <ion-label>{{ $t("Facility") }}</ion-label>
-              <ion-select value="any">
+              <ion-select value="any" interface="popover">
                 <ion-select-option value="any">California Warehouse</ion-select-option>
               </ion-select>
             </ion-item>
@@ -124,14 +124,15 @@
             <ion-item lines="none">
               <ion-icon slot="start" :icon="folderOutline" />
               <ion-label>{{ "Group by" }}</ion-label>
-              <ion-select value="any">
+              <ion-select value="any" interface="popover">
                 <ion-select-option value="any">Partent</ion-select-option>
               </ion-select>
             </ion-item>
+
             <ion-item lines="none">
               <ion-icon slot="start" :icon="swapVerticalOutline" />
               <ion-label>{{ $t("Sort") }}</ion-label>
-              <ion-select value="any">
+              <ion-select value="any" interface="popover">
                 <ion-select-option value="any">{{ $t("Product name") }}</ion-select-option>
               </ion-select>
             </ion-item>
@@ -139,9 +140,9 @@
 
           <hr />
 
-          <div class="product" v-for="product in products" :key="product.groupValue" @click.prevent="viewProduct(product)">
-            <div class="product-image desktop-only">
-              <Image :src="getProduct(product.productId).mainImageUrl" />
+          <div class="product" v-for="product in products" :key="product.productId" @click.prevent="viewProduct(product)">
+            <div class="desktop-only">
+              <Image :src="product.mainImageUrl" />
             </div>
 
             <div>
@@ -149,25 +150,25 @@
                 <div class="primary-info">
                   <ion-item lines="none">
                     <ion-thumbnail slot="start" class="mobile-only">
-                      <Image :src="getProduct(product.productId).mainImageUrl" />
+                      <Image :src="product.mainImageUrl" />
                     </ion-thumbnail>
                     <ion-label>
-                      <p>{{ getProduct(product.productId).brandName }}</p>
+                      <p>{{ product.brandName }}</p>
                       {{ product.productName }}
-                      <p>{{ $t("Color") }}: {{ $filters.getFeature(getProduct(product.productId).featureHierarchy, '1/COLOR/') }}</p>
-                      <p>{{ $t("Size") }}: {{ $filters.getFeature(getProduct(product.productId).featureHierarchy, '1/SIZE/') }}</p>
+                      <p>{{ $t("Color") }}: {{ $filters.getFeaturesList(product.featureHierarchy, '1/COLOR/').join(", ") }}</p>
+                      <p>{{ $t("Size") }}: {{ $filters.getFeaturesList(product.featureHierarchy, '1/SIZE/').join(", ") }}</p>
                     </ion-label>
                   </ion-item>
                 </div>
                 <div class="tags desktop-only">
                   <ion-chip>
                     <ion-icon :icon="pricetag" />
-                    <ion-label>{{ getProduct(product.productId).internalName }}</ion-label>
+                    <ion-label>{{ product.internalName }}</ion-label>
                   </ion-chip>
                 </div>
                 <div class="metadata">
                   <ion-item lines="none" detail>
-                    <ion-note slot="end">{{ product.variants.length }} {{ $t("variants") }}</ion-note>
+                    <ion-note slot="end">{{ product.variants?.length }} {{ $t("variants") }}</ion-note>
                   </ion-item>
                 </div>
               </section>
@@ -178,13 +179,13 @@
                     {{ $t("variants") }}
                     <hr />
                   </ion-list-header>
-                  <div v-for="item in product.variants" :key="item.productId" class="list-item">
+                  <div v-for="variant in product.variants" :key="variant.productId" class="list-item">
                     <div>
                       <ion-item lines="none">
                         <ion-label>
-                          {{ item.sku }}
-                          <p>{{ $t("Color") }}: {{ $filters.getFeature(item.featureHierarchy, '1/COLOR/') }}</p>
-                          <p>{{ $t("Size") }}: {{ $filters.getFeature(item.featureHierarchy, '1/SIZE/') }}</p>
+                          {{ variant.sku }}
+                          <p>{{ $t("Color") }}: {{ $filters.getFeature(variant.featureHierarchy, '1/COLOR/') }}</p>
+                          <p>{{ $t("Size") }}: {{ $filters.getFeature(variant.featureHierarchy, '1/SIZE/') }}</p>
                         </ion-label>
                       </ion-item>
                     </div>
@@ -192,21 +193,25 @@
                     <div>
                       <ion-chip>
                         <ion-icon :icon="pricetag" />
-                        <ion-label>{{ item.internalName }}</ion-label>
+                        <ion-label>{{ variant.internalName }}</ion-label>
                       </ion-chip>
                     </div>
 
-                    <div>
+                    <!-- Commenting this code because we will be releasing this feature in next release. -->
+                    <!-- <div>
                       <ion-item lines="none" detail>
-                        <ion-note slot="end">{{ getProductStock(item.productId) }}</ion-note>
+                        <ion-note slot="end">{{ getProductStock(variant.productId) }}</ion-note>
                       </ion-item>
-                    </div>
+                    </div> -->
                   </div>
                   <hr />
                 </ion-list>
               </div>
             </div>
           </div>
+          <ion-infinite-scroll @ionInfinite="loadMoreProducts($event)" threshold="100px" :disabled="!isScrollable">
+            <ion-infinite-scroll-content loading-spinner="crescent" :loading-text="$t('Loading')"/>
+          </ion-infinite-scroll>
         </main>
       </div>
     </ion-content>
@@ -228,6 +233,8 @@ import {
   IonContent,
   IonHeader,
   IonIcon,
+  IonInfiniteScroll,
+  IonInfiniteScrollContent,
   IonItem,
   IonLabel,
   IonList,
@@ -269,6 +276,8 @@ export default defineComponent({
     IonContent,
     IonHeader,
     IonIcon,
+    IonInfiniteScroll,
+    IonInfiniteScrollContent,
     IonItem,
     IonLabel,
     IonList,
@@ -286,7 +295,9 @@ export default defineComponent({
     ...mapGetters({
       products: "product/getProducts",
       getProduct: "product/getProduct",
-      getProductStock: "stock/getProductStock"
+      // Commenting this code because we will be releasing this feature in next release.
+      // getProductStock: "stock/getProductStock",
+      isScrollable: 'product/isScrollable'
     })
   },
   methods: {
@@ -298,7 +309,7 @@ export default defineComponent({
         "json": {
           "params": {
             "rows": viewSize,
-            "start": viewIndex,
+            "start": viewIndex * viewSize,
             "group": true,
             "group.field": "groupId",
             "group.limit": 10000,
@@ -309,6 +320,14 @@ export default defineComponent({
         }
       }
       this.store.dispatch("product/getProducts", payload);
+    },
+    async loadMoreProducts(event: any){
+      this.getProducts(
+        undefined,
+        Math.ceil(this.products.length / process.env.VUE_APP_VIEW_SIZE).toString()
+      ).then(() => {
+        event.target.complete();
+      })
     },
     async viewProduct(product: any) {
       product = {
