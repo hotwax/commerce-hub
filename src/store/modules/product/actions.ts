@@ -121,13 +121,15 @@ const actions: ActionTree<ProductState, RootState> = {
         const productInformation = await this.dispatch("product/fetchProducts", { productIds });
 
         products = products.map((product: any) => {
+          const virtual = productInformation[product.productId]
+
           return {
             ...product,
-            brandName: productInformation[product.productId]?.brandName,
-            productName: productInformation[product.productId]?.productName,
-            internalName: productInformation[product.productId]?.internalName,
-            mainImageUrl: productInformation[product.productId]?.mainImageUrl,
-            featureHierarchy: productInformation[product.productId]?.featureHierarchy
+            brandName: virtual?.brandName,
+            productName: virtual?.productName,
+            internalName: virtual?.internalName,
+            mainImageUrl: virtual?.mainImageUrl,
+            featureHierarchy: virtual?.featureHierarchy
           }
         })
 
