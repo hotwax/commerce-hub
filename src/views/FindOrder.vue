@@ -29,19 +29,19 @@
             <ion-list-header><h3>{{ $t("Date") }}</h3></ion-list-header>
             <ion-item>
               <ion-label>order created</ion-label>
-              <ion-select value="any">
+              <ion-select value="any" interface="popover">
                 <ion-select-option value="any">any</ion-select-option>
               </ion-select>
             </ion-item>
             <ion-item>
               <ion-label>order created</ion-label>
-              <ion-select value="any">
+              <ion-select value="any" interface="popover">
                 <ion-select-option value="any">any</ion-select-option>
               </ion-select>
             </ion-item>
             <ion-item>
               <ion-label>order created</ion-label>
-              <ion-select value="any">
+              <ion-select value="any" interface="popover">
                 <ion-select-option value="any">any</ion-select-option>
               </ion-select>
             </ion-item>
@@ -65,19 +65,19 @@
             <ion-list-header><h3>{{ $t("Fulfillment") }}</h3></ion-list-header>
             <ion-item>
               <ion-label>order created</ion-label>
-              <ion-select value="any">
+              <ion-select value="any" interface="popover">
                 <ion-select-option value="any">any</ion-select-option>
               </ion-select>
             </ion-item>
             <ion-item>
               <ion-label>order created</ion-label>
-              <ion-select value="any">
+              <ion-select value="any" interface="popover">
                 <ion-select-option value="any">any</ion-select-option>
               </ion-select>
             </ion-item>
             <ion-item>
               <ion-label>order created</ion-label>
-              <ion-select value="any">
+              <ion-select value="any" interface="popover">
                 <ion-select-option value="any">any</ion-select-option>
               </ion-select>
             </ion-item>
@@ -109,7 +109,7 @@
             <ion-item lines="none">
               <ion-icon slot="start" :icon="swapVerticalOutline" />
               <ion-label>{{ $t("Sort") }}</ion-label>
-              <ion-select value="any">
+              <ion-select value="any" interface="popover">
                 <ion-select-option value="any">Arrival date</ion-select-option>
               </ion-select>
             </ion-item>
