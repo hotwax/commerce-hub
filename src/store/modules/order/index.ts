@@ -32,7 +32,7 @@ const orderModule: Module<OrderState, RootState> ={
       },
       'poIds': {}
     },
-    currentOrderFiltersSelected: {
+    query: {
       'status': 'any',
       'shippingMethod': 'any',
       'shipFromLocation': 'any',
@@ -44,9 +44,10 @@ const orderModule: Module<OrderState, RootState> ={
       'orderCreated': '',
       'promisedDate': '',
       'autoCancelDate': '',
-      'poIds': [] as Array<string>
+      'poIds': [] as Array<string>,
+      'queryString': '',
+      'sort': 'orderDate desc',
     },
-    sort: 'orderDate desc',
     current: {}
   },
   getters,

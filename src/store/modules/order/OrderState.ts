@@ -4,7 +4,6 @@ export default interface OrderState {
     total: number
   },
   availableOrderFilterOptions: any,
-  currentOrderFiltersSelected: any,
-  sort: any,
+  query: any,
   current: any
 }
