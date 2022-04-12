@@ -26,24 +26,24 @@
 
         <aside class="filters">
           <ion-list>
-            <ion-list-header>{{ $t("Location") }}</ion-list-header>
+            <ion-list-header><h3>{{ $t("Location") }}</h3></ion-list-header>
             <ion-item>
               <ion-label>{{ $t("Product Store") }}</ion-label>
-              <ion-select value="any">
+              <ion-select value="any" interface="popover">
                 <ion-select-option value="any">Australia</ion-select-option>
               </ion-select>
             </ion-item>
 
             <ion-item>
               <ion-label>{{ $t("Facility") }}</ion-label>
-              <ion-select value="any">
+              <ion-select value="any" interface="popover">
                 <ion-select-option value="any">California Warehouse</ion-select-option>
               </ion-select>
             </ion-item>
           </ion-list>
 
           <ion-list>
-            <ion-list-header>{{ $t("Date") }}</ion-list-header>
+            <ion-list-header><h3>{{ $t("Date") }}</h3></ion-list-header>
             <ion-item>
               <ion-label>{{ $t("Arrival date") }}</ion-label>
               <ion-chip>
@@ -66,7 +66,7 @@
             <ion-item lines="none">
               <ion-icon :icon="swapVerticalOutline" slot="start" />
               <ion-label>{{ $t("Sort by") }}</ion-label>
-              <ion-select value="any">
+              <ion-select value="any" interface="popover">
                 <ion-select-option value="any">Arrival date</ion-select-option>
               </ion-select>
             </ion-item>
@@ -74,8 +74,7 @@
 
           <hr />
 
-          <!-- Product section -->
-          <div @click="() => router.push('/shipment')">
+          <div class="product" @click="() => router.push('/shipment')">
             <section class="section-header">
               <div class="primary-info">
                 <ion-item lines="none">
