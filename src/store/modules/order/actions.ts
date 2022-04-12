@@ -41,6 +41,7 @@ const actions: ActionTree<OrderState, RootState> = {
         const total = resp.data.grouped.orderId.ngroups;
         if (payload.json.params.start && payload.json.params.start > 0) orders = state.list.orders.concat(orders)
         this.dispatch('product/getProductInformation', { orders });
+        this.dispatch('order/fetchStatusChange')
         commit(types.ORDER_LIST_UPDATED, { orders, total });
       } else {
         showToast(translate("Something went wrong"));
@@ -146,6 +147,54 @@ const actions: ActionTree<OrderState, RootState> = {
 
   async updateQueryString({ commit }, queryString) {
     commit(types.ORDER_FILTERS_UPDATED, { 'filterName': 'queryString', 'value': queryString })
+  },
+
+  async fetchStatusChange({ commit }) {
+    let resp;
+    try {
+      resp = await OrderService.fetchStatusChange({
+        "inputFields": {
+          "statusId": "ORDER",
+          "statusId_op": "like"
+        },
+        "fieldList": ["statusId", "statusIdTo", "conditionExpression"],
+        "entityName": "StatusValidChange",
+        "noConditionFind": "Y",
+        "viewSize": 100
+      });
+
+      if (resp.status == 200 && resp.data.count && !hasError(resp)) {
+        const orderStatusValidChange = resp.data.docs.reduce((acc: any, obj: any) => {
+          const status = obj['statusId']
+          if (!acc[status]) {
+            acc[status] = []
+          }
+          !obj.conditionExpression && acc[status].push(obj.statusIdTo)
+          return acc
+        }, {})
+        commit(types.ORDER_VALID_STATUS_CHANGE_UPDATED, orderStatusValidChange)
+      } else {
+        console.error('Unable to fetch valid order status change options')
+      }
+    } catch (err) {
+      console.error(err)
+    }
+  },
+
+  async updateOrderStatus({ dispatch }, payload) {
+    let resp;
+    try {
+      resp = await OrderService.updateOrderStatus(payload);
+      if (resp.status == 200 && !hasError(resp)) {
+        dispatch('getOrderDetails', payload.orderId)
+      } else {
+        console.error('Unable to update order status')
+        showToast(translate('Something went wrong'))
+      }
+    } catch (err) {
+      console.error(err)
+      showToast(translate('Something went wrong'))
+    }
   }
 } 
 
