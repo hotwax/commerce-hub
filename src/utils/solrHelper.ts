@@ -1,6 +1,8 @@
 const prepareOrderQuery = (query: any) => {
   const typeFilterSelected = [];
 
+  console.log(query)
+
   const payload = {
     "json": {
       "params": {
@@ -94,8 +96,8 @@ const prepareOrderQuery = (query: any) => {
     payload.json.filter = payload.json.filter.concat(` AND autoCancelDate: [${query.autoCancelDate + 'T00:00:00Z'} TO ${query.autoCancelDate + 'T23:59:59Z'}]`)
   }
 
-  const correspondingPoId = query.poIds.map((id: string) => query.availableOrderFilterOptions.poIds[id]).join(" OR ")
-  if (query.poIds.length > 0) {
+  const correspondingPoId = query.selectedPoIds.map((id: string) => query.poIds[id]).join(" OR ")
+  if (query.selectedPoIds.length > 0) {
     payload.json.filter = payload.json.filter.concat(` AND correspondingPoId: (${correspondingPoId})`)
   }
 

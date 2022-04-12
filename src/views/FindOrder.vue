@@ -238,9 +238,6 @@ export default defineComponent ({
       query: 'order/getOrderQuery'
     })
   },
-  created() {
-    emitter.on('filterUpdated', this.getOrders)
-  },
   data() {
     return {
       shippingMethodOptions: ['any'],
@@ -307,7 +304,7 @@ export default defineComponent ({
       resp.data.grouped.externalOrderId.groups.map((group: any) => {
         this.poIds[group.groupValue] = group.doclist.docs.map((order: any) => order.orderId)
       })
-      this.store.dispatch('order/updateAvailableFilterOptions', { value: this.poIds, filterName: 'poIds' })
+      this.store.dispatch('order/updatePoIds', this.poIds)
     } else {
       console.error('Something went wrong')
     }

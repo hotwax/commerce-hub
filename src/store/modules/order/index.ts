@@ -30,8 +30,8 @@ const orderModule: Module<OrderState, RootState> ={
         'shippingMethod': 'any',
         'shipFromLocation': 'any'
       },
-      'poIds': {}
     },
+    poIds: {},
     query: {
       'status': 'any',
       'shippingMethod': 'any',
@@ -44,7 +44,7 @@ const orderModule: Module<OrderState, RootState> ={
       'orderCreated': '',
       'promisedDate': '',
       'autoCancelDate': '',
-      'poIds': [] as Array<string>,
+      'selectedPoIds': [] as Array<string>,
       'queryString': '',
       'sort': 'orderDate desc',
     },

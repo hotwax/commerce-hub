@@ -16,8 +16,8 @@ const mutations: MutationTree <OrderState> = {
   [types.ORDER_SORT_UPDATED] (state, payload) {
     state.query['sort'] = payload
   },
-  [types.ORDER_FILTER_OPTIONS_UPDATED] (state, payload) {
-    state.availableOrderFilterOptions[payload.filterName] = payload.value
+  [types.ORDER_PO_ID_UPDATED] (state, payload) {
+    state.poIds = payload
   }
 }
 export default mutations;

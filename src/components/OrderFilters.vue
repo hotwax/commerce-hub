@@ -75,7 +75,7 @@
       <ion-title>{{ $t("Purchase orders") }}</ion-title>
     </ion-toolbar>
     <ion-card-content>
-      <ion-chip @click="updateAppliedFilters(id, 'poIds')" v-for="(id, index) in Object.keys(poIds)" :key="index" :outline="!query.poIds.includes(id)">
+      <ion-chip @click="updateAppliedFilters(id, 'selectedPoIds')" v-for="(id, index) in Object.keys(poIds)" :key="index" :outline="!query.selectedPoIds.includes(id)">
         <ion-label>{{ id }}</ion-label>
       </ion-chip>
     </ion-card-content>
@@ -127,18 +127,13 @@ export default defineComponent({
       query: 'order/getOrderQuery'
     })
   },
-  data() {
-    return {
-      orderCreated: (this as any).query
-    }
-  },
   methods: {
     async updateAppliedFilters(value: string, filterName: string) {
-      if (value === this.query[filterName]) {
+      if (value === this.query[filterName] && !(filterName === 'orderCreated' || filterName === 'promisedDate' || filterName === 'autoCancelDate')) {
         return ;
       }
       // TODO: handle the case when the applied filter type is date, as in that case the action is called
-      // multiple times (two when date filter is applied and three when date filter is removed)
+      // multiple times (two times when date is applied and three times when date filter is removed)
       await this.store.dispatch('order/updateAppliedFilters', { value, filterName })
     }
   },

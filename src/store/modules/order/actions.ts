@@ -118,8 +118,8 @@ const actions: ActionTree<OrderState, RootState> = {
   },
 
   async updateAppliedFilters({ state, commit, dispatch }, payload) {
-    if (payload.filterName === 'poIds') {
-      const poIds = state.query.poIds;
+    if (payload.filterName === 'selectedPoIds') {
+      const poIds = state.query.selectedPoIds;
       !poIds.includes(payload.value) ? poIds.push(payload.value) : poIds.splice(poIds.indexOf(payload.value), 1)
       payload.value = poIds
     }
@@ -132,14 +132,14 @@ const actions: ActionTree<OrderState, RootState> = {
     commit(types.ORDER_SORT_UPDATED, payload)
   },
 
-  async updateAvailableFilterOptions({ commit }, payload) {
-    commit(types.ORDER_FILTER_OPTIONS_UPDATED, payload)
+  async updatePoIds({ commit }, payload) {
+    commit(types.ORDER_PO_ID_UPDATED, payload)
     return payload;
   },
 
   async updateQuery({ state, dispatch }, params) {
     await dispatch('updateQueryString', params.queryString)
-    const query = prepareOrderQuery({ ...(state.query), ...params})
+    const query = prepareOrderQuery({ ...(state.query), poIds: state.poIds, ...params})
     const resp = await dispatch('findOrders', query)
     return resp;
   },
