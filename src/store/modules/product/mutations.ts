@@ -14,5 +14,8 @@ const mutations: MutationTree <ProductState> = {
       });
     }
   },
+  [types.PRODUCT_CACHED_UPDATED](state, payload) {
+    state.cached = payload.cached
+  }
 }
 export default mutations;

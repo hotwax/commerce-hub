@@ -72,7 +72,7 @@ const actions: ActionTree<ProductState, RootState> = {
           cachedProducts[product.productId] = product
         });
       }
-      commit(types.PRODUCT_ADD_TO_CACHED_MULTIPLE, { cached: cachedProducts });
+      commit(types.PRODUCT_CACHED_UPDATED, { cached: cachedProducts });
       return cachedProducts;
     }
     return resp;
