@@ -49,9 +49,9 @@
 
           <hr />
 
-          <div class="product" v-for="product in products" :key="product.groupValue" @click="() => router.push('/product-inventory')">
+          <div class="product" v-for="product in products" :key="product.productId" @click="() => router.push('/product-inventory')">
             <div class="desktop-only">
-              <Image :src="getProduct(product.productId).mainImageUrl" />
+              <Image :src="product.mainImageUrl" />
             </div>
 
             <div>
@@ -59,25 +59,25 @@
                 <div class="primary-info">
                   <ion-item lines="none">
                     <ion-thumbnail slot="start" class="mobile-only">
-                      <Image :src="getProduct(product.productId).mainImageUrl" />
+                      <Image :src="product.mainImageUrl" />
                     </ion-thumbnail>
                     <ion-label>
-                      <p>{{ getProduct(product.productId).brandName }}</p>
+                      <p>{{ product.brandName }}</p>
                       {{ product.productName }}
-                      <p>{{ $t("Color") }}: {{ $filters.getFeaturesList(getProduct(product.productId).featureHierarchy, '1/COLOR/').join(", ") }}</p>
-                      <p>{{ $t("Size") }}: {{ $filters.getFeaturesList(getProduct(product.productId).featureHierarchy, '1/SIZE/').join(", ") }}</p>
+                      <p>{{ $t("Color") }}: {{ $filters.getFeaturesList(product.featureHierarchy, '1/COLOR/').join(", ") }}</p>
+                      <p>{{ $t("Size") }}: {{ $filters.getFeaturesList(product.featureHierarchy, '1/SIZE/').join(", ") }}</p>
                     </ion-label>
                   </ion-item>
                 </div>
                 <div class="tags desktop-only">
                   <ion-chip>
                     <ion-icon :icon="pricetag" />
-                    <ion-label>{{ getProduct(product.productId).internalName }}</ion-label>
+                    <ion-label>{{ product.internalName }}</ion-label>
                   </ion-chip>
                 </div>
                 <div class="metadata">
                   <ion-item lines="none" detail>
-                    <ion-note slot="end">{{ product.variants.length }} {{ $t("variants") }}</ion-note>
+                    <ion-note slot="end">{{ product.variants?.length }} {{ $t("variants") }}</ion-note>
                   </ion-item>
                 </div>
               </section>
@@ -88,13 +88,13 @@
                     {{ $t("variants") }}
                     <hr />
                   </ion-list-header>
-                  <div v-for="item in product.variants" :key="item.productId" class="list-item">
+                  <div v-for="variant in product.variants" :key="variant.productId" class="list-item">
                     <div>
                       <ion-item lines="none">
                         <ion-label>
-                          {{ item.sku }}
-                          <p>{{ $t("Color") }}: {{ $filters.getFeature(item.featureHierarchy, '1/COLOR/') }}</p>
-                          <p>{{ $t("Size") }}: {{ $filters.getFeature(item.featureHierarchy, '1/SIZE/') }}</p>
+                          {{ variant.sku }}
+                          <p>{{ $t("Color") }}: {{ $filters.getFeature(variant.featureHierarchy, '1/COLOR/') }}</p>
+                          <p>{{ $t("Size") }}: {{ $filters.getFeature(variant.featureHierarchy, '1/SIZE/') }}</p>
                         </ion-label>
                       </ion-item>
                     </div>
@@ -102,15 +102,16 @@
                     <div>
                       <ion-chip>
                         <ion-icon :icon="pricetag" />
-                        <ion-label>{{ item.internalName }}</ion-label>
+                        <ion-label>{{ variant.internalName }}</ion-label>
                       </ion-chip>
                     </div>
 
-                    <div>
+                    <!-- Commenting this code because we will be releasing this feature in next release. -->
+                    <!-- <div>
                       <ion-item lines="none" detail>
-                        <ion-note slot="end">{{ getProductStock(item.productId) }}</ion-note>
+                        <ion-note slot="end">{{ getProductStock(variant.productId) }}</ion-note>
                       </ion-item>
-                    </div>
+                    </div> -->
                   </div>
                   <hr />
                 </ion-list>
@@ -207,7 +208,8 @@ export default defineComponent({
     ...mapGetters({
       products: "product/getProducts",
       getProduct: "product/getProduct",
-      getProductStock: "stock/getProductStock",
+      // Commenting this code because we will be releasing this feature in next release.
+      // getProductStock: "stock/getProductStock",
       isScrollable: 'product/isScrollable'
     })
   },
