@@ -93,8 +93,14 @@ const actions: ActionTree<ProductState, RootState> = {
     }
   },
 
+  // Update QueryString
+  async updateQueryString({ commit }, queryString) {
+    commit(types.PRODUCT_FILTERS_CURRENT_UPDATED, { 'filterName': 'queryString', 'value': queryString })
+  },
+
   // Update Query
-  async updateQuery({ state }, params) {
+  async updateQuery({ state, dispatch }, params) {
+    await dispatch('updateQueryString', params.queryString)
     const typeFilterSelected = [] as any;
 
     const payload = {

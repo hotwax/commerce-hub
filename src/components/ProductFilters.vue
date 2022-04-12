@@ -134,9 +134,7 @@ export default defineComponent({
   props: ["categories", "colors", "sizes", "tags"],
   methods: {
     async updateFilters(value: string, filterName: string) {
-      await this.store.dispatch('product/updateProductFilters', { value, filterName }).then(() => {
-        emitter.emit('productFiltersUpdated');
-      })
+      await this.store.dispatch('product/updateProductFilters', { value, filterName })
     }
   },
   setup() {

@@ -227,9 +227,6 @@ export default defineComponent({
       isScrollable: 'product/isScrollable'
     })
   },
-  created() {
-    emitter.on('productFiltersUpdated', this.getProducts)
-  },
   methods: {
     async getProducts(vSize?: any, vIndex?: any) {
       const viewSize = vSize ? vSize : process.env.VUE_APP_VIEW_SIZE;

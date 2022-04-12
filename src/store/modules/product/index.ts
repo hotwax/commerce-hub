@@ -19,7 +19,8 @@ const productModule: Module<ProductState, RootState> = {
         size: 'All',
         tags: [],
         preOrder: false,
-        backOrder: false
+        backOrder: false,
+        queryString: ''
       }
     },
     getters,
