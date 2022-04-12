@@ -11,14 +11,25 @@
           <ion-button>
             <ion-icon :icon="downloadOutline" slot="icon-only" />
           </ion-button>
-          <ion-button fill="clear" class="mobile-only">
+          <ion-button fill="clear" class="mobile-only" @click="openProductFilterMenu()">
             <ion-icon slot="icon-only" :icon="filterOutline" />
           </ion-button>
         </ion-buttons>
       </ion-toolbar>
     </ion-header>
 
-    <ion-content>
+    <ion-menu content-id="content" type="overlay" side="end">
+      <ion-header>
+        <ion-toolbar>
+          <ion-title>{{ $t('Filters') }}</ion-title>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content>
+        <ProductFilters :categories="categories" :colors="colors" :sizes="sizes" :tags="tags" />
+      </ion-content>
+    </ion-menu>
+
+    <ion-content id="content">
       <div class="find">
         <section class="search">
           <ion-searchbar v-model="queryString" @keyup.enter="getProducts()" />
@@ -143,6 +154,7 @@ import {
   IonLabel,
   IonList,
   IonListHeader,
+  IonMenu,
   IonNote,
   IonPage,
   IonSearchbar,
@@ -150,7 +162,8 @@ import {
   IonSelectOption,
   IonThumbnail,
   IonTitle,
-  IonToolbar
+  IonToolbar,
+  menuController
 } from '@ionic/vue';
 import {
   downloadOutline,
@@ -186,6 +199,7 @@ export default defineComponent({
     IonList,
     IonListHeader,
     IonNote,
+    IonMenu,
     IonPage,
     IonSearchbar,
     IonSelect,
@@ -297,6 +311,9 @@ export default defineComponent({
       } catch(error) {
         console.error(error);
       }
+    },
+    async openProductFilterMenu() {
+      await menuController.open();
     }
   },
   mounted() {
