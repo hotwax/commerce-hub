@@ -303,8 +303,6 @@ export default defineComponent({
       this.store.dispatch("order/getOrderDetails", orderId);
     },
     changeStatus(orderId: string, ev: CustomEvent) {
-      // Added this condition to not call the updateOrderStatus action when the current
-      // selected status and the order status is same
       this.store.dispatch('order/updateOrderStatus', {orderId, statusId: ev['detail'].value, 'setItemStatus': 'Y'})
     }
   },
