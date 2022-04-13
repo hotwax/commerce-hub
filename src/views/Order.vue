@@ -20,7 +20,7 @@
               <ion-icon slot="start" :icon="ticketOutline" />
               <h1>{{ order.orderName ? order.orderName : order.orderId }}</h1>
               <ion-badge :color="orderStatus[order.statusId]?.color ? orderStatus[order.statusId]?.color : 'primary'" slot="end">{{ orderStatus[order.statusId]?.label ? orderStatus[order.statusId]?.label : order.statusId }}</ion-badge>
-              <ion-select :value="order.statusId" @ionChange="changeStatus(order.orderId, $event)" slot="end">
+              <ion-select v-if="validStatusChange(order.statusId)?.length > 0" @ionChange="changeStatus(order.orderId, $event)" slot="end">
                 <ion-select-option v-for="status in validStatusChange(order.statusId)" :key="status" :value="status">{{ orderStatus[status]?.label }}</ion-select-option>
               </ion-select>
             </ion-item>
@@ -305,7 +305,6 @@ export default defineComponent({
     changeStatus(orderId: string, ev: CustomEvent) {
       // Added this condition to not call the updateOrderStatus action when the current
       // selected status and the order status is same
-      if (this.order.statusId === ev['detail'].value) return ;
       this.store.dispatch('order/updateOrderStatus', {orderId, statusId: ev['detail'].value, 'setItemStatus': 'Y'})
     }
   },
