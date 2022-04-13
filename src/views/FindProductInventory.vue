@@ -50,8 +50,9 @@
             <ion-item lines="none">
               <ion-icon slot="start" :icon="swapVerticalOutline" />
               <ion-label>{{ $t("Sort") }}</ion-label>
-              <ion-select value="any" interface="popover">
-                <ion-select-option value="any">{{ $t("Product name") }}</ion-select-option>
+              <ion-select :value="sort" interface="popover" @ionChange="updateProductSorting($event.detail.value)">
+                <ion-select-option value="asc">{{ $t("A-Z") }}</ion-select-option>
+                <ion-select-option value="desc">{{ $t("Z-A") }}</ion-select-option>
               </ion-select>
             </ion-item>
           </section>
@@ -216,7 +217,8 @@ export default defineComponent({
       colors: [{ productFeatureTypeId: 'All', productFeatureId: 'All', description: 'All' }],
       sizes: [{ productFeatureTypeId: 'All', productFeatureId: 'All', description: 'All' }],
       tags: [],
-      showVariants: true
+      showVariants: true,
+      sort: 'asc'
     }
   },
   computed: {
@@ -310,6 +312,11 @@ export default defineComponent({
     },
     async openProductFilterMenu() {
       await menuController.open();
+    },
+    async updateProductSorting(value: string) {
+      this.sort = value
+      await this.store.dispatch('product/updateSortOption', this.sort)
+      this.getProducts();
     }
   },
   mounted() {

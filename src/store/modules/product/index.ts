@@ -20,7 +20,8 @@ const productModule: Module<ProductState, RootState> = {
         tags: [],
         preOrder: false,
         backOrder: false,
-        queryString: ''
+        queryString: '',
+        sort: 'asc'
       }
     },
     getters,

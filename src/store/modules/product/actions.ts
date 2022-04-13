@@ -98,6 +98,11 @@ const actions: ActionTree<ProductState, RootState> = {
     commit(types.PRODUCT_FILTERS_CURRENT_UPDATED, { 'filterName': 'queryString', 'value': queryString })
   },
 
+  // update sorting order
+  async updateSortOption({ commit }, payload) {
+    commit(types.PRODUCT_SORT_UPDATED, payload)
+  },
+
   // Update Query
   async updateQuery({ state, dispatch }, params) {
     await dispatch('updateQueryString', params.queryString)
@@ -106,6 +111,7 @@ const actions: ActionTree<ProductState, RootState> = {
     const payload = {
       "json": {
         "params": {
+          "sort": `parentProductName ${state.currentProductFilterSelected.sort}`,
           "rows": params.viewSize,
           "start": params.viewIndex * params.viewSize,
           "group": true,
