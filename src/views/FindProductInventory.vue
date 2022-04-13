@@ -41,12 +41,10 @@
 
         <main>
           <section class="sort">
-            <ion-item lines="none">
+            <ion-item lines="none" class="desktop-only">
               <ion-icon slot="start" :icon="folderOutline" />
-              <ion-label>{{ "Group by" }}</ion-label>
-              <ion-select value="any" interface="popover">
-                <ion-select-option value="any">Partent</ion-select-option>
-              </ion-select>
+              <ion-label>{{ $t("Show variants") }}</ion-label>
+              <ion-toggle color="secondary" :checked="showVariants" @ionChange="() => showVariants = !showVariants"/>
             </ion-item>
 
             <ion-item lines="none">
@@ -93,7 +91,7 @@
                 </div>
               </section>
 
-              <div class="desktop-only">
+              <div class="desktop-only" v-if="showVariants">
                 <ion-list>
                   <ion-list-header>
                     {{ $t("variants") }}
@@ -162,6 +160,7 @@ import {
   IonSelectOption,
   IonThumbnail,
   IonTitle,
+  IonToggle,
   IonToolbar,
   menuController
 } from '@ionic/vue';
@@ -207,6 +206,7 @@ export default defineComponent({
     IonThumbnail,
     IonTitle,
     IonToolbar,
+    IonToggle,
     ProductFilters
   },
   data() {
@@ -215,7 +215,8 @@ export default defineComponent({
       categories: [{ categoryName: 'All', productCategoryId: 'All' }],
       colors: [{ productFeatureTypeId: 'All', productFeatureId: 'All', description: 'All' }],
       sizes: [{ productFeatureTypeId: 'All', productFeatureId: 'All', description: 'All' }],
-      tags: []
+      tags: [],
+      showVariants: true
     }
   },
   computed: {
