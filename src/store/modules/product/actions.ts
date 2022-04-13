@@ -150,7 +150,7 @@ const actions: ActionTree<ProductState, RootState> = {
         return filter += tag;
       }, '');
 
-      payload.json.filter = payload.json.filter.concat(' AND keywordSearchText: ' + tagFilters + ')')
+      payload.json.filter = payload.json.filter.concat(' AND keywordSearchText: (' + tagFilters + ')')
     }
 
     if(state.currentProductFilterSelected.preOrder) {
@@ -233,7 +233,12 @@ const actions: ActionTree<ProductState, RootState> = {
     return resp;
   },
   
-  async updateProductFilters({ commit, dispatch }, payload) {
+  async updateProductFilters({ commit, dispatch, state }, payload) {
+    if (payload.filterName === 'tags') {
+      const tags = state.currentProductFilterSelected.tags;
+      !tags.includes(payload.value) ? tags.push(payload.value) : tags.splice(tags.indexOf(payload.value), 1)
+      payload.value = tags
+    }
     commit(types.PRODUCT_FILTERS_CURRENT_UPDATED, payload);
     await dispatch('updateQuery', { viewSize: process.env.VUE_APP_VIEW_SIZE, viewIndex: 0 });
   }

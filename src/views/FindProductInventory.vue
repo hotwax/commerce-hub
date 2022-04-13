@@ -304,7 +304,7 @@ export default defineComponent({
       try {
         resp = await ProductService.getTags(payload);
         if (resp.status === 200 && resp.data.docs?.length > 0 && !hasError(resp)) {
-          this.tags = resp.data.docs
+          this.tags = resp.data.docs.map((tag: any) => tag.keyword)
         }
       } catch(error) {
         console.error(error);

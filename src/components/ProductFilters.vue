@@ -40,8 +40,8 @@
         <ion-card-title>{{ $t("Tags") }}</ion-card-title>
       </ion-card-header>
       <ion-card-content>
-        <ion-chip v-for="tag in tags" :key="tag">
-          <ion-label>{{ tag.keyword }}</ion-label>
+        <ion-chip @click="updateFilters(tag, 'tags')" v-for="tag in tags" :key="tag" :outline="!appliedFilters.tags.includes(tag)">
+          <ion-label>{{ tag }}</ion-label>
         </ion-chip>
       </ion-card-content>
     </ion-card>
