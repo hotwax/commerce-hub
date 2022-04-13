@@ -5,5 +5,6 @@ export default interface OrderState {
   },
   poIds: any,
   query: any,
-  current: any
+  current: any,
+  validStatusChange: any
 }

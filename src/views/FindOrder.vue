@@ -34,7 +34,7 @@
     <ion-content id="content">
       <div class="find">
         <section class="search">
-          <ion-searchbar v-model="queryString" @keyup.enter="getOrders()"/>
+          <ion-searchbar v-model="queryString" @keyup.enter="queryString = $event.target.value; getOrders()"/>
         </section>
 
         <aside class="filters desktop-only">

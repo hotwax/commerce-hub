@@ -14,6 +14,9 @@ const getters: GetterTree <OrderState, RootState> = {
   },
   getCurrentOrder(state) {
     return state.current
+  },
+  getOrderValidStatusChange: (state) => (statusId: string) => {
+    return state.validStatusChange[statusId]
   }
 }
 export default getters;

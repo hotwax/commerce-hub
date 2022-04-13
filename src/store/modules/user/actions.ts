@@ -59,6 +59,7 @@ const actions: ActionTree<UserState, RootState> = {
       if (resp.data.userTimeZone !== localTimeZone) {
         emitter.emit('timeZoneDifferent', { profileTimeZone: resp.data.userTimeZone, localTimeZone});
       }
+      this.dispatch('order/fetchStatusChange')
       commit(types.USER_INFO_UPDATED, resp.data);
     }
   },
