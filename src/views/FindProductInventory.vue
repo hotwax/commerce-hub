@@ -32,7 +32,7 @@
     <ion-content id="content">
       <div class="find">
         <section class="search">
-          <ion-searchbar v-model="queryString" @keyup.enter="getProducts()" />
+          <ion-searchbar v-model="queryString" @keyup.enter="queryString = $event.target.value; getProducts()" />
         </section>
 
         <aside class="filters desktop-only">
