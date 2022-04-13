@@ -124,7 +124,7 @@ const actions: ActionTree<OrderState, RootState> = {
       payload.value = poIds
     }
     commit(types.ORDER_FILTERS_UPDATED, payload)
-    const resp = await dispatch('updateQuery', { viewSize: process.env.VUE_APP_VIEW_SIZE, viewIndex: 0 })
+    const resp = await dispatch('updateQuery', { viewSize: process.env.VUE_APP_VIEW_SIZE, viewIndex: 0, queryString: state.query.queryString })
     return resp;
   },
 
