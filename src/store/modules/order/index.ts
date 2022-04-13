@@ -29,7 +29,8 @@ const orderModule: Module<OrderState, RootState> ={
       'queryString': '',
       'sort': 'orderDate desc',
     },
-    current: {}
+    current: {},
+    validStatusChange: {}
   },
   getters,
   actions,

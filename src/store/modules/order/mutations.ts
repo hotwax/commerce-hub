@@ -18,6 +18,9 @@ const mutations: MutationTree <OrderState> = {
   },
   [types.ORDER_PO_ID_UPDATED] (state, payload) {
     state.poIds = payload
+  },
+  [types.ORDER_VALID_STATUS_CHANGE_UPDATED] (state, payload) {
+    state.validStatusChange = payload
   }
 }
 export default mutations;
