@@ -180,6 +180,17 @@ const actions: ActionTree<ProductState, RootState> = {
       if(resp.status === 200 && resp.data.grouped.groupId?.groups.length > 0 && !hasError(resp)) {
         let product = resp.data.grouped.groupId?.groups[0].doclist.docs[0]
 
+        const colors = product.productFeatures.filter((featureItem: any) => featureItem.startsWith('Color')).map((feature: any) => {
+          const featureSplit = feature ? feature.split('/') : [];
+          const featureValue = featureSplit[1] ? featureSplit[1] : '';
+          return featureValue;
+        })
+        const sizes = product.productFeatures.filter((featureItem: any) => featureItem.startsWith('Size')).map((feature: any) => {
+          const featureSplit = feature ? feature.split('/') : [];
+          const featureValue = featureSplit[1] ? featureSplit[1] : '';
+          return featureValue;
+        })
+
         product = {
           productId: product.productId,
           productName: product.productName,
@@ -203,6 +214,24 @@ const actions: ActionTree<ProductState, RootState> = {
   updateCurrent({ commit }, payload) {
     commit(types.PRODUCT_CURRENT_UPDATED, payload)
   },
+  // updateCurrentProductFeatures({ state, dispatch }, payload) {
+  //   let product = state.current;
+
+  //   product = {
+  //     productId: product.productId,
+  //     productName: product.productName,
+  //     brand: product.brandName,
+  //     externalId: product.externalId,
+  //     mainImage: product.mainImageUrl,
+  //     feature: product.productFeatures,
+  //     colors: product.colors,
+  //     sizes: product.sizes,
+  //     currentColor: payload.featureName === 'color' ? payload.feature: product.currentColor,
+  //     currentSize: payload.featureName === 'size' ? payload.feature: product.currentSize,
+  //     variants: product.variantProductIds
+  //   }
+  //   dispatch('updateCurrent', product);
+  // }
 }
 
 export default actions;

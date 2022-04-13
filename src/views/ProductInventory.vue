@@ -67,8 +67,8 @@
             <ion-list>
               <ion-list-header>{{ $t("Color") }}</ion-list-header>
               <ion-item lines="none">
-                <ion-chip v-for="(feature, index) in $filters.getFeatures(product.feature, 'Color')" :key="index">
-                  <ion-icon :icon="checkmarkOutline" />
+                <ion-chip v-for="(feature, index) in product.feature" :key="index" @click="updateCurrentSelectedFeatures('color', feature)">
+                  <ion-icon v-if="currentSelectedFeatures.color === feature" :icon="checkmarkOutline" />
                   <ion-label>{{ feature }}</ion-label>
                 </ion-chip>
               </ion-item>
@@ -76,8 +76,8 @@
             <ion-list>
               <ion-list-header>{{ $t("Size") }}</ion-list-header>
               <ion-item lines="none">
-                <ion-chip v-for="(feature, index) in $filters.getFeatures(product.feature, 'Size')" :key="index">
-                  <ion-icon :icon="checkmarkOutline" />
+                <ion-chip v-for="(feature, index) in product.feature" :key="index" @click="updateCurrentSelectedFeatures('size', feature)">
+                  <ion-icon v-if="currentSelectedFeatures.size === feature" :icon="checkmarkOutline" />
                   <ion-label>{{ feature }}</ion-label>
                 </ion-chip>
               </ion-item>
@@ -605,7 +605,7 @@ import {
   modalController,
   popoverController
 } from '@ionic/vue';
-import { defineComponent, ref } from 'vue';
+import { defineComponent, reactive, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import {
   businessOutline,
@@ -700,19 +700,62 @@ export default defineComponent({
       });
       return popover.present();
     },
+    async filterProductFeatures(features: any, featureName: any) {
+      let featuresList = []
+      if (features) {
+        featuresList = features.filter((featureItem: any) => featureItem.startsWith(featureName)).map((feature: any) => {
+          const featureSplit = feature ? feature.split('/') : [];
+          const featureValue = featureSplit[1] ? featureSplit[1] : '';
+          return featureValue;
+        })
+      }
+      return featuresList;
+    },
+    async updateCurrentSelectedFeatures(feature: any, featureName: any) {
+      (this.currentSelectedFeatures as any)[featureName] = feature
+    },
+    async getShopifyInformation() {
+      let resp;
+      try {
+        const payload = {
+          "json": {
+            "params": {
+              "group": true,
+              "group.field": "groupId",
+              "group.limit": 10000,
+              "group.ngroups": true,
+            } as any,
+            "query": "*:*",
+            // "filter": `docType: PRODUCT AND productId: ${productId}`
+          }
+        }
+        // resp = await ProductService.getProductDetail(payload);
+      } catch(err) {
+        console.error(err);
+      }
+    }
   },
   mounted() {
-    this.store.dispatch('product/getProductDetail', { productId: this.$route.params.id })
+    this.store.dispatch('product/getProductDetail', { productId: this.$route.params.id }).then(() => {
+      this.updateCurrentSelectedFeatures((this.filterProductFeatures(this.product.feature, 'Color') as any)[0], 'color');
+      this.updateCurrentSelectedFeatures((this.filterProductFeatures(this.product.feature, 'Size') as any)[0], 'size');
+      this.getShopifyInformation(); 
+    })
   },
   setup() {
     const router = useRouter();
     const store = useStore();
     const segment = ref("locations");
+    const currentSelectedFeatures = reactive({
+      color: '',
+      size: ''
+    })
 
     return {
       businessOutline,
       calendarOutline,
       checkmarkOutline,
+      currentSelectedFeatures,
       ellipsisVerticalOutline,
       globeOutline,
       listOutline,
