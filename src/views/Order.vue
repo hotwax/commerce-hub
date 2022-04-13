@@ -306,7 +306,7 @@ export default defineComponent({
       // Added this condition to not call the updateOrderStatus action when the current
       // selected status and the order status is same
       if (this.order.statusId === ev['detail'].value) return ;
-      this.store.dispatch('order/updateOrderStatus', {orderId, statusId: ev['detail'].value})
+      this.store.dispatch('order/updateOrderStatus', {orderId, statusId: ev['detail'].value, 'setItemStatus': 'Y'})
     }
   },
   mounted() {

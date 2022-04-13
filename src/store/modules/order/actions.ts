@@ -154,11 +154,11 @@ const actions: ActionTree<OrderState, RootState> = {
     try {
       resp = await OrderService.fetchStatusChange({
         "inputFields": {
-          "statusId": "ORDER",
-          "statusId_op": "like"
+          "statusTypeId": "ORDER_STATUS",
+          "conditionExpression_op": "empty"
         },
-        "fieldList": ["statusId", "statusIdTo", "conditionExpression"],
-        "entityName": "StatusValidChange",
+        "fieldList": ["statusId", "statusIdTo"],
+        "entityName": "StatusValidChangeToDetail",
         "noConditionFind": "Y",
         "viewSize": 100
       });
@@ -169,7 +169,7 @@ const actions: ActionTree<OrderState, RootState> = {
           if (!acc[status]) {
             acc[status] = []
           }
-          !obj.conditionExpression && acc[status].push(obj.statusIdTo)
+          acc[status].push(obj.statusIdTo)
           return acc
         }, {})
         commit(types.ORDER_VALID_STATUS_CHANGE_UPDATED, orderStatusValidChange)
