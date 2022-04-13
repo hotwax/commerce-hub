@@ -1,4 +1,5 @@
 {
+  "A-Z": "A-Z",
   "Activate": "Activate",
   "Add": "Add",
   "Add item to order": "Add item to order",
@@ -175,5 +176,6 @@
   "User name": "User name",
   "Users": "Users",
   "variants": "variants",
-  "View all": "View all"
+  "View all": "View all",
+  "Z-A": "Z-A"
 }
