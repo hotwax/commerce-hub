@@ -150,7 +150,7 @@ const actions: ActionTree<ProductState, RootState> = {
         return filter += tag;
       }, '');
 
-      payload.json.filter = payload.json.filter.concat(' AND keywordSearchText: (' + tagFilters + ')')
+      payload.json.filter = payload.json.filter.concat(' AND tags: (' + tagFilters + ')')
     }
 
     if(state.currentProductFilterSelected.preOrder) {
