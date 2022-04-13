@@ -67,9 +67,6 @@
             <ion-list>
               <ion-list-header>{{ $t("Color") }}</ion-list-header>
               <ion-item lines="none">
-                <ion-chip>
-                  <ion-label>All</ion-label>
-                </ion-chip>
                 <ion-chip v-for="(feature, index) in $filters.getFeatures(product.feature, 'Color')" :key="index">
                   <ion-icon :icon="checkmarkOutline" />
                   <ion-label>{{ feature }}</ion-label>
@@ -79,9 +76,6 @@
             <ion-list>
               <ion-list-header>{{ $t("Size") }}</ion-list-header>
               <ion-item lines="none">
-                <ion-chip>
-                  <ion-label>All</ion-label>
-                </ion-chip>
                 <ion-chip v-for="(feature, index) in $filters.getFeatures(product.feature, 'Size')" :key="index">
                   <ion-icon :icon="checkmarkOutline" />
                   <ion-label>{{ feature }}</ion-label>
