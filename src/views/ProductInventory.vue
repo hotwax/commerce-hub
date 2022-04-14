@@ -122,15 +122,15 @@
               <ion-card-header>
                 <ion-card-title>{{ $t("Shipping method") }}</ion-card-title>
               </ion-card-header>
-              <ion-item detail>
+              <ion-item detail button>
                 <ion-label>{{ $t("Store pickup") }}</ion-label>
                 <ion-note slot="end">{{ product?.variantOrderDetails && product.variantOrderDetails['10097']?.shipmentMethod['STOREPICKUP'] ? product.variantOrderDetails['10097']?.shipmentMethod['STOREPICKUP'] : '-'  }}</ion-note>
               </ion-item>
-              <ion-item detail>
+              <ion-item detail button>
                 <ion-label>{{ $t("Standard") }}</ion-label>
                 <ion-note slot="end">{{ product?.variantOrderDetails && product.variantOrderDetails['10097']?.shipmentMethod['STANDARD'] ? product.variantOrderDetails['10097']?.shipmentMethod['STANDARD']: '-' }}</ion-note>
               </ion-item>
-              <ion-item lines="none" detail>
+              <ion-item lines="none" detail button>
                 <ion-label>{{ $t("Expedited") }}</ion-label>
                 <ion-note slot="end">{{ product?.variantOrderDetails && product.variantOrderDetails['10097']?.shipmentMethod['NEXT_DAY'] ? product.variantOrderDetails['10097']?.shipmentMethod['NEXT_DAY']: '-' }}</ion-note>
               </ion-item>
@@ -154,7 +154,7 @@
                   <p>{{ $t("Pre orders") }}</p>
                 </ion-label>
                 <ion-label class="ion-text-center">
-                  <p>400</p>
+                  <p>{{ product?.variantOrderDetails && product.variantOrderDetails['10097']?.facility['PRE_ORDER_PARKING'] ? product.variantOrderDetails['10097']?.facility['PRE_ORDER_PARKING'] : '-'  }}</p>
                 </ion-label>
                 <ion-label class="ion-text-center">
                   <p>400</p>
@@ -166,7 +166,7 @@
                   <p>{{ $t("Back orders") }}</p>
                 </ion-label>
                 <ion-label class="ion-text-center">
-                  <p>400</p>
+                  <p>{{ product?.variantOrderDetails && product.variantOrderDetails['10097']?.facility['BACKORDER_PARKING'] ? product.variantOrderDetails['10097']?.facility['BACKORDER_PARKING'] : '-'  }}</p>
                 </ion-label>
                 <ion-label class="ion-text-center">
                   <p>400</p>
@@ -178,7 +178,7 @@
                   <p>{{ $t("Unfillable") }}</p>
                 </ion-label>
                 <ion-label class="ion-text-center">
-                  <p>400</p>
+                  <p>{{ product?.variantOrderDetails && product.variantOrderDetails['10097']?.facility['_NA_'] ? product.variantOrderDetails['10097']?.facility['_NA_'] : '-'  }}</p>
                 </ion-label>
                 <ion-label class="ion-text-center">
                   <p>400</p>
