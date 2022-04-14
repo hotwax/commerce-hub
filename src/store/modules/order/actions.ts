@@ -128,7 +128,7 @@ const actions: ActionTree<OrderState, RootState> = {
     return resp;
   },
 
-  async updateSortOption({ commit }, payload) {
+  async updateSort({ commit }, payload) {
     commit(types.ORDER_SORT_UPDATED, payload)
   },
 

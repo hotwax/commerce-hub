@@ -12,7 +12,7 @@
           <ion-button fill="clear">
             <ion-icon slot="icon-only" :icon="downloadOutline" />
           </ion-button> -->
-          <ion-button fill="clear" class="mobile-only" @click="openOrderFilterMenu()">
+          <ion-button fill="clear" class="mobile-only" @click="openOrderFilter()">
             <ion-icon slot="icon-only" :icon="filterOutline" />
           </ion-button>
         </ion-buttons>
@@ -250,7 +250,7 @@ export default defineComponent ({
   methods: {
     async sortOrders(value: string) {
       this.sort = value
-      await this.store.dispatch('order/updateSortOption', this.sort)
+      await this.store.dispatch('order/updateSort', this.sort)
       this.getOrders();
     },
     async getOrders(vSize?: any, vIndex?: any) {
@@ -279,7 +279,7 @@ export default defineComponent ({
         event.target.complete();
       })
     },
-    async openOrderFilterMenu() {
+    async openOrderFilter() {
       await menuController.open();
     }
   },
