@@ -67,7 +67,7 @@
             <ion-list>
               <ion-list-header>{{ $t("Color") }}</ion-list-header>
               <ion-item lines="none">
-                <ion-chip v-for="(feature, index) in product.feature" :key="index" @click="updateCurrentSelectedFeatures('color', feature)">
+                <ion-chip v-for="(feature, index) in $filters.getFeatures(product.feature, 'Color')" :key="index" @click="updateCurrentSelectedFeatures(feature, 'color')">
                   <ion-icon v-if="currentSelectedFeatures.color === feature" :icon="checkmarkOutline" />
                   <ion-label>{{ feature }}</ion-label>
                 </ion-chip>
@@ -76,7 +76,7 @@
             <ion-list>
               <ion-list-header>{{ $t("Size") }}</ion-list-header>
               <ion-item lines="none">
-                <ion-chip v-for="(feature, index) in product.feature" :key="index" @click="updateCurrentSelectedFeatures('size', feature)">
+                <ion-chip v-for="(feature, index) in $filters.getFeatures(product.feature, 'Size')" :key="index" @click="updateCurrentSelectedFeatures(feature, 'size')">
                   <ion-icon v-if="currentSelectedFeatures.size === feature" :icon="checkmarkOutline" />
                   <ion-label>{{ feature }}</ion-label>
                 </ion-chip>
@@ -737,8 +737,8 @@ export default defineComponent({
   },
   mounted() {
     this.store.dispatch('product/getProductDetail', { productId: this.$route.params.id }).then(() => {
-      this.updateCurrentSelectedFeatures((this.filterProductFeatures(this.product.feature, 'Color') as any)[0], 'color');
-      this.updateCurrentSelectedFeatures((this.filterProductFeatures(this.product.feature, 'Size') as any)[0], 'size');
+      this.filterProductFeatures(this.product.feature, 'Color').then((colors: any) =>  this.updateCurrentSelectedFeatures(colors[0], 'color'));
+      this.filterProductFeatures(this.product.feature, 'Size').then((sizes: any) =>  this.updateCurrentSelectedFeatures(sizes[0], 'size'));
       this.getShopifyInformation(); 
     })
   },

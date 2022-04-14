@@ -159,7 +159,21 @@ const actions: ActionTree<ProductState, RootState> = {
   async getProductDetail({ dispatch, state }, { productId }) {
     const current = state.current as any
     
-    if(current && current.productId === productId) { return current }
+    if(current && current.productId === productId) {
+      let variantProductIds: any = new Set();
+
+      current.variants.forEach((variant: any) => {
+        if(variant.productId) variantProductIds.add(variant.productId)
+      });
+      variantProductIds = [...variantProductIds]
+
+      if(variantProductIds.length) {
+        const variantProducts = await dispatch('fetchProducts', { productIds: variantProductIds })
+        console.log('variantProductIds', variantProductIds)
+        console.log('variantProducts', variantProducts);
+      }
+      return current
+    }
 
     let resp;
     try {
@@ -180,17 +194,6 @@ const actions: ActionTree<ProductState, RootState> = {
       if(resp.status === 200 && resp.data.grouped.groupId?.groups.length > 0 && !hasError(resp)) {
         let product = resp.data.grouped.groupId?.groups[0].doclist.docs[0]
 
-        const colors = product.productFeatures.filter((featureItem: any) => featureItem.startsWith('Color')).map((feature: any) => {
-          const featureSplit = feature ? feature.split('/') : [];
-          const featureValue = featureSplit[1] ? featureSplit[1] : '';
-          return featureValue;
-        })
-        const sizes = product.productFeatures.filter((featureItem: any) => featureItem.startsWith('Size')).map((feature: any) => {
-          const featureSplit = feature ? feature.split('/') : [];
-          const featureValue = featureSplit[1] ? featureSplit[1] : '';
-          return featureValue;
-        })
-
         product = {
           productId: product.productId,
           productName: product.productName,
@@ -200,6 +203,8 @@ const actions: ActionTree<ProductState, RootState> = {
           feature: product.productFeatures,
           variants: product.variantProductIds
         }
+        const variantProducts = await dispatch('fetchProducts', { productIds: product.variants })
+        // console.log('detail page variants', variantProducts);
 
         dispatch('updateCurrent', product);
       } else {
