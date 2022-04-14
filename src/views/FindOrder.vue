@@ -5,112 +5,57 @@
         <ion-back-button default-href="/" slot="start" />
         <ion-title>{{ $t("Orders") }}</ion-title>
         <ion-buttons slot="end">
-          <ion-button fill="clear">
+          <!-- TODO: make download csv and sync button functional -->
+          <!-- <ion-button fill="clear">
             <ion-icon slot="icon-only" :icon="syncOutline" />
           </ion-button>
           <ion-button fill="clear">
             <ion-icon slot="icon-only" :icon="downloadOutline" />
-          </ion-button>
-          <ion-button fill="clear" class="mobile-only">
+          </ion-button> -->
+          <ion-button fill="clear" class="mobile-only" @click="openOrderFilter()">
             <ion-icon slot="icon-only" :icon="filterOutline" />
           </ion-button>
         </ion-buttons>
       </ion-toolbar>
     </ion-header>
 
-    <ion-content>
+    <ion-menu content-id="content" type="overlay" side="end">
+      <ion-header>
+        <ion-toolbar>
+          <ion-title>{{ $t("Filters")}}</ion-title>
+        </ion-toolbar>
+      </ion-header>
+
+      <ion-content>
+        <OrderFilters :poIds="poIds" :shippingMethodOptions="shippingMethodOptions" :orderStatusOptions="orderStatusOptions"/>
+      </ion-content>
+    </ion-menu>
+
+    <ion-content id="content">
       <div class="find">
         <section class="search">
-          <ion-searchbar v-model="queryString" @keyup.enter="getOrders()"/>
+          <ion-searchbar v-model="queryString" @keyup.enter="queryString = $event.target.value; updateQueryString()"/>
         </section>
 
         <aside class="filters desktop-only">
-          <ion-list>
-            <ion-list-header><h3>{{ $t("Date") }}</h3></ion-list-header>
-            <ion-item>
-              <ion-label>order created</ion-label>
-              <ion-select value="any" interface="popover">
-                <ion-select-option value="any">any</ion-select-option>
-              </ion-select>
-            </ion-item>
-            <ion-item>
-              <ion-label>order created</ion-label>
-              <ion-select value="any" interface="popover">
-                <ion-select-option value="any">any</ion-select-option>
-              </ion-select>
-            </ion-item>
-            <ion-item>
-              <ion-label>order created</ion-label>
-              <ion-select value="any" interface="popover">
-                <ion-select-option value="any">any</ion-select-option>
-              </ion-select>
-            </ion-item>
-          </ion-list>
-          <ion-list>
-            <ion-list-header><h3>{{ $t("Type") }}</h3></ion-list-header>
-            <ion-item>
-              <ion-label>order created</ion-label>
-              <ion-checkbox />
-            </ion-item>
-            <ion-item>
-              <ion-label>order created</ion-label>
-              <ion-checkbox />
-            </ion-item>
-            <ion-item>
-              <ion-label>order created</ion-label>
-              <ion-checkbox />
-            </ion-item>
-          </ion-list>
-          <ion-list>
-            <ion-list-header><h3>{{ $t("Fulfillment") }}</h3></ion-list-header>
-            <ion-item>
-              <ion-label>order created</ion-label>
-              <ion-select value="any" interface="popover">
-                <ion-select-option value="any">any</ion-select-option>
-              </ion-select>
-            </ion-item>
-            <ion-item>
-              <ion-label>order created</ion-label>
-              <ion-select value="any" interface="popover">
-                <ion-select-option value="any">any</ion-select-option>
-              </ion-select>
-            </ion-item>
-            <ion-item>
-              <ion-label>order created</ion-label>
-              <ion-select value="any" interface="popover">
-                <ion-select-option value="any">any</ion-select-option>
-              </ion-select>
-            </ion-item>
-          </ion-list>
-
-          <ion-card>
-            <ion-toolbar>
-              <ion-title>{{ $t("Purchase orders") }}</ion-title>
-            </ion-toolbar>
-            <ion-card-content>
-              <ion-chip>
-                <ion-label>PO #</ion-label>
-              </ion-chip>
-              <ion-chip>
-                <ion-label>PO #</ion-label>
-              </ion-chip>
-            </ion-card-content>
-          </ion-card>
+          <OrderFilters :poIds="poIds" :shippingMethodOptions="shippingMethodOptions" :orderStatusOptions="orderStatusOptions"/>
         </aside>
 
         <main>
           <section class="sort">
             <ion-item lines="none">
               <ion-icon slot="start" :icon="documentTextOutline" />
-              <ion-label>{{ "Show order items" }}</ion-label>
-              <ion-toggle color="secondary" />
+              <ion-label>{{ $t("Show order items") }}</ion-label>
+              <ion-toggle color="secondary" :checked="showOrderItems" @ionChange="() => showOrderItems = !showOrderItems"/>
             </ion-item>
 
             <ion-item lines="none">
               <ion-icon slot="start" :icon="swapVerticalOutline" />
               <ion-label>{{ $t("Sort") }}</ion-label>
-              <ion-select value="any" interface="popover">
-                <ion-select-option value="any">Arrival date</ion-select-option>
+              <ion-select :value="sort" @ionChange="sortOrders($event.detail.value)">
+                <ion-select-option value="orderDate desc">{{ $t('Order date') }}</ion-select-option>
+                <ion-select-option value="promisedDatetime asc">{{ $t('Promised date') }}</ion-select-option>
+                <ion-select-option value="autoCancelDate asc">{{ $t('Auto cancel date') }}</ion-select-option>
               </ion-select>
             </ion-item>
           </section>
@@ -124,7 +69,7 @@
                 <ion-item lines="none">
                   <ion-label>
                     {{ order.orderId }}
-                    <p> {{ order.customerPartyName }} </p>
+                    <p> {{ order.customer.name }} </p>
                   </ion-label>
                 </ion-item>
               </div>
@@ -142,24 +87,24 @@
 
               <div class="metadata">
                 <ion-note> {{ $t("Ordered on") }} {{ $filters.formatUtcDate(order.orderDate, 'YYYY-MM-DDTHH:mm:ssZ', 'D MMM YYYY') }} </ion-note>
-                <ion-badge :color="orderStatus[order.orderStatusId].color ? orderStatus[order.orderStatusId].color : 'primary'">{{ orderStatus[order.orderStatusId].label ? orderStatus[order.orderStatusId].label : order.orderStatusId }}</ion-badge>
+                <ion-badge :color="orderStatus[order.orderStatusId]?.color ? orderStatus[order.orderStatusId]?.color : 'primary'">{{ orderStatus[order.orderStatusId]?.label ? orderStatus[order.orderStatusId]?.label : order.orderStatusId }}</ion-badge>
               </div>
             </section>
 
-            <section class="section-grid">
+            <section class="section-grid" v-if="showOrderItems">
               <ion-card v-for="(item, index) in order.doclist.docs" :key="index" :item="item">
                 <ion-item>
                   <ion-thumbnail slot="start">
                     <Image :src="getProduct(item.productId).mainImageUrl" />
                   </ion-thumbnail>
                   <ion-label>
-                    <p> {{ getProduct(item.productId).brandName ? getProduct(item.productId).brandName : '-' }} </p>
-                    {{ item.parentProductName }}
+                    <p>{{ getProduct(item.productId)?.brandName }}</p>
+                    {{ item.parentProductName ? item.parentProductName : item.productName }}
                     <!-- TODO: make the attribute displaying logic dynamic -->
-                    <p> {{ $t("Color") }}: {{ $filters.getFeature(getProduct(item.productId).featureHierarchy, '1/COLOR/') }} </p>
-                    <p> {{ $t("Size") }}: {{ $filters.getFeature(getProduct(item.productId).featureHierarchy, '1/SIZE/') }} </p>
+                    <p v-if="$filters.getFeature(getProduct(item.productId).featureHierarchy, '1/COLOR/')"> {{ $t("Color") }}: {{ $filters.getFeature(getProduct(item.productId).featureHierarchy, '1/COLOR/') }} </p>
+                    <p v-if="$filters.getFeature(getProduct(item.productId).featureHierarchy, '1/SIZE/')"> {{ $t("Size") }}: {{ $filters.getFeature(getProduct(item.productId).featureHierarchy, '1/SIZE/') }} </p>
                   </ion-label>
-                  <ion-badge :color="itemStatus[item.orderItemStatusId].color ? itemStatus[item.orderItemStatusId].color : 'primary'" slot="end"> {{ itemStatus[item.orderItemStatusId].label ? itemStatus[item.orderItemStatusId].label : item.orderItemStatusId }} </ion-badge>
+                  <ion-badge :color="itemStatus[item.orderItemStatusId]?.color ? itemStatus[item.orderItemStatusId]?.color : 'primary'" slot="end"> {{ itemStatus[item.orderItemStatusId]?.label ? itemStatus[item.orderItemStatusId]?.label : item.orderItemStatusId }} </ion-badge>
                 </ion-item>
                 <!-- TODO: Need to handle this property -->
                 <div v-if="item.facilityId === orderPreOrderId || item.facilityId === orderBackOrderId">
@@ -212,8 +157,6 @@ import {
   IonButtons,
   IonButton,
   IonCard,
-  IonCardContent,
-  IonCheckbox,
   IonChip,
   IonContent,
   IonHeader,
@@ -222,17 +165,17 @@ import {
   IonInfiniteScrollContent,
   IonItem,
   IonLabel,
-  IonList,
-  IonListHeader,
+  IonMenu,
   IonNote,
   IonPage,
   IonSearchbar,
   IonSelect,
+  IonSelectOption,
   IonThumbnail,
   IonTitle,
   IonToggle,
   IonToolbar,
-  IonSelectOption
+  menuController
 } from '@ionic/vue';
 import {
   documentTextOutline,
@@ -242,13 +185,17 @@ import {
   ribbon,
   swapVerticalOutline,
   syncOutline,
+  close,
 } from 'ionicons/icons';
 import { defineComponent, ref } from "vue";
 import { mapGetters, useStore } from "vuex";
-import { showToast } from '@/utils'
+import { hasError, showToast } from '@/utils'
 import { Plugins } from '@capacitor/core';
 import Image from '@/components/Image.vue';
 import { useRouter } from 'vue-router';
+import OrderFilters from '@/components/OrderFilters.vue'
+import emitter from '@/event-bus';
+import { OrderService } from '@/services/OrderService';
 
 const { Clipboard } = Plugins;
 
@@ -256,14 +203,11 @@ export default defineComponent ({
   name: 'Order',
   components: {
     Image,
-    IonSelectOption,
     IonBackButton,
     IonBadge,
     IonButtons,
     IonButton,
     IonCard,
-    IonCardContent,
-    IonCheckbox,
     IonChip,
     IonContent,
     IonHeader,
@@ -272,16 +216,17 @@ export default defineComponent ({
     IonInfiniteScrollContent,
     IonItem,
     IonLabel,
-    IonList,
-    IonListHeader,
+    IonMenu,
     IonNote,
     IonPage,
-    IonSearchbar,
     IonSelect,
+    IonSelectOption,
+    IonSearchbar,
     IonThumbnail,
     IonTitle,
     IonToggle,
     IonToolbar,
+    OrderFilters
   },
   computed: {
     ...mapGetters({
@@ -289,34 +234,34 @@ export default defineComponent ({
       getProduct: 'product/getProduct',
       currentFacilityId: 'user/getCurrentFacility',
       getProductStock: 'stock/getProductStock',
-      isScrollable: 'order/isScrollable'
+      isScrollable: 'order/isScrollable',
+      query: 'order/getOrderQuery'
     })
   },
+  data() {
+    return {
+      shippingMethodOptions: ['any'],
+      orderStatusOptions: ['any'],
+      sort: 'orderDate desc',
+      showOrderItems: true,
+      poIds: {} as any
+    }
+  },
   methods: {
-    async getOrders(vSize?: any, vIndex?: any){
-      const viewSize = vSize ? vSize : process.env.VUE_APP_VIEW_SIZE;
-      const viewIndex = vIndex ? vIndex : 0;
-      const payload = {
-        "json": {
-          "params": {
-            "rows": viewSize,
-            "start": viewSize * viewIndex,
-            "group": true,
-            "group.field": "orderId",
-            "group.limit": 10000,
-            "group.ngroups": true
-          } as any,
-          "query": "*:*",
-          "filter": "docType: ORDER AND orderTypeId: SALES_ORDER"
-        }
+    async sortOrders(value: string) {
+      this.sort = value
+      await this.store.dispatch('order/updateSort', this.sort)
+    },
+    async getOrders() {
+      const resp = await this.store.dispatch('order/updateQuery')
+
+      if (resp.status == 200 && resp.data.facets) {
+        this.orderStatusOptions = this.orderStatusOptions.length > 1 || resp.data.facets?.orderStatusIdFacet?.buckets.length < this.orderStatusOptions.length ? this.orderStatusOptions : this.orderStatusOptions.concat(resp.data.facets?.orderStatusIdFacet?.buckets.map((status: any) => status.val))
+        this.shippingMethodOptions = this.shippingMethodOptions.length > 1 || resp.data.facets?.shipmentMethodTypeIdFacet?.buckets.length < this.shippingMethodOptions.length ? this.shippingMethodOptions : this.shippingMethodOptions.concat(resp.data.facets?.shipmentMethodTypeIdFacet?.buckets.map((shippingMethod: any) => shippingMethod.val))
       }
-      if (this.queryString) {
-        payload.json.params.defType = 'edismax'
-        payload.json.params.qf = 'orderId customerPartyName customerPartyId productId internalName'
-        payload.json.params['q.op'] = 'AND'
-        payload.json.query = `*${this.queryString}*`
-      }
-      await this.store.dispatch("order/findOrders", payload);
+    },
+    async updateQueryString() {
+      await this.store.dispatch('order/updateAppliedFilters', { value: this.queryString, filterName: 'queryString' })
     },
     async copyToClipboard(text: any) {
       await Clipboard.write({
@@ -326,17 +271,47 @@ export default defineComponent ({
       })
     },
     async loadMoreOrders(event: any) {
-      this.getOrders(
-        undefined,
-        Math.ceil(this.orders.length / process.env.VUE_APP_VIEW_SIZE).toString()
-      ).then(() => {
+      await this.store.dispatch('order/updateQuery', {
+        viewSize: undefined,
+        viewIndex: Math.ceil(this.orders.length / process.env.VUE_APP_VIEW_SIZE).toString()
+      }).then((resp) => {
+        if (resp.status == 200 && resp.data.facets) {
+          this.orderStatusOptions = this.orderStatusOptions.length > 1 || resp.data.facets?.orderStatusIdFacet?.buckets.length < this.orderStatusOptions.length ? this.orderStatusOptions : this.orderStatusOptions.concat(resp.data.facets?.orderStatusIdFacet?.buckets.map((status: any) => status.val))
+          this.shippingMethodOptions = this.shippingMethodOptions.length > 1 || resp.data.facets?.shipmentMethodTypeIdFacet?.buckets.length < this.shippingMethodOptions.length ? this.shippingMethodOptions : this.shippingMethodOptions.concat(resp.data.facets?.shipmentMethodTypeIdFacet?.buckets.map((shippingMethod: any) => shippingMethod.val))
+        }
         event.target.complete();
       })
+    },
+    async openOrderFilter() {
+      await menuController.open();
     }
   },
-  mounted() {
-    this.getOrders();
+  async mounted() {
     this.store.dispatch('util/fetchShipmentMethods')
+    await this.getOrders();
+
+    const payload = {
+      "json": {
+        "params": {
+          "rows": 1000,
+          "group": true,
+          "group.field": "externalOrderId"
+        },
+        "filter": "docType: ORDER AND orderTypeId: PURCHASE_ORDER",
+        "fields": "externalOrderId orderId",
+        "query": "*:* AND externalOrderId: *"
+      }
+    }
+
+    const resp = await OrderService.getPOIds(payload);
+    if (resp.status == 200 && !hasError(resp)) {
+      resp.data.grouped.externalOrderId.groups.map((group: any) => {
+        this.poIds[group.groupValue] = group.doclist.docs.map((order: any) => order.orderId)
+      })
+      this.store.dispatch('order/updatePoIds', this.poIds)
+    } else {
+      console.error('Something went wrong')
+    }
   },
   setup() {
     const router = useRouter();
@@ -349,6 +324,7 @@ export default defineComponent ({
     const cusotmerLoyaltyOptions = process.env.VUE_APP_CUST_LOYALTY_OPTIONS
 
     return {
+      close,
       cusotmerLoyaltyOptions,
       documentTextOutline,
       downloadOutline,
@@ -380,6 +356,12 @@ export default defineComponent ({
 
 .metadata > ion-note {
   display: block;
+}
+
+ion-modal {
+  --width: 290px;
+  --height: 382px;
+  --border-radius: 8px;
 }
 
 @media (min-width: 991px) {

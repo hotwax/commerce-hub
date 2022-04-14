@@ -1,0 +1,6 @@
+---
+title: 'Implemented: solr helper to prepare order query and updated the state for storing filters'
+ticket_id: "#2712605"
+merge_request: 98
+author: Yash Maheshwari
+type: fixed
