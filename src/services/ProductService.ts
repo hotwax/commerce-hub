@@ -18,8 +18,16 @@ const getProducts = async (payload: any): Promise<any> => {
   })
 }
 
+const getFacility = async (payload: any): Promise<any> => {
+  return api({
+    url: "/performFind",
+    method: "post",
+    data: payload
+  });
+}
 
 export const ProductService = {
   fetchProducts,
-  getProducts
+  getProducts,
+  getFacility
 }

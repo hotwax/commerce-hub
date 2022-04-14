@@ -150,6 +150,41 @@ const actions: ActionTree<ProductState, RootState> = {
       showToast(translate("Something went wrong"));
     }
     return resp;
+  },
+  async getFacilities({commit, dispatch}) {
+    try {
+      let facilityIds = [] as any;
+      const resp = await ProductService.getFacility({
+        "entityName": "Facility",
+        "noConditionFind": "Y",
+        "viewSize": 30
+      });
+      console.log(resp);
+      facilityIds = resp.data.docs.map((facility: any) => {
+        return facility.facilityId
+      })
+      console.log(facilityIds)
+      dispatch('getFacilityInformation', facilityIds)
+      commit(types.PRODUCT_FACILITY_UPDATED, { list: resp.data.docs, total: resp.data.count });
+    } catch (err) {
+      console.error(err)
+    }
+  },
+  async getFacilityInformation({commit}, facilityIds) {
+    try {
+      const resp = await ProductService.getFacility({
+        "inputFields": {
+          "facilityId": facilityIds
+        },
+        "entityName": "ProductFacility",
+        "noConditionFind": "Y",
+        "viewSize": 30
+      });
+      console.log(resp);
+      // commit(types.PRODUCT_FACILITY_UPDATED, { list: resp.data.docs, total: resp.data.count });
+    } catch (err) {
+      console.error(err)
+    }
   }
 }
 

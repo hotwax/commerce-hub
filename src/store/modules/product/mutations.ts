@@ -16,6 +16,9 @@ const mutations: MutationTree <ProductState> = {
   },
   [types.PRODUCT_CACHED_UPDATED](state, payload) {
     state.cached = payload.cached
+  },
+  [types.PRODUCT_FACILITY_UPDATED](state, payload) {
+    state.facilities = payload;
   }
 }
 export default mutations;

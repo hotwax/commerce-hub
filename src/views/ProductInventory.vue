@@ -221,14 +221,14 @@
 
             <div class="actions">
               <div>
-                <ion-chip>
+                <ion-chip @click="filter('all')">
                   <ion-icon :icon="checkmarkOutline" />
                   <ion-label>All</ion-label>
                 </ion-chip>
-                <ion-chip>
+                <ion-chip @click="filter('RETAIL_STORE')">
                   <ion-label>Retail</ion-label>
                 </ion-chip>
-                <ion-chip>
+                <ion-chip @click="filter('WAREHOUSE')">
                   <ion-label>Warehouses</ion-label>
                 </ion-chip>
               </div>
@@ -247,7 +247,7 @@
             <div class="list-item">
               <ion-item lines="none">
                 <ion-icon :icon="globeOutline" slot="start" />
-                <ion-label>30 {{ $t("locations") }}</ion-label>
+                <ion-label>{{ facilities.total }} {{ $t("locations") }}</ion-label>
               </ion-item>
 
               <ion-label class="tablet">
@@ -288,12 +288,12 @@
 
             <hr />
 
-            <div class="list-item">
+            <div class="list-item" v-for="facility in filteredFacilities.list" :key="facility">
               <ion-item lines="none">
                 <ion-icon :icon="storefrontOutline" slot="start" />
                 <ion-label>
                   <p>Retail</p>
-                  Store 1 name
+                  {{ facility.facilityName }}
                   <p>Pickup and shipping</p>
                 </ion-label>
               </ion-item>
@@ -621,6 +621,7 @@ import {
 } from '@ionic/vue';
 import { defineComponent, ref } from 'vue';
 import { useRouter } from 'vue-router';
+import { useStore, mapGetters } from "vuex";
 import {
   businessOutline,
   calendarOutline,
@@ -671,7 +672,29 @@ export default defineComponent({
     IonToolbar,
     Image
   },
+  computed: {
+    ...mapGetters({
+      facilities: 'product/getFacilities'
+    }),
+    
+  },
+  data(){
+    return {
+      filteredFacilities: {} as any
+    }
+  },
   methods: {
+    filter(type: any){
+      this.store.dispatch('product/getFacilities');
+      if(type == "all"){
+        this.filteredFacilities = this.facilities;
+      } else {
+
+        this.filteredFacilities.list = this.facilities.list.filter((facility: any) => {
+          return facility.facilityTypeId === type;
+        })
+      }
+    },
     segmentChanged(ev: CustomEvent) {
       this.segment = ev.detail.value;
     },
@@ -710,6 +733,7 @@ export default defineComponent({
     },
   },
   setup() {
+    const store = useStore();
     const router = useRouter();
     const segment = ref("locations");
 
@@ -728,8 +752,13 @@ export default defineComponent({
       syncOutline,
       ticketOutline,
       router,
-      segment
+      segment,
+      store
     }
+  },
+  mounted(){
+    this.store.dispatch('product/getFacilities');
+    this.filteredFacilities = this.facilities;
   }
 });
 </script>
