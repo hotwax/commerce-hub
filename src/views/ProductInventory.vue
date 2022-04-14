@@ -124,15 +124,15 @@
               </ion-card-header>
               <ion-item detail>
                 <ion-label>{{ $t("Store pickup") }}</ion-label>
-                <ion-note slot="end">orders</ion-note>
+                <ion-note slot="end">{{ product?.variantOrderDetails && product.variantOrderDetails['10097']?.shipmentMethod['STOREPICKUP'] ? product.variantOrderDetails['10097']?.shipmentMethod['STOREPICKUP'] : '-'  }}</ion-note>
               </ion-item>
               <ion-item detail>
                 <ion-label>{{ $t("Standard") }}</ion-label>
-                <ion-note slot="end">orders</ion-note>
+                <ion-note slot="end">{{ product?.variantOrderDetails && product.variantOrderDetails['10097']?.shipmentMethod['STANDARD'] ? product.variantOrderDetails['10097']?.shipmentMethod['STANDARD']: '-' }}</ion-note>
               </ion-item>
               <ion-item lines="none" detail>
                 <ion-label>{{ $t("Expedited") }}</ion-label>
-                <ion-note slot="end">orders</ion-note>
+                <ion-note slot="end">{{ product?.variantOrderDetails && product.variantOrderDetails['10097']?.shipmentMethod['NEXT_DAY'] ? product.variantOrderDetails['10097']?.shipmentMethod['NEXT_DAY']: '-' }}</ion-note>
               </ion-item>
             </ion-card>
           

@@ -190,6 +190,8 @@ const actions: ActionTree<ProductState, RootState> = {
           variants: product.variantProductIds
         }
 
+        const orderDetails = await dispatch('fetchOrderInfoForProduct', product.variants)
+        product['variantOrderDetails'] = orderDetails
         dispatch('updateCurrent', product);
       } else {
         showToast(translate("Product not found"));
@@ -203,6 +205,75 @@ const actions: ActionTree<ProductState, RootState> = {
   updateCurrent({ commit }, payload) {
     commit(types.PRODUCT_CURRENT_UPDATED, payload)
   },
+
+  async fetchOrderInfoForProduct({ commit }, variantIds) {
+    let resp;
+    try {
+      const payload = {
+        "json": {
+          "params": {
+            "group": true,
+            "group.field": "productId",
+            "group.limit": 10000,
+            "group.ngroups": true
+          },
+          "query": "*:*",
+          "filter": `docType: ORDER AND productId: (${variantIds.join(' OR ')})`,
+          "facet": {
+            "productIdFacet": {
+              "excludeTags": "productIdFilter",
+              "field": "productId",
+              "mincount": 1,
+              "limit": -1,
+              "sort": "index",
+              "type": "terms",
+              "facet": {
+                "shipmentMethodTypeIdFacet": {
+                  "field": "shipmentMethodTypeId",
+                  "type": "terms",
+                  "limit": -1,
+                  "sort": "index"
+                },
+                "facilityIdFacet": {
+                  "excludeTags": "facilityIdFilter",
+                  "field" : "facilityId",
+                  "mincount": 0,
+                  "limit": -1,
+                  "type": "terms"
+                }
+              }
+            }
+          }
+        }
+      }
+      resp = await ProductService.getOrderInfoForProduct(payload);
+      if (resp.status === 200 && !hasError(resp) && resp.data.facets.count && resp.data?.grouped?.productId?.matches) {
+        const variantOrderDetails = resp.data.facets?.productIdFacet.buckets
+        const variants = variantOrderDetails.reduce((arr: any, bucket: any) => {
+          const key = bucket.val
+          const shipmentMethod = {} as any
+          bucket.shipmentMethodTypeIdFacet.buckets.map((method: any) => {
+            shipmentMethod[method.val]= method.count
+          })
+
+          const facility = {} as any
+          bucket.facilityIdFacet.buckets.map((facilityId: any) => {
+            facility[facilityId.val]= facilityId.count
+          })
+          if (!arr[key]) {
+            arr[key] = {
+              shipmentMethod,
+              facility
+            }
+          }
+          return arr
+        }, {})
+        return variants
+      }
+    } catch(err) {
+      console.error('Something went wrong')
+    }
+  }
 }
 
 export default actions;
