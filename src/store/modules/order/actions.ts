@@ -41,7 +41,6 @@ const actions: ActionTree<OrderState, RootState> = {
         const total = resp.data.grouped.orderId.ngroups;
         if (payload.json.params.start && payload.json.params.start > 0) orders = state.list.orders.concat(orders)
         this.dispatch('product/getProductInformation', { orders });
-        this.dispatch('order/fetchStatusChange')
         commit(types.ORDER_LIST_UPDATED, { orders, total });
       } else {
         showToast(translate("Something went wrong"));
