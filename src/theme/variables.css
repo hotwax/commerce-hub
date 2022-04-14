@@ -235,8 +235,8 @@ http://ionicframework.com/docs/theming/ */
   }
 }
 
+/** Spacer variables **/
 body {
-  /** Spacer variables **/
   --spacer-2xs: 0.25rem; /* 4px */
   --spacer-xs: 0.5rem;   /* 8px */
   --spacer-sm: 1rem;     /* 16px */
@@ -245,9 +245,6 @@ body {
   --spacer-xl: 2.5rem;   /* 40px */
   --spacer-2xl: 5rem;    /* 80px */
   --spacer-3xl: 10rem;   /* 160px */
-
-  /** Border variable **/
-  --border-medium: 1px solid var(--ion-color-medium);
 }
 
 .overline {
@@ -275,18 +272,11 @@ body {
 
 .search {
   grid-area: search;
+  margin-bottom: var(--spacer-lg);
 }
 
 .filters {
   grid-area: filters;
-}
-
-.sort {
-  margin: var(--spacer-sm) 0;
-}
-
-.sort > :first-child{
-  border-bottom: var(--border-medium);
 }
 
 .section-header {
@@ -345,9 +335,6 @@ body {
   justify-self: start
 }
 
-h1,h2 {
-  font-size: 16px;
-}
 
 ion-avatar > img ,
 ion-thumbnail > img {
@@ -359,15 +346,12 @@ ion-select {
 }
 
 hr {
-  border-top: var(--border-medium);
+  border-width: 1px;
+  color: var(--ion-color-medium);
 }
 
 ion-list-header > hr {
   width: 90%;
-}
-
-ion-card {
-  border-radius: 8px;
 }
 
 .desktop-only {
@@ -389,15 +373,10 @@ ion-card {
 }
 
 @media (min-width: 991px) {
-  h1,h2 {
-    font-size: revert;
-  }
-
   .find {
     grid: "search  main" min-content
           "filters main" 1fr 
           / 375px; 
-    column-gap: var(--spacer-2xl);      
     margin: var(--spacer-lg);                            
   }
   
@@ -405,23 +384,14 @@ ion-card {
     grid: "info tags metadata" / max-content 1fr minmax(min-content, max-content);
   }
 
-  .filters {
-    margin-top: var(--spacer-lg);
-  }  
-
   .sort {
     display: flex;
     justify-content: flex-end;
-    margin-bottom: var(--spacer-lg);
   }
 
   .sort > ion-item {
     max-width: 308px;
-    border-left: var(--border-medium);
-  }
-
-  .sort > :first-child{
-    border-bottom: unset;
+    border-left: 1px solid var(--ion-color-medium);
   }
 
   .desktop-only {
@@ -436,12 +406,15 @@ ion-card {
     display: unset;
   }  
 
-  .product,
-  .products {
-    margin-top: var(--spacer-lg);
+  .find > main {
+    margin-left: var(--spacer-lg);
   }
 
-  ion-content > main {
+  .products > ion-item {
+    margin-bottom: var(--spacer-lg);
+  }
+
+  .main-content {
     margin: var(--spacer-lg);
   }
 
@@ -478,17 +451,7 @@ ion-card {
   
   .timeline {
     grid-area: timeline;
-    border-left: var(--border-medium);
-  }
-
-  .product-image {
-    margin: var(--spacer-xs) 0 0 var(--spacer-xs);
-  }
-
-  .product-image > img {
-    border: var(--border-medium);
-    border-radius: 10px;
-    padding: var(--spacer-base);
+    border-left: 1px solid var(--ion-color-medium);
   }
 }
 

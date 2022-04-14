@@ -18,7 +18,7 @@
           <div class="id">
             <ion-item lines="none">
               <ion-icon slot="start" :icon="ticketOutline" />
-              <h1>{{ order.orderName ? order.orderName : order.orderId }}</h1>
+              <ion-label>{{ order.orderName ? order.orderName : order.orderId }}</ion-label>
               <ion-badge :color="orderStatus[order.statusId]?.color ? orderStatus[order.statusId]?.color : 'primary'" slot="end">{{ orderStatus[order.statusId]?.label ? orderStatus[order.statusId]?.label : order.statusId }}</ion-badge>
               <!-- TODO: implement functionality to change the orderStatus -->
               <!-- <ion-select :value="status" @ionChange="changeStatus($event)" slot="end">
@@ -33,7 +33,7 @@
           <!-- <div class="timeline">
             <ion-item lines="none">
               <ion-icon slot="start" :icon="timeOutline" class="mobile-only" />
-              <h2>{{ $t("Timeline") }}</h2>
+              <ion-label>{{ $t("Timeline") }}</ion-label>
               <ion-note slot="end">1:07pm 6th Dec 2021</ion-note>
             </ion-item>
 
@@ -80,7 +80,6 @@
                 </ion-item>
               </ion-list>
             </ion-card>
-
             <ion-card>
               <ion-list>
                 <ion-list-header>{{ $t("Shopify IDs") }}</ion-list-header>
@@ -101,10 +100,11 @@
           </div>
         </section>
 
-        <section class="products">
+        <!-- Product section -->
+        <section>
           <ion-item lines="none">
             <ion-icon slot="start" :icon="shirtOutline" />
-            <h1>{{ $t("Products") }}</h1>
+            <ion-label>{{ $t("Products") }}</ion-label>
           </ion-item>
 
           <div class="product" v-for="(item, index) of order.items" :key="index">
@@ -153,7 +153,7 @@
                   <ion-card>
                     <ion-list>
                       <ion-list-header>{{ $t("Destination") }}</ion-list-header>
-                      <ion-item lines="none">
+                      <ion-item>
                         <ion-label>
                           {{ item.customerPartyName }}
                           <p>{{ item.address1 }}</p>
@@ -212,7 +212,7 @@
                         <ion-label>{{ $t("Shipping from") }}</ion-label>
                         <p>{{ item.facilityName ? item.facilityName : "-" }}</p>
                       </ion-item>
-                      <ion-item lines="none">
+                      <ion-item>
                         <ion-label>{{ $t("Location Inventory") }}</ion-label>
                         <p>{{ getProductStock(item.productId) }}</p>
                       </ion-item>
@@ -370,6 +370,7 @@ ion-select {
 }
 
 @media (min-width: 991px) {
+
   .product {
     display: grid;
     grid-template-columns: 250px 1fr;
@@ -379,6 +380,12 @@ ion-select {
 
   .product-image {
     height: 362px;
+    margin: var(--spacer-xs) 0 0 var(--spacer-xs);
+  }
+
+  .product-image > img {
+    border: 1px solid var(--ion-color-medium);
+    border-radius: 10px;
   }
 }
 </style>

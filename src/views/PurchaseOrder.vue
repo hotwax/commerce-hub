@@ -19,7 +19,7 @@
           <div class="id">
             <ion-item lines="none">
               <ion-icon slot="start" :icon="ticketOutline" />
-              <h1>External Purchase Order ID</h1>
+              <ion-label>External Purchase Order ID</ion-label>
               <ion-badge slot="end">{{ status }}</ion-badge>
               <ion-select :value="status" @ionChange="changeStatus($event)" slot="end">
                 <ion-select-option value="Approved">Approved</ion-select-option>
@@ -32,7 +32,7 @@
           <div class="timeline">
             <ion-item lines="none" detail>
               <ion-icon slot="start" :icon="timeOutline" class="mobile-only" />
-              <h2>{{ $t("Timeline") }}</h2>
+              <ion-label>{{ $t("Timeline") }}</ion-label>
               <ion-note slot="end">1:07pm 6th Dec 2021</ion-note>
             </ion-item>
             
@@ -53,7 +53,7 @@
               <ion-card-header>
                 <ion-card-title>Facility name</ion-card-title>
               </ion-card-header>
-              <ion-item lines="none">
+              <ion-item>
                 <ion-icon :icon="locationOutline" slot="start" />
                 <ion-label>
                   Address1
@@ -96,7 +96,7 @@
         <section class="products">
           <ion-item lines="none">
             <ion-icon slot="start" :icon="shirtOutline" />
-            <h1>{{ $t("Products") }}</h1>
+            <ion-label>{{ $t("Products") }}</ion-label>
 
             <ion-button slot="end" fill="outline" color="medium" class="desktop-only">
               <ion-icon :icon="addOutline" slot="start" />
@@ -379,6 +379,12 @@ ion-select {
     grid-template-columns: 250px 1fr;
     gap: var(--spacer-lg);
     align-items: start;
+  }
+
+  .product-image {
+    margin: var(--spacer-xs) 0 0 var(--spacer-xs);
+    border: 1px solid var(--ion-color-medium);
+    border-radius: 10px;
   }
 }
 </style>

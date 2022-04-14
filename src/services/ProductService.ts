@@ -10,16 +10,6 @@ const fetchProducts = async (query: any): Promise <any>  => {
   });
 }
 
-const getProducts = async (payload: any): Promise<any> => {
-  return api({
-    url: "/solr-query",
-    method: "POST",
-    data: payload
-  })
-}
-
-
 export const ProductService = {
-  fetchProducts,
-  getProducts
+  fetchProducts
 }

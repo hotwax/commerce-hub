@@ -9,19 +9,19 @@
             <ion-card href="https://preorder.hotwax.io/login">
               <img src="../assets/images/PreOrder.svg" />
               <ion-card-header>
-                <ion-card-title>{{ $t("Pre Order Management") }}</ion-card-title>
+                <ion-card-title>Pre Order Management</ion-card-title>
               </ion-card-header>
             </ion-card>
             <ion-card href="https://threshold-management.hotwax.io/login">
               <img src="../assets/images/Threshold.svg" />
               <ion-card-header>
-                <ion-card-title>{{ $t("Threshold Management") }}</ion-card-title>
+                <ion-card-title>Threshold Management</ion-card-title>
               </ion-card-header>
             </ion-card>
             <ion-card href="">
               <img src="../assets/images/Transfer.svg" />
               <ion-card-header>
-                <ion-card-title>{{ $t("Stock Transfer") }}</ion-card-title>
+                <ion-card-title>Stock Transfer</ion-card-title>
               </ion-card-header>
             </ion-card>
           </section>
@@ -29,36 +29,31 @@
           <section class="internal">
             <ion-item button @click="() => router.push('/find-order')" lines="none" detail>
               <ion-icon :icon="ticketOutline" slot="start" />
-              <ion-label>{{ $t("Orders") }}</ion-label>
+              <ion-label>Orders</ion-label>
             </ion-item>
             <ion-item button @click="() => router.push('/find-product-inventory')" lines="none" detail>
               <ion-icon :icon="shirtOutline" slot="start" />
-              <ion-label>{{ $t("Product inventory") }}</ion-label>
+              <ion-label>Product inventory</ion-label>
             </ion-item>
             <ion-item button @click="() => router.push('/find-shipment')" lines="none" detail>
               <ion-icon :icon="sendOutline" slot="start" />
-              <ion-label>{{ $t("Shipments") }}</ion-label>
+              <ion-label>Shipments</ion-label>
             </ion-item>
             <ion-item button @click="() => router.push('/find-purchase-order')" lines="none" detail>
               <ion-icon :icon="calendarOutline" slot="start" />
-              <ion-label>{{ $t("Purchase orders") }}</ion-label>
+              <ion-label>Purchase orders</ion-label>
             </ion-item>
             <ion-item button @click="() => router.push('/settings')" lines="none" detail>
               <ion-icon :icon="settingsOutline" slot="start" />
-              <ion-label>{{ $t("Settings") }}</ion-label>
+              <ion-label>Settings</ion-label>
             </ion-item>
           </section>
         </nav>
 
         <section class="scroller">
           <ion-item class="scroller-header" lines="none">
-<<<<<<< HEAD
             <ion-label>Stuck orders</ion-label>
               <ion-button slot="end" fill="outline" size="small" @click.prevent="appliedFiltersUpdated([{value: 'ORDER_APPROVED', filterName: 'status'}, {value: true, filterName: 'unfillable'}])">View all</ion-button>
-=======
-            <h2>{{ $t("Stuck orders") }}</h2>
-              <ion-button slot="end" fill="outline" size="small">{{ $t("View all") }}</ion-button>
->>>>>>> c10acbe1d29f58c4114c2155024cf5e709e2b0b1
           </ion-item>
           <div class="scroller-content">
             <div class="scroller-item" v-for="order in stuckOrders" :key="order" @click.prevent="viewOrder(order)"> 
@@ -75,7 +70,6 @@
                     <Image :src="getProduct(order.productId).mainImageUrl" />
                   </ion-thumbnail>
                   <ion-label>
-<<<<<<< HEAD
                     
                     <p>{{ getProduct(order.productId).brandName }}</p>
                     {{ order.productName }}
@@ -83,21 +77,13 @@
                     <p>{{ $t("Size") }}: {{ $filters.getFeature(getProduct(order.productId).featureHierarchy, '1/SIZE/') }}</p>
                   </ion-label>
                   <ion-note slot="end" color="success">{{getProductStock(order.productId)}} in stock</ion-note>
-=======
-                    <p>Brand</p>
-                    Virtual name
-                    <p>{{ $t("Color") }}: color</p>
-                    <p>{{ $t("Size") }}: size</p>
-                  </ion-label>
-                  <ion-note slot="end" color="success">15 {{ $t("in stock") }}</ion-note>
->>>>>>> c10acbe1d29f58c4114c2155024cf5e709e2b0b1
                 </ion-item>
                 <ion-item>
-                  <ion-label>{{ $t("Last brokered") }}</ion-label>
+                  <ion-label>Last brokered</ion-label>
                   <!-- TODO Replace 'p' tag with 'ion-label' after upgrading Ionic 5 to Ionic 6 -->
                   <p slot="end">{{ getStuckOrderChangeFacilityInformation(order.orderId)?.LastBrokeredFacility }}</p>
                 </ion-item>
-                <ion-item lines="none">
+                <ion-item>
                   <ion-label>Rebrokered</ion-label>
                   <!-- TODO Replace 'p' tag with 'ion-label' after upgrading Ionic 5 to Ionic 6 -->
                   <p  slot="end">{{ getStuckOrderChangeFacilityInformation(order.orderId)?.count }} times</p>
@@ -240,7 +226,7 @@ export default defineComponent({
 <style scoped>
 figure {
   max-width: 375px;
-  margin: var(--spacer-xl) auto;
+  margin: auto;
 }
 
 .external {
@@ -268,17 +254,12 @@ figure {
   height: 200px;
 }
 
-ion-card-title {
-  font-size: 16px;
-  font-weight: bold;
-}
-
 .internal {
   margin: var(--spacer-base) 0 0;
 }
 
 .internal > ion-item {
-  border: var(--border-medium);
+  border: 1px solid var(--ion-color-medium);
   border-radius: 15px;
   margin: var(--spacer-xs) var(--spacer-xs) 0;
 }
@@ -289,11 +270,7 @@ ion-card > ion-card-header {
 
 .scroller > .scroller-header {
   width: var(--page-width);
-  margin: var(--spacer-xl) auto 0;
-}
-
-h2 {
-  font-weight: bold;
+  margin: auto;
 }
 
 .scroller-content {
@@ -333,13 +310,12 @@ h2 {
     margin: unset;
   }
 
-  .scroller > .scroller-header {
-    margin-bottom: var(--spacer-sm);
+  .internal > ion-item {
+    margin-bottom: unset;
   }
 
   main {
     --page-width: 1040px;
-    margin: unset;
   }
 }
 </style>
