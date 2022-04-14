@@ -8,7 +8,8 @@
       </ion-select>
     </ion-item>
 
-    <ion-card>
+    <!-- TODO: handle the functionality to filter the product based on child categories -->
+    <!-- <ion-card>
       <ion-card-header>
         <ion-card-title>{{ $t("Child categories") }}</ion-card-title>
       </ion-card-header>
@@ -20,7 +21,7 @@
           <ion-label>PO #</ion-label>
         </ion-chip>
       </ion-card-content>
-    </ion-card>
+    </ion-card> -->
 
     <ion-item>
       <ion-label>{{ $t("Size") }}</ion-label>
@@ -58,7 +59,8 @@
       <ion-checkbox v-model="appliedFilters.backOrder" @ionChange="updateFilters($event['detail'].checked, 'backOrder')" />
     </ion-item>
 
-    <ion-card>
+    <!-- TODO: handle functionality to filter products on the basis of PO ids -->
+    <!-- <ion-card>
       <ion-card-header>
         <ion-card-title>{{ $t("Purchase orders") }}</ion-card-title>
       </ion-card-header>
@@ -70,10 +72,11 @@
           <ion-label>PO #2</ion-label>
         </ion-chip>
       </ion-card-content>
-    </ion-card>
+    </ion-card> -->
   </ion-list>
 
-  <ion-list>
+  <!-- TODO: handle the functionality to filter products on the basis of product store and facility -->
+  <!-- <ion-list>
     <ion-list-header><h3>{{ $t("Location") }}</h3></ion-list-header>
     <ion-item>
       <ion-label>{{ $t("Product Store") }}</ion-label>
@@ -87,7 +90,7 @@
         <ion-select-option value="any">California Warehouse</ion-select-option>
       </ion-select>
     </ion-item>
-  </ion-list>
+  </ion-list> -->
 </template>
 
 <script lang="ts">
