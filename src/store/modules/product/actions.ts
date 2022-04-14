@@ -93,15 +93,16 @@ const actions: ActionTree<ProductState, RootState> = {
     }
   },
 
-    /**
-   * Get Product Inventory
-   */
+  /**
+  * Get Product Inventory
+  */
   async getProducts({ commit, state }, payload) {
     let resp;
-    
-    try{
+
+    try {
       resp = await ProductService.getProducts(payload);
-      if(resp.status === 200 && resp.data.grouped.groupId?.ngroups > 0 && !hasError(resp)) {
+
+      if (resp.status === 200 && resp.data.grouped.groupId?.ngroups > 0 && !hasError(resp)) {
         let products = resp.data.grouped.groupId?.groups;
         const totalProductsCount = resp.data.grouped.groupId.ngroups;
         
@@ -145,7 +146,7 @@ const actions: ActionTree<ProductState, RootState> = {
       } else {
         showToast(translate("Products not found"));
       }
-    } catch(error) {
+    } catch (error) {
       console.error(error);
       showToast(translate("Something went wrong"));
     }
@@ -185,7 +186,58 @@ const actions: ActionTree<ProductState, RootState> = {
     } catch (err) {
       console.error(err)
     }
-  }
+  },
+
+  /**
+  * Get Product-inventory details
+  */
+  async getProductDetail({ dispatch, state }, { productId }) {
+    const current = state.current as any
+    
+    if(current && current.productId === productId) { return current }
+
+    let resp;
+    try {
+      const payload = {
+        "json": {
+          "params": {
+            "group": true,
+            "group.field": "groupId",
+            "group.limit": 10000,
+            "group.ngroups": true,
+          } as any,
+          "query": "*:*",
+          "filter": `docType: PRODUCT AND productId: ${productId}`
+        }
+      }
+      resp = await ProductService.getProductDetail(payload);
+
+      if(resp.status === 200 && resp.data.grouped.groupId?.groups.length > 0 && !hasError(resp)) {
+        let product = resp.data.grouped.groupId?.groups[0].doclist.docs[0]
+
+        product = {
+          productId: product.productId,
+          productName: product.productName,
+          brand: product.brandName,
+          externalId: product.internalName,
+          mainImage:product.mainImageUrl,
+          feature: product.productFeatures,
+          variants: product.variantProductIds
+        }
+
+        dispatch('updateCurrent', product);
+      } else {
+        showToast(translate("Product not found"));
+      }
+    } catch(err) {
+      console.error(err);
+      showToast(translate("Something went wrong"));
+    }
+    return resp;
+  },
+  updateCurrent({ commit }, payload) {
+    commit(types.PRODUCT_CURRENT_UPDATED, payload)
+  },
 }
 
 export default actions;

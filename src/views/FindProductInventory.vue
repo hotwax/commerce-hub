@@ -140,7 +140,7 @@
 
           <hr />
 
-          <div class="product" v-for="product in products" :key="product.productId" @click="() => router.push('/product-inventory')">
+          <div class="product" v-for="product in products" :key="product.productId" @click.prevent="viewProduct(product)">
             <div class="desktop-only">
               <Image :src="product.mainImageUrl" />
             </div>
@@ -327,6 +327,21 @@ export default defineComponent({
         Math.ceil(this.products.length / process.env.VUE_APP_VIEW_SIZE).toString()
       ).then(() => {
         event.target.complete();
+      })
+    },
+    async viewProduct(product: any) {
+      product = {
+        productId: product.productId,
+        productName: product.productName,
+        brand: this.getProduct(product.productId).brandName,
+        externalId: this.getProduct(product.productId).internalName,
+        mainImage: this.getProduct(product.productId).mainImageUrl,
+        feature: this.getProduct(product.productId).productFeatures,
+        variants: product.variants
+      }
+
+      await this.store.dispatch('product/updateCurrent', product).then(() => {
+        this.router.push(`/product-inventory/${product.productId}`)
       })
     }
   },

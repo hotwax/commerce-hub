@@ -16,7 +16,8 @@ const productModule: Module<ProductState, RootState> = {
       facilities: {
         list: [],
         total: 0
-      }
+      },
+      current: {}
     },
     getters,
     actions,

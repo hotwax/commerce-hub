@@ -23,6 +23,9 @@ const getters: GetterTree<ProductState, RootState> = {
   },
   getFacilities (state) {
     return state.facilities;
+  }, 
+  getCurrentProduct(state) {
+    return state.current;
   }
 };
 export default getters;

@@ -7,5 +7,6 @@ export default interface ProductState {
   facilities: {
     list: any,
     total: number
-  }
+  },
+  current: any
 }
