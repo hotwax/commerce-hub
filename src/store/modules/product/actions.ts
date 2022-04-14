@@ -120,13 +120,13 @@ const actions: ActionTree<ProductState, RootState> = {
           "group.ngroups": true,
         } as any,
         "query": "*:*",
-        "filter": "docType: PRODUCT"
+        "filter": "docType: PRODUCT AND groupId: *"
       }
     }
 
     if (params.queryString) {
       payload.json.params.defType = 'edismax'
-      payload.json.params.qf = 'productId productName sku internalName brandName'
+      payload.json.params.qf = 'productId productName sku internalName brandName groupId'
       payload.json.params['q.op'] = 'AND'
       payload.json.query = `*${params.queryString}*`
     }
