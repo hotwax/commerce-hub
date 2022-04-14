@@ -235,10 +235,10 @@ export default defineComponent({
       await this.store.dispatch('product/updateQuery', { viewSize, viewIndex, queryString: this.queryString });
     },
     async loadMoreProducts(event: any){
-      this.getProducts(
-        undefined,
-        Math.ceil(this.products.length / process.env.VUE_APP_VIEW_SIZE).toString()
-      ).then(() => {
+      const viewSize = process.env.VUE_APP_VIEW_SIZE;
+      const viewIndex = Math.ceil(this.products.length / process.env.VUE_APP_VIEW_SIZE).toString()
+
+      await this.store.dispatch('product/updateQuery', { viewSize, viewIndex }).then(() => {
         event.target.complete();
       })
     },

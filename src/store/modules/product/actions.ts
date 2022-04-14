@@ -118,11 +118,11 @@ const actions: ActionTree<ProductState, RootState> = {
       }
     }
 
-    if (params.queryString) {
+    if (state.currentProductFilterSelected.queryString) {
       payload.json.params.defType = 'edismax'
       payload.json.params.qf = 'productId productName sku internalName brandName'
       payload.json.params['q.op'] = 'AND'
-      payload.json.query = `*${params.queryString}*`
+      payload.json.query = `*${state.currentProductFilterSelected.queryString}*`
     }
     
     // updating the filters value in json object as per the filters selected
@@ -227,9 +227,9 @@ const actions: ActionTree<ProductState, RootState> = {
     return resp;
   },
   
-  async updateProductFilters({ commit, dispatch }, payload) {
+  async updateProductFilters({ commit, dispatch, state }, payload) {
     commit(types.PRODUCT_FILTERS_CURRENT_UPDATED, payload);
-    await dispatch('updateQuery', { viewSize: process.env.VUE_APP_VIEW_SIZE, viewIndex: 0 });
+    await dispatch('updateQuery', { viewSize: process.env.VUE_APP_VIEW_SIZE, viewIndex: 0, 'queryString': state.currentProductFilterSelected.queryString });
   }
 }
 
