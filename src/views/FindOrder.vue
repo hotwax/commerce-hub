@@ -34,7 +34,7 @@
     <ion-content id="content">
       <div class="find">
         <section class="search">
-          <ion-searchbar v-model="queryString" @keyup.enter="queryString = $event.target.value; getOrders()"/>
+          <ion-searchbar v-model="queryString" @keyup.enter="queryString = $event.target.value; updateQueryString()"/>
         </section>
 
         <aside class="filters desktop-only">
@@ -251,18 +251,17 @@ export default defineComponent ({
     async sortOrders(value: string) {
       this.sort = value
       await this.store.dispatch('order/updateSort', this.sort)
-      this.getOrders();
     },
-    async getOrders(vSize?: any, vIndex?: any) {
-      const viewSize = vSize ? vSize : process.env.VUE_APP_VIEW_SIZE;
-      const viewIndex = vIndex ? vIndex : 0;
-
-      const resp = await this.store.dispatch('order/updateQuery', { viewSize, viewIndex, queryString: this.queryString })
+    async getOrders() {
+      const resp = await this.store.dispatch('order/updateQuery')
 
       if (resp.status == 200 && resp.data.facets) {
         this.orderStatusOptions = this.orderStatusOptions.length > 1 || resp.data.facets?.orderStatusIdFacet?.buckets.length < this.orderStatusOptions.length ? this.orderStatusOptions : this.orderStatusOptions.concat(resp.data.facets?.orderStatusIdFacet?.buckets.map((status: any) => status.val))
         this.shippingMethodOptions = this.shippingMethodOptions.length > 1 || resp.data.facets?.shipmentMethodTypeIdFacet?.buckets.length < this.shippingMethodOptions.length ? this.shippingMethodOptions : this.shippingMethodOptions.concat(resp.data.facets?.shipmentMethodTypeIdFacet?.buckets.map((shippingMethod: any) => shippingMethod.val))
       }
+    },
+    async updateQueryString() {
+      await this.store.dispatch('order/updateAppliedFilters', { value: this.queryString, filterName: 'queryString' })
     },
     async copyToClipboard(text: any) {
       await Clipboard.write({
@@ -272,10 +271,14 @@ export default defineComponent ({
       })
     },
     async loadMoreOrders(event: any) {
-      this.getOrders(
-        undefined,
-        Math.ceil(this.orders.length / process.env.VUE_APP_VIEW_SIZE).toString()
-      ).then(() => {
+      await this.store.dispatch('order/updateQuery', {
+        viewSize: undefined,
+        viewIndex: Math.ceil(this.orders.length / process.env.VUE_APP_VIEW_SIZE).toString()
+      }).then((resp) => {
+        if (resp.status == 200 && resp.data.facets) {
+          this.orderStatusOptions = this.orderStatusOptions.length > 1 || resp.data.facets?.orderStatusIdFacet?.buckets.length < this.orderStatusOptions.length ? this.orderStatusOptions : this.orderStatusOptions.concat(resp.data.facets?.orderStatusIdFacet?.buckets.map((status: any) => status.val))
+          this.shippingMethodOptions = this.shippingMethodOptions.length > 1 || resp.data.facets?.shipmentMethodTypeIdFacet?.buckets.length < this.shippingMethodOptions.length ? this.shippingMethodOptions : this.shippingMethodOptions.concat(resp.data.facets?.shipmentMethodTypeIdFacet?.buckets.map((shippingMethod: any) => shippingMethod.val))
+        }
         event.target.complete();
       })
     },

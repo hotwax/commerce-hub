@@ -124,12 +124,13 @@ const actions: ActionTree<OrderState, RootState> = {
       payload.value = poIds
     }
     commit(types.ORDER_FILTERS_UPDATED, payload)
-    const resp = await dispatch('updateQuery', { viewSize: process.env.VUE_APP_VIEW_SIZE, viewIndex: 0, queryString: state.query.queryString })
+    const resp = await dispatch('updateQuery')
     return resp;
   },
 
-  async updateSort({ commit }, payload) {
+  async updateSort({ commit, dispatch }, payload) {
     commit(types.ORDER_SORT_UPDATED, payload)
+    await dispatch('updateQuery')
   },
 
   async updatePoIds({ commit }, payload) {
@@ -138,14 +139,9 @@ const actions: ActionTree<OrderState, RootState> = {
   },
 
   async updateQuery({ state, dispatch }, params) {
-    await dispatch('updateQueryString', params.queryString)
     const query = prepareOrderQuery({ ...(state.query), poIds: state.poIds, ...params})
     const resp = await dispatch('findOrders', query)
     return resp;
-  },
-
-  async updateQueryString({ commit }, queryString) {
-    commit(types.ORDER_FILTERS_UPDATED, { 'filterName': 'queryString', 'value': queryString })
   },
 
   async fetchStatusChange({ commit }) {
