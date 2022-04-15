@@ -22,7 +22,6 @@ const getters: GetterTree<ProductState, RootState> = {
     return state.products.list;
   },
   getFacilities (state) {
-    console.log('getter', state.facilities)
     return state.facilities;
   }, 
   getCurrentProduct(state) {

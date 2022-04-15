@@ -213,14 +213,16 @@
 
             <div class="actions">
               <div>
-                <ion-chip @click="filter('all')">
-                  <ion-icon :icon="checkmarkOutline" />
+                <ion-chip @click="filter('all'), setSelected('all')">
+                  <ion-icon v-show="selected === 'all'" :icon="checkmarkOutline" />
                   <ion-label>All</ion-label>
                 </ion-chip>
-                <ion-chip @click="filter('RETAIL_STORE')">
+                <ion-chip @click="filter('RETAIL_STORE'), setSelected('retail')">
+                  <ion-icon v-show="selected === 'retail'" :icon="checkmarkOutline" />
                   <ion-label>Retail</ion-label>
                 </ion-chip>
-                <ion-chip @click="filter('WAREHOUSE')">
+                <ion-chip @click="filter('WAREHOUSE'), setSelected('warehouse')">
+                  <ion-icon v-show="selected === 'warehouse'" :icon="checkmarkOutline" />
                   <ion-label>Warehouses</ion-label>
                 </ion-chip>
               </div>
@@ -303,7 +305,7 @@
                   <p>{{ $t("QOH") }}</p>
                 </ion-label>
                 <ion-label>
-                  {{ facility.minimumStock }}
+                  {{ facility.minimumStock ? facility.minimumStock : "-"}}
                   <p>{{ $t("safety stock") }}</p>
                 </ion-label>            
                 <ion-label class="tablet">
@@ -622,14 +624,20 @@ export default defineComponent({
   },
   data () {
     return {
-      filteredFacilities: [] as any
+      filteredFacilities: [] as any,
+      selected: 'all'
     }
   },
   methods: {
+    setSelected(value: any){
+      this.selected = value;
+    },
     totalQuantity(value: any){
       let total = 0;
       this.filteredFacilities.forEach((facility: any) => {
-        total = total + facility[value];
+        if(facility[value]){
+          total = total + facility[value];
+        }
       });
       return total;
     },
