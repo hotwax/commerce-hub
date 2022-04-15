@@ -1,5 +1,3 @@
-import store from "@/store";
-
 const prepareOrderQuery = (query: any) => {
   const typeFilterSelected = [];
   const viewSize = query.viewSize ? query.viewSize : process.env.VUE_APP_VIEW_SIZE;
@@ -39,10 +37,10 @@ const prepareOrderQuery = (query: any) => {
     }
   }
 
-  if (store.state.order.query.queryString) {
+  if (query.queryString) {
     payload.json.params.defType = 'edismax'
     payload.json.params.qf = 'orderId customerPartyName customerPartyId productId internalName'
-    payload.json.query = `*${store.state.order.query.queryString}*`
+    payload.json.query = `*${query.queryString}*`
   }
 
   // updating the filter value in json object as per the filters selected
