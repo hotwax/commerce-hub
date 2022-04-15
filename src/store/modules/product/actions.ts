@@ -185,8 +185,8 @@ const actions: ActionTree<ProductState, RootState> = {
           productName: product.productName,
           brand: product.brandName,
           externalId: product.internalName,
-          mainImage:product.mainImageUrl,
-          feature: product.productFeatures,
+          mainImage: product.mainImageUrl,
+          features: product.productFeatures,
           variants: product.variantProductIds
         }
 

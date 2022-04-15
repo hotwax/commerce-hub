@@ -330,13 +330,15 @@ export default defineComponent({
       })
     },
     async viewProduct(product: any) {
+      const virtual = this.getProduct(product.productId);
+
       product = {
         productId: product.productId,
         productName: product.productName,
-        brand: this.getProduct(product.productId).brandName,
-        externalId: this.getProduct(product.productId).internalName,
-        mainImage: this.getProduct(product.productId).mainImageUrl,
-        feature: this.getProduct(product.productId).productFeatures,
+        brand: virtual.brandName,
+        externalId: virtual.internalName,
+        mainImage: virtual.mainImageUrl,
+        features: virtual.productFeatures,
         variants: product.variants
       }
 
