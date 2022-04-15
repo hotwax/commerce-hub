@@ -71,7 +71,7 @@ const prepareOrderQuery = (query: any) => {
 
   payload.json.filter = payload.json.filter.concat(` AND facilityId: (${typeFilterValues ? typeFilterValues : '*'})`)
 
-  if (query.shipFromLocation !== 'any') {
+  if (query.shipFromLocation) {
     payload.json.filter = payload.json.filter.concat(` AND facilityTypeId: ${query.shipFromLocation}`)
   }
 
