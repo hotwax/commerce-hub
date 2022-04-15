@@ -16,7 +16,7 @@ const orderModule: Module<OrderState, RootState> ={
     query: {
       'status': 'any',
       'shippingMethod': 'any',
-      'shipFromLocation': 'any',
+      'shipFromLocation': '',
       'storePickup': false,
       'shipFromStore': false,
       'preOrder': false,
