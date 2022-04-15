@@ -4,9 +4,6 @@ export default interface ProductState {
     list: any;
     total: number;
   }
-  facilities: {
-    list: any,
-    total: number
-  },
-  current: any
+  facilities: [];
+  current: any;
 }

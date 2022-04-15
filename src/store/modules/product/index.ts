@@ -13,10 +13,7 @@ const productModule: Module<ProductState, RootState> = {
         list: [],
         total: 0
       },
-      facilities: {
-        list: [],
-        total: 0
-      },
+      facilities: [],
       current: {}
     },
     getters,

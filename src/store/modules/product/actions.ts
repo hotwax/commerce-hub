@@ -152,40 +152,74 @@ const actions: ActionTree<ProductState, RootState> = {
     }
     return resp;
   },
-  async getFacilities({commit, dispatch}) {
+  async getFacilities({commit, dispatch}, productId) {
+    let resp;
     try {
       let facilityIds = [] as any;
-      const resp = await ProductService.getFacility({
+      resp = await ProductService.getFacility({
         "entityName": "Facility",
         "noConditionFind": "Y",
         "viewSize": 30
       });
-      console.log(resp);
       facilityIds = resp.data.docs.map((facility: any) => {
         return facility.facilityId
       })
-      console.log(facilityIds)
-      dispatch('getFacilityInformation', facilityIds)
-      commit(types.PRODUCT_FACILITY_UPDATED, { list: resp.data.docs, total: resp.data.count });
+      
+      const facilityInformation = await dispatch('getFacilityInformation', {facilityIds, productId})
+      const facilitiesPromises = await Promise.all(resp.data.docs.map( async (facility: any) => {
+        const getProductInventoryResp =  await dispatch('getProductInventoryInformation', {
+          productId: "10097",
+          facilityId: facility.facilityId
+        })
+        
+        facility['accountingQuantityTotal'] = getProductInventoryResp.accountingQuantityTotal
+        facility.availableToPromiseTotal = getProductInventoryResp.availableToPromiseTotal
+        facility.quantityOnHandTotal = getProductInventoryResp.quantityOnHandTotal
+        
+        const facilityFound = facilityInformation.find((facilityInfo: any) => {
+          return facilityInfo.facilityId === facility.facilityId;
+        })
+        if(facilityFound){
+          facility.minimumStock = facilityFound.minimumStock
+        } else {
+          facility.minimumStock = "-"
+        }
+        return facility;
+      }))
+      const facilities =  facilitiesPromises;
+      commit(types.PRODUCT_FACILITY_UPDATED,  facilities);
     } catch (err) {
       console.error(err)
     }
   },
-  async getFacilityInformation({commit}, facilityIds) {
+async getFacilityInformation({commit}, payload) {
+    let resp;
     try {
-      const resp = await ProductService.getFacility({
+      resp = await ProductService.getFacility({
         "inputFields": {
-          "facilityId": facilityIds
+          "facilityId": payload.facilityIds,
+          "productId": "10097",
+          "facilityId_op": "in"
         },
         "entityName": "ProductFacility",
+        "fieldList": ["facilityId", "minimumStock"],
         "noConditionFind": "Y",
         "viewSize": 30
       });
-      console.log(resp);
-      // commit(types.PRODUCT_FACILITY_UPDATED, { list: resp.data.docs, total: resp.data.count });
     } catch (err) {
       console.error(err)
     }
+    return resp.data?.docs
+  },
+
+  async getProductInventoryInformation({commit}, payload){
+    let resp;
+    try {
+      resp = await ProductService.getProductInventoryAvailable(payload);
+    } catch (err) {
+      console.error(err)
+    }
+    return resp.data;
   },
 
   /**
