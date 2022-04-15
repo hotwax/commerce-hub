@@ -82,7 +82,7 @@ app.config.globalProperties.$filters = {
       })
     }
     return featuresList;
-  }
+  },
 }
 
 
