@@ -14,8 +14,8 @@ const orderModule: Module<OrderState, RootState> ={
     },
     poIds: {},
     query: {
-      'status': 'any',
-      'shippingMethod': 'any',
+      'status': '',
+      'shippingMethod': '',
       'shipFromLocation': '',
       'storePickup': false,
       'shipFromStore': false,

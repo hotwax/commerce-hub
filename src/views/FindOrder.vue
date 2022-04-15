@@ -240,8 +240,8 @@ export default defineComponent ({
   },
   data() {
     return {
-      shippingMethodOptions: ['any'],
-      orderStatusOptions: ['any'],
+      shippingMethodOptions: [''],
+      orderStatusOptions: [''],
       sort: 'orderDate desc',
       showOrderItems: true,
       poIds: {} as any

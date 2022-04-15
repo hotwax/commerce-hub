@@ -51,13 +51,13 @@
     <ion-item>
       <ion-label>{{ $t("Status") }}</ion-label>
       <ion-select :value="query.status" @ionChange="updateAppliedFilters($event['detail'].value, 'status')" interface="popover">
-        <ion-select-option v-for="status in orderStatusOptions" :key="status" :value="status">{{ orderStatus[status]?.label ? orderStatus[status]?.label : status }}</ion-select-option>
+        <ion-select-option v-for="status in orderStatusOptions" :key="status" :value="status">{{ status ? ( orderStatus[status]?.label ? orderStatus[status]?.label : status ) : "any" }}</ion-select-option>
       </ion-select>
     </ion-item>
     <ion-item>
       <ion-label>{{ $t("Shipping method") }}</ion-label>
       <ion-select :value="query.shippingMethod" @ionChange="updateAppliedFilters($event['detail'].value, 'shippingMethod')" interface="popover">
-        <ion-select-option v-for="method in shippingMethodOptions" :key="method" :value="method">{{ method === 'any' ? 'any' : getShipmentMethodDesc(method) }}</ion-select-option>
+        <ion-select-option v-for="shippingMethod in shippingMethodOptions" :key="shippingMethod" :value="shippingMethod">{{ shippingMethod  ? getShipmentMethodDesc(shippingMethod) : 'any' }}</ion-select-option>
       </ion-select>
     </ion-item>
     <ion-item>

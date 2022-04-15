@@ -20,7 +20,7 @@ const prepareOrderQuery = (query: any) => {
       "facet": {
         "orderStatusIdFacet": {
             "field": "orderStatusId",
-            "mincount": 0,
+            "mincount": 1,
             "limit": -1,
             "sort": "index",
             "type": "terms"
@@ -28,7 +28,7 @@ const prepareOrderQuery = (query: any) => {
         "shipmentMethodTypeIdFacet": {
           "excludeTags": "shipmentMethodTypeIdFilter",
           "field": "shipmentMethodTypeId",
-          "mincount": 0,
+          "mincount": 1,
           "limit": -1,
           "sort": "index",
           "type": "terms"
@@ -73,13 +73,9 @@ const prepareOrderQuery = (query: any) => {
     payload.json.filter = payload.json.filter.concat(` AND facilityTypeId: ${query.shipFromLocation}`)
   }
 
-  if (query.status) {
-    payload.json.filter = payload.json.filter.concat(` AND orderStatusId: ${query.status !== 'any' ? query.status : '*'}`)
-  }
+  payload.json.filter = payload.json.filter.concat(` AND orderStatusId: ${query.status ? query.status : '*'}`)
 
-  if (query.shippingMethod) {
-    payload.json.filter = payload.json.filter.concat(` AND shipmentMethodTypeId: ${query.shippingMethod !== 'any' ? query.shippingMethod : '*' }`)
-  }
+  payload.json.filter = payload.json.filter.concat(` AND shipmentMethodTypeId: ${query.shippingMethod ? query.shippingMethod : '*' }`)
 
   // TODO: improve logic to pass the date in the solr-query payload
   if (query.orderCreated) {
