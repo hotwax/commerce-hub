@@ -93,21 +93,15 @@ const actions: ActionTree<ProductState, RootState> = {
     }
   },
 
-  // Update QueryString
-  async updateQueryString({ commit }, queryString) {
-    commit(types.PRODUCT_FILTERS_CURRENT_UPDATED, { 'filterName': 'queryString', 'value': queryString })
-  },
-
   // Update Query
   async updateQuery({ state, dispatch }, params) {
-    await dispatch('updateQueryString', params.queryString)
     const typeFilterSelected = [] as any;
 
     const payload = {
       "json": {
         "params": {
-          "rows": params.viewSize,
-          "start": params.viewIndex * params.viewSize,
+          "rows": params?.viewSize ? params?.viewSize : process.env.VUE_APP_VIEW_SIZE,
+          "start": params?.viewIndex ? params?.viewIndex * params?.viewSize : 0,
           "group": true,
           "group.field": "groupId",
           "group.limit": 10000,
@@ -229,7 +223,7 @@ const actions: ActionTree<ProductState, RootState> = {
   
   async updateProductFilters({ commit, dispatch, state }, payload) {
     commit(types.PRODUCT_FILTERS_CURRENT_UPDATED, payload);
-    await dispatch('updateQuery', { viewSize: process.env.VUE_APP_VIEW_SIZE, viewIndex: 0, 'queryString': state.currentProductFilterSelected.queryString });
+    await dispatch('updateQuery');
   }
 }
 

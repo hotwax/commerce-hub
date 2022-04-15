@@ -32,7 +32,7 @@
     <ion-content id="content">
       <div class="find">
         <section class="search">
-          <ion-searchbar v-model="queryString" @keyup.enter="queryString = $event.target.value; getProducts()" />
+          <ion-searchbar v-model="queryString" @keyup.enter="queryString = $event.target.value; updateQueryString()" />
         </section>
 
         <aside class="filters desktop-only">
@@ -229,10 +229,10 @@ export default defineComponent({
   },
   methods: {
     async getProducts(vSize?: any, vIndex?: any) {
-      const viewSize = vSize ? vSize : process.env.VUE_APP_VIEW_SIZE;
-      const viewIndex = vIndex ? vIndex : 0;
-
-      await this.store.dispatch('product/updateQuery', { viewSize, viewIndex, queryString: this.queryString });
+      await this.store.dispatch('product/updateQuery');
+    },
+    async updateQueryString() {
+      await this.store.dispatch('product/updateProductFilters', { value: this.queryString, filterName: 'queryString' })
     },
     async loadMoreProducts(event: any){
       const viewSize = process.env.VUE_APP_VIEW_SIZE;
