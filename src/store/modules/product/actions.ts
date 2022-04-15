@@ -165,20 +165,13 @@ const actions: ActionTree<ProductState, RootState> = {
     try {
       const payload = {
         "json": {
-          "params": {
-            "group": true,
-            "group.field": "groupId",
-            "group.limit": 10000,
-            "group.ngroups": true,
-          } as any,
           "query": "*:*",
           "filter": `docType: PRODUCT AND productId: ${productId}`
         }
       }
       resp = await ProductService.getProductDetail(payload);
-
-      if(resp.status === 200 && resp.data.grouped.groupId?.groups.length > 0 && !hasError(resp)) {
-        let product = resp.data.grouped.groupId?.groups[0].doclist.docs[0]
+      if(resp.status === 200 && resp.data.response?.docs.length > 0 && !hasError(resp)) {
+        let product = resp.data.response?.docs[0]
 
         product = {
           productId: product.productId,
