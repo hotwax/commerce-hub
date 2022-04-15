@@ -194,7 +194,6 @@ import { Plugins } from '@capacitor/core';
 import Image from '@/components/Image.vue';
 import { useRouter } from 'vue-router';
 import OrderFilters from '@/components/OrderFilters.vue'
-import emitter from '@/event-bus';
 import { OrderService } from '@/services/OrderService';
 
 const { Clipboard } = Plugins;
@@ -254,7 +253,7 @@ export default defineComponent ({
       await this.store.dispatch('order/updateSort', this.sort)
     },
     async getOrders() {
-      const resp = await this.store.dispatch('order/updateQuery')
+      const resp = await this.store.dispatch('order/findOrders')
 
       if (resp.status == 200 && resp.data.facets) {
         this.orderStatusOptions = this.orderStatusOptions.length > 1 || resp.data.facets?.orderStatusIdFacet?.buckets.length < this.orderStatusOptions.length ? this.orderStatusOptions : this.orderStatusOptions.concat(resp.data.facets?.orderStatusIdFacet?.buckets.map((status: any) => status.val))
@@ -272,7 +271,7 @@ export default defineComponent ({
       })
     },
     async loadMoreOrders(event: any) {
-      await this.store.dispatch('order/updateQuery', {
+      await this.store.dispatch('order/findOrders', {
         viewSize: undefined,
         viewIndex: Math.ceil(this.orders.length / process.env.VUE_APP_VIEW_SIZE).toString()
       }).then((resp) => {

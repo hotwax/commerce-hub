@@ -11,10 +11,11 @@ import { prepareOrderQuery } from '@/utils/solrHelper'
 const actions: ActionTree<OrderState, RootState> = {
   
   // Find Orders
-  async findOrders ( { commit, state }, payload) {
+  async findOrders ( { commit, state }, params) {
     let resp;
+    const query = prepareOrderQuery({ ...(state.query), poIds: state.poIds, ...params})
     try {
-      resp = await OrderService.findOrder(payload)
+      resp = await OrderService.findOrder(query)
       if (resp && resp.status === 200 && !hasError(resp)) {
         let orders = resp.data.grouped.orderId.groups.map((order: any) => {
           order.orderId = order.doclist.docs[0].orderId
@@ -39,7 +40,7 @@ const actions: ActionTree<OrderState, RootState> = {
         })
 
         const total = resp.data.grouped.orderId.ngroups;
-        if (payload.json.params.start && payload.json.params.start > 0) orders = state.list.orders.concat(orders)
+        if (query.json.params.start && query.json.params.start > 0) orders = state.list.orders.concat(orders)
         this.dispatch('product/getProductInformation', { orders });
         commit(types.ORDER_LIST_UPDATED, { orders, total });
       } else {
@@ -124,24 +125,18 @@ const actions: ActionTree<OrderState, RootState> = {
       payload.value = poIds
     }
     commit(types.ORDER_FILTERS_UPDATED, payload)
-    const resp = await dispatch('updateQuery')
+    const resp = await dispatch('findOrders')
     return resp;
   },
 
   async updateSort({ commit, dispatch }, payload) {
     commit(types.ORDER_SORT_UPDATED, payload)
-    await dispatch('updateQuery')
+    await dispatch('findOrders')
   },
 
   async updatePoIds({ commit }, payload) {
     commit(types.ORDER_PO_ID_UPDATED, payload)
     return payload;
-  },
-
-  async updateQuery({ state, dispatch }, params) {
-    const query = prepareOrderQuery({ ...(state.query), poIds: state.poIds, ...params})
-    const resp = await dispatch('findOrders', query)
-    return resp;
   },
 
   async fetchStatusChange({ commit }) {
