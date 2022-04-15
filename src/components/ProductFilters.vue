@@ -76,21 +76,21 @@
   </ion-list>
 
   <!-- TODO: handle the functionality to filter products on the basis of product store and facility -->
-  <!-- <ion-list>
+  <ion-list>
     <ion-list-header><h3>{{ $t("Location") }}</h3></ion-list-header>
     <ion-item>
       <ion-label>{{ $t("Product Store") }}</ion-label>
-      <ion-select value="any" interface="popover">
-        <ion-select-option value="any">Australia</ion-select-option>
+      <ion-select :value="appliedFilters.productStore" interface="popover" @ionChange="updateFilters($event['detail'].value, 'productStore')">
+        <ion-select-option :value="store.productStoreId" v-for="store in productStores.concat({'productStoreId': 'any', 'storeName': 'any'})" :key="store.productStoreId">{{ store.storeName }}</ion-select-option>
       </ion-select>
     </ion-item>
-    <ion-item>
+    <!-- <ion-item>
       <ion-label>{{ $t("Facility") }}</ion-label>
       <ion-select value="any" interface="popover">
         <ion-select-option value="any">California Warehouse</ion-select-option>
       </ion-select>
-    </ion-item>
-  </ion-list> -->
+    </ion-item> -->
+  </ion-list>
 </template>
 
 <script lang="ts">
@@ -131,7 +131,8 @@ export default defineComponent({
   },
   computed: {
     ...mapGetters({
-      appliedFilters: 'product/getcurrentProductFilters'
+      appliedFilters: 'product/getcurrentProductFilters',
+      productStores: 'util/getProductStores'
     })
   },
   props: ["categories", "colors", "sizes", "tags"],

@@ -324,6 +324,7 @@ export default defineComponent({
     this.getCategories();
     this.getFeatures();
     this.getTags();
+    this.store.dispatch('util/fetchEcomStores')
   },
   setup() {
     const router = useRouter();
