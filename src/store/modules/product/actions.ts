@@ -93,6 +93,89 @@ const actions: ActionTree<ProductState, RootState> = {
     }
   },
 
+  // Update QueryString
+  async updateQueryString({ commit }, queryString) {
+    commit(types.PRODUCT_FILTERS_CURRENT_UPDATED, { 'filterName': 'queryString', 'value': queryString })
+  },
+
+  // update sorting order
+  async updateSortOption({ commit }, payload) {
+    commit(types.PRODUCT_SORT_UPDATED, payload)
+  },
+
+  // Update Query
+  async updateQuery({ state, dispatch }, params) {
+    await dispatch('updateQueryString', params.queryString)
+    const typeFilterSelected = [] as any;
+
+    const payload = {
+      "json": {
+        "params": {
+          "sort": `parentProductName ${state.currentProductFilterSelected.sort}`,
+          "rows": params.viewSize,
+          "start": params.viewIndex * params.viewSize,
+          "group": true,
+          "group.field": "groupId",
+          "group.limit": 10000,
+          "group.ngroups": true,
+        } as any,
+        "query": "*:*",
+        "filter": "docType: PRODUCT AND groupId: *"
+      }
+    }
+
+    if (params.queryString) {
+      payload.json.params.defType = 'edismax'
+      payload.json.params.qf = 'productId productName sku internalName brandName groupId'
+      payload.json.params['q.op'] = 'AND'
+      payload.json.query = `*${params.queryString}*`
+    }
+    
+    // updating the filters value in json object as per the filters selected
+    if(state.currentProductFilterSelected.category !== 'All') {
+      payload.json.filter = payload.json.filter.concat(` AND productCategories: ${state.currentProductFilterSelected.category}`)
+    }
+
+    if(state.currentProductFilterSelected.color !== 'All') {
+      payload.json.filter = payload.json.filter.concat(` AND productFeatureIds: ${state.currentProductFilterSelected.color}`)
+    }
+
+    if(state.currentProductFilterSelected.size !== 'All') {
+      payload.json.filter = payload.json.filter.concat(` AND productFeatureIds: ${state.currentProductFilterSelected.size}`)
+    }
+
+    if(state.currentProductFilterSelected.tags.length > 0) {
+      const tagFilters = state.currentProductFilterSelected.tags.reduce((filter: string, tag: any) => {
+        if (filter !== '') filter += ' OR '
+        return filter += tag;
+      }, '');
+
+      payload.json.filter = payload.json.filter.concat(' AND tags: (' + tagFilters + ')')
+    }
+
+    if(state.currentProductFilterSelected.preOrder) {
+      typeFilterSelected.push('PRE-ORDER')
+    }
+
+    if(state.currentProductFilterSelected.backOrder) {
+      typeFilterSelected.push('BACKORDER')
+    }
+
+    if(state.currentProductFilterSelected.productStore !== 'any') {
+      payload.json.filter = payload.json.filter.concat(` AND productStoreIds: ${state.currentProductFilterSelected.productStore}`)
+    }
+
+    const typeFilterValues = typeFilterSelected.toString().replaceAll(',', ' OR ')
+
+    if(typeFilterValues) {
+      payload.json.filter = payload.json.filter.concat(` AND keywordSearchText: (${typeFilterValues ? typeFilterValues : '*'})`)
+    }
+
+    const resp = dispatch("getProducts", payload);
+
+    return resp;
+  },
+
     /**
    * Get Product Inventory
    */
@@ -144,12 +227,24 @@ const actions: ActionTree<ProductState, RootState> = {
         commit(types.PRODUCT_LIST_UPDATED, { products, totalProductsCount });
       } else {
         showToast(translate("Products not found"));
+        commit(types.PRODUCT_LIST_UPDATED, { products: [], totalProductsCount: 0 });
       }
     } catch(error) {
       console.error(error);
+      commit(types.PRODUCT_LIST_UPDATED, { products: [], totalProductsCount: 0 });
       showToast(translate("Something went wrong"));
     }
     return resp;
+  },
+  
+  async updateProductFilters({ commit, dispatch, state }, payload) {
+    if (payload.filterName === 'tags') {
+      const tags = state.currentProductFilterSelected.tags;
+      !tags.includes(payload.value) ? tags.push(payload.value) : tags.splice(tags.indexOf(payload.value), 1)
+      payload.value = tags
+    }
+    commit(types.PRODUCT_FILTERS_CURRENT_UPDATED, payload);
+    await dispatch('updateQuery', { viewSize: process.env.VUE_APP_VIEW_SIZE, viewIndex: 0 });
   }
 }
 

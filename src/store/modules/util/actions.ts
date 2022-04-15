@@ -26,6 +26,26 @@ const actions: ActionTree<UtilState, RootState> = {
     } catch (err) {
       console.error("error", err);
     }
+  },
+
+  async fetchEcomStores({ commit }) {
+    const payload = {
+      "viewSize": 100,
+      "fieldList": ["productStoreId", "storeName"],
+      "entityName": "ProductStore",
+      "distinct": "Y",
+      "noConditionFind": "Y"
+    }
+    try {
+      const resp = await UtilService.fetchEcomStores(payload);
+      if (resp.status === 200 && resp.data.docs?.length > 0 && !hasError(resp)) {
+        commit(types.UTIL_PRODUCT_STORE_UPDATED, resp.data.docs)
+      } else {
+        console.error("error", resp.data._ERROR_MESSAGE_)
+      }
+    } catch (err) {
+      console.error("error", err);
+    }
   }
 }
 

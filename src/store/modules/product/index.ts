@@ -12,6 +12,17 @@ const productModule: Module<ProductState, RootState> = {
       products: {
         list: [],
         total: 0
+      },
+      currentProductFilterSelected: {
+        category: 'All',
+        color: 'All',
+        size: 'All',
+        tags: [],
+        preOrder: false,
+        backOrder: false,
+        queryString: '',
+        sort: 'asc',
+        productStore: 'any'
       }
     },
     getters,

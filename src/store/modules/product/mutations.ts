@@ -16,6 +16,12 @@ const mutations: MutationTree <ProductState> = {
   },
   [types.PRODUCT_CACHED_UPDATED](state, payload) {
     state.cached = payload.cached
+  },
+  [types.PRODUCT_FILTERS_CURRENT_UPDATED](state, payload) {
+    state.currentProductFilterSelected[payload.filterName] = payload.value;
+  },
+  [types.PRODUCT_SORT_UPDATED](state, payload) {
+    state.currentProductFilterSelected.sort = payload;
   }
 }
 export default mutations;
