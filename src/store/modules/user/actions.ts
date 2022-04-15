@@ -85,7 +85,7 @@ const actions: ActionTree<UserState, RootState> = {
   },
 
   // Set User Instance Url
-  setUserInstanceUrl ({ state, commit }, payload){
+  setUserInstanceUrl ({ commit }, payload){
     commit(types.USER_INSTANCE_URL_UPDATED, payload)
   }
 }
