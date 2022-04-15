@@ -64,8 +64,8 @@
       <ion-label>{{ $t("Ship from location") }}</ion-label>
       <ion-select :value="query.shipFromLocation" @ionChange="updateAppliedFilters($event['detail'].value, 'shipFromLocation')" interface="popover">
         <ion-select-option value="any" >{{ $t('any') }}</ion-select-option>
-        <ion-select-option value="store" >{{ $t('Store') }}</ion-select-option>
-        <ion-select-option value="warehouse" >{{ $t('Warehouse') }}</ion-select-option>
+        <ion-select-option value="RETAIL_STORE" >{{ $t('Store') }}</ion-select-option>
+        <ion-select-option value="WAREHOUSE" >{{ $t('Warehouse') }}</ion-select-option>
       </ion-select>
     </ion-item>
   </ion-list>

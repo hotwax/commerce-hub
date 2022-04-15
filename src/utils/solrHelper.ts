@@ -71,10 +71,8 @@ const prepareOrderQuery = (query: any) => {
 
   payload.json.filter = payload.json.filter.concat(` AND facilityId: (${typeFilterValues ? typeFilterValues : '*'})`)
 
-  if (query.shipFromLocation === 'store') {
-    payload.json.filter = payload.json.filter.concat(' AND facilityTypeId: RETAIL_STORE')
-  } else if (query.shipFromLocation === 'warehouse') {
-    payload.json.filter = payload.json.filter.concat(' AND facilityTypeId: WAREHOUSE')
+  if (query.shipFromLocation !== 'any') {
+    payload.json.filter = payload.json.filter.concat(` AND facilityTypeId: ${query.shipFromLocation}`)
   }
 
   if (query.status) {
