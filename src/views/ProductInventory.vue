@@ -122,15 +122,15 @@
               <ion-card-header>
                 <ion-card-title>{{ $t("Shipping method") }}</ion-card-title>
               </ion-card-header>
-              <ion-item detail button>
+              <ion-item detail button @click="openFindOrderPage('STOREPICKUP')">
                 <ion-label>{{ $t("Store pickup") }}</ion-label>
                 <ion-note slot="end">{{ product?.variantOrderDetails && product.variantOrderDetails['10097']?.shipmentMethod['STOREPICKUP'] ? product.variantOrderDetails['10097']?.shipmentMethod['STOREPICKUP'] : '-'  }}</ion-note>
               </ion-item>
-              <ion-item detail button>
+              <ion-item detail button @click="openFindOrderPage('STANDARD')">
                 <ion-label>{{ $t("Standard") }}</ion-label>
                 <ion-note slot="end">{{ product?.variantOrderDetails && product.variantOrderDetails['10097']?.shipmentMethod['STANDARD'] ? product.variantOrderDetails['10097']?.shipmentMethod['STANDARD']: '-' }}</ion-note>
               </ion-item>
-              <ion-item lines="none" detail button>
+              <ion-item lines="none" detail button @click="openFindOrderPage('NEXT_DAY')">
                 <ion-label>{{ $t("Expedited") }}</ion-label>
                 <ion-note slot="end">{{ product?.variantOrderDetails && product.variantOrderDetails['10097']?.shipmentMethod['NEXT_DAY'] ? product.variantOrderDetails['10097']?.shipmentMethod['NEXT_DAY']: '-' }}</ion-note>
               </ion-item>
@@ -140,7 +140,7 @@
               <ion-item>
                 <ion-label>{{ $t("Open orders") }}</ion-label>
                 <ion-label class="ion-text-center">
-                  400
+                  {{ product?.variantOrderDetails && product.variantOrderDetails['10097']?.facility['total'] ? product.variantOrderDetails['10097']?.facility['total'] : '-' }}
                   <p>{{ $t("Total") }}</p>
                 </ion-label>
                 <ion-label class="ion-text-center">
@@ -706,6 +706,12 @@ export default defineComponent({
       });
       return popover.present();
     },
+    openFindOrderPage(value: string) {
+      this.store.commit('order/order/FILTERS_UPDATED', {value, filterName: 'shippingMethod'})
+      this.store.commit('order/order/FILTERS_UPDATED', {value: '10097', filterName: 'queryString'})
+      this.store.commit('order/order/FILTERS_UPDATED', {value: '(ORDER_CREATED OR ORDER_APPROVED)', filterName: 'status'})
+      this.router.push('/find-order')
+    }
   },
   mounted() {
     this.store.dispatch('product/getProductDetail', { productId: this.$route.params.id })

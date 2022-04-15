@@ -172,7 +172,7 @@ const actions: ActionTree<ProductState, RootState> = {
             "group.ngroups": true,
           } as any,
           "query": "*:*",
-          "filter": `docType: PRODUCT AND productId: ${productId}`
+          "filter": `docType: PRODUCT AND productId: 10096`
         }
       }
       resp = await ProductService.getProductDetail(payload);
@@ -218,7 +218,7 @@ const actions: ActionTree<ProductState, RootState> = {
             "group.ngroups": true
           },
           "query": "*:*",
-          "filter": `docType: ORDER AND productId: (${variantIds.join(' OR ')})`,
+          "filter": `docType: ORDER AND orderStatusId: (ORDER_APPROVED OR ORDER_CREATED) AND productId: (${variantIds.join(' OR ')})`,
           "facet": {
             "productIdFacet": {
               "excludeTags": "productIdFilter",
@@ -251,6 +251,7 @@ const actions: ActionTree<ProductState, RootState> = {
         const variantOrderDetails = resp.data.facets?.productIdFacet.buckets
         const variants = variantOrderDetails.reduce((arr: any, bucket: any) => {
           const key = bucket.val
+          
           const shipmentMethod = {} as any
           bucket.shipmentMethodTypeIdFacet.buckets.map((method: any) => {
             shipmentMethod[method.val]= method.count
@@ -260,6 +261,13 @@ const actions: ActionTree<ProductState, RootState> = {
           bucket.facilityIdFacet.buckets.map((facilityId: any) => {
             facility[facilityId.val]= facilityId.count
           })
+          facility['total'] = bucket.facilityIdFacet.buckets.reduce((a: any, b: any) => {
+            if (b.val === 'PRE_ORDER_PARKING' || b.val === 'BACKORDER_PARKING' || b.val === '_NA_') {
+              return a + b.count
+            }
+            return a;
+          }, 0)
+          
           if (!arr[key]) {
             arr[key] = {
               shipmentMethod,
