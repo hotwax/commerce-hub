@@ -161,6 +161,10 @@ const actions: ActionTree<ProductState, RootState> = {
       typeFilterSelected.push('BACKORDER')
     }
 
+    if(state.currentProductFilterSelected.productStore !== 'any') {
+      payload.json.filter = payload.json.filter.concat(` AND productStoreIds: ${state.currentProductFilterSelected.productStore}`)
+    }
+
     const typeFilterValues = typeFilterSelected.toString().replaceAll(',', ' OR ')
 
     if(typeFilterValues) {

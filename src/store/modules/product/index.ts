@@ -21,7 +21,8 @@ const productModule: Module<ProductState, RootState> = {
         preOrder: false,
         backOrder: false,
         queryString: '',
-        sort: 'asc'
+        sort: 'asc',
+        productStore: 'any'
       }
     },
     getters,
