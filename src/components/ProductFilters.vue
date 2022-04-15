@@ -80,7 +80,7 @@
     <ion-list-header><h3>{{ $t("Location") }}</h3></ion-list-header>
     <ion-item>
       <ion-label>{{ $t("Product Store") }}</ion-label>
-      <ion-select :value="appliedFilters.productStore" interface="popover" @ionChange="updateFilters($event['detail'].value, 'productStore')">
+      <ion-select :value="currentProductStore ? currentProductStore : 'any'" interface="popover" @ionChange="currentProductStore = $event['detail'].value; updateFilters($event['detail'].value, 'productStore')">
         <ion-select-option :value="store.productStoreId" v-for="store in productStores.concat({'productStoreId': 'any', 'storeName': 'any'})" :key="store.productStoreId">{{ store.storeName }}</ion-select-option>
       </ion-select>
     </ion-item>
@@ -134,6 +134,11 @@ export default defineComponent({
       appliedFilters: 'product/getcurrentProductFilters',
       productStores: 'util/getProductStores'
     })
+  },
+  data() {
+    return {
+      currentProductStore: (this as any).appliedFilters?.productStore
+    }
   },
   props: ["categories", "colors", "sizes", "tags"],
   methods: {
