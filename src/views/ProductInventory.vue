@@ -708,7 +708,7 @@ export default defineComponent({
     },
   },
   mounted() {
-    this.store.dispatch('product/getProductDetail', { productId: this.$route.params.id })
+    this.store.dispatch('product/updateCurrent', { productId: this.$route.params.id })
   },
   setup() {
     const router = useRouter();

@@ -156,26 +156,28 @@ const actions: ActionTree<ProductState, RootState> = {
   /**
   * Get Product-inventory details
   */
-  async getProductDetail({ commit, state }, { productId }) {
+  async updateCurrent({ commit, state }, { productId }) {
     const current = state.current as any
     const products = state.products.list as any
 
     if(current && current.productId === productId) { return current }
 
     if(products.length) {
-      const virtual = products.find((product: any) => product.productId == productId );
+      const virtual = products.find((product: any) => product.productId === productId );
 
-      const product = {
-        productId: virtual?.productId,
-        productName: virtual?.productName,
-        brand: virtual?.brandName,
-        externalId: virtual?.internalName,
-        mainImage: virtual?.mainImageUrl,
-        features: virtual?.featureHierarchy,
-        variants: virtual?.variants
+      if(virtual) {
+        const product = {
+          productId: virtual?.productId,
+          productName: virtual?.productName,
+          brand: virtual?.brandName,
+          externalId: virtual?.internalName,
+          mainImage: virtual?.mainImageUrl,
+          features: virtual?.featureHierarchy,
+          variants: virtual?.variants
+        }
+        commit(types.PRODUCT_CURRENT_UPDATED, product)
+        return product
       }
-      commit(types.PRODUCT_CURRENT_UPDATED, product)
-      return product
     }
 
     let resp;

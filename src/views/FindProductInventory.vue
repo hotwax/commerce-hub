@@ -330,7 +330,7 @@ export default defineComponent({
       })
     },
     async viewProduct(product: any) {
-      await this.store.dispatch('product/getProductDetail', product.productId).then(() => {
+      await this.store.dispatch('product/updateCurrent', product.productId).then(() => {
         this.router.push(`/product-inventory/${product.productId}`)
       })
     }
