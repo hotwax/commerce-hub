@@ -164,7 +164,7 @@ const actions: ActionTree<ProductState, RootState> = {
 
     if(products.length) {
       const virtual = products.find((product: any) => product.productId == productId );
-      
+
       const product = {
         productId: virtual?.productId,
         productName: virtual?.productName,
@@ -196,7 +196,7 @@ const actions: ActionTree<ProductState, RootState> = {
           brand: product.brandName,
           externalId: product.internalName,
           mainImage: product.mainImageUrl,
-          features: product.productFeatures,
+          features: product.featureHierarchy,
           variants: product.variantProductIds
         }
 
