@@ -26,8 +26,17 @@ const getProductDetail = async (payload: any): Promise<any> => {
   })
 }
 
+const getShopifyProductStores = async (payload: any): Promise<any> => {
+  return api({
+    url: "/performFind",
+    method: "POST",
+    data: payload
+  })
+}
+
 export const ProductService = {
   fetchProducts,
   getProducts,
-  getProductDetail
+  getProductDetail,
+  getShopifyProductStores
 }

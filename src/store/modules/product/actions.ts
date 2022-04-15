@@ -159,21 +159,7 @@ const actions: ActionTree<ProductState, RootState> = {
   async getProductDetail({ dispatch, state }, { productId }) {
     const current = state.current as any
     
-    if(current && current.productId === productId) {
-      let variantProductIds: any = new Set();
-
-      current.variants.forEach((variant: any) => {
-        if(variant.productId) variantProductIds.add(variant.productId)
-      });
-      variantProductIds = [...variantProductIds]
-
-      if(variantProductIds.length) {
-        const variantProducts = await dispatch('fetchProducts', { productIds: variantProductIds })
-        console.log('variantProductIds', variantProductIds)
-        console.log('variantProducts', variantProducts);
-      }
-      return current
-    }
+    if(current && current.productId === productId) return current;
 
     let resp;
     try {
@@ -204,7 +190,10 @@ const actions: ActionTree<ProductState, RootState> = {
           variants: product.variantProductIds
         }
         const variantProducts = await dispatch('fetchProducts', { productIds: product.variants })
-        // console.log('detail page variants', variantProducts);
+        product = {
+          ...product,
+          variants: Object.values(variantProducts)
+        }
 
         dispatch('updateCurrent', product);
       } else {

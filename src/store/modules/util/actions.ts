@@ -26,7 +26,85 @@ const actions: ActionTree<UtilState, RootState> = {
     } catch (err) {
       console.error("error", err);
     }
-  }
+  },
+
+  // Get shopify enumeration description
+  async getShopifyEnumerations({ state, commit }, payload) {
+    const enumIds = payload.map((enumeration: any) => enumeration.productIdentifierEnumId)
+    const currentEnums = JSON.parse(JSON.stringify(state.enumerations));
+    const currentEnumIds = Object.keys(state.enumerations);
+
+    const enumIdFilter = enumIds.reduce((enums: any, enumId: any) => {
+      if(!currentEnumIds.includes(enumId)) {
+        enums.push(enumId);
+      }
+      return enums;
+    }, []);
+
+    if(!enumIdFilter.length) return currentEnums;
+
+    const params = {
+      "inputFields": {
+        "enumId": enumIds,
+        "enumId_op": 'in'
+      },
+      "fieldList": ['enumId', 'description'],
+      "entityName": "Enumeration",
+      "noConditionFind": "Y",
+      "distinct": "Y"
+    }
+    const resp = await UtilService.getShopifyEnumeration(params);
+    if (resp.status === 200 && resp.data.docs?.length > 0 && !hasError(resp)) {
+      const shopifyEnumeration = resp.data.docs;
+      if(resp.data) {
+        shopifyEnumeration.map((enumeration: any) => {
+          currentEnums[enumeration.enumId] = enumeration
+        });
+      }
+      commit(types.UTIL_ENUMERATIONS_UPDATED, currentEnums);
+    }
+
+    return currentEnums;
+  },
+
+  // Get shopify configs
+  // async getShopifyConfigIds({ state, commit }, payload) {
+    // const productStoreIds = payload.map((prdtStore: any) => prdtStore.productStoreId)
+    // const currentEnums = JSON.parse(JSON.stringify(state.enumerations));
+    // const currentEnumIds = Object.keys(state.enumerations);
+
+    // const enumIdFilter = enumIds.reduce((enums: any, enumId: any) => {
+    //   if(!currentEnumIds.includes(enumId)) {
+    //     enums.push(enumId);
+    //   }
+    //   return enums;
+    // }, []);
+
+    // if(!enumIdFilter.length) return currentEnums;
+
+    // const params = {
+    //   "inputFields": {
+    //     "enumId": enumIds,
+    //     "enumId_op": 'in'
+    //   },
+    //   "fieldList": ['enumId', 'description'],
+    //   "entityName": "Enumeration",
+    //   "noConditionFind": "Y",
+    //   "distinct": "Y"
+    // }
+    // const resp = await UtilService.getShopifyEnumeration(params);
+    // if (resp.status === 200 && resp.data.docs?.length > 0 && !hasError(resp)) {
+    //   const shopifyEnumeration = resp.data.docs;
+    //   if(resp.data) {
+    //     shopifyEnumeration.map((enumeration: any) => {
+    //       currentEnumIds[enumeration.enumId] = enumeration
+    //     });
+    //   }
+    //   commit(types.UTIL_ENUMERATIONS_UPDATED, currentEnumIds);
+    //   return currentEnumIds;
+    // }
+    // return resp
+  // }
 }
 
 export default actions;

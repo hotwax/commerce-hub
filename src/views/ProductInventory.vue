@@ -85,17 +85,13 @@
           </div>
 
           <div class="variant-id desktop-only">
-            <ion-card>
+            <ion-card v-for="(productStore, index) in productStores" :key="index">
               <ion-card-header>
-                <ion-card-title>{{ $t("Shopify IDs") }}</ion-card-title>
+                <ion-card-title>{{ productStore.productStoreId }}</ion-card-title>
               </ion-card-header>
               <ion-item>
-                <ion-label>{{ $t("SKU") }}</ion-label>
-                <ion-label slot="end">SKU</ion-label>
-              </ion-item>
-              <ion-item>
-                <ion-label>{{ $t("UPC") }}</ion-label>
-                <ion-label slot="end">order id</ion-label>
+                <ion-label>{{ productStore.description }}</ion-label>
+                <ion-label slot="end">{{ productStore?.internalName }}</ion-label>
               </ion-item>
               <ion-item lines="none">
                 <ion-label>{{ $t("Internal ID") }}</ion-label>
@@ -628,6 +624,8 @@ import LocationPopover from '@/components/LocationPopover.vue';
 import PurchaseOrderPopover from '@/components/PurchaseOrderPopover.vue';
 import FulfillmentSettingsPopover from '@/components/FulfillmentSettingsPopover.vue';
 import { useStore, mapGetters } from 'vuex';
+import { ProductService } from "@/services/ProductService";
+import { hasError } from '@/utils';
 
 export default defineComponent({
   name: 'ProductInventory',
@@ -657,6 +655,11 @@ export default defineComponent({
     IonToggle,
     IonToolbar,
     Image
+  },
+  data() {
+    return {
+      productStores: []
+    }
   },
   computed: {
     ...mapGetters({
@@ -700,7 +703,7 @@ export default defineComponent({
       });
       return popover.present();
     },
-    async filterProductFeatures(features: any, featureName: any) {
+    filterProductFeatures(features: any, featureName: any) {
       let featuresList = []
       if (features) {
         featuresList = features.filter((featureItem: any) => featureItem.startsWith(featureName)).map((feature: any) => {
@@ -713,33 +716,65 @@ export default defineComponent({
     },
     async updateCurrentSelectedFeatures(feature: any, featureName: any) {
       (this.currentSelectedFeatures as any)[featureName] = feature
+      await this.getShopifyInformations(this.currentSelectedFeatures.color, this.currentSelectedFeatures.size);
     },
-    async getShopifyInformation() {
+    async getShopifyProductStores(productStoreIds: any) {
       let resp;
-      try {
+
+      try{
         const payload = {
-          "json": {
-            "params": {
-              "group": true,
-              "group.field": "groupId",
-              "group.limit": 10000,
-              "group.ngroups": true,
-            } as any,
-            "query": "*:*",
-            // "filter": `docType: PRODUCT AND productId: ${productId}`
-          }
+          "inputFields": {
+            "productStoreId": productStoreIds,
+            "productStoreId_op": 'in'
+          },
+          "fieldList": ['productStoreId', 'productIdentifierEnumId'],
+          "entityName": "ProductStore",
+          "noConditionFind": "Y",
+          "distinct": "Y"
         }
-        // resp = await ProductService.getProductDetail(payload);
-      } catch(err) {
-        console.error(err);
+        resp = await ProductService.getShopifyProductStores(payload);
+        if (resp.status === 200 && resp.data.docs?.length > 0 && !hasError(resp)) {
+          return resp.data.docs;
+        }
+      } catch(error) {
+        console.error(error);
+      }
+      return []
+    },
+    async getShopifyInformations(color: any, size: any) {
+      if(this.product.variants) {
+        const variant = this.product.variants.find((variant: any) => {
+          const variantColor = this.filterProductFeatures(variant.productFeatures, 'Color')
+          const variantSize = this.filterProductFeatures(variant.productFeatures, 'Size')
+
+          if((variantColor.includes(color) && variantSize.includes(size))) return variant
+        })
+
+        await this.getShopifyProductStores(variant?.productStoreIds).then( async(shopifyProductStores: any) => {
+          if(shopifyProductStores.length) {
+            await this.store.dispatch('util/getShopifyEnumerations', shopifyProductStores).then((enums: any) => {
+              // const shopifyConfigs = await this.store.dispatch('util/getShopifyConfigIds', shopifyProductStores)
+
+              this.productStores = shopifyProductStores.map((prdtStore: any) => {
+                return {
+                  ...prdtStore,
+                  internalName: variant?.internalName,
+                  description: enums[prdtStore.productIdentifierEnumId]?.description
+                }
+              })
+            })
+          }
+        })
+
+        return this.productStores;
       }
     }
   },
   mounted() {
     this.store.dispatch('product/getProductDetail', { productId: this.$route.params.id }).then(() => {
-      this.filterProductFeatures(this.product.feature, 'Color').then((colors: any) =>  this.updateCurrentSelectedFeatures(colors[0], 'color'));
-      this.filterProductFeatures(this.product.feature, 'Size').then((sizes: any) =>  this.updateCurrentSelectedFeatures(sizes[0], 'size'));
-      this.getShopifyInformation(); 
+      this.updateCurrentSelectedFeatures(this.filterProductFeatures(this.product.feature, 'Color')[0], 'color')
+      this.updateCurrentSelectedFeatures(this.filterProductFeatures(this.product.feature, 'Size')[0], 'size')
+      this.getShopifyInformations(this.currentSelectedFeatures.color, this.currentSelectedFeatures.size);
     })
   },
   setup() {
