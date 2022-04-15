@@ -87,7 +87,7 @@
           <div class="variant-id desktop-only">
             <ion-card v-for="(productStore, index) in productStores" :key="index">
               <ion-card-header>
-                <ion-card-title>{{ productStore.productStoreId }}</ion-card-title>
+                <ion-card-title>{{ productStore.storeName }}</ion-card-title>
               </ion-card-header>
               <ion-item>
                 <ion-label>{{ productStore.description }}</ion-label>
@@ -95,7 +95,7 @@
               </ion-item>
               <ion-item lines="none">
                 <ion-label>{{ $t("Internal ID") }}</ion-label>
-                <ion-label slot="end">internal id</ion-label>
+                <ion-label slot="end">{{ productStore?.shopifyProductId }}</ion-label>
               </ion-item>
             </ion-card>
           </div>
@@ -725,9 +725,10 @@ export default defineComponent({
         const payload = {
           "inputFields": {
             "productStoreId": productStoreIds,
-            "productStoreId_op": 'in'
+            "productStoreId_op": 'in',
+            "productIdentifierEnumId_op": 'not-empty'
           },
-          "fieldList": ['productStoreId', 'productIdentifierEnumId'],
+          "fieldList": ['productStoreId', 'productIdentifierEnumId', 'storeName'],
           "entityName": "ProductStore",
           "noConditionFind": "Y",
           "distinct": "Y"
@@ -753,13 +754,20 @@ export default defineComponent({
         await this.getShopifyProductStores(variant?.productStoreIds).then( async(shopifyProductStores: any) => {
           if(shopifyProductStores.length) {
             await this.store.dispatch('util/getShopifyEnumerations', shopifyProductStores).then((enums: any) => {
-              // const shopifyConfigs = await this.store.dispatch('util/getShopifyConfigIds', shopifyProductStores)
-
               this.productStores = shopifyProductStores.map((prdtStore: any) => {
                 return {
                   ...prdtStore,
                   internalName: variant?.internalName,
                   description: enums[prdtStore.productIdentifierEnumId]?.description
+                }
+              })
+            })
+            console.log(variant?.productId)
+            await this.store.dispatch('util/getShopifyConfigIds', { shopifyProductStores, productId: variant?.productId }).then((configs: any) => {
+              this.productStores  = (this.productStores as any).map((prdtStore: any) => {
+                return {
+                  ...prdtStore,
+                  ...configs[prdtStore.productStoreId]
                 }
               })
             })

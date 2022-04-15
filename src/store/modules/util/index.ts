@@ -9,7 +9,8 @@ const utilModule: Module<UtilState, RootState> = {
     namespaced: true,
     state: {
       shipmentMethod: {},
-      enumerations: {}
+      enumerations: {},
+      shopifyConfigs: {}
     },
     getters,
     actions,

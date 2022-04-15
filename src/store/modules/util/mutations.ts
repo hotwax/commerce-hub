@@ -8,6 +8,9 @@ const mutations: MutationTree <UtilState> = {
     },
     [types.UTIL_ENUMERATIONS_UPDATED](state, payload) {
         state.enumerations = payload
+    },
+    [types.UTIL_SHOPIFY_CONFIGS_UPDATED](state, payload) {
+        state.shopifyConfigs = payload
     }
 }
 export default mutations;

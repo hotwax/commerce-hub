@@ -67,44 +67,84 @@ const actions: ActionTree<UtilState, RootState> = {
     return currentEnums;
   },
 
-  // Get shopify configs
-  // async getShopifyConfigIds({ state, commit }, payload) {
-    // const productStoreIds = payload.map((prdtStore: any) => prdtStore.productStoreId)
-    // const currentEnums = JSON.parse(JSON.stringify(state.enumerations));
-    // const currentEnumIds = Object.keys(state.enumerations);
+  // Get shopify configIds
+  async getShopifyConfigIds({ state, commit, dispatch }, payload) {
+    const prdtStoreIds = payload.shopifyProductStores.map((prdtStore: any) => prdtStore.productStoreId)
+    const currentConfigs = JSON.parse(JSON.stringify(state.shopifyConfigs));
+    const currentConfigIds = Object.keys(state.shopifyConfigs);
 
-    // const enumIdFilter = enumIds.reduce((enums: any, enumId: any) => {
-    //   if(!currentEnumIds.includes(enumId)) {
-    //     enums.push(enumId);
-    //   }
-    //   return enums;
-    // }, []);
+    const prdtStoreFilter = prdtStoreIds.reduce((stores: any, storeId: any) => {
+      if(!currentConfigIds.includes(storeId)) {
+        stores.push(storeId);
+      }
+      return stores;
+    }, []);
 
-    // if(!enumIdFilter.length) return currentEnums;
+    if(!prdtStoreFilter.length) return currentConfigs;
 
-    // const params = {
-    //   "inputFields": {
-    //     "enumId": enumIds,
-    //     "enumId_op": 'in'
-    //   },
-    //   "fieldList": ['enumId', 'description'],
-    //   "entityName": "Enumeration",
-    //   "noConditionFind": "Y",
-    //   "distinct": "Y"
-    // }
-    // const resp = await UtilService.getShopifyEnumeration(params);
-    // if (resp.status === 200 && resp.data.docs?.length > 0 && !hasError(resp)) {
-    //   const shopifyEnumeration = resp.data.docs;
-    //   if(resp.data) {
-    //     shopifyEnumeration.map((enumeration: any) => {
-    //       currentEnumIds[enumeration.enumId] = enumeration
-    //     });
-    //   }
-    //   commit(types.UTIL_ENUMERATIONS_UPDATED, currentEnumIds);
-    //   return currentEnumIds;
-    // }
-    // return resp
-  // }
+    const params = {
+      "inputFields": {
+        "productStoreId": prdtStoreFilter,
+        "productStoreId_op": 'in'
+      },
+      "fieldList": ['shopifyConfigId', 'productStoreId'],
+      "entityName": "ShopifyConfig",
+      "noConditionFind": "Y",
+      "distinct": "Y"
+    }
+    try{
+      const resp = await UtilService.getShopifyConfigIds(params);
+      if (resp.status === 200 && resp.data.docs?.length > 0 && !hasError(resp)) {
+        const shopifyConfigIds = resp.data.docs.map((configId: any) => configId.shopifyConfigId);
+        if(resp.data) {
+          resp.data.docs.map((prdt: any) => {
+            currentConfigs[prdt.productStoreId] = prdt
+          })
+        }
+        
+        const params = {
+          "inputFields": {
+            "productId": payload?.productId,
+            "shopifyConfigId": shopifyConfigIds,
+            "shopifyConfigId_op": 'in'
+          },
+          "fieldList": ['shopifyProductId', 'shopifyConfigId'],
+          "entityName": "ShopifyProduct",
+          "noConditionFind": "Y",
+          "distinct": "Y"
+        }
+        const shopifyProductIds = await dispatch('getShopifyproductIds', params);
+        shopifyProductIds.map((product: any) => {
+          const currentConfig = Object.values(currentConfigs).find((conf: any) => conf.shopifyConfigId === product.shopifyConfigId)
+
+          currentConfigs[(currentConfig as any)?.productStoreId] = {
+            ...(currentConfig as any),
+            shopifyConfigId: product.shopifyConfigId,
+            shopifyProductId: product.shopifyProductId
+          }
+        })
+        
+        commit(types.UTIL_SHOPIFY_CONFIGS_UPDATED, currentConfigs);
+      }
+    } catch(err) {
+      console.error(err);
+    }
+    return currentConfigs
+  },
+
+  // Get shopify product Ids
+  async getShopifyproductIds({ state, commit }, payload) {
+    let resp;
+    try{
+      resp = await UtilService.getShopifyproductIds(payload);
+      if (resp.status === 200 && resp.data.docs?.length > 0 && !hasError(resp)) {
+        return resp.data.docs
+      }
+    } catch(err) {
+      console.error(err);
+    }
+    return [];
+  }
 }
 
 export default actions;

@@ -16,7 +16,25 @@ const getShopifyEnumeration = async (payload: any): Promise<any> => {
   })
 }
 
+const getShopifyConfigIds = async (payload: any): Promise<any> => {
+  return api({
+    url: "/performFind",
+    method: "POST",
+    data: payload
+  })
+}
+
+const getShopifyproductIds = async (payload: any): Promise<any> => {
+  return api({
+    url: "/performFind",
+    method: "POST",
+    data: payload
+  })
+}
+
 export const UtilService = {
   getShipmentMethods,
-  getShopifyEnumeration
+  getShopifyEnumeration,
+  getShopifyConfigIds,
+  getShopifyproductIds
 }
