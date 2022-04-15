@@ -140,7 +140,7 @@
 
           <hr />
 
-          <div class="product" v-for="product in products" :key="product.productId" @click.prevent="viewProduct(product)">
+          <div class="product" v-for="product in products" :key="product.productId" @click="viewProduct(product)">
             <div class="desktop-only">
               <Image :src="product.mainImageUrl" />
             </div>
