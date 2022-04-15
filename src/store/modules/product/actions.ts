@@ -156,10 +156,27 @@ const actions: ActionTree<ProductState, RootState> = {
   /**
   * Get Product-inventory details
   */
-  async getProductDetail({ dispatch, state }, { productId }) {
+  async getProductDetail({ commit, state }, { productId }) {
     const current = state.current as any
-    
+    const products = state.products.list as any
+
     if(current && current.productId === productId) { return current }
+
+    if(products.length) {
+      const virtual = products.find((product: any) => product.productId == productId );
+      
+      const product = {
+        productId: virtual?.productId,
+        productName: virtual?.productName,
+        brand: virtual?.brandName,
+        externalId: virtual?.internalName,
+        mainImage: virtual?.mainImageUrl,
+        features: virtual?.featureHierarchy,
+        variants: virtual?.variants
+      }
+      commit(types.PRODUCT_CURRENT_UPDATED, product)
+      return product
+    }
 
     let resp;
     try {
@@ -183,7 +200,7 @@ const actions: ActionTree<ProductState, RootState> = {
           variants: product.variantProductIds
         }
 
-        dispatch('updateCurrent', product);
+        commit(types.PRODUCT_CURRENT_UPDATED, product)
       } else {
         showToast(translate("Product not found"));
       }
@@ -192,10 +209,7 @@ const actions: ActionTree<ProductState, RootState> = {
       showToast(translate("Something went wrong"));
     }
     return resp;
-  },
-  updateCurrent({ commit }, payload) {
-    commit(types.PRODUCT_CURRENT_UPDATED, payload)
-  },
+  }
 }
 
 export default actions;

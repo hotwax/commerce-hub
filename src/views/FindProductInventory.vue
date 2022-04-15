@@ -330,19 +330,7 @@ export default defineComponent({
       })
     },
     async viewProduct(product: any) {
-      const virtual = this.getProduct(product.productId);
-
-      product = {
-        productId: product.productId,
-        productName: product.productName,
-        brand: virtual.brandName,
-        externalId: virtual.internalName,
-        mainImage: virtual.mainImageUrl,
-        features: virtual.productFeatures,
-        variants: product.variants
-      }
-
-      await this.store.dispatch('product/updateCurrent', product).then(() => {
+      await this.store.dispatch('product/getProductDetail', product.productId).then(() => {
         this.router.push(`/product-inventory/${product.productId}`)
       })
     }
