@@ -182,7 +182,7 @@ const actions: ActionTree<ProductState, RootState> = {
         if(facilityFound){
           facility.minimumStock = facilityFound.minimumStock
         } else {
-          facility.minimumStock = "-"
+          facility.minimumStock = 0
         }
         return facility;
       }))

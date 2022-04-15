@@ -253,17 +253,17 @@
               </ion-label>
 
               <ion-label class="tablet">
-                400
+                {{ totalQuantity("quantityOnHandTotal") }}
                 <p>{{ $t("QOH") }}</p>
               </ion-label>
 
               <ion-label>
-                400
+                {{ totalQuantity("minimumStock") }}
                 <p>{{ $t("safety stock") }}</p>
               </ion-label>
 
               <ion-label class="tablet">
-                400
+                {{ totalQuantity("availableToPromiseTotal") }}
                 <p>{{ $t("ATP") }}</p>
               </ion-label>
 
@@ -280,51 +280,43 @@
 
             <hr />
 
-            <div class="list-item" v-for="facility in filteredFacilities" :key="facility.facilityId">
-              <ion-item lines="none">
+            <div v-for="facility in filteredFacilities" :key="facility.facilityId">
+              <div class="list-item">
+                <ion-item lines="none">
                 <ion-icon :icon="storefrontOutline" slot="start" />
                 <ion-label>
                   <p>{{ getFacilityType(facility.facilityTypeId) }}</p>
                   {{ facility.facilityName }}
                   <p>Pickup and shipping</p>
                 </ion-label>
-              </ion-item>
-
-              <ion-label class="tablet">
-                600
-                <p>{{ $t("orders") }}</p>
-              </ion-label>
-
-              <ion-label>
-                400
-                <p>{{ $t("purchase order ATP") }}</p>
-              </ion-label>
-
-              <ion-label class="tablet">
-                {{ facility.quantityOnHandTotal }}
-                <p>{{ $t("QOH") }}</p>
-              </ion-label>
-
-              <ion-label>
-                {{ facility.minimumStock }}
-                <p>{{ $t("safety stock") }}</p>
-              </ion-label>
-
-              <ion-label class="tablet">
-                {{ facility.availableToPromiseTotal }}
-                <p>{{ $t("ATP") }}</p>
-              </ion-label>
-
-              <ion-checkbox />
-
-              <ion-button fill="clear" color="medium" @click="openLocationPopover">
-                <ion-icon slot="icon-only" :icon="ellipsisVerticalOutline" />
-              </ion-button>
+                </ion-item>
+                <ion-label class="tablet">
+                  600
+                  <p>{{ $t("orders") }}</p>
+                </ion-label>
+                <ion-label>
+                  400
+                  <p>{{ $t("purchase order ATP") }}</p>
+                </ion-label>
+                <ion-label class="tablet">
+                  {{ facility.quantityOnHandTotal }}
+                  <p>{{ $t("QOH") }}</p>
+                </ion-label>
+                <ion-label>
+                  {{ facility.minimumStock }}
+                  <p>{{ $t("safety stock") }}</p>
+                </ion-label>            
+                <ion-label class="tablet">
+                  {{ facility.availableToPromiseTotal }}
+                  <p>{{ $t("ATP") }}</p>
+                </ion-label>
+                <ion-checkbox />
+                <ion-button fill="clear" color="medium" @click="openLocationPopover">
+                  <ion-icon slot="icon-only" :icon="ellipsisVerticalOutline" />
+                </ion-button>
+              </div>
+              <hr />
             </div>
-
-            <hr />
-
-            <hr />
           </div>
 
           <div v-if="segment == 'purchase-orders'">
@@ -630,10 +622,17 @@ export default defineComponent({
   },
   data () {
     return {
-      filteredFacilities: {} as any
+      filteredFacilities: [] as any
     }
   },
   methods: {
+    totalQuantity(value: any){
+      let total = 0;
+      this.filteredFacilities.forEach((facility: any) => {
+        total = total + facility[value];
+      });
+      return total;
+    },
     getFacilityType(typeId: any){
       if(typeId === "RETAIL_STORE") return "Retail"
       else if(typeId === "WAREHOUSE") return "Warehouse"
