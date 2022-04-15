@@ -126,7 +126,7 @@
                 <div v-else>
                   <ion-item>
                     <ion-label>{{ $t("Shipping method") }}</ion-label>
-                    <p slot="end"> {{ item.shipmentMethodTypeId }} </p>
+                    <p slot="end"> {{ item.shipmentMethodTypeId ? getShipmentMethodDesc(item.shipmentMethodTypeId) : '-' }} </p>
                   </ion-item>
                   <ion-item>
                     <ion-label>{{ $t("Shipping from") }}</ion-label>
@@ -235,7 +235,8 @@ export default defineComponent ({
       currentFacilityId: 'user/getCurrentFacility',
       getProductStock: 'stock/getProductStock',
       isScrollable: 'order/isScrollable',
-      query: 'order/getOrderQuery'
+      query: 'order/getOrderQuery',
+      getShipmentMethodDesc: 'util/getShipmentMethod'
     })
   },
   data() {
