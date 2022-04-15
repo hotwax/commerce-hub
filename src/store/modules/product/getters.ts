@@ -20,6 +20,9 @@ const getters: GetterTree<ProductState, RootState> = {
   },
   getProducts(state) {
     return state.products.list;
+  },
+  getCurrent(state) {
+    return state.current;
   }
 };
 export default getters;
