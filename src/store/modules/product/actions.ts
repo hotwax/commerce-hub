@@ -233,14 +233,23 @@ const actions: ActionTree<ProductState, RootState> = {
                   "field": "shipmentMethodTypeId",
                   "type": "terms",
                   "limit": -1,
-                  "sort": "index"
+                  "sort": "count"
                 },
                 "facilityIdFacet": {
                   "excludeTags": "facilityIdFilter",
                   "field" : "facilityId",
                   "mincount": 0,
                   "limit": -1,
-                  "type": "terms"
+                  "type": "terms",
+                  "facet": {
+                    "withoutPromisedDatetimeFacet": {
+                      "field" : "promisedDatetime",
+                      "mincount": 0,
+                      "limit": -1,
+                      "type": "query",
+                      "q": "-promisedDatetime: *"
+                    }
+                  }
                 }
               }
             }
@@ -262,11 +271,17 @@ const actions: ActionTree<ProductState, RootState> = {
           bucket.facilityIdFacet.buckets.map((facilityId: any) => {
             facility[facilityId.val]= facilityId.count
           })
+
+          const withoutPromisedDatetime = {} as any
+          bucket.facilityIdFacet.buckets.map((facilityId: any) => {
+            withoutPromisedDatetime[facilityId.val]= facilityId?.withoutPromisedDatetimeFacet?.count
+          })
           
           if (!arr[key]) {
             arr[key] = {
               shipmentMethod,
-              facility
+              facility,
+              withoutPromisedDatetime
             }
           }
           return arr
