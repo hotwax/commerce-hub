@@ -6,6 +6,7 @@ import * as types from './mutation-types'
 import { hasError, showToast } from '@/utils'
 import { translate } from '@/i18n'
 import emitter from '@/event-bus'
+import router from "@/router";
 
 
 const actions: ActionTree<ProductState, RootState> = {
@@ -261,12 +262,6 @@ const actions: ActionTree<ProductState, RootState> = {
           bucket.facilityIdFacet.buckets.map((facilityId: any) => {
             facility[facilityId.val]= facilityId.count
           })
-          facility['total'] = bucket.facilityIdFacet.buckets.reduce((a: any, b: any) => {
-            if (b.val === 'PRE_ORDER_PARKING' || b.val === 'BACKORDER_PARKING' || b.val === '_NA_') {
-              return a + b.count
-            }
-            return a;
-          }, 0)
           
           if (!arr[key]) {
             arr[key] = {
@@ -281,6 +276,13 @@ const actions: ActionTree<ProductState, RootState> = {
     } catch(err) {
       console.error('Something went wrong')
     }
+  },
+
+  openFindOrderPage({ commit }, filters) {
+    filters.map((filter: any) => {
+      commit('order/order/FILTERS_UPDATED', filter, { root: true })
+    })
+    router.push('/find-order')
   }
 }
 

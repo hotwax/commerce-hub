@@ -140,7 +140,7 @@
               <ion-item>
                 <ion-label>{{ $t("Open orders") }}</ion-label>
                 <ion-label class="ion-text-center">
-                  {{ product?.variantOrderDetails && product.variantOrderDetails['10097']?.facility['total'] ? product.variantOrderDetails['10097']?.facility['total'] : '-' }}
+                  {{ getTotalByColumn(product.variantOrderDetails && product.variantOrderDetails['10097'].facility) }}
                   <p>{{ $t("Total") }}</p>
                 </ion-label>
                 <ion-label class="ion-text-center">
@@ -707,10 +707,19 @@ export default defineComponent({
       return popover.present();
     },
     openFindOrderPage(value: string) {
-      this.store.commit('order/order/FILTERS_UPDATED', {value, filterName: 'shippingMethod'})
-      this.store.commit('order/order/FILTERS_UPDATED', {value: '10097', filterName: 'queryString'})
-      this.store.commit('order/order/FILTERS_UPDATED', {value: '(ORDER_CREATED OR ORDER_APPROVED)', filterName: 'status'})
-      this.router.push('/find-order')
+      this.store.dispatch('product/openFindOrderPage', [
+        {value, filterName: 'shippingMethod'},
+        {value: '10097', filterName: 'queryString'},
+        {value: '(ORDER_CREATED OR ORDER_APPROVED)', filterName: 'status'}
+      ])
+    },
+    // This method returns the total of the fields passed or
+    // returns the total for all the values passed if no fields are passed.
+    getTotalByColumn(values: any, fields?: any) {
+      return fields ? fields.reduce((count: any, field: any) => {
+        count += values[field] ? values[field] : count
+        return count;
+      }, 0) : values ? Object.values(values).reduce((count: any, value: any) => count += value, 0) : 0
     }
   },
   mounted() {
