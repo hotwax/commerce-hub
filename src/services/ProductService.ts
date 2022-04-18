@@ -42,13 +42,6 @@ const getProductInventoryAvailable = async (payload: any): Promise<any> => {
   })
 }
 
-const getPurchaseOrderAtp = async (payload: any): Promise<any> => {
-  return api({
-    url: "/solr-query",
-    method: "POST",
-    data: payload
-  })
-}
 
 
 export const ProductService = {
@@ -57,5 +50,4 @@ export const ProductService = {
   getFacility,
   getProductDetail,
   getProductInventoryAvailable,
-  getPurchaseOrderAtp
 }

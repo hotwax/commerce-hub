@@ -221,50 +221,7 @@ async getFacilityInformation({commit}, payload) {
     return resp.data;
   },
 
-  async getPurchaseOrderAtp({commit}, variantIds){
-    console.log(variantIds.join(' OR '))
-    let resp;
-    try {
-      const payload = {
-        "json":
-        {
-          "params": {
-              "group": true,
-              "group.field": "productId",
-              "group.limit": 10000,
-              "group.ngroups": true,
-              "rows": 10
-          },
-          "query": "*:*",
-          "filter": `docType: ORDER AND orderTypeId: PURCHASE_ORDER AND productId: (${variantIds.join(' OR ')})`,
-          "facet": {
-            "productIdFacet": {
-              "excludeTags":"productIdFilter",
-              "field": "productId",
-              "mincount": 0,
-              "limit": -1,
-              "sort": "index",
-              "type": "terms",
-              "facet": {
-                "facilityIdFacet": {
-                  "excludeTags":"facilityIdFilter",
-                  "field" : "facilityId",
-                  "mincount":0,
-                  "limit":-1,
-                  "type":"terms"
-                },
-               "poATP":"sum(availableToPromise)"
-              }
-            }
-          }
-        }
-      }
-      resp = await ProductService.getPurchaseOrderAtp(payload)
-    } catch(error){
-      console.error(error)
-    }
-    return resp;
-  },
+  
 
   /**
   * Get Product-inventory details
