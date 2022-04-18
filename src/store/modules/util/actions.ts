@@ -30,7 +30,12 @@ const actions: ActionTree<UtilState, RootState> = {
 
   // Get shopify enumeration description
   async getEnumerations({ state, commit }, payload) {
-    const enumIds = payload.map((enumeration: any) => enumeration.productIdentifierEnumId)
+    let enumIds: any = new Set();
+    payload.forEach((productStore: any) => {
+      if (productStore.productIdentifierEnumId) enumIds.add(productStore.productIdentifierEnumId);
+    })
+    enumIds = [...enumIds]
+
     const currentEnums = JSON.parse(JSON.stringify(state.enumerations));
     const currentEnumIds = Object.keys(state.enumerations);
 
