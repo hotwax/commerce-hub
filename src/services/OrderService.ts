@@ -40,10 +40,19 @@ const updateOrderStatus = async (payload: any): Promise<any> => {
   })
 }
 
+const getPOIdsForSo = async (payload: any): Promise<any> => {
+  return api({
+    url: "/solr-query",
+    method: "post",
+    data: payload
+  })
+}
+
 export const OrderService = {
   fetchStatusChange,
   findOrder,
   findOrderDetails,
   getPOIds,
+  getPOIdsForSo,
   updateOrderStatus
 }
