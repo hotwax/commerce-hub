@@ -6,6 +6,7 @@ import * as types from './mutation-types'
 import { hasError, showToast } from '@/utils'
 import { translate } from '@/i18n'
 import emitter from '@/event-bus'
+import router from "@/router";
 
 
 const actions: ActionTree<ProductState, RootState> = {
@@ -156,7 +157,7 @@ const actions: ActionTree<ProductState, RootState> = {
   /**
   * Get Product-inventory details
   */
-  async updateCurrent({ commit, state }, { productId }) {
+  async updateCurrent({ commit, state, dispatch }, { productId }) {
     const current = state.current as any
     const products = state.products.list as any
 
@@ -185,7 +186,7 @@ const actions: ActionTree<ProductState, RootState> = {
       const payload = {
         "json": {
           "query": "*:*",
-          "filter": `docType: PRODUCT AND productId: ${productId}`
+          "filter": `docType: PRODUCT AND productId: 10096`
         }
       }
       resp = await ProductService.getProductDetail(payload);
@@ -202,6 +203,9 @@ const actions: ActionTree<ProductState, RootState> = {
           variants: product.variantProductIds
         }
 
+        const orderDetails = await dispatch('fetchOrderInfoForProduct', product.variants)
+        product['variantOrderDetails'] = orderDetails
+        dispatch('updateCurrent', product);
         commit(types.PRODUCT_CURRENT_UPDATED, product)
       } else {
         showToast(translate("Product not found"));
@@ -211,6 +215,99 @@ const actions: ActionTree<ProductState, RootState> = {
       showToast(translate("Something went wrong"));
     }
     return resp;
+  },
+
+  async fetchOrderInfoForProduct({ commit }, variantIds) {
+    let resp;
+    try {
+      const payload = {
+        "json": {
+          "params": {
+            "group": true,
+            "group.field": "productId",
+            "group.limit": 10000,
+            "group.ngroups": true
+          },
+          "query": "*:*",
+          "filter": `docType: ORDER AND orderStatusId: (ORDER_APPROVED OR ORDER_CREATED) AND productId: (${variantIds.join(' OR ')})`,
+          "facet": {
+            "productIdFacet": {
+              "excludeTags": "productIdFilter",
+              "field": "productId",
+              "mincount": 1,
+              "limit": -1,
+              "sort": "index",
+              "type": "terms",
+              "facet": {
+                "shipmentMethodTypeIdFacet": {
+                  "field": "shipmentMethodTypeId",
+                  "type": "terms",
+                  "limit": -1,
+                  "sort": "count"
+                },
+                "facilityIdFacet": {
+                  "excludeTags": "facilityIdFilter",
+                  "field" : "facilityId",
+                  "mincount": 0,
+                  "limit": -1,
+                  "type": "terms",
+                  "facet": {
+                    "withoutPromisedDatetimeFacet": {
+                      "field" : "promisedDatetime",
+                      "mincount": 0,
+                      "limit": -1,
+                      "type": "query",
+                      "q": "-promisedDatetime: *"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+      resp = await ProductService.getOrderInfoForProduct(payload);
+      if (resp.status === 200 && !hasError(resp) && resp.data.facets.count && resp.data?.grouped?.productId?.matches) {
+        const variantOrderDetails = resp.data.facets?.productIdFacet.buckets
+        const variants = variantOrderDetails.reduce((arr: any, bucket: any) => {
+          const key = bucket.val
+          
+          const shipmentMethod = {} as any
+          bucket.shipmentMethodTypeIdFacet.buckets.map((method: any) => {
+            shipmentMethod[method.val]= method.count
+          })
+
+          const facility = {} as any
+          bucket.facilityIdFacet.buckets.map((facilityId: any) => {
+            facility[facilityId.val]= facilityId.count
+          })
+
+          const withoutPromisedDatetime = {} as any
+          bucket.facilityIdFacet.buckets.map((facilityId: any) => {
+            withoutPromisedDatetime[facilityId.val]= facilityId?.withoutPromisedDatetimeFacet?.count
+          })
+          
+          if (!arr[key]) {
+            arr[key] = {
+              shipmentMethod,
+              facility,
+              withoutPromisedDatetime
+            }
+          }
+          return arr
+        }, {})
+        return variants
+      }
+    } catch(err) {
+      console.error('Something went wrong')
+    }
+  },
+
+  openFindOrderPage({ commit }, filters) {
+    filters.map((filter: any) => {
+      commit('order/order/FILTERS_UPDATED', filter, { root: true })
+    })
+    router.push('/find-order')
   }
 }
 

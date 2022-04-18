@@ -122,29 +122,27 @@
               <ion-card-header>
                 <ion-card-title>{{ $t("Shipping method") }}</ion-card-title>
               </ion-card-header>
-              <ion-item detail>
+              <ion-item detail button @click="openFindOrderPage('STOREPICKUP')">
                 <ion-label>{{ $t("Store pickup") }}</ion-label>
-                <ion-note slot="end">orders</ion-note>
+                <ion-note slot="end">{{ product?.variantOrderDetails && product.variantOrderDetails[variant]?.shipmentMethod['STOREPICKUP'] ? product.variantOrderDetails[variant]?.shipmentMethod['STOREPICKUP'] : '-'  }}</ion-note>
               </ion-item>
-              <ion-item detail>
-                <ion-label>{{ $t("Standard") }}</ion-label>
-                <ion-note slot="end">orders</ion-note>
-              </ion-item>
-              <ion-item lines="none" detail>
-                <ion-label>{{ $t("Expedited") }}</ion-label>
-                <ion-note slot="end">orders</ion-note>
-              </ion-item>
+              <div v-for="(index, shippingMethod) in product.variantOrderDetails[variant]?.shipmentMethod" :key="index">
+                <ion-item v-if="shippingMethod !== 'STOREPICKUP'" detail button @click="openFindOrderPage(shippingMethod)">
+                  <ion-label>{{ $t("Standard") }}</ion-label>
+                  <ion-note slot="end">{{ product?.variantOrderDetails && product.variantOrderDetails[variant]?.shipmentMethod[shippingMethod] ? product.variantOrderDetails[variant]?.shipmentMethod[shippingMethod]: '-' }}</ion-note>
+                </ion-item>
+              </div>
             </ion-card>
           
             <ion-card>
               <ion-item>
                 <ion-label>{{ $t("Open orders") }}</ion-label>
                 <ion-label class="ion-text-center">
-                  400
+                  {{ getTotalByColumn(product.variantOrderDetails && product.variantOrderDetails[variant].facility, ['PRE_ORDER_PARKING', 'BACKORDER_PARKING', '_NA_']) }}
                   <p>{{ $t("Total") }}</p>
                 </ion-label>
                 <ion-label class="ion-text-center">
-                  400
+                  {{ getTotalByColumn(product.variantOrderDetails && product.variantOrderDetails[variant].withoutPromisedDatetime, ['PRE_ORDER_PARKING', 'BACKORDER_PARKING', '_NA_']) }}
                   <p>{{ $t("Without promise date") }}</p>
                 </ion-label>
               </ion-item>
@@ -154,10 +152,10 @@
                   <p>{{ $t("Pre orders") }}</p>
                 </ion-label>
                 <ion-label class="ion-text-center">
-                  <p>400</p>
+                  <p>{{ product?.variantOrderDetails && product.variantOrderDetails[variant]?.facility['PRE_ORDER_PARKING'] ? product.variantOrderDetails[variant]?.facility['PRE_ORDER_PARKING'] : '-'  }}</p>
                 </ion-label>
                 <ion-label class="ion-text-center">
-                  <p>400</p>
+                  <p>{{ product?.variantOrderDetails && product.variantOrderDetails[variant]?.withoutPromisedDatetime['PRE_ORDER_PARKING'] ? product.variantOrderDetails[variant]?.withoutPromisedDatetime['PRE_ORDER_PARKING'] : '-'  }}</p>
                 </ion-label>
               </ion-item>
 
@@ -166,10 +164,10 @@
                   <p>{{ $t("Back orders") }}</p>
                 </ion-label>
                 <ion-label class="ion-text-center">
-                  <p>400</p>
+                  <p>{{ product?.variantOrderDetails && product.variantOrderDetails[variant]?.facility['BACKORDER_PARKING'] ? product.variantOrderDetails[variant]?.facility['BACKORDER_PARKING'] : '-'  }}</p>
                 </ion-label>
                 <ion-label class="ion-text-center">
-                  <p>400</p>
+                  <p>{{ product?.variantOrderDetails && product.variantOrderDetails[variant]?.withoutPromisedDatetime['BACKORDER_PARKING'] ? product.variantOrderDetails[variant]?.withoutPromisedDatetime['BACKORDER_PARKING'] : '-'  }}</p>
                 </ion-label>
               </ion-item>
 
@@ -178,10 +176,10 @@
                   <p>{{ $t("Unfillable") }}</p>
                 </ion-label>
                 <ion-label class="ion-text-center">
-                  <p>400</p>
+                  <p>{{ product?.variantOrderDetails && product.variantOrderDetails[variant]?.facility['_NA_'] ? product.variantOrderDetails[variant]?.facility['_NA_'] : '-'  }}</p>
                 </ion-label>
                 <ion-label class="ion-text-center">
-                  <p>400</p>
+                  <p>{{ product?.variantOrderDetails && product.variantOrderDetails[variant]?.withoutPromisedDatetime['_NA_'] ? product.variantOrderDetails[variant]?.withoutPromisedDatetime['_NA_'] : '-'  }}</p>
                 </ion-label>
               </ion-item>
             </ion-card>
@@ -706,9 +704,29 @@ export default defineComponent({
       });
       return popover.present();
     },
+    openFindOrderPage(value: string) {
+      this.store.dispatch('product/openFindOrderPage', [
+        {value, filterName: 'shippingMethod'},
+        {value: '10097', filterName: 'queryString'},
+        {value: '(ORDER_CREATED OR ORDER_APPROVED)', filterName: 'status'}
+      ])
+    },
+    // This method returns the total of the fields passed or
+    // returns the total for all the values passed if no fields are passed.
+    getTotalByColumn(values: any, fields?: any) {
+      return fields && values ? fields.reduce((count: any, field: any) => {
+        count += values[field] ? values[field] : count
+        return count;
+      }, 0) : values ? Object.values(values).reduce((count: any, value: any) => count += value ? value : 0, 0) : 0
+    }
   },
   mounted() {
     this.store.dispatch('product/updateCurrent', { productId: this.$route.params.id })
+  },
+  data() {
+    return {
+      variant: '10097'
+    }
   },
   setup() {
     const router = useRouter();
