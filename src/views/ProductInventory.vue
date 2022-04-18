@@ -745,8 +745,8 @@ export default defineComponent({
     async getShopifyInformations(color: any, size: any) {
       if(this.product.variants) {
         const variant = this.product.variants.find((variant: any) => {
-          const variantColor = this.filterProductFeatures(variant.productFeatures, 'Color')
-          const variantSize = this.filterProductFeatures(variant.productFeatures, 'Size')
+          const variantColor = this.filterProductFeatures(variant.featureHierarchy, '1/COLOR/')
+          const variantSize = this.filterProductFeatures(variant.featureHierarchy, '1/SIZE/')
 
           if((variantColor.includes(color) && variantSize.includes(size))) return variant
         })
@@ -762,7 +762,7 @@ export default defineComponent({
                 }
               })
             })
-            console.log(variant?.productId)
+
             await this.store.dispatch('util/getShopifyConfigIds', { shopifyProductStores, productId: variant?.productId }).then((configs: any) => {
               this.productStores  = (this.productStores as any).map((prdtStore: any) => {
                 return {
@@ -780,8 +780,8 @@ export default defineComponent({
   },
   mounted() {
     this.store.dispatch('product/updateCurrent', { productId: this.$route.params.id }).then(() => {
-      this.updateCurrentSelectedFeatures(this.filterProductFeatures(this.product.feature, 'Color')[0], 'color')
-      this.updateCurrentSelectedFeatures(this.filterProductFeatures(this.product.feature, 'Size')[0], 'size')
+      this.updateCurrentSelectedFeatures(this.filterProductFeatures(this.product.features, '1/COLOR/')[0], 'color');
+      this.updateCurrentSelectedFeatures(this.filterProductFeatures(this.product.features, '1/SIZE/')[0], 'size');
       this.getShopifyInformations(this.currentSelectedFeatures.color, this.currentSelectedFeatures.size);
     })
   },
