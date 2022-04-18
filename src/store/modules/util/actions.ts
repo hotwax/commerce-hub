@@ -29,7 +29,7 @@ const actions: ActionTree<UtilState, RootState> = {
   },
 
   // Get shopify enumeration description
-  async getShopifyEnumerations({ state, commit }, payload) {
+  async getEnumerations({ state, commit }, payload) {
     const enumIds = payload.map((enumeration: any) => enumeration.productIdentifierEnumId)
     const currentEnums = JSON.parse(JSON.stringify(state.enumerations));
     const currentEnumIds = Object.keys(state.enumerations);

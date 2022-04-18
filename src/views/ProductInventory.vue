@@ -754,7 +754,7 @@ export default defineComponent({
 
         await this.getShopifyProductStores(variant?.productStoreIds).then( async(shopifyProductStores: any) => {
           if(shopifyProductStores.length) {
-            await this.store.dispatch('util/getShopifyEnumerations', shopifyProductStores).then((enums: any) => {
+            await this.store.dispatch('util/getEnumerations', shopifyProductStores).then((enums: any) => {
               this.productStores = shopifyProductStores.map((prdtStore: any) => {
                 return {
                   ...prdtStore,
