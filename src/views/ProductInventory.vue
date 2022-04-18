@@ -625,8 +625,8 @@ import PurchaseOrderPopover from '@/components/PurchaseOrderPopover.vue';
 import FulfillmentSettingsPopover from '@/components/FulfillmentSettingsPopover.vue';
 import { useStore, mapGetters } from 'vuex';
 import { ProductService } from "@/services/ProductService";
+import { UtilService } from "@/services/UtilService";
 import { hasError } from '@/utils';
-import { config } from '@vue/test-utils';
 
 export default defineComponent({
   name: 'ProductInventory',
@@ -719,7 +719,7 @@ export default defineComponent({
       (this.currentSelectedFeatures as any)[featureName] = feature
       await this.getShopifyInformations(this.currentSelectedFeatures.color, this.currentSelectedFeatures.size);
     },
-    async getShopifyProductStores(productStoreIds: any) {
+    async getProductIdentEnumIds(productStoreIds: any) {
       let resp;
 
       try{
@@ -734,7 +734,7 @@ export default defineComponent({
           "noConditionFind": "Y",
           "distinct": "Y"
         }
-        resp = await ProductService.getShopifyProductStores(payload);
+        resp = await ProductService.getProductIdentEnumIds(payload);
         if (resp.status === 200 && resp.data.docs?.length > 0 && !hasError(resp)) {
           return resp.data.docs;
         }
@@ -752,31 +752,63 @@ export default defineComponent({
           if((variantColor.includes(color) && variantSize.includes(size))) return variant
         })
 
-        await this.getShopifyProductStores(variant?.productStoreIds).then( async(shopifyProductStores: any) => {
-          if(shopifyProductStores.length) {
-            await this.store.dispatch('util/getEnumerations', shopifyProductStores).then((enums: any) => {
-              this.productStores = shopifyProductStores.map((prdtStore: any) => {
-                return {
-                  ...prdtStore,
-                  internalName: variant?.internalName,
-                  description: enums[prdtStore.productIdentifierEnumId]?.description
-                }
-              })
+        if(variant?.productStoreIds) {
+          await this.getProductIdentEnumIds(variant?.productStoreIds).then( async(productIdenEnumIds: any) => {
+            let enumIds: any = new Set();
+            productIdenEnumIds.forEach((productStore: any) => {
+              if (productStore.productIdentifierEnumId) enumIds.add(productStore.productIdentifierEnumId);
             })
+            enumIds = [...enumIds]
+          
+            if(productIdenEnumIds.length) {
+              await this.store.dispatch('util/getEnumerations', enumIds).then((enums: any) => {
+                this.productStores = productIdenEnumIds.map((productStore: any) => {
+                  return {
+                    ...productStore,
+                    internalName: variant?.internalName,
+                    description: enums[productStore.productIdentifierEnumId]?.description
+                  }
+                })
+              })
+            }
+          });
 
-            await this.store.dispatch('util/getShopifyConfigIds', { shopifyProductStores, productId: variant?.productId }).then((shopifyConfigs: any) => {
-              this.productStores  = (this.productStores as any).map((prdtStore: any) => {
-                return {
-                  ...prdtStore,
-                  ...shopifyConfigs[variant?.productId]
-                }
-              })
-            })
-          }
-        })
+          const productStoreIds = Object.values(variant?.productStoreIds)
+          await this.store.dispatch('util/getShopifyConfigIds', productStoreIds).then( async (shopifyConfigs: any) => {
+            const configIds = Object.values(shopifyConfigs).map((config: any) => config.shopifyConfigId)
+            const shopifyProducts = await this.getShopifyProductIds({ configIds, productId: variant?.productId });
+
+            this.productStores = (this.productStores as any).map((productStore: any) => {
+              const shopifyProduct = shopifyProducts.find((shopifyProduct: any) => shopifyProduct.shopifyConfigId === shopifyConfigs[productStore.productStoreId].shopifyConfigId)
+              return {
+                ...productStore,
+                ...shopifyProduct
+              }
+            });
+          })          
+        }
 
         return this.productStores;
       }
+    },
+    async getShopifyProductIds(payload: any) {
+      const params = {
+        "inputFields": {
+          "productId": payload?.productId,
+          "shopifyConfigId": payload?.configIds,
+          "shopifyConfigId_op": 'in'
+        },
+        "fieldList": ['shopifyProductId', 'shopifyConfigId', 'productId'],
+        "entityName": "ShopifyProduct",
+        "noConditionFind": "Y",
+        "distinct": "Y"
+      }
+
+      const resp = await UtilService.getShopifyProductIds(params);
+      if (resp.status === 200 && resp.data.docs?.length > 0 && !hasError(resp)) {
+        return resp.data.docs
+      } 
+      return []
     }
   },
   mounted() {

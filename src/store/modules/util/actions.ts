@@ -30,14 +30,8 @@ const actions: ActionTree<UtilState, RootState> = {
 
   // Get enumeration descriptions
   async getEnumerations({ state, commit }, payload) {
-    let enumIds: any = new Set();
-    payload.forEach((productStore: any) => {
-      if (productStore.productIdentifierEnumId) enumIds.add(productStore.productIdentifierEnumId);
-    })
-    enumIds = [...enumIds]
-
     const currentEnums = JSON.parse(JSON.stringify(state.enumerations));
-    const enumIdFilter = enumIds.reduce((enums: any, enumId: any) => {
+    const enumIdFilter = payload.reduce((enums: any, enumId: any) => {
       if(!currentEnums[enumId]) {
         enums.push(enumId);
       }
@@ -56,11 +50,11 @@ const actions: ActionTree<UtilState, RootState> = {
       "noConditionFind": "Y",
       "distinct": "Y"
     }
-    const resp = await UtilService.getShopifyEnumeration(params);
+    const resp = await UtilService.getEnumerations(params);
     if (resp.status === 200 && resp.data.docs?.length > 0 && !hasError(resp)) {
-      const shopifyEnumeration = resp.data.docs;
+      const enumerations = resp.data.docs;
       if(resp.data) {
-        shopifyEnumeration.map((enumeration: any) => {
+        enumerations.map((enumeration: any) => {
           currentEnums[enumeration.enumId] = enumeration
         });
       }
@@ -71,13 +65,11 @@ const actions: ActionTree<UtilState, RootState> = {
   },
 
   // Get shopify configIds
-  async getShopifyConfigIds({ state, commit, dispatch }, payload) {
-    const prdtStoreIds = payload.shopifyProductStores.map((prdtStore: any) => prdtStore.productStoreId)
+  async getShopifyConfigIds({ state, commit }, payload) {
     const currentConfigs = JSON.parse(JSON.stringify(state.shopifyConfigs));
-    const currentConfigIds = Object.keys(state.shopifyConfigs);
 
-    const prdtStoreFilter = prdtStoreIds.reduce((stores: any, storeId: any) => {
-      if(!currentConfigIds.includes(storeId)) {
+    const prdtStoreFilter = payload.reduce((stores: any, storeId: any) => {
+      if(!currentConfigs[storeId]) {
         stores.push(storeId);
       }
       return stores;
@@ -95,54 +87,20 @@ const actions: ActionTree<UtilState, RootState> = {
       "noConditionFind": "Y",
       "distinct": "Y"
     }
-    try{
-      const resp = await UtilService.getShopifyConfigIds(params);
-      if (resp.status === 200 && resp.data.docs?.length > 0 && !hasError(resp)) {
-        const configIds = resp.data.docs
-        const shopifyConfigIds = configIds.map((configId: any) => configId.shopifyConfigId);
-
-        const params = {
-          "inputFields": {
-            "productId": payload?.productId,
-            "shopifyConfigId": shopifyConfigIds,
-            "shopifyConfigId_op": 'in'
-          },
-          "fieldList": ['shopifyProductId', 'shopifyConfigId', 'productId'],
-          "entityName": "ShopifyProduct",
-          "noConditionFind": "Y",
-          "distinct": "Y"
-        }
-        const shopifyProductIds = await dispatch('getShopifyproductIds', params);
-
-        shopifyProductIds.map((shopifyPrdt: any) => {
-          const productStore = configIds.find((configId: any) => configId.shopifyConfigId === shopifyPrdt.shopifyConfigId) 
-
-          currentConfigs[shopifyPrdt.productId] = {
-            productStoreId : productStore?.productStoreId,
-            ...shopifyPrdt
-          }
+    
+    const resp = await UtilService.getShopifyConfigIds(params);
+    if (resp.status === 200 && resp.data.docs?.length > 0 && !hasError(resp)) {
+      const shopifyConfigIds = resp.data.docs
+      if(resp.data) {
+        shopifyConfigIds.map((config: any) => {
+          currentConfigs[config.productStoreId] = config
         });
-        
-        commit(types.UTIL_SHOPIFY_CONFIGS_UPDATED, currentConfigs);
       }
-    } catch(err) {
-      console.error(err);
+                  
+      commit(types.UTIL_SHOPIFY_CONFIGS_UPDATED, currentConfigs);
     }
-    return currentConfigs
-  },
 
-  // Get shopify product Ids
-  async getShopifyproductIds({ state, commit }, payload) {
-    let resp;
-    try{
-      resp = await UtilService.getShopifyproductIds(payload);
-      if (resp.status === 200 && resp.data.docs?.length > 0 && !hasError(resp)) {
-        return resp.data.docs
-      }
-    } catch(err) {
-      console.error(err);
-    }
-    return [];
+    return currentConfigs
   }
 }
 
