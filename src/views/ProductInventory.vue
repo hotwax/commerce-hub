@@ -292,10 +292,12 @@
                   <p>{{ facility.allowBopis === "y" ? "pick up" : "" }} {{ facility.allowBopis === "y" && facility.allowBrokering === "y"? " and " : ""}} {{ facility.allowBrokering === "y"? "delivery" : "" }}</p>
                 </ion-label>
                 </ion-item>
+                <!-- TODO: fetch data using solar query -->
                 <ion-label class="tablet">
                   600
                   <p>{{ $t("orders") }}</p>
                 </ion-label>
+                <!-- TODO: fetch data using solar query -->
                 <ion-label>
                   400
                   <p>{{ $t("purchase order ATP") }}</p>
@@ -693,15 +695,11 @@ export default defineComponent({
       return popover.present();
     },
   },
-<<<<<<< HEAD
   async mounted() {
     await this.store.dispatch('product/getProductDetail', { productId: this.$route.params.id })
     await this.store.dispatch('product/getFacilities', this.$route.params.id);
     this.filter('all');
-=======
-  mounted() {
     this.store.dispatch('product/updateCurrent', { productId: this.$route.params.id })
->>>>>>> 867f4597572226eefd793586dbd9886a7b3a37ff
   },
   setup () {
     const router = useRouter();
