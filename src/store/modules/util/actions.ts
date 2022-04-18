@@ -28,7 +28,7 @@ const actions: ActionTree<UtilState, RootState> = {
     }
   },
 
-  // Get shopify enumeration description
+  // Get enumeration descriptions
   async getEnumerations({ state, commit }, payload) {
     let enumIds: any = new Set();
     payload.forEach((productStore: any) => {
@@ -37,10 +37,8 @@ const actions: ActionTree<UtilState, RootState> = {
     enumIds = [...enumIds]
 
     const currentEnums = JSON.parse(JSON.stringify(state.enumerations));
-    const currentEnumIds = Object.keys(state.enumerations);
-
     const enumIdFilter = enumIds.reduce((enums: any, enumId: any) => {
-      if(!currentEnumIds.includes(enumId)) {
+      if(!currentEnums[enumId]) {
         enums.push(enumId);
       }
       return enums;
@@ -50,7 +48,7 @@ const actions: ActionTree<UtilState, RootState> = {
 
     const params = {
       "inputFields": {
-        "enumId": enumIds,
+        "enumId": enumIdFilter,
         "enumId_op": 'in'
       },
       "fieldList": ['enumId', 'description'],
