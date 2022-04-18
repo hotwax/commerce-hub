@@ -95,34 +95,30 @@ const actions: ActionTree<UtilState, RootState> = {
     try{
       const resp = await UtilService.getShopifyConfigIds(params);
       if (resp.status === 200 && resp.data.docs?.length > 0 && !hasError(resp)) {
-        const shopifyConfigIds = resp.data.docs.map((configId: any) => configId.shopifyConfigId);
-        if(resp.data) {
-          resp.data.docs.map((prdt: any) => {
-            currentConfigs[prdt.productStoreId] = prdt
-          })
-        }
-        
+        const configIds = resp.data.docs
+        const shopifyConfigIds = configIds.map((configId: any) => configId.shopifyConfigId);
+
         const params = {
           "inputFields": {
             "productId": payload?.productId,
             "shopifyConfigId": shopifyConfigIds,
             "shopifyConfigId_op": 'in'
           },
-          "fieldList": ['shopifyProductId', 'shopifyConfigId'],
+          "fieldList": ['shopifyProductId', 'shopifyConfigId', 'productId'],
           "entityName": "ShopifyProduct",
           "noConditionFind": "Y",
           "distinct": "Y"
         }
         const shopifyProductIds = await dispatch('getShopifyproductIds', params);
-        shopifyProductIds.map((product: any) => {
-          const currentConfig = Object.values(currentConfigs).find((conf: any) => conf.shopifyConfigId === product.shopifyConfigId)
 
-          currentConfigs[(currentConfig as any)?.productStoreId] = {
-            ...(currentConfig as any),
-            shopifyConfigId: product.shopifyConfigId,
-            shopifyProductId: product.shopifyProductId
+        shopifyProductIds.map((shopifyPrdt: any) => {
+          const productStore = configIds.find((configId: any) => configId.shopifyConfigId === shopifyPrdt.shopifyConfigId) 
+
+          currentConfigs[shopifyPrdt.productId] = {
+            productStoreId : productStore?.productStoreId,
+            ...shopifyPrdt
           }
-        })
+        });
         
         commit(types.UTIL_SHOPIFY_CONFIGS_UPDATED, currentConfigs);
       }

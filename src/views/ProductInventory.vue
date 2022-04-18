@@ -626,6 +626,7 @@ import FulfillmentSettingsPopover from '@/components/FulfillmentSettingsPopover.
 import { useStore, mapGetters } from 'vuex';
 import { ProductService } from "@/services/ProductService";
 import { hasError } from '@/utils';
+import { config } from '@vue/test-utils';
 
 export default defineComponent({
   name: 'ProductInventory',
@@ -763,11 +764,11 @@ export default defineComponent({
               })
             })
 
-            await this.store.dispatch('util/getShopifyConfigIds', { shopifyProductStores, productId: variant?.productId }).then((configs: any) => {
+            await this.store.dispatch('util/getShopifyConfigIds', { shopifyProductStores, productId: variant?.productId }).then((shopifyConfigs: any) => {
               this.productStores  = (this.productStores as any).map((prdtStore: any) => {
                 return {
                   ...prdtStore,
-                  ...configs[prdtStore.productStoreId]
+                  ...shopifyConfigs[variant?.productId]
                 }
               })
             })
