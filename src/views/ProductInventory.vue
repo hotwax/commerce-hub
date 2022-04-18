@@ -70,7 +70,7 @@
                 <ion-chip>
                   <ion-label>All</ion-label>
                 </ion-chip>
-                <ion-chip v-for="(feature, index) in $filters.getFeatures(product.feature, 'Color')" :key="index">
+                <ion-chip v-for="(feature, index) in $filters.getFeaturesList(product.features, '1/COLOR/')" :key="index">
                   <ion-icon :icon="checkmarkOutline" />
                   <ion-label>{{ feature }}</ion-label>
                 </ion-chip>
@@ -82,7 +82,7 @@
                 <ion-chip>
                   <ion-label>All</ion-label>
                 </ion-chip>
-                <ion-chip v-for="(feature, index) in $filters.getFeatures(product.feature, 'Size')" :key="index">
+                <ion-chip v-for="(feature, index) in $filters.getFeaturesList(product.features, '1/SIZE/')" :key="index">
                   <ion-icon :icon="checkmarkOutline" />
                   <ion-label>{{ feature }}</ion-label>
                 </ion-chip>
@@ -664,7 +664,7 @@ export default defineComponent({
   },
   computed: {
     ...mapGetters({
-      product: 'product/getCurrentProduct'
+      product: 'product/getCurrent'
     })
   },
   methods: {
@@ -721,7 +721,7 @@ export default defineComponent({
     }
   },
   mounted() {
-    this.store.dispatch('product/getProductDetail', { productId: this.$route.params.id })
+    this.store.dispatch('product/updateCurrent', { productId: this.$route.params.id })
   },
   data() {
     return {

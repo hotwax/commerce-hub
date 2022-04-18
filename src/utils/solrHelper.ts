@@ -1,5 +1,3 @@
-import store from "@/store";
-
 const prepareOrderQuery = (query: any) => {
   const typeFilterSelected = [];
   const viewSize = query.viewSize ? query.viewSize : process.env.VUE_APP_VIEW_SIZE;
@@ -22,7 +20,7 @@ const prepareOrderQuery = (query: any) => {
       "facet": {
         "orderStatusIdFacet": {
             "field": "orderStatusId",
-            "mincount": 0,
+            "mincount": 1,
             "limit": -1,
             "sort": "index",
             "type": "terms"
@@ -30,7 +28,7 @@ const prepareOrderQuery = (query: any) => {
         "shipmentMethodTypeIdFacet": {
           "excludeTags": "shipmentMethodTypeIdFilter",
           "field": "shipmentMethodTypeId",
-          "mincount": 0,
+          "mincount": 1,
           "limit": -1,
           "sort": "index",
           "type": "terms"
@@ -39,10 +37,10 @@ const prepareOrderQuery = (query: any) => {
     }
   }
 
-  if (store.state.order.query.queryString) {
+  if (query.queryString) {
     payload.json.params.defType = 'edismax'
     payload.json.params.qf = 'orderId customerPartyName customerPartyId productId internalName'
-    payload.json.query = `*${store.state.order.query.queryString}*`
+    payload.json.query = `*${query.queryString}*`
   }
 
   // updating the filter value in json object as per the filters selected
@@ -71,19 +69,13 @@ const prepareOrderQuery = (query: any) => {
 
   payload.json.filter = payload.json.filter.concat(` AND facilityId: (${typeFilterValues ? typeFilterValues : '*'})`)
 
-  if (query.shipFromLocation === 'store') {
-    payload.json.filter = payload.json.filter.concat(' AND facilityTypeId: RETAIL_STORE')
-  } else if (query.shipFromLocation === 'warehouse') {
-    payload.json.filter = payload.json.filter.concat(' AND facilityTypeId: WAREHOUSE')
+  if (query.shipFromLocation) {
+    payload.json.filter = payload.json.filter.concat(` AND facilityTypeId: ${query.shipFromLocation}`)
   }
 
-  if (query.status) {
-    payload.json.filter = payload.json.filter.concat(` AND orderStatusId: ${query.status !== 'any' ? query.status : '*'}`)
-  }
+  payload.json.filter = payload.json.filter.concat(` AND orderStatusId: ${query.status ? query.status : '*'}`)
 
-  if (query.shippingMethod) {
-    payload.json.filter = payload.json.filter.concat(` AND shipmentMethodTypeId: ${query.shippingMethod !== 'any' ? query.shippingMethod : '*' }`)
-  }
+  payload.json.filter = payload.json.filter.concat(` AND shipmentMethodTypeId: ${query.shippingMethod ? query.shippingMethod : '*' }`)
 
   // TODO: improve logic to pass the date in the solr-query payload
   if (query.orderCreated) {

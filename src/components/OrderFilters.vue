@@ -51,21 +51,21 @@
     <ion-item>
       <ion-label>{{ $t("Status") }}</ion-label>
       <ion-select :value="query.status" @ionChange="updateAppliedFilters($event['detail'].value, 'status')" interface="popover">
-        <ion-select-option v-for="status in orderStatusOptions" :key="status" :value="status">{{ orderStatus[status]?.label ? orderStatus[status]?.label : status }}</ion-select-option>
+        <ion-select-option v-for="status in orderStatusOptions" :key="status" :value="status">{{ status ? ( orderStatus[status]?.label ? orderStatus[status]?.label : status ) : "any" }}</ion-select-option>
       </ion-select>
     </ion-item>
     <ion-item>
       <ion-label>{{ $t("Shipping method") }}</ion-label>
       <ion-select :value="query.shippingMethod" @ionChange="updateAppliedFilters($event['detail'].value, 'shippingMethod')" interface="popover">
-        <ion-select-option v-for="method in shippingMethodOptions" :key="method" :value="method">{{ method === 'any' ? 'any' : getShipmentMethodDesc(method) }}</ion-select-option>
+        <ion-select-option v-for="shippingMethod in shippingMethodOptions" :key="shippingMethod" :value="shippingMethod">{{ shippingMethod  ? getShipmentMethodDesc(shippingMethod) : 'any' }}</ion-select-option>
       </ion-select>
     </ion-item>
     <ion-item>
       <ion-label>{{ $t("Ship from location") }}</ion-label>
       <ion-select :value="query.shipFromLocation" @ionChange="updateAppliedFilters($event['detail'].value, 'shipFromLocation')" interface="popover">
-        <ion-select-option value="any" >{{ $t('any') }}</ion-select-option>
-        <ion-select-option value="store" >{{ $t('Store') }}</ion-select-option>
-        <ion-select-option value="warehouse" >{{ $t('Warehouse') }}</ion-select-option>
+        <ion-select-option value="" >{{ $t('any') }}</ion-select-option>
+        <ion-select-option value="RETAIL_STORE" >{{ $t('Store') }}</ion-select-option>
+        <ion-select-option value="WAREHOUSE" >{{ $t('Warehouse') }}</ion-select-option>
       </ion-select>
     </ion-item>
   </ion-list>
