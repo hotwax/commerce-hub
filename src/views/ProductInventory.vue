@@ -213,14 +213,16 @@
 
             <div class="actions">
               <div>
-                <ion-chip>
-                  <ion-icon :icon="checkmarkOutline" />
+                <ion-chip @click="filter('all'), setSelected('all')">
+                  <ion-icon v-show="selected === 'all'" :icon="checkmarkOutline" />
                   <ion-label>All</ion-label>
                 </ion-chip>
-                <ion-chip>
+                <ion-chip @click="filter('RETAIL_STORE'), setSelected('retail')">
+                  <ion-icon v-show="selected === 'retail'" :icon="checkmarkOutline" />
                   <ion-label>Retail</ion-label>
                 </ion-chip>
-                <ion-chip>
+                <ion-chip @click="filter('WAREHOUSE'), setSelected('warehouse')">
+                  <ion-icon v-show="selected === 'warehouse'" :icon="checkmarkOutline" />
                   <ion-label>Warehouses</ion-label>
                 </ion-chip>
               </div>
@@ -239,7 +241,7 @@
             <div class="list-item">
               <ion-item lines="none">
                 <ion-icon :icon="globeOutline" slot="start" />
-                <ion-label>30 {{ $t("locations") }}</ion-label>
+                <ion-label>{{ filteredFacilities.length }} {{ $t("locations") }}</ion-label>
               </ion-item>
 
               <ion-label class="tablet">
@@ -253,17 +255,17 @@
               </ion-label>
 
               <ion-label class="tablet">
-                400
+                {{ totalQuantity("quantityOnHandTotal") }}
                 <p>{{ $t("QOH") }}</p>
               </ion-label>
 
               <ion-label>
-                400
+                {{ totalQuantity("minimumStock") }}
                 <p>{{ $t("safety stock") }}</p>
               </ion-label>
 
               <ion-label class="tablet">
-                400
+                {{ totalQuantity("availableToPromiseTotal") }}
                 <p>{{ $t("ATP") }}</p>
               </ion-label>
 
@@ -280,93 +282,45 @@
 
             <hr />
 
-            <div class="list-item">
-              <ion-item lines="none">
+            <div v-for="facility in filteredFacilities" :key="facility.facilityId">
+              <div class="list-item">
+                <ion-item lines="none">
                 <ion-icon :icon="storefrontOutline" slot="start" />
                 <ion-label>
-                  <p>Retail</p>
-                  Store 1 name
-                  <p>Pickup and shipping</p>
+                  <p>{{ getFacilityType(facility.facilityTypeId) }}</p>
+                  {{ facility.facilityName }}
+                  <p>{{ facility.allowBopis === "y" ? "pick up" : "" }} {{ facility.allowBopis === "y" && facility.allowBrokering === "y"? " and " : ""}} {{ facility.allowBrokering === "y"? "delivery" : "" }}</p>
                 </ion-label>
-              </ion-item>
-
-              <ion-label class="tablet">
-                600
-                <p>{{ $t("orders") }}</p>
-              </ion-label>
-
-              <ion-label>
-                400
-                <p>{{ $t("purchase order ATP") }}</p>
-              </ion-label>
-
-              <ion-label class="tablet">
-                400
-                <p>{{ $t("QOH") }}</p>
-              </ion-label>
-
-              <ion-label>
-                400
-                <p>{{ $t("safety stock") }}</p>
-              </ion-label>
-
-              <ion-label class="tablet">
-                400
-                <p>{{ $t("ATP") }}</p>
-              </ion-label>
-
-              <ion-checkbox />
-
-              <ion-button fill="clear" color="medium" @click="openLocationPopover">
-                <ion-icon slot="icon-only" :icon="ellipsisVerticalOutline" />
-              </ion-button>
-            </div>
-
-            <hr />
-
-            <div class="list-item">
-              <ion-item lines="none">
-                <ion-icon :icon="businessOutline" slot="start" />
+                </ion-item>
+                <!-- TODO: fetch data using solar query -->
+                <ion-label class="tablet">
+                  600
+                  <p>{{ $t("orders") }}</p>
+                </ion-label>
+                <!-- TODO: fetch data using solar query -->
                 <ion-label>
-                  <p>Warehouse</p>
-                  Warehouse 1 name
-                  <p>Shipping</p>
+                  400
+                  <p>{{ $t("purchase order ATP") }}</p>
                 </ion-label>
-              </ion-item>
-
-              <ion-label class="tablet">
-                600
-                <p>{{ $t("orders") }}</p>
-              </ion-label>
-
-              <ion-label>
-                400
-                <p>{{ $t("purchase order ATP") }}</p>
-              </ion-label>
-
-              <ion-label class="tablet">
-                400
-                <p>{{ $t("QOH") }}</p>
-              </ion-label>
-
-              <ion-label>
-                400
-                <p>{{ $t("safety stock") }}</p>
-              </ion-label>
-
-              <ion-label class="tablet">
-                400
-                <p>{{ $t("ATP") }}</p>
-              </ion-label>
-
-              <ion-checkbox />
-
-              <ion-button fill="clear" color="medium" @click="openLocationPopover">
-                <ion-icon slot="icon-only" :icon="ellipsisVerticalOutline" />
-              </ion-button>
+                <ion-label class="tablet">
+                  {{ facility.quantityOnHandTotal }}
+                  <p>{{ $t("QOH") }}</p>
+                </ion-label>
+                <ion-label>
+                  {{ facility.minimumStock ? facility.minimumStock : "-"}}
+                  <p>{{ $t("safety stock") }}</p>
+                </ion-label>            
+                <ion-label class="tablet">
+                  {{ facility.availableToPromiseTotal }}
+                  <p>{{ $t("ATP") }}</p>
+                </ion-label>
+                <ion-checkbox />
+                <ion-button fill="clear" color="medium" @click="openLocationPopover">
+                  <ion-icon slot="icon-only" :icon="ellipsisVerticalOutline" />
+                </ion-button>
+              </div>
+              <hr />
             </div>
-
-            <hr />
           </div>
 
           <div v-if="segment == 'purchase-orders'">
@@ -613,6 +567,7 @@ import {
 } from '@ionic/vue';
 import { defineComponent, ref } from 'vue';
 import { useRouter } from 'vue-router';
+import { useStore, mapGetters } from "vuex";
 import {
   businessOutline,
   calendarOutline,
@@ -633,7 +588,6 @@ import EditQuantityModal from '@/components/EditQuantityModal.vue';
 import LocationPopover from '@/components/LocationPopover.vue';
 import PurchaseOrderPopover from '@/components/PurchaseOrderPopover.vue';
 import FulfillmentSettingsPopover from '@/components/FulfillmentSettingsPopover.vue';
-import { useStore, mapGetters } from 'vuex';
 
 export default defineComponent({
   name: 'ProductInventory',
@@ -666,10 +620,44 @@ export default defineComponent({
   },
   computed: {
     ...mapGetters({
+      facilities: 'product/getFacilities',
       product: 'product/getCurrent'
-    })
+    }),
+  },
+  data () {
+    return {
+      filteredFacilities: [] as any,
+      selected: 'all'
+    }
   },
   methods: {
+    setSelected(value: any){
+      this.selected = value;
+    },
+    totalQuantity(value: any){
+      let total = 0;
+      this.filteredFacilities.forEach((facility: any) => {
+        if(facility[value]){
+          total = total + facility[value];
+        }
+      });
+      return total;
+    },
+    getFacilityType(typeId: any){
+      if(typeId === "RETAIL_STORE") return "Retail"
+      else if(typeId === "WAREHOUSE") return "Warehouse"
+      else return ""
+    },
+    filter (type: any) {
+      this.store.dispatch('product/getFacilities');
+      if(type == "all"){
+        this.filteredFacilities = this.facilities;
+      } else {
+        this.filteredFacilities = this.facilities.filter((facility: any) => {
+          return facility.facilityTypeId === type;
+        })
+      }
+    },
     segmentChanged(ev: CustomEvent) {
       this.segment = ev.detail.value;
     },
@@ -707,10 +695,13 @@ export default defineComponent({
       return popover.present();
     },
   },
-  mounted() {
+  async mounted() {
+    await this.store.dispatch('product/getProductDetail', { productId: this.$route.params.id })
+    await this.store.dispatch('product/getFacilities', this.$route.params.id);
+    this.filter('all');
     this.store.dispatch('product/updateCurrent', { productId: this.$route.params.id })
   },
-  setup() {
+  setup () {
     const router = useRouter();
     const store = useStore();
     const segment = ref("locations");

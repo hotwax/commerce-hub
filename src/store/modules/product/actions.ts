@@ -133,7 +133,7 @@ const actions: ActionTree<ProductState, RootState> = {
             featureHierarchy: virtual?.featureHierarchy
           }
         })
-
+        
         // We are commenting this code because we will be releasing this feature in next release.
 
         // const variantIds = products.reduce((acc: any, product: any) => {
@@ -152,6 +152,76 @@ const actions: ActionTree<ProductState, RootState> = {
     }
     return resp;
   },
+  async getFacilities({commit, dispatch}, productId) {
+    let resp;
+    try {
+      let facilityIds = [] as any;
+      resp = await ProductService.getFacility({
+        "entityName": "Facility",
+        "noConditionFind": "Y",
+        "viewSize": 30
+      });
+      facilityIds = resp.data.docs.map((facility: any) => {
+        return facility.facilityId
+      })
+      const facilityInformation = await dispatch('getFacilityInformation', {facilityIds, productId})
+      const facilitiesPromises = await Promise.all(resp.data.docs.map( async (facility: any) => {
+        const getProductInventoryResp =  await dispatch('getProductInventoryInformation', {
+          productId: "10097",
+          facilityId: facility.facilityId
+        })
+        
+        facility['accountingQuantityTotal'] = getProductInventoryResp.accountingQuantityTotal
+        facility.availableToPromiseTotal = getProductInventoryResp.availableToPromiseTotal
+        facility.quantityOnHandTotal = getProductInventoryResp.quantityOnHandTotal
+        
+        const facilityFound = facilityInformation.find((facilityInfo: any) => {
+          return facilityInfo.facilityId === facility.facilityId;
+        })
+        if(facilityFound){
+          facility = {...facility, ...facilityFound}
+        }
+        return facility;
+      }))
+
+      const facilities =  facilitiesPromises;
+      commit(types.PRODUCT_FACILITY_UPDATED,  facilities);
+    } catch (err) {
+      console.error(err)
+    }
+  },
+async getFacilityInformation({commit}, payload) {
+    let resp;
+    try {
+      resp = await ProductService.getFacility({
+        "inputFields": {
+          "facilityId": payload.facilityIds,
+          "productId": "10097",
+          "facilityId_op": "in"
+        },
+        "entityName": "ProductFacility",
+        "fieldList": ["facilityId", "minimumStock", "allowBopis", "allowBrokering"],
+        "noConditionFind": "Y",
+        "viewSize": 30
+      });
+    } catch (err) {
+      console.error(err)
+    }
+    return resp.data?.docs
+  },
+
+  async getProductInventoryInformation({commit}, payload){
+    let resp;
+    try {
+      
+      resp = await ProductService.getProductInventoryAvailable(payload);
+    } catch (err) {
+      console.error(err)
+    }
+    return resp.data;
+  },
+
+  
 
   /**
   * Get Product-inventory details
