@@ -70,7 +70,7 @@
                 <ion-chip>
                   <ion-label>All</ion-label>
                 </ion-chip>
-                <ion-chip v-for="(feature, index) in $filters.getFeatures(product.feature, 'Color')" :key="index">
+                <ion-chip v-for="(feature, index) in $filters.getFeaturesList(product.features, '1/COLOR/')" :key="index">
                   <ion-icon :icon="checkmarkOutline" />
                   <ion-label>{{ feature }}</ion-label>
                 </ion-chip>
@@ -82,7 +82,7 @@
                 <ion-chip>
                   <ion-label>All</ion-label>
                 </ion-chip>
-                <ion-chip v-for="(feature, index) in $filters.getFeatures(product.feature, 'Size')" :key="index">
+                <ion-chip v-for="(feature, index) in $filters.getFeaturesList(product.features, '1/SIZE/')" :key="index">
                   <ion-icon :icon="checkmarkOutline" />
                   <ion-label>{{ feature }}</ion-label>
                 </ion-chip>
@@ -619,7 +619,7 @@ export default defineComponent({
   computed: {
     ...mapGetters({
       facilities: 'product/getFacilities',
-      product: 'product/getCurrentProduct'
+      product: 'product/getCurrent'
     }),
   },
   data () {
@@ -693,10 +693,15 @@ export default defineComponent({
       return popover.present();
     },
   },
+<<<<<<< HEAD
   async mounted() {
     await this.store.dispatch('product/getProductDetail', { productId: this.$route.params.id })
     await this.store.dispatch('product/getFacilities', this.$route.params.id);
     this.filter('all');
+=======
+  mounted() {
+    this.store.dispatch('product/updateCurrent', { productId: this.$route.params.id })
+>>>>>>> 867f4597572226eefd793586dbd9886a7b3a37ff
   },
   setup () {
     const router = useRouter();

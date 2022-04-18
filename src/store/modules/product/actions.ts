@@ -269,41 +269,53 @@ async getFacilityInformation({commit}, payload) {
   /**
   * Get Product-inventory details
   */
-  async getProductDetail({ dispatch, state }, { productId }) {
+  async updateCurrent({ commit, state }, { productId }) {
     const current = state.current as any
-    
+    const products = state.products.list as any
+
     if(current && current.productId === productId) { return current }
+
+    if(products.length) {
+      const virtual = products.find((product: any) => product.productId === productId );
+
+      if(virtual) {
+        const product = {
+          productId: virtual?.productId,
+          productName: virtual?.productName,
+          brand: virtual?.brandName,
+          externalId: virtual?.internalName,
+          mainImage: virtual?.mainImageUrl,
+          features: virtual?.featureHierarchy,
+          variants: virtual?.variants
+        }
+        commit(types.PRODUCT_CURRENT_UPDATED, product)
+        return product
+      }
+    }
 
     let resp;
     try {
       const payload = {
         "json": {
-          "params": {
-            "group": true,
-            "group.field": "groupId",
-            "group.limit": 10000,
-            "group.ngroups": true,
-          } as any,
           "query": "*:*",
           "filter": `docType: PRODUCT AND productId: ${productId}`
         }
       }
       resp = await ProductService.getProductDetail(payload);
-
-      if(resp.status === 200 && resp.data.grouped.groupId?.groups.length > 0 && !hasError(resp)) {
-        let product = resp.data.grouped.groupId?.groups[0].doclist.docs[0]
+      if(resp.status === 200 && resp.data.response?.docs.length > 0 && !hasError(resp)) {
+        let product = resp.data.response?.docs[0]
 
         product = {
           productId: product.productId,
           productName: product.productName,
           brand: product.brandName,
           externalId: product.internalName,
-          mainImage:product.mainImageUrl,
-          feature: product.productFeatures,
+          mainImage: product.mainImageUrl,
+          features: product.featureHierarchy,
           variants: product.variantProductIds
         }
 
-        dispatch('updateCurrent', product);
+        commit(types.PRODUCT_CURRENT_UPDATED, product)
       } else {
         showToast(translate("Product not found"));
       }
@@ -312,11 +324,7 @@ async getFacilityInformation({commit}, payload) {
       showToast(translate("Something went wrong"));
     }
     return resp;
-  },
-  updateCurrent({ commit, dispatch }, payload) {
-    dispatch('getPurchaseOrderAtp', payload.variants)
-    commit(types.PRODUCT_CURRENT_UPDATED, payload)
-  },
+  }
 }
 
 export default actions;

@@ -20,12 +20,9 @@
               <ion-icon slot="start" :icon="ticketOutline" />
               <h1>{{ order.orderName ? order.orderName : order.orderId }}</h1>
               <ion-badge :color="orderStatus[order.statusId]?.color ? orderStatus[order.statusId]?.color : 'primary'" slot="end">{{ orderStatus[order.statusId]?.label ? orderStatus[order.statusId]?.label : order.statusId }}</ion-badge>
-              <!-- TODO: implement functionality to change the orderStatus -->
-              <!-- <ion-select :value="status" @ionChange="changeStatus($event)" slot="end">
-                <ion-select-option value="Approved">Approved</ion-select-option>
-                <ion-select-option value="Completed">Completed</ion-select-option>
-                <ion-select-option value="Shipped">Shipped</ion-select-option>
-              </ion-select> -->
+              <ion-select v-if="validStatusChange(order.statusId)?.length > 0" @ionChange="changeStatus(order.orderId, $event)" slot="end">
+                <ion-select-option v-for="status in validStatusChange(order.statusId)" :key="status" :value="status">{{ orderStatus[status]?.label }}</ion-select-option>
+              </ion-select>
             </ion-item>
           </div>
 
@@ -260,6 +257,8 @@ import {
   IonList,
   IonListHeader,
   IonPage,
+  IonSelect,
+  IonSelectOption,
   IonThumbnail,
   IonTitle,
   IonToolbar
@@ -284,29 +283,27 @@ export default defineComponent({
     IonList,
     IonListHeader,
     IonPage,
+    IonSelect,
+    IonSelectOption,
     IonThumbnail,
     IonTitle,
     IonToolbar
-  },
-  data() {
-    return {
-      status: "Approved" // default value
-    }
   },
   computed: {
     ...mapGetters({
       order: 'order/getCurrentOrder',
       getProduct: 'product/getProduct',
       getProductStock: 'stock/getProductStock',
-      getShipmentMethod: 'util/getShipmentMethod'
+      getShipmentMethod: 'util/getShipmentMethod',
+      validStatusChange: 'order/getOrderValidStatusChange'
     })
   },
   methods:{
     orderDetails(orderId?: any){
       this.store.dispatch("order/getOrderDetails", orderId);
     },
-    changeStatus(ev: CustomEvent) {
-      this.status = ev['detail'].value
+    changeStatus(orderId: string, ev: CustomEvent) {
+      this.store.dispatch('order/updateOrderStatus', {orderId, statusId: ev['detail'].value, 'setItemStatus': 'Y'})
     }
   },
   mounted() {

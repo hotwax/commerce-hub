@@ -140,7 +140,7 @@
 
           <hr />
 
-          <div class="product" v-for="product in products" :key="product.productId" @click.prevent="viewProduct(product)">
+          <div class="product" v-for="product in products" :key="product.productId" @click="viewProduct(product)">
             <div class="desktop-only">
               <Image :src="product.mainImageUrl" />
             </div>
@@ -330,17 +330,7 @@ export default defineComponent({
       })
     },
     async viewProduct(product: any) {
-      product = {
-        productId: product.productId,
-        productName: product.productName,
-        brand: this.getProduct(product.productId).brandName,
-        externalId: this.getProduct(product.productId).internalName,
-        mainImage: this.getProduct(product.productId).mainImageUrl,
-        feature: this.getProduct(product.productId).productFeatures,
-        variants: product.variants
-      }
-
-      await this.store.dispatch('product/updateCurrent', product).then(() => {
+      await this.store.dispatch('product/updateCurrent', { productId: product?.productId }).then(() => {
         this.router.push(`/product-inventory/${product.productId}`)
       })
     }
