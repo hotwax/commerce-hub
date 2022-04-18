@@ -133,7 +133,7 @@ const actions: ActionTree<ProductState, RootState> = {
             featureHierarchy: virtual?.featureHierarchy
           }
         })
-
+        
         // We are commenting this code because we will be releasing this feature in next release.
 
         // const variantIds = products.reduce((acc: any, product: any) => {
@@ -164,7 +164,6 @@ const actions: ActionTree<ProductState, RootState> = {
       facilityIds = resp.data.docs.map((facility: any) => {
         return facility.facilityId
       })
-      
       const facilityInformation = await dispatch('getFacilityInformation', {facilityIds, productId})
       const facilitiesPromises = await Promise.all(resp.data.docs.map( async (facility: any) => {
         const getProductInventoryResp =  await dispatch('getProductInventoryInformation', {
@@ -180,10 +179,11 @@ const actions: ActionTree<ProductState, RootState> = {
           return facilityInfo.facilityId === facility.facilityId;
         })
         if(facilityFound){
-          facility.minimumStock = facilityFound.minimumStock
+          facility = {...facility, ...facilityFound}
         }
         return facility;
       }))
+
       const facilities =  facilitiesPromises;
       commit(types.PRODUCT_FACILITY_UPDATED,  facilities);
     } catch (err) {
@@ -200,7 +200,7 @@ async getFacilityInformation({commit}, payload) {
           "facilityId_op": "in"
         },
         "entityName": "ProductFacility",
-        "fieldList": ["facilityId", "minimumStock"],
+        "fieldList": ["facilityId", "minimumStock", "allowBopis", "allowBrokering"],
         "noConditionFind": "Y",
         "viewSize": 30
       });
@@ -213,11 +213,57 @@ async getFacilityInformation({commit}, payload) {
   async getProductInventoryInformation({commit}, payload){
     let resp;
     try {
+      
       resp = await ProductService.getProductInventoryAvailable(payload);
     } catch (err) {
       console.error(err)
     }
     return resp.data;
+  },
+
+  async getPurchaseOrderAtp({commit}, variantIds){
+    console.log(variantIds.join(' OR '))
+    let resp;
+    try {
+      const payload = {
+        "json":
+        {
+          "params": {
+              "group": true,
+              "group.field": "productId",
+              "group.limit": 10000,
+              "group.ngroups": true,
+              "rows": 10
+          },
+          "query": "*:*",
+          "filter": `docType: ORDER AND orderTypeId: PURCHASE_ORDER AND productId: (${variantIds.join(' OR ')})`,
+          "facet": {
+            "productIdFacet": {
+              "excludeTags":"productIdFilter",
+              "field": "productId",
+              "mincount": 0,
+              "limit": -1,
+              "sort": "index",
+              "type": "terms",
+              "facet": {
+                "facilityIdFacet": {
+                  "excludeTags":"facilityIdFilter",
+                  "field" : "facilityId",
+                  "mincount":0,
+                  "limit":-1,
+                  "type":"terms"
+                },
+               "poATP":"sum(availableToPromise)"
+              }
+            }
+          }
+        }
+      }
+      resp = await ProductService.getPurchaseOrderAtp(payload)
+    } catch(error){
+      console.error(error)
+    }
+    return resp;
   },
 
   /**
@@ -267,7 +313,8 @@ async getFacilityInformation({commit}, payload) {
     }
     return resp;
   },
-  updateCurrent({ commit }, payload) {
+  updateCurrent({ commit, dispatch }, payload) {
+    dispatch('getPurchaseOrderAtp', payload.variants)
     commit(types.PRODUCT_CURRENT_UPDATED, payload)
   },
 }

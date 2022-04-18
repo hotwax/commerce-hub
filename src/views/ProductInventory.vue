@@ -289,7 +289,7 @@
                 <ion-label>
                   <p>{{ getFacilityType(facility.facilityTypeId) }}</p>
                   {{ facility.facilityName }}
-                  <p>Pickup and shipping</p>
+                  <p>{{ facility.allowBopis === "y" ? "pick up" : "" }} {{ facility.allowBopis === "y" && facility.allowBrokering === "y"? " and " : ""}} {{ facility.allowBrokering === "y"? "delivery" : "" }}</p>
                 </ion-label>
                 </ion-item>
                 <ion-label class="tablet">
