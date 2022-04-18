@@ -67,7 +67,7 @@
             <ion-list>
               <ion-list-header>{{ $t("Color") }}</ion-list-header>
               <ion-item lines="none">
-                <ion-chip v-for="(feature, index) in $filters.getFeatures(product.feature, 'Color')" :key="index" @click="updateCurrentSelectedFeatures(feature, 'color')">
+                <ion-chip v-for="(feature, index) in $filters.getFeaturesList(product.features, '1/COLOR/')" :key="index" @click="updateCurrentSelectedFeatures(feature, 'color')">
                   <ion-icon v-if="currentSelectedFeatures.color === feature" :icon="checkmarkOutline" />
                   <ion-label>{{ feature }}</ion-label>
                 </ion-chip>
@@ -76,7 +76,7 @@
             <ion-list>
               <ion-list-header>{{ $t("Size") }}</ion-list-header>
               <ion-item lines="none">
-                <ion-chip v-for="(feature, index) in $filters.getFeatures(product.feature, 'Size')" :key="index" @click="updateCurrentSelectedFeatures(feature, 'size')">
+                <ion-chip v-for="(feature, index) in $filters.getFeaturesList(product.features, '1/SIZE/')" :key="index" @click="updateCurrentSelectedFeatures(feature, 'size')">
                   <ion-icon v-if="currentSelectedFeatures.size === feature" :icon="checkmarkOutline" />
                   <ion-label>{{ feature }}</ion-label>
                 </ion-chip>
@@ -663,7 +663,7 @@ export default defineComponent({
   },
   computed: {
     ...mapGetters({
-      product: 'product/getCurrentProduct'
+      product: 'product/getCurrent'
     })
   },
   methods: {
@@ -708,7 +708,7 @@ export default defineComponent({
       if (features) {
         featuresList = features.filter((featureItem: any) => featureItem.startsWith(featureName)).map((feature: any) => {
           const featureSplit = feature ? feature.split('/') : [];
-          const featureValue = featureSplit[1] ? featureSplit[1] : '';
+          const featureValue = featureSplit[2] ? featureSplit[2] : '';
           return featureValue;
         })
       }
@@ -779,7 +779,7 @@ export default defineComponent({
     }
   },
   mounted() {
-    this.store.dispatch('product/getProductDetail', { productId: this.$route.params.id }).then(() => {
+    this.store.dispatch('product/updateCurrent', { productId: this.$route.params.id }).then(() => {
       this.updateCurrentSelectedFeatures(this.filterProductFeatures(this.product.feature, 'Color')[0], 'color')
       this.updateCurrentSelectedFeatures(this.filterProductFeatures(this.product.feature, 'Size')[0], 'size')
       this.getShopifyInformations(this.currentSelectedFeatures.color, this.currentSelectedFeatures.size);
