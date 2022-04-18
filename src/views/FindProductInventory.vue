@@ -60,7 +60,7 @@
 
           <hr />
 
-          <div class="product" v-for="product in products" :key="product.productId" @click="() => router.push('/product-inventory')">
+          <div class="product" v-for="product in products" :key="product.productId" @click="viewProduct(product)">
             <div class="desktop-only">
               <Image :src="product.mainImageUrl" />
             </div>
@@ -240,6 +240,11 @@ export default defineComponent({
 
       await this.store.dispatch('product/updateQuery', { viewSize, viewIndex }).then(() => {
         event.target.complete();
+      })
+    },
+    async viewProduct(product: any) {
+      await this.store.dispatch('product/updateCurrent', { productId: product?.productId }).then(() => {
+        this.router.push(`/product-inventory/${product.productId}`)
       })
     },
     async getCategories() {

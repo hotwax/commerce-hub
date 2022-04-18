@@ -3,5 +3,8 @@ export default interface OrderState {
     orders: any[],
     total: number
   },
-  current: any
+  poIds: any,
+  query: any,
+  current: any,
+  validStatusChange: any
 }

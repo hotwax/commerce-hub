@@ -4,5 +4,6 @@ export default interface ProductState {
     list: any;
     total: number;
   },
+  current: any
   currentProductFilterSelected: any
 }

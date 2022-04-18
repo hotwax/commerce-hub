@@ -160,15 +160,16 @@ const actions: ActionTree<ProductState, RootState> = {
     return resp;
   },
 
-    /**
-   * Get Product Inventory
-   */
+  /**
+  * Get Product Inventory
+  */
   async getProducts({ commit, state }, payload) {
     let resp;
-    
-    try{
+
+    try {
       resp = await ProductService.getProducts(payload);
-      if(resp.status === 200 && resp.data.grouped.groupId?.ngroups > 0 && !hasError(resp)) {
+
+      if (resp.status === 200 && resp.data.grouped.groupId?.ngroups > 0 && !hasError(resp)) {
         let products = resp.data.grouped.groupId?.groups;
         const totalProductsCount = resp.data.grouped.groupId.ngroups;
         
@@ -213,14 +214,73 @@ const actions: ActionTree<ProductState, RootState> = {
         showToast(translate("Products not found"));
         commit(types.PRODUCT_LIST_UPDATED, { products: [], totalProductsCount: 0 });
       }
-    } catch(error) {
+    } catch (error) {
       console.error(error);
       commit(types.PRODUCT_LIST_UPDATED, { products: [], totalProductsCount: 0 });
       showToast(translate("Something went wrong"));
     }
     return resp;
   },
-  
+
+  /**
+  * Get Product-inventory details
+  */
+  async updateCurrent({ commit, state }, { productId }) {
+    const current = state.current as any
+    const products = state.products.list as any
+
+    if(current && current.productId === productId) { return current }
+
+    if(products.length) {
+      const virtual = products.find((product: any) => product.productId === productId );
+
+      if(virtual) {
+        const product = {
+          productId: virtual?.productId,
+          productName: virtual?.productName,
+          brand: virtual?.brandName,
+          externalId: virtual?.internalName,
+          mainImage: virtual?.mainImageUrl,
+          features: virtual?.featureHierarchy,
+          variants: virtual?.variants
+        }
+        commit(types.PRODUCT_CURRENT_UPDATED, product)
+        return product
+      }
+    }
+
+    let resp;
+    try {
+      const payload = {
+        "json": {
+          "query": "*:*",
+          "filter": `docType: PRODUCT AND productId: ${productId}`
+        }
+      }
+      resp = await ProductService.getProductDetail(payload);
+      if(resp.status === 200 && resp.data.response?.docs.length > 0 && !hasError(resp)) {
+        let product = resp.data.response?.docs[0]
+
+        product = {
+          productId: product.productId,
+          productName: product.productName,
+          brand: product.brandName,
+          externalId: product.internalName,
+          mainImage: product.mainImageUrl,
+          features: product.featureHierarchy,
+          variants: product.variantProductIds
+        }
+
+        commit(types.PRODUCT_CURRENT_UPDATED, product)
+      } else {
+        showToast(translate("Product not found"));
+      }
+    } catch(err) {
+      console.error(err);
+      showToast(translate("Something went wrong"));
+    }
+    return resp;
+  },
   async updateProductFilters({ commit, dispatch, state }, payload) {
     commit(types.PRODUCT_FILTERS_CURRENT_UPDATED, payload);
     await dispatch('updateQuery');

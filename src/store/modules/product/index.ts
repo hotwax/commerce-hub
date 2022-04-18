@@ -13,6 +13,7 @@ const productModule: Module<ProductState, RootState> = {
         list: [],
         total: 0
       },
+      current: {},
       currentProductFilterSelected: {
         category: 'All',
         color: 'All',

@@ -21,6 +21,9 @@ const getters: GetterTree<ProductState, RootState> = {
   getProducts(state) {
     return state.products.list;
   },
+  getCurrent(state) {
+    return state.current;
+  },
   getcurrentProductFilters(state) {
     return state.currentProductFilterSelected;
   }
