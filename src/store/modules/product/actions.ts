@@ -6,6 +6,7 @@ import * as types from './mutation-types'
 import { hasError, showToast } from '@/utils'
 import { translate } from '@/i18n'
 import emitter from '@/event-bus'
+import { prepareProductQuery } from "@/utils/solrHelper"
 
 
 const actions: ActionTree<ProductState, RootState> = {
@@ -93,81 +94,15 @@ const actions: ActionTree<ProductState, RootState> = {
     }
   },
 
-  // Update Query
-  async updateQuery({ state, dispatch }, params) {
-    const typeFilterSelected = [] as any;
-
-    const payload = {
-      "json": {
-        "params": {
-          "rows": params?.viewSize ? params?.viewSize : process.env.VUE_APP_VIEW_SIZE,
-          "start": params?.viewIndex ? params?.viewIndex * params?.viewSize : 0,
-          "group": true,
-          "group.field": "groupId",
-          "group.limit": 10000,
-          "group.ngroups": true,
-        } as any,
-        "query": "*:*",
-        "filter": "docType: PRODUCT"
-      }
-    }
-
-    if (state.currentProductFilterSelected.queryString) {
-      payload.json.params.defType = 'edismax'
-      payload.json.params.qf = 'productId productName sku internalName brandName'
-      payload.json.params['q.op'] = 'AND'
-      payload.json.query = `*${state.currentProductFilterSelected.queryString}*`
-    }
-    
-    // updating the filters value in json object as per the filters selected
-    if(state.currentProductFilterSelected.category !== 'All') {
-      payload.json.filter = payload.json.filter.concat(` AND productCategories: ${state.currentProductFilterSelected.category}`)
-    }
-
-    if(state.currentProductFilterSelected.color !== 'All') {
-      payload.json.filter = payload.json.filter.concat(` AND productFeatureIds: ${state.currentProductFilterSelected.color}`)
-    }
-
-    if(state.currentProductFilterSelected.size !== 'All') {
-      payload.json.filter = payload.json.filter.concat(` AND productFeatureIds: ${state.currentProductFilterSelected.size}`)
-    }
-
-    if(state.currentProductFilterSelected.tags.length > 0) {
-      const tagFilters = state.currentProductFilterSelected.tags.reduce((filter: string, tag: any) => {
-        if (filter !== '') filter += ' OR '
-        return filter += tag;
-      }, '');
-
-      payload.json.filter = payload.json.filter.concat(' AND keywordSearchText: ' + tagFilters + ')')
-    }
-
-    if(state.currentProductFilterSelected.preOrder) {
-      typeFilterSelected.push('PRE-ORDER')
-    }
-
-    if(state.currentProductFilterSelected.backOrder) {
-      typeFilterSelected.push('BACKORDER')
-    }
-
-    const typeFilterValues = typeFilterSelected.toString().replaceAll(',', ' OR ')
-
-    if(typeFilterValues) {
-      payload.json.filter = payload.json.filter.concat(` AND keywordSearchText: (${typeFilterValues ? typeFilterValues : '*'})`)
-    }
-
-    const resp = dispatch("getProducts", payload);
-
-    return resp;
-  },
-
   /**
   * Get Product Inventory
   */
   async getProducts({ commit, state }, payload) {
     let resp;
+    const query = prepareProductQuery({ ...(state.currentProductFilterSelected), ...payload })
 
     try {
-      resp = await ProductService.getProducts(payload);
+      resp = await ProductService.getProducts(query);
 
       if (resp.status === 200 && resp.data.grouped.groupId?.ngroups > 0 && !hasError(resp)) {
         let products = resp.data.grouped.groupId?.groups;
@@ -208,7 +143,7 @@ const actions: ActionTree<ProductState, RootState> = {
         // }, [])
         // this.dispatch("stock/addProducts", { variantIds });
         
-        if(payload.json.params.start && payload.json.params.start > 0) products = state.products.list.concat(products);
+        if(query?.json.params.start && query?.json.params.start > 0) products = state.products.list.concat(products);
         commit(types.PRODUCT_LIST_UPDATED, { products, totalProductsCount });
       } else {
         showToast(translate("Products not found"));
@@ -283,7 +218,8 @@ const actions: ActionTree<ProductState, RootState> = {
   },
   async updateProductFilters({ commit, dispatch, state }, payload) {
     commit(types.PRODUCT_FILTERS_CURRENT_UPDATED, payload);
-    await dispatch('updateQuery');
+    const resp = await dispatch('getProducts');
+    return resp;
   }
 }
 

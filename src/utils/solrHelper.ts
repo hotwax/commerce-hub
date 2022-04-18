@@ -98,4 +98,63 @@ const prepareOrderQuery = (query: any) => {
   return payload
 }
 
-export { prepareOrderQuery }
+const prepareProductQuery = (query: any) => {
+  const typeFilterSelected = [];
+  const viewSize = query.viewSize ? query.viewSize : process.env.VUE_APP_VIEW_SIZE;
+  const viewIndex = query.viewIndex ? query.viewIndex : 0;
+
+  const payload = {
+    "json": {
+      "params": {
+        "rows": viewSize,
+        "start": viewSize * viewIndex,
+        "group": true,
+        "group.field": "groupId",
+        "group.limit": 10000,
+        "group.ngroups": true,
+      } as any,
+      "query": "*:*",
+      "filter": "docType: PRODUCT"
+    }
+  }
+
+  if (query.queryString) {
+    payload.json.params.defType = 'edismax'
+    payload.json.params.qf = 'productId productName sku internalName brandName'
+    payload.json.params['q.op'] = 'AND'
+    payload.json.query = `*${query.queryString}*`
+  }
+
+  // updating the filters value in json object as per the filters selected
+  if (query.category !== 'All') {
+    payload.json.filter = payload.json.filter.concat(` AND productCategories: ${query.category}`)
+  }
+
+  if (query.color !== 'All') {
+    payload.json.filter = payload.json.filter.concat(` AND productFeatureIds: ${query.color}`)
+  }
+
+  if (query.size !== 'All') {
+    payload.json.filter = payload.json.filter.concat(` AND productFeatureIds: ${query.size}`)
+  }
+
+  if (query.preOrder) {
+    typeFilterSelected.push('PRE-ORDER')
+  }
+
+  if (query.backOrder) {
+    typeFilterSelected.push('BACKORDER')
+  }
+
+  const typeFilterValues = typeFilterSelected.toString().replaceAll(',', ' OR ')
+  if (typeFilterValues) {
+    payload.json.filter = payload.json.filter.concat(` AND keywordSearchText: (${typeFilterValues ? typeFilterValues : '*'})`)
+  }
+
+  return payload
+}
+
+export {
+  prepareOrderQuery,
+  prepareProductQuery
+}

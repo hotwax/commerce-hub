@@ -179,7 +179,6 @@ import { useRouter } from "vue-router";
 import ProductFilters from "@/components/ProductFilters.vue"
 import { ProductService } from "@/services/ProductService";
 import { hasError } from '@/utils';
-import emitter from '@/event-bus';
 
 export default defineComponent({
   name: 'ProductInventory',
@@ -229,7 +228,7 @@ export default defineComponent({
   },
   methods: {
     async getProducts(vSize?: any, vIndex?: any) {
-      await this.store.dispatch('product/updateQuery');
+      await this.store.dispatch('product/getProducts');
     },
     async updateQueryString() {
       await this.store.dispatch('product/updateProductFilters', { value: this.queryString, filterName: 'queryString' })
@@ -238,7 +237,7 @@ export default defineComponent({
       const viewSize = process.env.VUE_APP_VIEW_SIZE;
       const viewIndex = Math.ceil(this.products.length / process.env.VUE_APP_VIEW_SIZE).toString()
 
-      await this.store.dispatch('product/updateQuery', { viewSize, viewIndex }).then(() => {
+      await this.store.dispatch('product/getProducts', { viewSize, viewIndex }).then(() => {
         event.target.complete();
       })
     },
