@@ -40,14 +40,18 @@ const actions: ActionTree<OrderState, RootState> = {
         })
 
         const total = resp.data.grouped.orderId.ngroups;
-        const status = new Set();
 
+        const status = new Set();
         orders.map((order: any) => {
           status.add(order.orderStatusId)
           order.doclist.docs.map((item: any) => status.add(item.orderItemStatusId))
         })
 
-        this.dispatch('util/fetchStatus', [...status])
+        const statuses = await this.dispatch('util/fetchStatus', [...status])
+        orders.map((order: any) => {
+          order['orderStatusDesc'] = statuses[order.orderStatusId]
+          order.doclist.docs.map((item: any) => item['orderItemStatusDesc'] = statuses[item.orderItemStatusId])
+        })
 
         if (query.json.params.start && query.json.params.start > 0) orders = state.list.orders.concat(orders)
         this.dispatch('product/getProductInformation', { orders });
@@ -113,6 +117,14 @@ const actions: ActionTree<OrderState, RootState> = {
           },
           notes: group.doclist.docs[0].orderNotes
         }
+
+        const status = new Set();
+        status.add(order.statusId);
+        order.items?.map((item: any) => status.add(item.orderItemStatusId))
+
+        const statuses = await this.dispatch('util/fetchStatus', [...status])
+        order['statusDesc'] = statuses[order.statusId]
+        order.items?.map((item: any) => item['orderItemStatusDesc'] = statuses[item.orderItemStatusId])
 
         const productIds = order.items?.map((item: OrderItem) => item.productId)
 

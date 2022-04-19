@@ -33,15 +33,13 @@ const actions: ActionTree<UtilState, RootState> = {
 
     const cachedStatus = JSON.parse(JSON.stringify(state.status));
     const statusIdFilter = statusIds.reduce((filter: Array<string>, statusId: any) => {
-      if (cachedStatus[statusId]) {
-        return filter;
-      } else {
+      if (!cachedStatus[statusId]) {
         filter.push(statusId)
-        return filter;
       }
+      return filter;
     }, []);
 
-    if (statusIdFilter.length <= 0) return;
+    if (statusIdFilter.length <= 0) return cachedStatus;
 
     try {
       resp = await UtilService.fetchStatus({
@@ -57,11 +55,16 @@ const actions: ActionTree<UtilState, RootState> = {
       })
 
       if (resp.status == 200 && !hasError(resp) && resp.data.count) {
-        commit(types.UTIL_STATUS_UPDATED, resp.data.docs)
+        const status = resp.data.docs;
+        status.map((s: any) => {
+          cachedStatus[s.statusId] = s.description
+        })
+        commit(types.UTIL_STATUS_UPDATED, cachedStatus)
       }
     } catch(err) {
       console.error('Something went wrong while fetching status for items and orders')
     }
+    return cachedStatus;
   }
 }
 
