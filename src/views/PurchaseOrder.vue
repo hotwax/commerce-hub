@@ -30,8 +30,12 @@
           </div>
 
           <div class="timeline">
-            <ion-item lines="none" detail>
-              <ion-icon slot="start" :icon="timeOutline" class="mobile-only" />
+            <ion-item lines="none" class="desktop-only">
+              <h2>{{ $t("Timeline") }}</h2>
+              <ion-note slot="end">1:07pm 6th Dec 2021</ion-note>
+            </ion-item>
+            <ion-item lines="none" @click="() => router.push('/timeline')" detail class="mobile-only">
+              <ion-icon slot="start" :icon="timeOutline" />
               <h2>{{ $t("Timeline") }}</h2>
               <ion-note slot="end">1:07pm 6th Dec 2021</ion-note>
             </ion-item>
@@ -296,6 +300,7 @@ import {
 } from 'ionicons/icons';
 import Image from '@/components/Image.vue';
 import ProductPopover from '@/components/ProductPopover.vue';
+import { useRouter } from 'vue-router';
 
 export default defineComponent({
   name: 'PurchaseOrder',
@@ -345,6 +350,8 @@ export default defineComponent({
     },
   },
   setup() {
+    const router = useRouter();
+
     return {
       addOutline,
       addCircleOutline,
@@ -353,6 +360,7 @@ export default defineComponent({
       ellipsisVerticalOutline,
       informationCircleOutline,
       locationOutline,
+      router,
       shirtOutline,
       syncOutline,
       ticketOutline,
