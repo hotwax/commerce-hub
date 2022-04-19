@@ -11,7 +11,7 @@ import { prepareOrderQuery } from '@/utils/solrHelper'
 const actions: ActionTree<OrderState, RootState> = {
   
   // Find Orders
-  async findOrders ( { commit, state }, params) {
+  async findOrders ({ commit, state }, params) {
     let resp;
     const query = prepareOrderQuery({ ...(state.query), poIds: state.poIds, ...params})
     try {
@@ -40,6 +40,15 @@ const actions: ActionTree<OrderState, RootState> = {
         })
 
         const total = resp.data.grouped.orderId.ngroups;
+        const status = new Set();
+
+        orders.map((order: any) => {
+          status.add(order.orderStatusId)
+          order.doclist.docs.map((item: any) => status.add(item.orderItemStatusId))
+        })
+
+        this.dispatch('util/fetchStatus', [...status])
+
         if (query.json.params.start && query.json.params.start > 0) orders = state.list.orders.concat(orders)
         this.dispatch('product/getProductInformation', { orders });
         commit(types.ORDER_LIST_UPDATED, { orders, total });
