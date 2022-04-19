@@ -285,7 +285,7 @@ body {
   margin: var(--spacer-sm) 0;
 }
 
-.sort > :first-child{
+.sort > div > :first-child{
   border-bottom: var(--border-medium);
 }
 
@@ -411,16 +411,27 @@ ion-card {
 
   .sort {
     display: flex;
-    justify-content: flex-end;
+    flex-wrap: wrap;
+    justify-content: space-between;
     margin-bottom: var(--spacer-lg);
   }
 
   .sort > ion-item {
-    max-width: 308px;
+    flex-grow: 1;
+  }
+
+  .sort > div {
+    display: flex;
+    flex-grow: 2;
+    justify-content: end;
+  }
+
+  .sort > div > ion-item {
+    flex: 0 1 343px;
     border-left: var(--border-medium);
   }
 
-  .sort > :first-child{
+  .sort > div > :first-child{
     border-bottom: unset;
   }
 

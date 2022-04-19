@@ -58,18 +58,24 @@
         <main>
           <section class="sort">
             <ion-item lines="none">
-              <ion-icon :icon="documentTextOutline" slot="start" />
-              <ion-label>{{ $t("Show order items") }}</ion-label>
-              <ion-toggle slot="end" checked></ion-toggle>
+              <h2>Results:</h2>
             </ion-item>
 
-            <ion-item lines="none">
-              <ion-icon :icon="swapVerticalOutline" slot="start" />
-              <ion-label>{{ $t("Sort by") }}</ion-label>
-              <ion-select value="any" interface="popover">
-                <ion-select-option value="any">Arrival date</ion-select-option>
-              </ion-select>
-            </ion-item>
+            <div>
+              <ion-item lines="none">
+                <ion-icon :icon="documentTextOutline" slot="start" />
+                <ion-label class="ion-text-wrap">{{ $t("Show order items") }}</ion-label>
+                <ion-toggle slot="end" checked></ion-toggle>
+              </ion-item>
+
+              <ion-item lines="none">
+                <ion-icon :icon="swapVerticalOutline" slot="start" />
+                <ion-label class="ion-text-wrap">{{ $t("Sort by") }}</ion-label>
+                <ion-select value="any" interface="popover">
+                  <ion-select-option value="any">Arrival date</ion-select-option>
+                </ion-select>
+              </ion-item>
+            </div>
           </section>
 
           <hr />
