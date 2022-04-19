@@ -87,7 +87,7 @@
 
               <div class="metadata">
                 <ion-note> {{ $t("Ordered on") }} {{ $filters.formatUtcDate(order.orderDate, 'YYYY-MM-DDTHH:mm:ssZ', 'D MMM YYYY') }} </ion-note>
-                <StatusBadge :statusDesc="order.orderStatusDesc"/>
+                <StatusBadge :statusDesc="order.orderStatusDesc || ''" :key="order.orderStatusDesc"/>
               </div>
             </section>
 
@@ -104,7 +104,7 @@
                     <p v-if="$filters.getFeature(getProduct(item.productId).featureHierarchy, '1/COLOR/')"> {{ $t("Color") }}: {{ $filters.getFeature(getProduct(item.productId).featureHierarchy, '1/COLOR/') }} </p>
                     <p v-if="$filters.getFeature(getProduct(item.productId).featureHierarchy, '1/SIZE/')"> {{ $t("Size") }}: {{ $filters.getFeature(getProduct(item.productId).featureHierarchy, '1/SIZE/') }} </p>
                   </ion-label>
-                  <StatusBadge :statusDesc="item.orderItemStatusDesc"/>
+                  <StatusBadge :statusDesc="item.orderItemStatusDesc || ''" :key="item.orderItemStatusDesc"/>
                 </ion-item>
                 <!-- TODO: Need to handle this property -->
                 <div v-if="item.facilityId === orderPreOrderId || item.facilityId === orderBackOrderId">

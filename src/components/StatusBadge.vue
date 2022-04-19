@@ -1,5 +1,5 @@
 <template>
-  <ion-badge :color="color(statusDesc) || color('default')">{{ $t(statusDesc) }}</ion-badge>
+  <ion-badge :color="color(statusDesc) || color('default')">{{ statusDesc }}</ion-badge>
 </template>
 
 <script lang="ts">

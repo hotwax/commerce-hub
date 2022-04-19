@@ -19,7 +19,7 @@
             <ion-item lines="none">
               <ion-icon slot="start" :icon="ticketOutline" />
               <h1>{{ order.orderName ? order.orderName : order.orderId }}</h1>
-              <ion-badge :color="orderStatus[order.statusId]?.color ? orderStatus[order.statusId]?.color : 'primary'" slot="end">{{ orderStatus[order.statusId]?.label ? orderStatus[order.statusId]?.label : order.statusId }}</ion-badge>
+              <StatusBadge :statusDesc="order.statusDesc || ''" :key="order.statusDesc" slot="end"/>
               <ion-select v-if="validStatusChange(order.statusId)?.length > 0" @ionChange="changeStatus(order.orderId, $event)" slot="end">
                 <ion-select-option v-for="status in validStatusChange(order.statusId)" :key="status" :value="status">{{ orderStatus[status]?.label }}</ion-select-option>
               </ion-select>
@@ -139,7 +139,8 @@
                 </div>
 
                   <ion-item lines="none">
-                    <ion-badge slot="end" :color="itemStatus[item.orderItemStatusId]?.color ? itemStatus[item.orderItemStatusId]?.color : 'primary'">{{ itemStatus[item.orderItemStatusId]?.label ? itemStatus[item.orderItemStatusId]?.label : item.orderItemStatusId }}</ion-badge>
+                    <StatusBadge :statusDesc="item.orderItemStatusDesc || ''" :key="item.orderItemStatusDesc"/>
+                    <!-- <ion-badge slot="end" :color="itemStatus[item.orderItemStatusId]?.color ? itemStatus[item.orderItemStatusId]?.color : 'primary'">{{ itemStatus[item.orderItemStatusId]?.label ? itemStatus[item.orderItemStatusId]?.label : item.orderItemStatusId }}</ion-badge> -->
                   </ion-item>
               </div>
 
@@ -246,7 +247,6 @@ import {
 } from 'ionicons/icons';
 import {
   IonBackButton,
-  IonBadge,
   IonCard,
   IonChip,
   IonContent,
@@ -266,13 +266,13 @@ import {
 import { useStore } from "@/store";
 import { mapGetters } from "vuex";
 import { defineComponent } from "vue";
+import StatusBadge from '@/components/StatusBadge.vue'
 
 export default defineComponent({
   name: 'Order',
   components: {
     Image,
     IonBackButton,
-    IonBadge,
     IonCard,
     IonChip,
     IonContent,
@@ -287,7 +287,8 @@ export default defineComponent({
     IonSelectOption,
     IonThumbnail,
     IonTitle,
-    IonToolbar
+    IonToolbar,
+    StatusBadge
   },
   computed: {
     ...mapGetters({
