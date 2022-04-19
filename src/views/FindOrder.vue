@@ -22,6 +22,11 @@
     <ion-menu content-id="content" type="overlay" side="end">
       <ion-header>
         <ion-toolbar>
+          <ion-buttons slot="start">
+            <ion-button @click="closeFilters">
+              <ion-icon :icon="closeOutline" slot="icon-only" />
+            </ion-button>
+          </ion-buttons>
           <ion-title>{{ $t("Filters")}}</ion-title>
         </ion-toolbar>
       </ion-header>
@@ -183,14 +188,14 @@ import {
   menuController
 } from '@ionic/vue';
 import {
+  closeOutline,
   documentTextOutline,
   downloadOutline,
   filterOutline,
   pricetag,
   ribbon,
   swapVerticalOutline,
-  syncOutline,
-  close,
+  syncOutline
 } from 'ionicons/icons';
 import { defineComponent, ref } from "vue";
 import { mapGetters, useStore } from "vuex";
@@ -254,6 +259,9 @@ export default defineComponent ({
     }
   },
   methods: {
+    async closeFilters() {
+      await menuController.close();
+    },
     async sortOrders(value: string) {
       this.sort = value
       await this.store.dispatch('order/updateSort', this.sort)
@@ -356,7 +364,7 @@ export default defineComponent ({
     const cusotmerLoyaltyOptions = process.env.VUE_APP_CUST_LOYALTY_OPTIONS
 
     return {
-      close,
+      closeOutline,
       cusotmerLoyaltyOptions,
       documentTextOutline,
       downloadOutline,
@@ -378,6 +386,9 @@ export default defineComponent ({
 </script>
 
 <style scoped>
+ion-menu {
+  --width: 100%;
+}
 .section-header{
   margin: 0 var(--spacer-xs);
 }
@@ -397,6 +408,10 @@ ion-modal {
 }
 
 @media (min-width: 991px) {
+  ion-menu {
+    --width: 375px;
+  }
+
   .main {
     margin-left: var(--spacer-xl);
   }
