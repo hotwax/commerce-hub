@@ -190,7 +190,7 @@
                       </ion-item>
                     </div>
 
-                    <!-- Commenting this code because we will use category here later on -->
+                    <!-- Commenting this code because we will use external id here later on -->
                     <!-- <div>
                       <ion-chip>
                         <ion-icon :icon="pricetag" />
