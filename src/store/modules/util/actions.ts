@@ -55,9 +55,9 @@ const actions: ActionTree<UtilState, RootState> = {
       })
 
       if (resp.status == 200 && !hasError(resp) && resp.data.count) {
-        const status = resp.data.docs;
-        status.map((s: any) => {
-          cachedStatus[s.statusId] = s.description
+        const statuses = resp.data.docs;
+        statuses.map((status: any) => {
+          cachedStatus[status.statusId] = status.description
         })
         commit(types.UTIL_STATUS_UPDATED, cachedStatus)
       }
