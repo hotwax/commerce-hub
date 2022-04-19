@@ -39,7 +39,7 @@ const prepareOrderQuery = (query: any) => {
 
   if (query.queryString) {
     payload.json.params.defType = 'edismax'
-    payload.json.params.qf = 'orderId customerPartyName customerPartyId productId internalName'
+    payload.json.params.qf = 'orderName orderId customerPartyName productId internalName'
     payload.json.query = `*${query.queryString}*`
   }
 
