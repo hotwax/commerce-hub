@@ -36,7 +36,8 @@ const actions: ActionTree<UtilState, RootState> = {
       if (cachedStatus[statusId]) {
         return filter;
       } else {
-        return filter.push(statusId);
+        filter.push(statusId)
+        return filter;
       }
     }, []);
 
