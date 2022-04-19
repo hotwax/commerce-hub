@@ -52,7 +52,7 @@
             <ion-item lines="none">
               <ion-icon slot="start" :icon="swapVerticalOutline" />
               <ion-label>{{ $t("Sort") }}</ion-label>
-              <ion-select :value="sort" @ionChange="sortOrders($event.detail.value)">
+              <ion-select :value="sort" @ionChange="sortOrders($event.detail.value)" interface="popover">
                 <ion-select-option value="orderDate desc">{{ $t('Order date') }}</ion-select-option>
                 <ion-select-option value="promisedDatetime asc">{{ $t('Promised date') }}</ion-select-option>
                 <ion-select-option value="autoCancelDate asc">{{ $t('Auto cancel date') }}</ion-select-option>
