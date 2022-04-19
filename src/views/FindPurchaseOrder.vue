@@ -78,7 +78,7 @@
             <section class="section-header">
               <div class="primary-info">
                 <ion-item lines="none">
-                  <ion-label>
+                  <ion-label class="ion-text-wrap">
                     <p>Product store</p>
                     PO external ID
                     <p>Created date</p>
@@ -112,7 +112,7 @@
                       <ion-thumbnail slot="start">
                         <Image src="https://cdn.shopify.com/s/files/1/0069/7384/9727/products/test-track.jpg?v=1626255137" />
                       </ion-thumbnail>
-                      <ion-label>
+                      <ion-label class="ion-text-wrap">
                         SKU
                         <p>{{ $t("Color") }} : color</p>
                         <p>{{ $t("Size") }}: size</p>
