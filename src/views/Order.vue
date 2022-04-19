@@ -118,29 +118,29 @@
               <hr />
 
               <div class="product-header">
-                  <ion-item lines="none">
-                    <ion-thumbnail slot="start" class="mobile-only">
-                      <Image :src="getProduct(item.productId).mainImageUrl" />
-                    </ion-thumbnail>
-                    <ion-label class="ion-text-wrap">
-                      <p> {{ item.brandName }} </p>
-                      {{ item.parentProductName ? item.parentProductName : item.productName }}
-                      <p v-if="$filters.getFeature(getProduct(item.productId).featureHierarchy, '1/COLOR/')">{{ $t("Color") }}: {{ $filters.getFeature(getProduct(item.productId).featureHierarchy, '1/COLOR/') }}</p>
-                      <p v-if="$filters.getFeature(getProduct(item.productId).featureHierarchy, '1/SIZE/')">{{ $t("Size") }}: {{ $filters.getFeature(getProduct(item.productId).featureHierarchy, '1/SIZE/') }}</p>
-                    </ion-label>
-                  </ion-item>
+                <ion-item lines="none">
+                  <ion-thumbnail slot="start" class="mobile-only">
+                    <Image :src="getProduct(item.productId).mainImageUrl" />
+                  </ion-thumbnail>
+                  <ion-label class="ion-text-wrap">
+                    <p> {{ item.brandName }} </p>
+                    {{ item.parentProductName ? item.parentProductName : item.productName }}
+                    <p v-if="$filters.getFeature(getProduct(item.productId).featureHierarchy, '1/COLOR/')">{{ $t("Color") }}: {{ $filters.getFeature(getProduct(item.productId).featureHierarchy, '1/COLOR/') }}</p>
+                    <p v-if="$filters.getFeature(getProduct(item.productId).featureHierarchy, '1/SIZE/')">{{ $t("Size") }}: {{ $filters.getFeature(getProduct(item.productId).featureHierarchy, '1/SIZE/') }}</p>
+                  </ion-label>
+                </ion-item>
 
                 <div class="product-tags desktop-only">
                   <ion-chip v-if="item.internalName">
                     <!-- TODO update shopify icon later -->
                     <ion-icon :icon="pricetag" />
-                    <ion-label class="ion-text-wrap">{{ item.internalName }}</ion-label>
+                    <ion-label>{{ item.internalName }}</ion-label>
                   </ion-chip>
                 </div>
 
-                  <ion-item lines="none">
-                    <StatusBadge :statusDesc="item.orderItemStatusDesc || ''" :key="item.orderItemStatusDesc"/>
-                  </ion-item>
+                <ion-item lines="none">
+                  <StatusBadge :statusDesc="item.orderItemStatusDesc || ''" :key="item.orderItemStatusDesc"/>
+                </ion-item>
               </div>
 
               <hr />
@@ -352,12 +352,16 @@ ion-select {
 
 .product-header {
   display: grid;
-  grid-template-columns: max-content 1fr max-content;
+  grid-template-columns: 1fr max-content;
   align-items: center;
 }
 
 .product-tags {
   justify-self: center;
+}
+
+.product-header > :last-child {
+  justify-self: end;
 }
 
 .product-card {
@@ -372,6 +376,10 @@ ion-select {
     grid-template-columns: 250px 1fr;
     gap: var(--spacer-lg);     
     align-items: start;
+  }
+
+  .product-header {
+    grid-template-columns: max-content 1fr max-content;
   }
 
   .product-image {
