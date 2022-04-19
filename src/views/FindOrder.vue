@@ -75,7 +75,7 @@
               </div>
 
               <div class="tags">
-                <ion-chip @click="copyToClipboard(order.orderName)" outline v-if="order.orderName">
+                <ion-chip @click.stop="copyToClipboard(order.orderName)" outline v-if="order.orderName">
                   <ion-icon :icon="pricetag" />
                   <ion-label> {{ order.orderName }} </ion-label>
                 </ion-chip>
