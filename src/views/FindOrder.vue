@@ -44,20 +44,26 @@
         <main>
           <section class="sort">
             <ion-item lines="none">
-              <ion-icon slot="start" :icon="documentTextOutline" />
-              <ion-label>{{ $t("Show order items") }}</ion-label>
-              <ion-toggle color="secondary" :checked="showOrderItems" @ionChange="() => showOrderItems = !showOrderItems"/>
+              <h2>{{ $t("Results") }}:</h2> 
             </ion-item>
 
-            <ion-item lines="none">
-              <ion-icon slot="start" :icon="swapVerticalOutline" />
-              <ion-label>{{ $t("Sort") }}</ion-label>
-              <ion-select :value="sort" @ionChange="sortOrders($event.detail.value)" interface="popover">
-                <ion-select-option value="orderDate desc">{{ $t('Order date') }}</ion-select-option>
-                <ion-select-option value="promisedDatetime asc">{{ $t('Promised date') }}</ion-select-option>
-                <ion-select-option value="autoCancelDate asc">{{ $t('Auto cancel date') }}</ion-select-option>
-              </ion-select>
-            </ion-item>
+            <div>
+              <ion-item lines="none">
+                <ion-icon slot="start" :icon="documentTextOutline" />
+                <ion-label class="ion-text-wrap">{{ $t("Show order items") }}</ion-label>
+                <ion-toggle color="secondary" :checked="showOrderItems" @ionChange="() => showOrderItems = !showOrderItems"/>
+              </ion-item>
+
+              <ion-item lines="none">
+                <ion-icon slot="start" :icon="swapVerticalOutline" />
+                <ion-label class="ion-text-wrap">{{ $t("Sort") }}</ion-label>
+                <ion-select :value="sort" @ionChange="sortOrders($event.detail.value)" interface="popover">
+                  <ion-select-option value="orderDate desc">{{ $t('Order date') }}</ion-select-option>
+                  <ion-select-option value="promisedDatetime asc">{{ $t('Promised date') }}</ion-select-option>
+                  <ion-select-option value="autoCancelDate asc">{{ $t('Auto cancel date') }}</ion-select-option>
+                </ion-select>
+              </ion-item>
+            </div>
           </section>
 
           <!-- Order Item Section -->
