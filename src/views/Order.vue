@@ -50,16 +50,16 @@
             <ion-card>
               <ion-list>
                 <ion-item lines="none">
-                  <ion-label> {{ order.customer?.name }} </ion-label>
+                  <ion-label class="ion-text-wrap"> {{ order.customer?.name }} </ion-label>
                   <!-- TODO: handle this property to display loyalty options -->
                   <ion-chip slot="end" v-if="order.customer?.loyaltyOptions">
                     <ion-icon :icon="ribbon" />
-                    <ion-label>{{ order.customer?.loyaltyOptions }}</ion-label>
+                    <ion-label class="ion-text-wrap">{{ order.customer?.loyaltyOptions }}</ion-label>
                   </ion-chip>
                 </ion-item>
                 <ion-item v-if="order.customer?.emailId">
                   <ion-icon :icon="mailOutline" slot="start" />
-                  <ion-label> {{ order.customer?.emailId }} </ion-label>
+                  <ion-label class="ion-text-wrap"> {{ order.customer?.emailId }} </ion-label>
                 </ion-item>
                 <ion-item v-if="order.customer?.phoneNumber">
                   <ion-icon :icon="callOutline" slot="start" />
@@ -67,7 +67,7 @@
                 </ion-item>
                 <ion-item lines="none" v-if="order.customer?.toName || order.customer?.address1 || order.customer?.address2 || order.customer?.city || order.customer?.country">
                   <ion-icon :icon="cashOutline" slot="start" />
-                  <ion-label>
+                  <ion-label class="ion-text-wrap">
                     {{ order.customer?.toName }}
                     <p>{{ order.customer?.address1 }}</p>
                     <p>{{ order.customer?.address2 }}</p>
@@ -82,15 +82,15 @@
               <ion-list>
                 <ion-list-header>{{ $t("Shopify IDs") }}</ion-list-header>
                 <ion-item>
-                  <ion-label> {{ $t("Order Number") }} </ion-label>
+                  <ion-label class="ion-text-wrap"> {{ $t("Order Number") }} </ion-label>
                   <p slot="end">{{ order.identifications?.orderNo ? order.identifications.orderNo : "-" }}</p>
                 </ion-item>
                 <ion-item>
-                  <ion-label> {{ $t("Order ID") }} </ion-label>
+                  <ion-label class="ion-text-wrap"> {{ $t("Order ID") }} </ion-label>
                   <p slot="end">{{ order.identifications?.orderId ? order.identifications.orderId : "-" }}</p>
                 </ion-item>
                 <ion-item lines="none">
-                  <ion-label> {{ $t("Order Name") }} </ion-label>
+                  <ion-label class="ion-text-wrap"> {{ $t("Order Name") }} </ion-label>
                   <p slot="end">{{ order.identifications?.orderName ? order.identifications.orderName : "-" }} </p>
                 </ion-item>
               </ion-list>
@@ -118,17 +118,17 @@
               <hr />
 
               <div class="product-header">
-                  <ion-item lines="none">
-                    <ion-thumbnail slot="start" class="mobile-only">
-                      <Image :src="getProduct(item.productId).mainImageUrl" />
-                    </ion-thumbnail>
-                    <ion-label>
-                      <p> {{ item.brandName }} </p>
-                      {{ item.parentProductName ? item.parentProductName : item.productName }}
-                      <p v-if="$filters.getFeature(getProduct(item.productId).featureHierarchy, '1/COLOR/')">{{ $t("Color") }}: {{ $filters.getFeature(getProduct(item.productId).featureHierarchy, '1/COLOR/') }}</p>
-                      <p v-if="$filters.getFeature(getProduct(item.productId).featureHierarchy, '1/SIZE/')">{{ $t("Size") }}: {{ $filters.getFeature(getProduct(item.productId).featureHierarchy, '1/SIZE/') }}</p>
-                    </ion-label>
-                  </ion-item>
+                <ion-item lines="none">
+                  <ion-thumbnail slot="start" class="mobile-only">
+                    <Image :src="getProduct(item.productId).mainImageUrl" />
+                  </ion-thumbnail>
+                  <ion-label class="ion-text-wrap">
+                    <p> {{ item.brandName }} </p>
+                    {{ item.parentProductName ? item.parentProductName : item.productName }}
+                    <p v-if="$filters.getFeature(getProduct(item.productId).featureHierarchy, '1/COLOR/')">{{ $t("Color") }}: {{ $filters.getFeature(getProduct(item.productId).featureHierarchy, '1/COLOR/') }}</p>
+                    <p v-if="$filters.getFeature(getProduct(item.productId).featureHierarchy, '1/SIZE/')">{{ $t("Size") }}: {{ $filters.getFeature(getProduct(item.productId).featureHierarchy, '1/SIZE/') }}</p>
+                  </ion-label>
+                </ion-item>
 
                 <div class="product-tags desktop-only">
                   <ion-chip v-if="item.internalName">
@@ -138,9 +138,9 @@
                   </ion-chip>
                 </div>
 
-                  <ion-item lines="none">
-                    <StatusBadge :statusDesc="item.orderItemStatusDesc || ''" :key="item.orderItemStatusDesc"/>
-                  </ion-item>
+                <ion-item lines="none">
+                  <StatusBadge :statusDesc="item.orderItemStatusDesc || ''" :key="item.orderItemStatusDesc"/>
+                </ion-item>
               </div>
 
               <hr />
@@ -352,12 +352,16 @@ ion-select {
 
 .product-header {
   display: grid;
-  grid-template-columns: max-content 1fr max-content;
+  grid-template-columns: 1fr max-content;
   align-items: center;
 }
 
 .product-tags {
   justify-self: center;
+}
+
+.product-header > :last-child {
+  justify-self: end;
 }
 
 .product-card {
@@ -372,6 +376,10 @@ ion-select {
     grid-template-columns: 250px 1fr;
     gap: var(--spacer-lg);     
     align-items: start;
+  }
+
+  .product-header {
+    grid-template-columns: max-content 1fr max-content;
   }
 
   .product-image {
