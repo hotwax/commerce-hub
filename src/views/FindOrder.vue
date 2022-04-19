@@ -93,7 +93,7 @@
 
               <div class="metadata">
                 <ion-note> {{ $t("Ordered on") }} {{ $filters.formatUtcDate(order.orderDate, 'YYYY-MM-DDTHH:mm:ssZ', 'D MMM YYYY') }} </ion-note>
-                <ion-badge :color="orderStatus[order.orderStatusId]?.color ? orderStatus[order.orderStatusId]?.color : 'primary'">{{ orderStatus[order.orderStatusId]?.label ? orderStatus[order.orderStatusId]?.label : order.orderStatusId }}</ion-badge>
+                <StatusBadge :statusDesc="order.orderStatusDesc || ''" :key="order.orderStatusDesc"/>
               </div>
             </section>
 
@@ -110,7 +110,7 @@
                     <p v-if="$filters.getFeature(getProduct(item.productId).featureHierarchy, '1/COLOR/')"> {{ $t("Color") }}: {{ $filters.getFeature(getProduct(item.productId).featureHierarchy, '1/COLOR/') }} </p>
                     <p v-if="$filters.getFeature(getProduct(item.productId).featureHierarchy, '1/SIZE/')"> {{ $t("Size") }}: {{ $filters.getFeature(getProduct(item.productId).featureHierarchy, '1/SIZE/') }} </p>
                   </ion-label>
-                  <ion-badge :color="itemStatus[item.orderItemStatusId]?.color ? itemStatus[item.orderItemStatusId]?.color : 'primary'" slot="end"> {{ itemStatus[item.orderItemStatusId]?.label ? itemStatus[item.orderItemStatusId]?.label : item.orderItemStatusId }} </ion-badge>
+                  <StatusBadge :statusDesc="item.orderItemStatusDesc || ''" :key="item.orderItemStatusDesc"/>
                 </ion-item>
                 <!-- TODO: Need to handle this property -->
                 <div v-if="item.facilityId === orderPreOrderId || item.facilityId === orderBackOrderId">
@@ -159,7 +159,6 @@
 <script lang="ts">
 import {
   IonBackButton,
-  IonBadge,
   IonButtons,
   IonButton,
   IonCard,
@@ -201,6 +200,7 @@ import Image from '@/components/Image.vue';
 import { useRouter } from 'vue-router';
 import OrderFilters from '@/components/OrderFilters.vue'
 import { OrderService } from '@/services/OrderService';
+import StatusBadge from '@/components/StatusBadge.vue'
 
 const { Clipboard } = Plugins;
 
@@ -209,7 +209,6 @@ export default defineComponent ({
   components: {
     Image,
     IonBackButton,
-    IonBadge,
     IonButtons,
     IonButton,
     IonCard,
@@ -231,7 +230,8 @@ export default defineComponent ({
     IonTitle,
     IonToggle,
     IonToolbar,
-    OrderFilters
+    OrderFilters,
+    StatusBadge
   },
   computed: {
     ...mapGetters({
