@@ -122,7 +122,7 @@
         <main>
           <section class="sort">
             <ion-item lines="none">
-              <h2>Results:</h2>
+              <h2>{{ $t("Results") }}:</h2>
             </ion-item>
 
             <div>
