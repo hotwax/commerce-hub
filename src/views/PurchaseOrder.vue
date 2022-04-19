@@ -138,7 +138,7 @@
 
                 <ion-label>
                   400
-                  <p>{{ $t("ATP") }}</p>
+                  <p><abbr title="Available to promise">{{ $t("ATP") }}</abbr></p>
                 </ion-label>
 
                 <ion-label class="tablet">
@@ -181,7 +181,7 @@
 
                   <ion-label>
                     400
-                    <p>{{ $t("ATP") }}</p>
+                    <p><abbr title="Available to promise">{{ $t("ATP") }}</abbr></p>
                   </ion-label>
 
                   <ion-label>
@@ -223,7 +223,7 @@
 
                   <ion-label>
                     400
-                    <p>{{ $t("ATP") }}</p>
+                    <p><abbr title="Available to promise">{{ $t("ATP") }}</abbr></p>
                   </ion-label>
 
                   <ion-label>
