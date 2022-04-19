@@ -103,7 +103,7 @@
                   <ion-thumbnail slot="start">
                     <Image :src="getProduct(item.productId).mainImageUrl" />
                   </ion-thumbnail>
-                  <ion-label>
+                  <ion-label class="ion-text-wrap">
                     <p>{{ getProduct(item.productId)?.brandName }}</p>
                     {{ item.parentProductName ? item.parentProductName : item.productName }}
                     <!-- TODO: make the attribute displaying logic dynamic -->
