@@ -1,0 +1,7 @@
+---
+title: 'Improved: code to only display those PO ids for which a corresponding sales
+  order is available'
+ticket_id: "#27qxday"
+merge_request: 109
+author: Yash Maheshwari
+type: added

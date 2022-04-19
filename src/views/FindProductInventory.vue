@@ -158,7 +158,7 @@
                     <ion-thumbnail slot="start" class="mobile-only">
                       <Image :src="product.mainImageUrl" />
                     </ion-thumbnail>
-                    <ion-label>
+                    <ion-label class="ion-text-wrap">
                       <p>{{ product.brandName }}</p>
                       {{ product.productName }}
                       <p>{{ $t("Color") }}: {{ $filters.getFeaturesList(product.featureHierarchy, '1/COLOR/').join(", ") }}</p>
@@ -188,7 +188,7 @@
                   <div v-for="variant in product.variants" :key="variant.productId" class="list-item">
                     <div>
                       <ion-item lines="none">
-                        <ion-label>
+                        <ion-label class="ion-text-wrap">
                           {{ variant.sku }}
                           <p>{{ $t("Color") }}: {{ $filters.getFeature(variant.featureHierarchy, '1/COLOR/') }}</p>
                           <p>{{ $t("Size") }}: {{ $filters.getFeature(variant.featureHierarchy, '1/SIZE/') }}</p>
@@ -196,12 +196,13 @@
                       </ion-item>
                     </div>
 
-                    <div>
+                    <!-- Commenting this code because we will use external id here later on -->
+                    <!-- <div>
                       <ion-chip>
                         <ion-icon :icon="pricetag" />
                         <ion-label>{{ variant.internalName }}</ion-label>
                       </ion-chip>
-                    </div>
+                    </div> -->
 
                     <!-- Commenting this code because we will be releasing this feature in next release. -->
                     <!-- <div>

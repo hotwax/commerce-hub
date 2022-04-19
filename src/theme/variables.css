@@ -349,6 +349,10 @@ h1,h2 {
   font-size: 16px;
 }
 
+ion-item > h1,h2 {
+  margin: 0;
+}
+
 ion-avatar > img ,
 ion-thumbnail > img {
   object-fit: contain;
@@ -363,7 +367,8 @@ hr {
 }
 
 ion-list-header > hr {
-  width: 90%;
+  flex: 1;
+  margin-left: var(--spacer-base);
 }
 
 ion-card {
