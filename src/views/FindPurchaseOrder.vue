@@ -239,9 +239,5 @@ export default {
     --columns-desktop: 3;
     grid-template-columns: 1fr max-content 1fr;
   }
-
-  .section-header {
-    grid-template-columns: 1fr max-content 1fr;
-  }
 }
 </style>

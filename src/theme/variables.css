@@ -407,7 +407,7 @@ ion-card {
   }
   
   .section-header {
-    grid: "info tags metadata" / max-content 1fr minmax(min-content, max-content);
+    grid: "info tags metadata" / 1fr max-content 1fr;
   }
 
   .filters {

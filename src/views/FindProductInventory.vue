@@ -368,10 +368,6 @@ export default defineComponent({
     height: 180px;
   }
 
-  .section-header {
-    grid-template-columns: 1fr max-content 1fr;
-  }
-
   .list-item {
     --columns-desktop: 3;
     grid-template-columns: 1fr max-content 1fr;
