@@ -363,7 +363,8 @@ hr {
 }
 
 ion-list-header > hr {
-  width: 90%;
+  flex: 1;
+  margin-left: var(--spacer-base);
 }
 
 ion-card {
