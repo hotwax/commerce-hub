@@ -44,7 +44,7 @@ const actions: ActionTree<UtilState, RootState> = {
     if (statusIdFilter.length <= 0) return;
 
     try {
-      resp = await UtilService.getStatusDesc({
+      resp = await UtilService.fetchStatus({
         "entityName": "StatusItem",
         "noConditionFind": "Y",
         "distinct": "Y",

@@ -8,7 +8,7 @@ const getShipmentMethods = async (payload: any): Promise<any> => {
   });
 }
 
-const getStatusDesc = async (payload: any): Promise<any> => {
+const fetchStatus = async (payload: any): Promise<any> => {
   return api({
     url: "/performFind",
     method: "post",
@@ -18,5 +18,5 @@ const getStatusDesc = async (payload: any): Promise<any> => {
 
 export const UtilService = {
   getShipmentMethods,
-  getStatusDesc
+  fetchStatus
 }
