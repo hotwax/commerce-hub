@@ -11,7 +11,7 @@ import { prepareOrderQuery } from '@/utils/solrHelper'
 const actions: ActionTree<OrderState, RootState> = {
   
   // Find Orders
-  async findOrders ({ commit, state }, params) {
+  async findOrders ({ dispatch, commit, state }, params) {
     let resp;
     const query = prepareOrderQuery({ ...(state.query), poIds: state.poIds, ...params})
     try {
@@ -42,15 +42,35 @@ const actions: ActionTree<OrderState, RootState> = {
         const total = resp.data.grouped.orderId.ngroups;
 
         const status = new Set();
+        const orderAndItemSeqId = {} as any;
+        let orderItemTrackingCodes = {} as any;
+
         orders.map((order: any) => {
           status.add(order.orderStatusId)
-          order.doclist.docs.map((item: any) => status.add(item.orderItemStatusId))
+          order.doclist.docs.map((item: any) => {
+            if (item.shipmentMethodTypeId !== 'STOREPICKUP' && item.orderItemStatusId === 'ITEM_COMPLETED') {
+              if (!orderAndItemSeqId[order.orderId]) {
+                orderAndItemSeqId[order.orderId] = []
+              }
+              orderAndItemSeqId[order.orderId].push(item.orderItemSeqId)
+            }
+            status.add(item.orderItemStatusId)
+          })
         })
+
+        if (Object.keys(orderAndItemSeqId).length) {
+          orderItemTrackingCodes = await dispatch('fetchShipmentDetailForOrderItem', orderAndItemSeqId)
+        }
 
         const statuses = await this.dispatch('util/fetchStatus', [...status])
         orders.map((order: any) => {
           order['orderStatusDesc'] = statuses[order.orderStatusId]
-          order.doclist.docs.map((item: any) => item['orderItemStatusDesc'] = statuses[item.orderItemStatusId])
+          order.doclist.docs.map((item: any) => {
+            item['orderItemStatusDesc'] = statuses[item.orderItemStatusId]
+            if (item.shipmentMethodTypeId !== 'STOREPICKUP' && item.orderItemStatusId === 'ITEM_COMPLETED' && orderItemTrackingCodes[item.orderId]) {
+              item['orderItemTrackingCode'] = orderItemTrackingCodes[item.orderId][item.orderItemSeqId]
+            }
+          })
         })
 
         if (query.json.params.start && query.json.params.start > 0) orders = state.list.orders.concat(orders)
@@ -60,6 +80,7 @@ const actions: ActionTree<OrderState, RootState> = {
         showToast(translate("Something went wrong"));
       }
     } catch(error){
+      console.error(error)
       showToast(translate("Something went wrong"));
     }
     return resp;
@@ -206,6 +227,44 @@ const actions: ActionTree<OrderState, RootState> = {
       console.error(err)
       showToast(translate('Something went wrong'))
     }
+  },
+
+  async fetchShipmentDetailForOrderItem({ commit }, payload) {
+    let resp;
+
+    // TODO: implement grouping logic to get the tracking code for order items
+    // when grouping only getting response for two groups
+    const params = {
+      "inputFields": {
+        "primaryOrderId": Object.keys(payload),
+        "primaryOrderId_op": "in",
+        "trackingCode_op": "not-empty",
+        "orderItemSeqId_op": "not-empty"
+      },
+      "entityName": "ShipmentPackageRouteSegAndItemDetail",
+      "distinct": "Y",
+      "noConditionFind": "Y",
+      "fieldList": ["trackingCode", "primaryOrderId", "orderItemSeqId"],
+      "viewSize": 100
+    }
+
+    try {
+      resp = await OrderService.fetchShipmentDetailForOrderItem(params)
+      if(resp.status == 200 && !hasError(resp) && resp.data.count > 0) {
+        return resp.data.docs.reduce((acc: any, list: any) => {
+          if(!acc[list.primaryOrderId]) {
+            acc[list.primaryOrderId] = {}
+          }
+          acc[list.primaryOrderId][list.orderItemSeqId] = list.trackingCode
+          return acc;
+        }, {})
+      } else {
+        console.error('Something went wrong while fetching tracking code for order items or there may not exist any tracking code for current order ids')
+      }
+    } catch(err) {
+      console.error(err)
+    }
+    return resp;
   }
 } 
 

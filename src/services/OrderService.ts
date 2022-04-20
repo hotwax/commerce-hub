@@ -48,7 +48,16 @@ const getPOIdsForSo = async (payload: any): Promise<any> => {
   })
 }
 
+const fetchShipmentDetailForOrderItem = async (payload: any): Promise<any> => {
+  return api({
+    url: "/performFind",
+    method: "post",
+    data: payload
+  })
+}
+
 export const OrderService = {
+  fetchShipmentDetailForOrderItem,
   fetchStatusChange,
   findOrder,
   findOrderDetails,

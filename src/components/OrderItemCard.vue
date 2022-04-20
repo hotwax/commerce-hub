@@ -38,13 +38,12 @@
         <ion-label>{{ $t("Shipping method") }}</ion-label>
         <p slot="end"> {{ item.shipmentMethodTypeId ? getShipmentMethodDesc(item.shipmentMethodTypeId) : '-' }} </p>
       </ion-item>
-      <div v-if="item.facilityId !== '_NA_'">
+      <div v-if="item.facilityId !== '_NA_' && item.orderItemStatusId !== 'ITEM_COMPLETED'">
         <ion-item>
           <ion-label>{{ $t("Shipping from") }}</ion-label>
           <!-- Used ion-badge to display a dot after the facility name when the ship from facility is brokering queue -->
           <p slot="end">
             {{ item.facilityName ? item.facilityName : "-" }}
-            <ion-badge v-if="item.facilityId === '_NA_'" color="warning">{{ ' ' }}</ion-badge>
           </p>
         </ion-item>
         <ion-item lines="none">
@@ -52,15 +51,24 @@
           <p slot="end">{{ getProductStock(item.productId) }}</p>
         </ion-item>
       </div>
-      <div v-else>
+      <div v-if="item.facilityId === '_NA_' && item.orderItemStatusId !== 'ITEM_COMPLETED'">
         <ion-item>
           <ion-label>{{ $t("Auto cancel") }}</ion-label>
-          <!-- Used ion-badge to display a dot after the facility name when the ship from facility is brokering queue -->
           <p slot="end">{{ item.autoCancelDate ? moment.utc(item.autoCancelDate).fromNow() : '-' }}</p>
         </ion-item>
         <ion-item lines="none">
           <ion-label>{{ $t("Parking") }}</ion-label>
           <p slot="end">{{ 'Brokering queue' }}</p>
+        </ion-item>
+      </div>
+      <div v-if="item.orderItemStatusId === 'ITEM_COMPLETED'">
+        <ion-item>
+          <ion-label>{{ $t("Shipped from") }}</ion-label>
+          <p slot="end">{{ item.facilityName ? item.facilityName : "-" }}</p>
+        </ion-item>
+        <ion-item lines="none">
+          <ion-label>{{ $t("Tracking code") }}</ion-label>
+          <p slot="end">{{ item.orderItemTrackingCode ? item.orderItemTrackingCode : '-' }}</p>
         </ion-item>
       </div>
     </div>
@@ -70,7 +78,6 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import {
-  IonBadge,
   IonCard,
   IonItem,
   IonLabel,
@@ -85,7 +92,6 @@ export default defineComponent({
   name: "OrderItemCard",
   components: {
     Image,
-    IonBadge,
     IonCard,
     IonItem,
     IonLabel,
