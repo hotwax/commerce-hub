@@ -72,7 +72,7 @@
                     <p>{{ order.customer?.address1 }}</p>
                     <p>{{ order.customer?.address2 }}</p>
                     <p>{{ order.customer?.city }} {{ order.customer?.zipCode && ',' }} {{ order.customer?.zipCode }}</p>
-                    <p>{{ order.customer?.state }} {{ order.customer?.country && ',' }} {{ order.customer?.country }}</p>
+                    <p>{{ getGeoName(order.customer?.state) }} {{ getGeoName(order.customer?.country) && ',' }} {{ getGeoName(order.customer?.country) }}</p>
                   </ion-label>
                 </ion-item>
               </ion-list>
@@ -295,7 +295,8 @@ export default defineComponent({
       getProduct: 'product/getProduct',
       getProductStock: 'stock/getProductStock',
       getShipmentMethod: 'util/getShipmentMethod',
-      validStatusChange: 'order/getOrderValidStatusChange'
+      validStatusChange: 'order/getOrderValidStatusChange',
+      getGeoName: 'util/getGeoName'
     })
   },
   methods:{

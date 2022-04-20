@@ -11,25 +11,26 @@ import { prepareOrderQuery } from '@/utils/solrHelper'
 const actions: ActionTree<OrderState, RootState> = {
   
   // Find Orders
-  async findOrders ( { commit, state }, params) {
+  async findOrders ( { commit, state, dispatch }, params) {
     let resp;
     const query = prepareOrderQuery({ ...(state.query), poIds: state.poIds, ...params})
     try {
       resp = await OrderService.findOrder(query)
       if (resp && resp.status === 200 && !hasError(resp)) {
-        let orders = resp.data.grouped.orderId.groups.map((order: any) => {
+        let orders = await Promise.all(resp.data.grouped.orderId.groups.map(async(order: any) =>  {
+          const info = await dispatch('getCustomerInformation', order.doclist.docs[0].orderId);
           order.orderId = order.doclist.docs[0].orderId
           order.customer = {
             name: order.doclist.docs[0].customerPartyName,
             emailId: order.doclist.docs[0].customerEmailId,
             phoneNumber: order.doclist.docs[0].customerPhoneNumber,
             toName: order.doclist.docs[0].customerPartyName,
-            city: order.doclist.docs[0].shipToCity,
-            state: order.doclist.docs[0].shipToState,
-            zipCode: order.doclist.docs[0].postalCode,
-            country: order.doclist.docs[0].shipToCountry,
-            addressLine1: order.doclist.docs[0].address1,
-            addressLine2: order.doclist.docs[0].address2,
+            city: info.city,
+            state: info.stateProvinceGeoId,
+            zipCode: info.postalCode,
+            country: info.countryGeoId,
+            addressLine1: info.address1,
+            addressLine2: info.address2,
           },
           order.orderName = order.doclist.docs[0].orderName
           order.orderNotes = order.doclist.docs[0].orderNotes
@@ -37,8 +38,7 @@ const actions: ActionTree<OrderState, RootState> = {
           order.orderStatusId = order.doclist.docs[0].orderStatusId
 
           return order
-        })
-
+        })) as any
         const total = resp.data.grouped.orderId.ngroups;
         if (query.json.params.start && query.json.params.start > 0) orders = state.list.orders.concat(orders)
         this.dispatch('product/getProductInformation', { orders });
@@ -51,7 +51,7 @@ const actions: ActionTree<OrderState, RootState> = {
     }
     return resp;
   },
-  async getOrderDetails({ commit }, orderId) {
+  async getOrderDetails({ commit, dispatch }, orderId) {
     let resp;
 
     const payload = {
@@ -77,21 +77,23 @@ const actions: ActionTree<OrderState, RootState> = {
         const customerLoyaltyOptions = process.env.VUE_APP_CUST_LOYALTY_OPTIONS
 
         const group = resp.data.grouped.orderId.groups.length > 0 && resp.data.grouped.orderId.groups[0]
-
+        const info = await dispatch('getCustomerInformation', group.doclist.docs[0].orderId);
+        const shippingDetails = await dispatch('getShippingDetails',group.doclist.docs[0].orderId)
+        await this.dispatch("util/findGeoName",[info.countryGeoId, info.stateProvinceGeoId])
         const order: Order = {
           orderId: group.doclist.docs[0].orderId,
           orderName: group.doclist.docs[0].orderName,
           customer: {
             name: group.doclist.docs[0].customerPartyName,
             emailId: group.doclist.docs[0].customerEmailId,
-            phoneNumber: group.doclist.docs[0].customerPhoneNumber,
+            phoneNumber: info.contactNumber,
             toName: group.doclist.docs[0].customerPartyName,
-            city: group.doclist.docs[0].shipToCity,
-            state: group.doclist.docs[0].shipToState,
-            zipCode: group.doclist.docs[0].postalCode,
-            country: group.doclist.docs[0].shipToCountry,
-            addressLine1: group.doclist.docs[0].address1,
-            addressLine2: group.doclist.docs[0].address2,
+            city: info.city,
+            state: info.stateProvinceGeoId,
+            zipCode: info.postalCode,
+            country: info.countryGeoId,
+            addressLine1: info.address1,
+            addressLine2: info.address2,
             loyaltyOptions: getCustomerLoyalty(group.doclist.docs[0].orderNotes, customerLoyaltyOptions)
           },
           /** An array containing the items purchased in this order */
@@ -104,7 +106,7 @@ const actions: ActionTree<OrderState, RootState> = {
           },
           notes: group.doclist.docs[0].orderNotes
         }
-
+      
         const productIds = order.items?.map((item: OrderItem) => item.productId)
 
         commit(types.ORDER_CURRENT_UPDATED, { order })
@@ -113,6 +115,7 @@ const actions: ActionTree<OrderState, RootState> = {
         showToast(translate("Something went wrong"));
       }
     } catch(error) {
+      console.error(error)
       showToast(translate("Something went wrong"));
     }
     return resp;
@@ -185,6 +188,61 @@ const actions: ActionTree<OrderState, RootState> = {
       console.error(err)
       showToast(translate('Something went wrong'))
     }
+  },
+
+  async getShippingDetails ({commit}, orderId) {
+    const resp = await OrderService.getShippingDetails({
+      "inputFields": {
+        "orderId": orderId,
+      },
+      "fieldList": ["orderId", "contactMechId"],
+      "entityName": "OrderItemShipGroup",
+      "noConditionFind": "Y",
+    })
+    const shippingAddress = await OrderService.getShippingAddress({
+      "inputFields": {
+        "contactMechId": resp.data.docs[0].contactMechId,
+      },
+      "fieldList": ["address1", "address2", "city", "countryGeoId", "postalCode", "stateProvinceGeoId"],
+      "entityName": "PostalAddress",
+      "noConditionFind": "Y",
+    })
+  },
+  
+  async getCustomerInformation({ commit },orderId){
+    const resp = await OrderService.getCustomerInformation({
+      "inputFields": {
+        "orderId": orderId,
+        "contactMechPurposeTypeId": ["BILLING_LOCATION", "PHONE_BILLING"]
+      },  
+      "entityName": "OrderContactMech",
+      "fieldList": ["contactMechPurposeTypeId", "contactMechId"],
+      "noConditionFind": "Y",
+    });
+    const postalAddress = resp.data.docs.find((item: any) => {
+      return item.contactMechPurposeTypeId === "BILLING_LOCATION";
+    });
+    const phoneNumber = resp.data.docs.find((item: any) => {
+      return item.contactMechPurposeTypeId === "PHONE_BILLING";
+    });
+    const address = await OrderService.getPostalAddress({
+      "inputFields": {
+        "contactMechId": postalAddress?.contactMechId,
+      },
+      "fieldList": ["city", "stateProvinceGeoId", "postalCode", "countryGeoId", "address1", "address2"],
+      "entityName": "PostalAddress",
+      "noConditionFind": "Y",
+    });
+    const number = await OrderService.getCustomerPhoneNumber({
+      "inputFields": {
+        "contactMechId": phoneNumber?.contactMechId,
+      },
+      "fieldList": ["contactMechId", "contactNumber"],
+      "entityName": "TelecomNumber",
+      "noConditionFind": "Y",
+    });
+    const info = {...address.data.docs[0], ...number.data.docs[0]}
+    return info;
   }
 } 
 

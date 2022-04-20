@@ -16,6 +16,38 @@ const getPOIds = async (payload: any): Promise<any> => {
   })
 }
 
+const getCustomerInformation = async (payload: any): Promise<any> => {
+  return api({
+    url: "performFind",
+    method: "post",
+    data: payload
+  })
+}
+
+const getPostalAddress = async (payload: any): Promise<any> => {
+  return api({
+    url: "performFind",
+    method: "post",
+    data: payload
+  })
+}
+
+const getCustomerPhoneNumber = async (payload: any): Promise<any> => {
+  return api({
+    url: "performFind",
+    method: "post",
+    data: payload
+  })
+}
+
+const getCustomerEmail = async (payload: any): Promise<any> => {
+  return api({
+    url: "performFind",
+    method: "post",
+    data: payload
+  })
+}
+
 const findOrderDetails = async (payload: any): Promise<any> => {
   return api({
     url: "/solr-query",
@@ -40,10 +72,32 @@ const updateOrderStatus = async (payload: any): Promise<any> => {
   })
 }
 
+const getShippingDetails = async (payload: any): Promise<any> => {
+  return api({
+    url: "/performFind",
+    method: "post",
+    data: payload
+  });
+}
+
+const getShippingAddress = async (payload: any): Promise<any> => {
+  return api({
+    url: "/performFind",
+    method: "post",
+    data: payload
+  });
+}
+
 export const OrderService = {
   fetchStatusChange,
   findOrder,
   findOrderDetails,
   getPOIds,
-  updateOrderStatus
+  updateOrderStatus,
+  getCustomerInformation,
+  getPostalAddress,
+  getCustomerPhoneNumber,
+  getCustomerEmail,
+  getShippingDetails,
+  getShippingAddress
 }

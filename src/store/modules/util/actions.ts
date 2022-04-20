@@ -26,6 +26,47 @@ const actions: ActionTree<UtilState, RootState> = {
     } catch (err) {
       console.error("error", err);
     }
+  },
+  async fetchGeoName({ commit, state}, geoIds){
+    try {
+     const resp = UtilService.getGeoName({
+       "inputFields": {
+         "geoId": geoIds
+       },
+       "entityName": "Geo",
+       "fieldList": ["geoName", "geoId"],
+       "noConditionFind": "Y"
+     });
+    } catch (err) {
+      console.error(err);
+    }
+  },
+  async findGeoName({state, commit}, geoIds){
+    const cachedGeoNames = JSON.parse(JSON.stringify(state.cached));
+    const geoIdFilter = geoIds.reduce((filter: Array<string>, geoId: any) => {
+      if (!cachedGeoNames[geoId]) {
+        filter.push(geoId)
+      } 
+      return filter;
+    }, []);
+    if (geoIdFilter.length <= 0) return cachedGeoNames;
+
+    const resp = await UtilService.getGeoName({
+      "inputFields": {
+        "geoId": geoIdFilter
+      },
+      "entityName": "Geo",
+      "fieldList": ["geoName", "geoId"],
+      "noConditionFind": "Y"
+    });
+    if (resp.status == 200 && !hasError(resp) && resp.data.count) {
+      const geos = resp.data.docs;
+      geos.map((geo:any) => {
+        cachedGeoNames[geo.geoId] = geo.geoName
+      })
+      commit(types.UTIL_GEO_CACHED_UPDATED, cachedGeoNames);
+      return cachedGeoNames;
+    }
   }
 }
 
