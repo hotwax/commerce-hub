@@ -5,7 +5,8 @@ import * as types from './mutation-types'
 const mutations: MutationTree <OrderState> = {
   [types.ORDER_LIST_UPDATED] (state, payload) {
     state.list.orders = payload.orders
-    state.list.total = payload.total
+    state.list.total = payload.total,
+    state.list.items = payload.items
   },
   [types.ORDER_FILTERS_UPDATED] (state, payload) {
     state.query[payload.filterName] = payload.value

@@ -19,7 +19,7 @@ const getters: GetterTree<ProductState, RootState> = {
     return state.cached[productId] ? state.cached[productId] : {};
   },
   getProducts(state) {
-    return state.products.list;
+    return state.products;
   },
   getCurrent(state) {
     return state.current;

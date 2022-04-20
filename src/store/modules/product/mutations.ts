@@ -6,6 +6,7 @@ const mutations: MutationTree <ProductState> = {
   [types.PRODUCT_LIST_UPDATED] (state, payload) {
     state.products.list = payload.products;
     state.products.total = payload.totalProductsCount;
+    state.products.variants = payload.totalVariants
   },
   [types.PRODUCT_ADD_TO_CACHED_MULTIPLE](state, payload) {
     if (payload.products) {
