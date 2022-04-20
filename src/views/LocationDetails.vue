@@ -37,6 +37,8 @@
           <ion-note slot="end">note</ion-note>
         </ion-item>
 
+        <ion-item lines="none" />
+
         <ion-item>
           <ion-label>{{ $t("Threshold") }}</ion-label>
           <ion-label slot="end">25 {{ $t("orders") }}</ion-label>
