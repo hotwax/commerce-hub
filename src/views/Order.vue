@@ -209,14 +209,14 @@
                         <ion-label>{{ $t("Shipping from") }}</ion-label>
                         <p>{{ item.facilityName ? item.facilityName : "-" }}</p>
                       </ion-item>
-                      <ion-item lines="none">
+                      <ion-item>
                         <ion-label>{{ $t("Location Inventory") }}</ion-label>
                         <p>{{ getProductStock(item.productId) }}</p>
                       </ion-item>
                       <!-- TODO: make changing location button functional, also add UI for same -->
-                      <!-- <ion-buttons>
-                        <ion-button color="primary" fill="clear">{{ $t("Change fulfillment location") }}</ion-button>
-                      </ion-buttons> -->
+                      <ion-buttons>
+                        <ion-button color="primary" fill="clear" @click="updateFulfillmentLocation()">{{ $t("Change fulfillment location") }}</ion-button>
+                      </ion-buttons>
                     </ion-list>
                   </ion-card>
                 </div>
@@ -260,12 +260,14 @@ import {
   IonSelectOption,
   IonThumbnail,
   IonTitle,
-  IonToolbar
+  IonToolbar,
+  modalController,
 } from '@ionic/vue';
 import { useStore } from "@/store";
 import { mapGetters } from "vuex";
 import { defineComponent } from "vue";
 import StatusBadge from '@/components/StatusBadge.vue'
+import FulfillmentLocationModal from '@/components/FulfillmentLocationModal.vue'
 
 export default defineComponent({
   name: 'Order',
@@ -304,7 +306,13 @@ export default defineComponent({
     },
     changeStatus(orderId: string, ev: CustomEvent) {
       this.store.dispatch('order/updateOrderStatus', {orderId, statusId: ev['detail'].value, 'setItemStatus': 'Y'})
-    }
+    },
+    async updateFulfillmentLocation() {
+      const updateModal = await modalController.create({
+        component: FulfillmentLocationModal,
+      });
+      return updateModal.present();
+    },
   },
   mounted() {
     this.orderDetails(this.$route.params.orderId);
