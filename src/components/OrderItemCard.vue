@@ -11,7 +11,10 @@
         <p v-if="$filters.getFeature(getProduct(item.productId).featureHierarchy, '1/COLOR/')"> {{ $t("Color") }}: {{ $filters.getFeature(getProduct(item.productId).featureHierarchy, '1/COLOR/') }} </p>
         <p v-if="$filters.getFeature(getProduct(item.productId).featureHierarchy, '1/SIZE/')"> {{ $t("Size") }}: {{ $filters.getFeature(getProduct(item.productId).featureHierarchy, '1/SIZE/') }} </p>
       </ion-label>
-      <StatusBadge :statusDesc="item.orderItemStatusDesc || ''" :key="item.orderItemStatusDesc"/>
+      <div class="metadata">
+        <StatusBadge :statusDesc="item.orderItemStatusDesc || ''" :key="item.orderItemStatusDesc"/>
+        <StatusBadge v-if="item.facilityId === orderPreOrderId || item.facilityId === orderBackOrderId" :statusDesc="item.facilityId === orderPreOrderId ? 'Pre-order' : 'Backorder' || ''" :key="item.facilityName"/>
+      </div>
     </ion-item>
     <!-- TODO: Need to handle this property -->
     <div v-if="item.facilityId === orderPreOrderId || item.facilityId === orderBackOrderId">
@@ -35,14 +38,31 @@
         <ion-label>{{ $t("Shipping method") }}</ion-label>
         <p slot="end"> {{ item.shipmentMethodTypeId ? getShipmentMethodDesc(item.shipmentMethodTypeId) : '-' }} </p>
       </ion-item>
-      <ion-item>
-        <ion-label>{{ $t("Shipping from") }}</ion-label>
-        <p slot="end"> {{ item.facilityName ? item.facilityName : "-" }} </p>
-      </ion-item>
-      <ion-item lines="none">
-        <ion-label>{{ $t("Location inventory") }}</ion-label>
-        <p slot="end">{{ getProductStock(item.productId) }}</p>
-      </ion-item>
+      <div v-if="item.facilityId !== '_NA_'">
+        <ion-item>
+          <ion-label>{{ $t("Shipping from") }}</ion-label>
+          <!-- Used ion-badge to display a dot after the facility name when the ship from facility is brokering queue -->
+          <p slot="end">
+            {{ item.facilityName ? item.facilityName : "-" }}
+            <ion-badge v-if="item.facilityId === '_NA_'" color="warning">{{ ' ' }}</ion-badge>
+          </p>
+        </ion-item>
+        <ion-item lines="none">
+          <ion-label>{{ $t("Location inventory") }}</ion-label>
+          <p slot="end">{{ getProductStock(item.productId) }}</p>
+        </ion-item>
+      </div>
+      <div v-else>
+        <ion-item>
+          <ion-label>{{ $t("Auto cancel") }}</ion-label>
+          <!-- Used ion-badge to display a dot after the facility name when the ship from facility is brokering queue -->
+          <p slot="end">{{ item.autoCancelDate ? moment.utc(item.autoCancelDate).fromNow() : '-' }}</p>
+        </ion-item>
+        <ion-item lines="none">
+          <ion-label>{{ $t("Parking") }}</ion-label>
+          <p slot="end">{{ 'Brokering queue' }}</p>
+        </ion-item>
+      </div>
     </div>
   </ion-card>
 </template>
@@ -50,6 +70,7 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import {
+  IonBadge,
   IonCard,
   IonItem,
   IonLabel,
@@ -58,11 +79,13 @@ import {
 import { mapGetters } from "vuex";
 import Image from '@/components/Image.vue'
 import StatusBadge from '@/components/StatusBadge.vue'
+import * as moment from "moment-timezone";
 
 export default defineComponent({
   name: "OrderItemCard",
   components: {
     Image,
+    IonBadge,
     IonCard,
     IonItem,
     IonLabel,
@@ -82,9 +105,19 @@ export default defineComponent({
     const orderBackOrderId = process.env.VUE_APP_BACKORDER_IDNT_ID
 
     return {
+      moment,
       orderPreOrderId,
       orderBackOrderId
     }
   }
 });
 </script>
+
+<style scoped>
+.metadata {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  row-gap: 4px;
+}
+</style>

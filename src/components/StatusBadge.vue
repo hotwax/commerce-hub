@@ -21,6 +21,8 @@ export default defineComponent({
         'Completed': 'success',
         'Cancelled': 'danger',
         'Unfillable': 'warning',
+        'Pre-order': 'warning',
+        'Backorder': 'warning',
         'default': 'medium'
       } as any)[desc]
     }
