@@ -98,35 +98,36 @@
             </section>
 
             <section class="section-grid" v-if="showOrderItems">
-              <ion-card v-for="(item, index) in order.doclist.docs" :key="index" :item="item">
+              <OrderItemCard v-for="(item, index) in order.doclist.docs" :key="index" :item="item" />
+              <!-- <ion-card v-for="(item, index) in order.doclist.docs" :key="index" :item="item">
                 <ion-item>
                   <ion-thumbnail slot="start">
                     <Image :src="getProduct(item.productId).mainImageUrl" />
                   </ion-thumbnail>
                   <ion-label class="ion-text-wrap">
                     <p>{{ getProduct(item.productId)?.brandName }}</p>
-                    {{ item.parentProductName ? item.parentProductName : item.productName }}
+                    {{ item.parentProductName ? item.parentProductName : item.productName }} -->
                     <!-- TODO: make the attribute displaying logic dynamic -->
-                    <p v-if="$filters.getFeature(getProduct(item.productId).featureHierarchy, '1/COLOR/')"> {{ $t("Color") }}: {{ $filters.getFeature(getProduct(item.productId).featureHierarchy, '1/COLOR/') }} </p>
+                    <!-- <p v-if="$filters.getFeature(getProduct(item.productId).featureHierarchy, '1/COLOR/')"> {{ $t("Color") }}: {{ $filters.getFeature(getProduct(item.productId).featureHierarchy, '1/COLOR/') }} </p>
                     <p v-if="$filters.getFeature(getProduct(item.productId).featureHierarchy, '1/SIZE/')"> {{ $t("Size") }}: {{ $filters.getFeature(getProduct(item.productId).featureHierarchy, '1/SIZE/') }} </p>
                   </ion-label>
                   <StatusBadge :statusDesc="item.orderItemStatusDesc || ''" :key="item.orderItemStatusDesc"/>
-                </ion-item>
+                </ion-item> -->
                 <!-- TODO: Need to handle this property -->
-                <div v-if="item.facilityId === orderPreOrderId || item.facilityId === orderBackOrderId">
+                <!-- <div v-if="item.facilityId === orderPreOrderId || item.facilityId === orderBackOrderId">
                   <ion-item>
                     <ion-label>{{ $t("Promise date") }}</ion-label>
                     <p slot="end"> {{ item.promisedDatetime ? $filters.formatUtcDate(item.promisedDatetime, 'YYYY-MM-DDTHH:mm:ssZ', 'D MMM YYYY') : '-'  }} </p>
                   </ion-item>
                   <ion-item>
                     <ion-label>{{ $t("PO arrival date") }}</ion-label>
-                    <!-- TODO: Need to handle this property -->
-                    <p slot="end"> {{ item.promiseOrderArrivalDate ? $filters.formatUtcDate(item.promiseOrderArrivalDate, 'YYYY-MM-DDTHH:mm:ssZ', 'D MMM YYYY') : '-' }} </p>
+                    TODO: Need to handle this property -->
+                    <!-- <p slot="end"> {{ item.promiseOrderArrivalDate ? $filters.formatUtcDate(item.promiseOrderArrivalDate, 'YYYY-MM-DDTHH:mm:ssZ', 'D MMM YYYY') : '-' }} </p>
                   </ion-item>
                   <ion-item>
-                    <ion-label>{{ $t("Location") }}</ion-label>
+                    <ion-label>{{ $t("Location") }}</ion-label> -->
                     <!-- TODO: Need to handle this property -->
-                    <p slot="end"> {{ item.facilityName ? item.facilityName : '-' }} </p>
+                    <!-- <p slot="end"> {{ item.facilityName ? item.facilityName : '-' }} </p>
                   </ion-item>
                 </div>
                 <div v-else>
@@ -143,7 +144,7 @@
                     <p slot="end">{{ getProductStock(item.productId) }}</p>
                   </ion-item>
                 </div>
-              </ion-card>
+              </ion-card> -->
             </section>
             <hr />
           </div>
@@ -161,7 +162,6 @@ import {
   IonBackButton,
   IonButtons,
   IonButton,
-  IonCard,
   IonChip,
   IonContent,
   IonHeader,
@@ -176,7 +176,6 @@ import {
   IonSearchbar,
   IonSelect,
   IonSelectOption,
-  IonThumbnail,
   IonTitle,
   IonToggle,
   IonToolbar,
@@ -196,22 +195,20 @@ import { defineComponent, ref } from "vue";
 import { mapGetters, useStore } from "vuex";
 import { hasError, showToast } from '@/utils'
 import { Plugins } from '@capacitor/core';
-import Image from '@/components/Image.vue';
 import { useRouter } from 'vue-router';
 import OrderFilters from '@/components/OrderFilters.vue'
 import { OrderService } from '@/services/OrderService';
 import StatusBadge from '@/components/StatusBadge.vue'
+import OrderItemCard from '@/components/OrderItemCard.vue'
 
 const { Clipboard } = Plugins;
 
 export default defineComponent ({
   name: 'Order',
   components: {
-    Image,
     IonBackButton,
     IonButtons,
     IonButton,
-    IonCard,
     IonChip,
     IonContent,
     IonHeader,
@@ -226,11 +223,11 @@ export default defineComponent ({
     IonSelect,
     IonSelectOption,
     IonSearchbar,
-    IonThumbnail,
     IonTitle,
     IonToggle,
     IonToolbar,
     OrderFilters,
+    OrderItemCard,
     StatusBadge
   },
   computed: {
