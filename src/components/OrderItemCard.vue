@@ -48,7 +48,7 @@
         </ion-item>
         <ion-item lines="none">
           <ion-label>{{ $t("Location inventory") }}</ion-label>
-          <p slot="end">{{ getProductStock(item.productId) }}</p>
+          <p slot="end">{{ getProductStockForFacility(item.productId, item.facilityId) }}</p>
         </ion-item>
       </div>
       <div v-if="isItemInBrokeringQueue(item)">
@@ -102,7 +102,7 @@ export default defineComponent({
     ...mapGetters({
       getProduct: 'product/getProduct',
       getShipmentMethodDesc: 'util/getShipmentMethod',
-      getProductStock: 'stock/getProductStock',
+      getProductStockForFacility: 'stock/getProductStockForFacility'
     })
   },
   props: ["item"],

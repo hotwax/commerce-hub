@@ -42,6 +42,7 @@ const actions: ActionTree<OrderState, RootState> = {
         const total = resp.data.grouped.orderId.ngroups;
 
         const status = new Set();
+        const orderItems = [] as any;
         const completedOrderIds = [] as any;
         let orderItemTrackingCodes = {} as any;
 
@@ -52,12 +53,15 @@ const actions: ActionTree<OrderState, RootState> = {
               completedOrderIds.push(item.orderId)
             }
             status.add(item.orderItemStatusId)
+            orderItems.push(item)
           })
         })
 
         if (completedOrderIds.length) {
           orderItemTrackingCodes = await OrderService.getShipmentDetailForOrderItem(completedOrderIds)
         }
+
+        this.dispatch('stock/fetchProductStockForFacility', orderItems)
 
         const statuses = await this.dispatch('util/fetchStatus', [...status])
         orders.map((order: any) => {
@@ -72,6 +76,7 @@ const actions: ActionTree<OrderState, RootState> = {
 
         if (query.json.params.start && query.json.params.start > 0) orders = state.list.orders.concat(orders)
         this.dispatch('product/getProductInformation', { orders });
+
         commit(types.ORDER_LIST_UPDATED, { orders, total });
       } else {
         showToast(translate("Something went wrong"));
@@ -137,8 +142,15 @@ const actions: ActionTree<OrderState, RootState> = {
         }
 
         const status = new Set();
+        const orderItems = [] as any;
+
         status.add(order.statusId);
-        order.items?.map((item: any) => status.add(item.orderItemStatusId))
+        order.items?.map((item: any) => {
+          status.add(item.orderItemStatusId)
+          orderItems.push(item)
+        })
+
+        this.dispatch('stock/fetchProductStockForFacility', orderItems)
 
         const statuses = await this.dispatch('util/fetchStatus', [...status])
         order['statusDesc'] = statuses[order.statusId]
