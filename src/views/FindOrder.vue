@@ -396,6 +396,25 @@ ion-modal {
   --border-radius: 8px;
 }
 
+main > div:hover {
+  cursor: pointer;
+  background: rgb(240, 240, 240);
+}
+
+ion-item, ion-card{
+  --background: none;
+}
+
+@media (prefers-color-scheme: dark) {
+  main > div:hover {
+    background: rgb(63, 63, 63);
+  }
+
+  ion-card {
+    box-shadow: 2px 2px 5px rgb(83, 83, 83);
+  }
+} 
+
 @media (min-width: 991px) {
   .main {
     margin-left: var(--spacer-xl);
