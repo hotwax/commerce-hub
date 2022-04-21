@@ -42,6 +42,8 @@ const actions: ActionTree<OrderState, RootState> = {
         const total = resp.data.grouped.orderId.ngroups;
 
         const status = new Set();
+        let productIds: any = new Set();
+        let facilityIds: any = new Set();
         const completedOrderIds = [] as any;
         let orderItemTrackingCodes = {} as any;
 
@@ -52,6 +54,8 @@ const actions: ActionTree<OrderState, RootState> = {
               completedOrderIds.push(item.orderId)
             }
             status.add(item.orderItemStatusId)
+            productIds.add(item.productId);
+            facilityIds.add(item.facilityId);
           })
         })
 
@@ -59,11 +63,17 @@ const actions: ActionTree<OrderState, RootState> = {
           orderItemTrackingCodes = await dispatch('fetchShipmentDetailForOrderItem', completedOrderIds)
         }
 
+        productIds = [...productIds]
+        facilityIds = [...facilityIds]
+
+        const productInventory = await this.dispatch('stock/fetchProductStockForFacility', { productIds, facilityIds })
+
         const statuses = await this.dispatch('util/fetchStatus', [...status])
         orders.map((order: any) => {
           order['orderStatusDesc'] = statuses[order.orderStatusId]
           order.doclist.docs.map((item: any) => {
             item['orderItemStatusDesc'] = statuses[item.orderItemStatusId]
+            item['facilityAtp'] = productInventory[item.facilityId] ? productInventory[item.facilityId][item.productId] : 0
             if (orderItemTrackingCodes[item.orderId] && item.shipmentMethodTypeId !== 'STOREPICKUP' && item.orderItemStatusId === 'ITEM_COMPLETED') {
               item['orderItemTrackingCode'] = orderItemTrackingCodes[item.orderId][item.orderItemSeqId]
             }
@@ -71,7 +81,8 @@ const actions: ActionTree<OrderState, RootState> = {
         })
 
         if (query.json.params.start && query.json.params.start > 0) orders = state.list.orders.concat(orders)
-        this.dispatch('product/getProductInformation', { orders });
+        this.dispatch('product/fetchProductInformation', orders);
+
         commit(types.ORDER_LIST_UPDATED, { orders, total });
       } else {
         showToast(translate("Something went wrong"));
