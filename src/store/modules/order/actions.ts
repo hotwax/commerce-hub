@@ -42,7 +42,7 @@ const actions: ActionTree<OrderState, RootState> = {
         const total = resp.data.grouped.orderId.ngroups;
 
         const status = new Set();
-        const orderItems = new Set();
+        const orderItems = [] as any;
         const completedOrderIds = [] as any;
         let orderItemTrackingCodes = {} as any;
 
@@ -53,7 +53,7 @@ const actions: ActionTree<OrderState, RootState> = {
               completedOrderIds.push(item.orderId)
             }
             status.add(item.orderItemStatusId)
-            orderItems.add(item)
+            orderItems.push(item)
           })
         })
 
@@ -61,7 +61,7 @@ const actions: ActionTree<OrderState, RootState> = {
           orderItemTrackingCodes = await OrderService.getShipmentDetailForOrderItem(completedOrderIds)
         }
 
-        this.dispatch('stock/fetchProductStockForFacility', [...orderItems])
+        this.dispatch('stock/fetchProductStockForFacility', orderItems)
 
         const statuses = await this.dispatch('util/fetchStatus', [...status])
         orders.map((order: any) => {
@@ -142,8 +142,15 @@ const actions: ActionTree<OrderState, RootState> = {
         }
 
         const status = new Set();
+        const orderItems = [] as any;
+
         status.add(order.statusId);
-        order.items?.map((item: any) => status.add(item.orderItemStatusId))
+        order.items?.map((item: any) => {
+          status.add(item.orderItemStatusId)
+          orderItems.push(item)
+        })
+
+        this.dispatch('stock/fetchProductStockForFacility', orderItems)
 
         const statuses = await this.dispatch('util/fetchStatus', [...status])
         order['statusDesc'] = statuses[order.statusId]
