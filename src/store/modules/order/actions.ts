@@ -48,10 +48,8 @@ const actions: ActionTree<OrderState, RootState> = {
         orders.map((order: any) => {
           status.add(order.orderStatusId)
           order.doclist.docs.map((item: any) => {
-            if (item.shipmentMethodTypeId !== 'STOREPICKUP' && item.orderItemStatusId === 'ITEM_COMPLETED') {
-              if (!completedOrderIds.includes(item.orderId)) {
-                completedOrderIds.push(item.orderId)
-              }
+            if (item.shipmentMethodTypeId !== 'STOREPICKUP' && item.orderItemStatusId === 'ITEM_COMPLETED' && !completedOrderIds.includes(item.orderId)) {
+              completedOrderIds.push(item.orderId)
             }
             status.add(item.orderItemStatusId)
           })
