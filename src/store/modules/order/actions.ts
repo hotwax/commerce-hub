@@ -11,7 +11,7 @@ import { prepareOrderQuery } from '@/utils/solrHelper'
 const actions: ActionTree<OrderState, RootState> = {
   
   // Find Orders
-  async findOrders ({ commit, state }, params) {
+  async findOrders ({ dispatch, commit, state }, params) {
     let resp;
     const query = prepareOrderQuery({ ...(state.query), poIds: state.poIds, ...params})
     try {
@@ -42,15 +42,32 @@ const actions: ActionTree<OrderState, RootState> = {
         const total = resp.data.grouped.orderId.ngroups;
 
         const status = new Set();
+        const completedOrderIds = [] as any;
+        let orderItemTrackingCodes = {} as any;
+
         orders.map((order: any) => {
           status.add(order.orderStatusId)
-          order.doclist.docs.map((item: any) => status.add(item.orderItemStatusId))
+          order.doclist.docs.map((item: any) => {
+            if (item.shipmentMethodTypeId !== 'STOREPICKUP' && item.orderItemStatusId === 'ITEM_COMPLETED' && !completedOrderIds.includes(item.orderId)) {
+              completedOrderIds.push(item.orderId)
+            }
+            status.add(item.orderItemStatusId)
+          })
         })
+
+        if (completedOrderIds.length) {
+          orderItemTrackingCodes = await OrderService.getShipmentDetailForOrderItem(completedOrderIds)
+        }
 
         const statuses = await this.dispatch('util/fetchStatus', [...status])
         orders.map((order: any) => {
           order['orderStatusDesc'] = statuses[order.orderStatusId]
-          order.doclist.docs.map((item: any) => item['orderItemStatusDesc'] = statuses[item.orderItemStatusId])
+          order.doclist.docs.map((item: any) => {
+            item['orderItemStatusDesc'] = statuses[item.orderItemStatusId]
+            if (orderItemTrackingCodes[item.orderId] && item.shipmentMethodTypeId !== 'STOREPICKUP' && item.orderItemStatusId === 'ITEM_COMPLETED') {
+              item['orderItemTrackingCode'] = orderItemTrackingCodes[item.orderId][item.orderItemSeqId]
+            }
+          })
         })
 
         if (query.json.params.start && query.json.params.start > 0) orders = state.list.orders.concat(orders)
@@ -60,6 +77,7 @@ const actions: ActionTree<OrderState, RootState> = {
         showToast(translate("Something went wrong"));
       }
     } catch(error){
+      console.error(error)
       showToast(translate("Something went wrong"));
     }
     return resp;
