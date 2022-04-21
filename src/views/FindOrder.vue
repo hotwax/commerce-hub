@@ -302,8 +302,6 @@ export default defineComponent ({
     const queryString = ref();
     const orderStatus = JSON.parse(process.env.VUE_APP_ORDER_STATUS)
     const itemStatus = JSON.parse(process.env.VUE_APP_ITEM_STATUS)
-    const orderPreOrderId = process.env.VUE_APP_PRE_ORDER_IDNT_ID
-    const orderBackOrderId = process.env.VUE_APP_BACKORDER_IDNT_ID
     const cusotmerLoyaltyOptions = process.env.VUE_APP_CUST_LOYALTY_OPTIONS
 
     return {
@@ -315,8 +313,6 @@ export default defineComponent ({
       itemStatus,
       pricetag,
       orderStatus,
-      orderBackOrderId,
-      orderPreOrderId,
       ribbon,
       swapVerticalOutline,
       syncOutline,

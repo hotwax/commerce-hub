@@ -13,11 +13,11 @@
       </ion-label>
       <div class="metadata">
         <StatusBadge :statusDesc="item.orderItemStatusDesc || ''" :key="item.orderItemStatusDesc"/>
-        <StatusBadge v-if="item.facilityId === orderPreOrderId || item.facilityId === orderBackOrderId" :statusDesc="item.facilityId === orderPreOrderId ? 'Pre-order' : 'Backorder' || ''" :key="item.facilityName"/>
+        <StatusBadge v-if="item.facilityId === orderPreOrderFacilityId || item.facilityId === orderBackOrderFacilityId" :statusDesc="item.facilityId === orderPreOrderFacilityId ? 'Pre-order' : 'Backorder' || ''" :key="item.facilityName"/>
       </div>
     </ion-item>
     <!-- TODO: Need to handle this property -->
-    <div v-if="item.facilityId === orderPreOrderId || item.facilityId === orderBackOrderId">
+    <div v-if="item.facilityId === orderPreOrderFacilityId || item.facilityId === orderBackOrderFacilityId">
       <ion-item>
         <ion-label>{{ $t("Promise date") }}</ion-label>
         <p slot="end"> {{ item.promisedDatetime ? $filters.formatUtcDate(item.promisedDatetime, 'YYYY-MM-DDTHH:mm:ssZ', 'D MMM YYYY') : '-'  }} </p>
@@ -107,13 +107,13 @@ export default defineComponent({
   },
   props: ["item"],
   setup() {
-    const orderPreOrderId = process.env.VUE_APP_PRE_ORDER_IDNT_ID
-    const orderBackOrderId = process.env.VUE_APP_BACKORDER_IDNT_ID
+    const orderPreOrderFacilityId = process.env.VUE_APP_PRE_ORDER_IDNT_ID
+    const orderBackOrderFacilityId = process.env.VUE_APP_BACKORDER_IDNT_ID
 
     return {
       moment,
-      orderPreOrderId,
-      orderBackOrderId
+      orderPreOrderFacilityId,
+      orderBackOrderFacilityId
     }
   }
 });
