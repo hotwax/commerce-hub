@@ -37,8 +37,8 @@
               <h2>{{ $t("Timeline") }}</h2>
               <ion-note slot="end">1:07pm 6th Dec 2021</ion-note>
             </ion-item>
-            
-            <TimelineDetail />
+
+            <TimelineDetail class="desktop-only" />
           </div>
 
           <div class="info">

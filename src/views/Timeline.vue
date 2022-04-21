@@ -8,16 +8,7 @@
     </ion-header>
 
     <ion-content>
-      <ion-list>
-        <ion-item v-for="item in 5" :key="item">
-        <ion-icon :icon="ticketOutline" slot="start" />
-        <ion-label>
-          <p>+10 minutes</p>
-          Imported from Shopify
-        </ion-label>
-        <ion-icon slot="end" :icon="informationCircleOutline" />
-        </ion-item>
-      </ion-list>
+      <TimelineDetail />
     </ion-content>
   </ion-page>
 </template>
@@ -27,16 +18,13 @@ import {
   IonBackButton,
   IonContent,
   IonHeader,
-  IonItem,
-  IonIcon,
-  IonLabel,
-  IonList,
   IonPage,
   IonToolbar,
   IonTitle,
 } from '@ionic/vue';
 import { defineComponent } from 'vue';
 import { informationCircleOutline, ticketOutline } from 'ionicons/icons'
+import TimelineDetail from '@/components/TimelineDetail.vue'
 
 export default defineComponent({
   name: 'Timeline',
@@ -44,13 +32,10 @@ export default defineComponent({
     IonBackButton,
     IonContent,
     IonHeader,
-    IonItem,
-    IonIcon,
-    IonLabel,
-    IonList,
     IonPage,
     IonToolbar,
     IonTitle,
+    TimelineDetail
   },
   setup() {
     return {

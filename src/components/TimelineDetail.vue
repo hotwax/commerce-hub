@@ -1,5 +1,5 @@
 <template>
-  <ion-list class="desktop-only">
+  <ion-list>
     <ion-item v-for="item in 5" :key="item">
       <ion-icon :icon="ticketOutline" slot="start" />
       <ion-label>
