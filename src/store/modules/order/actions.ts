@@ -11,7 +11,7 @@ import { prepareOrderQuery } from '@/utils/solrHelper'
 const actions: ActionTree<OrderState, RootState> = {
   
   // Find Orders
-  async findOrders ( { commit, state }, params) {
+  async findOrders ({ dispatch, commit, state }, params) {
     let resp;
     const query = prepareOrderQuery({ ...(state.query), poIds: state.poIds, ...params})
     try {
@@ -40,13 +40,49 @@ const actions: ActionTree<OrderState, RootState> = {
         })
 
         const total = resp.data.grouped.orderId.ngroups;
+
+        const status = new Set();
+        const orderItems = [] as any;
+        const completedOrderIds = [] as any;
+        let orderItemTrackingCodes = {} as any;
+
+        orders.map((order: any) => {
+          status.add(order.orderStatusId)
+          order.doclist.docs.map((item: any) => {
+            if (item.shipmentMethodTypeId !== 'STOREPICKUP' && item.orderItemStatusId === 'ITEM_COMPLETED' && !completedOrderIds.includes(item.orderId)) {
+              completedOrderIds.push(item.orderId)
+            }
+            status.add(item.orderItemStatusId)
+            orderItems.push(item)
+          })
+        })
+
+        if (completedOrderIds.length) {
+          orderItemTrackingCodes = await OrderService.getShipmentDetailForOrderItem(completedOrderIds)
+        }
+
+        this.dispatch('stock/fetchProductStockForFacility', orderItems)
+
+        const statuses = await this.dispatch('util/fetchStatus', [...status])
+        orders.map((order: any) => {
+          order['orderStatusDesc'] = statuses[order.orderStatusId]
+          order.doclist.docs.map((item: any) => {
+            item['orderItemStatusDesc'] = statuses[item.orderItemStatusId]
+            if (orderItemTrackingCodes[item.orderId] && item.shipmentMethodTypeId !== 'STOREPICKUP' && item.orderItemStatusId === 'ITEM_COMPLETED') {
+              item['orderItemTrackingCode'] = orderItemTrackingCodes[item.orderId][item.orderItemSeqId]
+            }
+          })
+        })
+
         if (query.json.params.start && query.json.params.start > 0) orders = state.list.orders.concat(orders)
         this.dispatch('product/getProductInformation', { orders });
+
         commit(types.ORDER_LIST_UPDATED, { orders, total });
       } else {
         showToast(translate("Something went wrong"));
       }
     } catch(error){
+      console.error(error)
       showToast(translate("Something went wrong"));
     }
     return resp;
@@ -104,6 +140,21 @@ const actions: ActionTree<OrderState, RootState> = {
           },
           notes: group.doclist.docs[0].orderNotes
         }
+
+        const status = new Set();
+        const orderItems = [] as any;
+
+        status.add(order.statusId);
+        order.items?.map((item: any) => {
+          status.add(item.orderItemStatusId)
+          orderItems.push(item)
+        })
+
+        this.dispatch('stock/fetchProductStockForFacility', orderItems)
+
+        const statuses = await this.dispatch('util/fetchStatus', [...status])
+        order['statusDesc'] = statuses[order.statusId]
+        order.items?.map((item: any) => item['orderItemStatusDesc'] = statuses[item.orderItemStatusId])
 
         const productIds = order.items?.map((item: OrderItem) => item.productId)
 
