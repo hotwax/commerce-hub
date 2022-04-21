@@ -48,7 +48,7 @@
         </ion-item>
         <ion-item lines="none">
           <ion-label>{{ $t("Location inventory") }}</ion-label>
-          <p slot="end">{{ item.facilityAtp ? item.facilityAtp : "-" }}</p>
+          <p slot="end">{{ getProductStockForFacility(item.productId, item.facilityId) }}</p>
         </ion-item>
       </div>
       <div v-if="item.facilityId === '_NA_' && item.orderItemStatusId !== 'ITEM_COMPLETED'">
@@ -101,7 +101,8 @@ export default defineComponent({
   computed: {
     ...mapGetters({
       getProduct: 'product/getProduct',
-      getShipmentMethodDesc: 'util/getShipmentMethod'
+      getShipmentMethodDesc: 'util/getShipmentMethod',
+      getProductStockForFacility: 'stock/getProductStockForFacility'
     })
   },
   props: ["item"],
