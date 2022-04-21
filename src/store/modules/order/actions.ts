@@ -42,24 +42,23 @@ const actions: ActionTree<OrderState, RootState> = {
         const total = resp.data.grouped.orderId.ngroups;
 
         const status = new Set();
-        const orderItemSeqId = {} as any;
+        const completedOrderIds = [] as any;
         let orderItemTrackingCodes = {} as any;
 
         orders.map((order: any) => {
           status.add(order.orderStatusId)
           order.doclist.docs.map((item: any) => {
             if (item.shipmentMethodTypeId !== 'STOREPICKUP' && item.orderItemStatusId === 'ITEM_COMPLETED') {
-              if (!orderItemSeqId[order.orderId]) {
-                orderItemSeqId[order.orderId] = []
+              if (!completedOrderIds.includes(item.orderId)) {
+                completedOrderIds.push(item.orderId)
               }
-              orderItemSeqId[order.orderId].push(item.orderItemSeqId)
             }
             status.add(item.orderItemStatusId)
           })
         })
 
-        if (Object.keys(orderItemSeqId).length) {
-          orderItemTrackingCodes = await dispatch('fetchShipmentDetailForOrderItem', orderItemSeqId)
+        if (completedOrderIds.length) {
+          orderItemTrackingCodes = await dispatch('fetchShipmentDetailForOrderItem', completedOrderIds)
         }
 
         const statuses = await this.dispatch('util/fetchStatus', [...status])
@@ -236,7 +235,7 @@ const actions: ActionTree<OrderState, RootState> = {
     // currently when grouping only getting response for two groups thus used in operator for now
     const params = {
       "inputFields": {
-        "primaryOrderId": Object.keys(payload),
+        "primaryOrderId": payload,
         "primaryOrderId_op": "in",
         "trackingCode_op": "not-empty",
         "orderItemSeqId_op": "not-empty"
