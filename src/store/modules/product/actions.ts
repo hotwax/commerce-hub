@@ -89,21 +89,6 @@ const actions: ActionTree<ProductState, RootState> = {
     productIds = [...productIds]
     if (productIds.length) {
       this.dispatch('product/fetchProducts', { productIds })
-      this.dispatch('stock/addProducts', { productIds })
-    }
-  },
-
-  // Get product related information
-  async fetchProductInformation(context, orders) {
-    let productIds: any = new Set();
-    orders.forEach((order: any) => {
-      order.doclist.docs.forEach((item: any) => {
-        if (item.productId) productIds.add(item.productId);
-      })
-    })
-    productIds = [...productIds]
-    if (productIds.length) {
-      this.dispatch('product/fetchProducts', { productIds })
     }
   },
 
