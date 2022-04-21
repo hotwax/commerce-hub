@@ -13,11 +13,11 @@
       </ion-label>
       <div class="metadata">
         <StatusBadge :statusDesc="item.orderItemStatusDesc || ''" :key="item.orderItemStatusDesc"/>
-        <StatusBadge v-if="item.facilityId === orderPreOrderFacilityId || item.facilityId === orderBackOrderFacilityId" :statusDesc="item.facilityId === orderPreOrderFacilityId ? 'Pre-order' : 'Backorder' || ''" :key="item.facilityName"/>
+        <StatusBadge v-if="isItemPreorderOrBackorder(item)" :statusDesc="item.facilityId === orderPreOrderFacilityId ? 'Pre-order' : 'Backorder' || ''" :key="item.facilityName"/>
       </div>
     </ion-item>
     <!-- TODO: Need to handle this property -->
-    <div v-if="item.facilityId === orderPreOrderFacilityId || item.facilityId === orderBackOrderFacilityId">
+    <div v-if="isItemPreorderOrBackorder(item)">
       <ion-item>
         <ion-label>{{ $t("Promise date") }}</ion-label>
         <p slot="end"> {{ item.promisedDatetime ? $filters.formatUtcDate(item.promisedDatetime, 'YYYY-MM-DDTHH:mm:ssZ', 'D MMM YYYY') : '-'  }} </p>
@@ -38,7 +38,7 @@
         <ion-label>{{ $t("Shipping method") }}</ion-label>
         <p slot="end"> {{ item.shipmentMethodTypeId ? getShipmentMethodDesc(item.shipmentMethodTypeId) : '-' }} </p>
       </ion-item>
-      <div v-if="item.facilityId !== '_NA_' && item.orderItemStatusId !== 'ITEM_COMPLETED'">
+      <div v-if="isItemBrokered(item)">
         <ion-item>
           <ion-label>{{ $t("Shipping from") }}</ion-label>
           <!-- Used ion-badge to display a dot after the facility name when the ship from facility is brokering queue -->
@@ -51,7 +51,7 @@
           <p slot="end">{{ getProductStock(item.productId) }}</p>
         </ion-item>
       </div>
-      <div v-if="item.facilityId === '_NA_' && item.orderItemStatusId !== 'ITEM_COMPLETED'">
+      <div v-if="isItemInBrokeringQueue(item)">
         <ion-item>
           <ion-label>{{ $t("Auto cancel") }}</ion-label>
           <p slot="end">{{ item.autoCancelDate ? moment.utc(item.autoCancelDate).fromNow() : '-' }}</p>
@@ -61,7 +61,7 @@
           <p slot="end">{{ 'Brokering queue' }}</p>
         </ion-item>
       </div>
-      <div v-if="item.orderItemStatusId === 'ITEM_COMPLETED'">
+      <div v-if="isItemCompleted(item)">
         <ion-item>
           <ion-label>{{ $t("Shipped from") }}</ion-label>
           <p slot="end">{{ item.facilityName ? item.facilityName : "-" }}</p>
@@ -106,6 +106,20 @@ export default defineComponent({
     })
   },
   props: ["item"],
+  methods: {
+    isItemPreorderOrBackorder(item: any) {
+      return item.facilityId === this.orderPreOrderFacilityId || item.facilityId === this.orderBackOrderFacilityId
+    },
+    isItemBrokered(item: any) {
+      return item.facilityId !== '_NA_' && item.orderItemStatusId !== 'ITEM_COMPLETED'
+    },
+    isItemCompleted(item: any) {
+      return item.orderItemStatusId === 'ITEM_COMPLETED'
+    },
+    isItemInBrokeringQueue(item: any) {
+      return item.facilityId === '_NA_' && item.orderItemStatusId !== 'ITEM_COMPLETED'
+    }
+  },
   setup() {
     const orderPreOrderFacilityId = process.env.VUE_APP_PRE_ORDER_IDNT_ID
     const orderBackOrderFacilityId = process.env.VUE_APP_BACKORDER_IDNT_ID
