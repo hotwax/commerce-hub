@@ -66,7 +66,7 @@ const actions: ActionTree<StockState, RootState> = {
   },
 
   async fetchProductStockForFacility({ state, commit }, items) {
-    const cachedProductAtp = JSON.parse(JSON.stringify(state.productFacilityAtp));
+    const cachedProductAtp = JSON.parse(JSON.stringify(state.productsByFacility));
     const products = items.map((item: any) => {
       if(!cachedProductAtp[item.facilityId] || !cachedProductAtp[item.facilityId][item.productId]) {
         return item

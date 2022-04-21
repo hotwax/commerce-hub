@@ -12,7 +12,7 @@ const mutations: MutationTree <StockState> = {
     });
   },
   [types.STOCK_ADD_PRODUCT_FACILITY_ATP] (state, payload) {
-    state.productFacilityAtp = payload
+    state.productsByFacility = payload
   }
 }
 export default mutations;

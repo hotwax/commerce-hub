@@ -7,7 +7,7 @@ const getters: GetterTree <StockState, RootState> = {
     return state.products[productId] ? state.products[productId] : 0
   },
   getProductStockForFacility: (state) => (productId: string, facilityId: string) => {
-    return state.productFacilityAtp[facilityId] ? state.productFacilityAtp[facilityId][productId] ? state.productFacilityAtp[facilityId][productId] : 0 : 0
+    return state.productsByFacility[facilityId] ? state.productsByFacility[facilityId][productId] ? state.productsByFacility[facilityId][productId] : 0 : 0
   }
 }
 export default getters;

@@ -1,4 +1,4 @@
 export default interface StockState {
   products: any;
-  productFacilityAtp: any;
+  productsByFacility: any;
 }
