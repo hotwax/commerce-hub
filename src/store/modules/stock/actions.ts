@@ -63,6 +63,31 @@ const actions: ActionTree<StockState, RootState> = {
     //     if (resp.data) commit(types.STOCK_ADD_PRODUCTS, { products: resp.data.docs })
     //   }
     // }
+  },
+
+  async fetchProductStockForFacility({ state, commit }, payload) {
+    const resp: any = await StockService.checkInventory({
+      "filters": {
+        "productId": payload.productIds,
+        "productId_op": "in",
+        "facilityId": payload.facilityIds,
+        "facilityId_op": "in"
+      },
+      "fieldsToSelect": ["productId", "atp", "facilityId"],
+      "viewSize": 100
+    });
+    if (resp.status === 200 && !hasError(resp) && resp.data.count > 0) {
+      const productFacilityAtp = {} as any;
+      resp.data.docs.map((product: any) => {
+        if (!productFacilityAtp[product.facilityId]) {
+          productFacilityAtp[product.facilityId] = {}
+        }
+        productFacilityAtp[product.facilityId][product.productId] = product.atp
+      })
+
+      commit(types.STOCK_ADD_PRODUCT_FACILITY_ATP, productFacilityAtp)
+      return productFacilityAtp;
+    }
   }
 }
 export default actions;
