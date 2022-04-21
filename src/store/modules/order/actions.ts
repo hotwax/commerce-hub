@@ -42,24 +42,24 @@ const actions: ActionTree<OrderState, RootState> = {
         const total = resp.data.grouped.orderId.ngroups;
 
         const status = new Set();
-        const orderAndItemSeqId = {} as any;
+        const orderItemSeqId = {} as any;
         let orderItemTrackingCodes = {} as any;
 
         orders.map((order: any) => {
           status.add(order.orderStatusId)
           order.doclist.docs.map((item: any) => {
             if (item.shipmentMethodTypeId !== 'STOREPICKUP' && item.orderItemStatusId === 'ITEM_COMPLETED') {
-              if (!orderAndItemSeqId[order.orderId]) {
-                orderAndItemSeqId[order.orderId] = []
+              if (!orderItemSeqId[order.orderId]) {
+                orderItemSeqId[order.orderId] = []
               }
-              orderAndItemSeqId[order.orderId].push(item.orderItemSeqId)
+              orderItemSeqId[order.orderId].push(item.orderItemSeqId)
             }
             status.add(item.orderItemStatusId)
           })
         })
 
-        if (Object.keys(orderAndItemSeqId).length) {
-          orderItemTrackingCodes = await dispatch('fetchShipmentDetailForOrderItem', orderAndItemSeqId)
+        if (Object.keys(orderItemSeqId).length) {
+          orderItemTrackingCodes = await dispatch('fetchShipmentDetailForOrderItem', orderItemSeqId)
         }
 
         const statuses = await this.dispatch('util/fetchStatus', [...status])
@@ -67,7 +67,7 @@ const actions: ActionTree<OrderState, RootState> = {
           order['orderStatusDesc'] = statuses[order.orderStatusId]
           order.doclist.docs.map((item: any) => {
             item['orderItemStatusDesc'] = statuses[item.orderItemStatusId]
-            if (item.shipmentMethodTypeId !== 'STOREPICKUP' && item.orderItemStatusId === 'ITEM_COMPLETED' && orderItemTrackingCodes[item.orderId]) {
+            if (orderItemTrackingCodes[item.orderId] && item.shipmentMethodTypeId !== 'STOREPICKUP' && item.orderItemStatusId === 'ITEM_COMPLETED') {
               item['orderItemTrackingCode'] = orderItemTrackingCodes[item.orderId][item.orderItemSeqId]
             }
           })
@@ -233,7 +233,7 @@ const actions: ActionTree<OrderState, RootState> = {
     let resp;
 
     // TODO: implement grouping logic to get the tracking code for order items
-    // when grouping only getting response for two groups
+    // currently when grouping only getting response for two groups thus used in operator for now
     const params = {
       "inputFields": {
         "primaryOrderId": Object.keys(payload),
