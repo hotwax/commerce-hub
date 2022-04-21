@@ -99,52 +99,6 @@
 
             <section class="section-grid" v-if="showOrderItems">
               <OrderItemCard v-for="(item, index) in order.doclist.docs" :key="index" :item="item" />
-              <!-- <ion-card v-for="(item, index) in order.doclist.docs" :key="index" :item="item">
-                <ion-item>
-                  <ion-thumbnail slot="start">
-                    <Image :src="getProduct(item.productId).mainImageUrl" />
-                  </ion-thumbnail>
-                  <ion-label class="ion-text-wrap">
-                    <p>{{ getProduct(item.productId)?.brandName }}</p>
-                    {{ item.parentProductName ? item.parentProductName : item.productName }} -->
-                    <!-- TODO: make the attribute displaying logic dynamic -->
-                    <!-- <p v-if="$filters.getFeature(getProduct(item.productId).featureHierarchy, '1/COLOR/')"> {{ $t("Color") }}: {{ $filters.getFeature(getProduct(item.productId).featureHierarchy, '1/COLOR/') }} </p>
-                    <p v-if="$filters.getFeature(getProduct(item.productId).featureHierarchy, '1/SIZE/')"> {{ $t("Size") }}: {{ $filters.getFeature(getProduct(item.productId).featureHierarchy, '1/SIZE/') }} </p>
-                  </ion-label>
-                  <StatusBadge :statusDesc="item.orderItemStatusDesc || ''" :key="item.orderItemStatusDesc"/>
-                </ion-item> -->
-                <!-- TODO: Need to handle this property -->
-                <!-- <div v-if="item.facilityId === orderPreOrderId || item.facilityId === orderBackOrderId">
-                  <ion-item>
-                    <ion-label>{{ $t("Promise date") }}</ion-label>
-                    <p slot="end"> {{ item.promisedDatetime ? $filters.formatUtcDate(item.promisedDatetime, 'YYYY-MM-DDTHH:mm:ssZ', 'D MMM YYYY') : '-'  }} </p>
-                  </ion-item>
-                  <ion-item>
-                    <ion-label>{{ $t("PO arrival date") }}</ion-label>
-                    TODO: Need to handle this property -->
-                    <!-- <p slot="end"> {{ item.promiseOrderArrivalDate ? $filters.formatUtcDate(item.promiseOrderArrivalDate, 'YYYY-MM-DDTHH:mm:ssZ', 'D MMM YYYY') : '-' }} </p>
-                  </ion-item>
-                  <ion-item>
-                    <ion-label>{{ $t("Location") }}</ion-label> -->
-                    <!-- TODO: Need to handle this property -->
-                    <!-- <p slot="end"> {{ item.facilityName ? item.facilityName : '-' }} </p>
-                  </ion-item>
-                </div>
-                <div v-else>
-                  <ion-item>
-                    <ion-label>{{ $t("Shipping method") }}</ion-label>
-                    <p slot="end"> {{ item.shipmentMethodTypeId ? getShipmentMethodDesc(item.shipmentMethodTypeId) : '-' }} </p>
-                  </ion-item>
-                  <ion-item>
-                    <ion-label>{{ $t("Shipping from") }}</ion-label>
-                    <p slot="end"> {{ item.facilityName ? item.facilityName : "-" }} </p>
-                  </ion-item>
-                  <ion-item lines="none">
-                    <ion-label>{{ $t("Location inventory") }}</ion-label>
-                    <p slot="end">{{ getProductStock(item.productId) }}</p>
-                  </ion-item>
-                </div>
-              </ion-card> -->
             </section>
             <hr />
           </div>
