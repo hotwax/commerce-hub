@@ -36,7 +36,7 @@ const getShipmentDetailForOrderItem = async (payload: any) => {
   } catch(err) {
     console.error(err)
   }
-  return resp;
+  return {};
 }
 
 const findOrder = async (payload: any): Promise<any> => {
