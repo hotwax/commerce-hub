@@ -37,17 +37,8 @@
               <h2>{{ $t("Timeline") }}</h2>
               <ion-note slot="end">1:07pm 6th Dec 2021</ion-note>
             </ion-item>
-
-            <ion-list class="desktop-only">
-              <ion-item v-for="item in 2" :key="item">
-                <ion-icon :icon="ticketOutline" slot="start" />
-                <ion-label>
-                  <p>+10 minutes</p>
-                  Imported from Shopify
-                </ion-label>
-                <ion-icon slot="end" :icon="informationCircleOutline" />
-              </ion-item>
-            </ion-list>
+            
+            <TimelineDetail />
           </div>
 
           <div class="info">
@@ -271,6 +262,7 @@ import { mapGetters } from "vuex";
 import { defineComponent } from "vue";
 import { useRouter } from 'vue-router';
 import StatusBadge from '@/components/StatusBadge.vue'
+import TimelineDetail from '@/components/TimelineDetail.vue'
 
 export default defineComponent({
   name: 'Order',
@@ -292,7 +284,8 @@ export default defineComponent({
     IonThumbnail,
     IonTitle,
     IonToolbar,
-    StatusBadge
+    StatusBadge,
+    TimelineDetail
   },
   computed: {
     ...mapGetters({

@@ -40,16 +40,7 @@
               <ion-note slot="end">1:07pm 6th Dec 2021</ion-note>
             </ion-item>
             
-            <ion-list class="desktop-only">
-              <ion-item v-for="item in 3" :key="item">
-                <ion-icon slot="start" :icon="ticketOutline" />
-                <ion-label>
-                  <p class="overline">+ 10 minutes</p>
-                  Imported from ERP
-                </ion-label>
-                <ion-icon :icon="informationCircleOutline" />
-              </ion-item>
-            </ion-list>
+            <TimelineDetail />
           </div>
 
           <div class="info">
@@ -301,6 +292,7 @@ import {
 import Image from '@/components/Image.vue';
 import ProductPopover from '@/components/ProductPopover.vue';
 import { useRouter } from 'vue-router';
+import TimelineDetail from '@/components/TimelineDetail.vue'
 
 export default defineComponent({
   name: 'PurchaseOrder',
@@ -328,7 +320,8 @@ export default defineComponent({
     IonThumbnail,
     IonTitle,
     IonToolbar,
-    Image
+    Image,
+    TimelineDetail
   },
   data() {
     return {
