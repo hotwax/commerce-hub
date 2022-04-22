@@ -69,10 +69,10 @@
           <!-- Order Item Section -->
           <hr />
 
-          <div v-for="(order, index) in orders" :key="index" :order="order" @click="() => router.push(`/order/${order.orderId}`)">
+          <div v-for="(order, index) in orders" :key="index" :order="order" @click="() => router.push(`/order/${order.orderId}`)" @mouseover="showBackground()" @mouseleave="hideBackground()">
             <section class="section-header">
               <div class="primary-info">
-                <ion-item lines="none">
+                <ion-item lines="none" :class="{ background : hover }">
                   <ion-label>
                     {{ order.orderId }}
                     <p> {{ order.customer.name }} </p>
@@ -96,10 +96,10 @@
                 <StatusBadge :statusDesc="order.orderStatusDesc || ''" :key="order.orderStatusDesc"/>
               </div>
             </section>
-
+ 
             <section class="section-grid" v-if="showOrderItems">
-              <ion-card v-for="(item, index) in order.doclist.docs" :key="index" :item="item">
-                <ion-item>
+              <ion-card v-for="(item, index) in order.doclist.docs" :key="index" :item="item" :class="{ background : hover }">
+                <ion-item :class="{ background : hover }">
                   <ion-thumbnail slot="start">
                     <Image :src="getProduct(item.productId).mainImageUrl" />
                   </ion-thumbnail>
@@ -114,31 +114,31 @@
                 </ion-item>
                 <!-- TODO: Need to handle this property -->
                 <div v-if="item.facilityId === orderPreOrderId || item.facilityId === orderBackOrderId">
-                  <ion-item>
+                  <ion-item :class="{ backround : hover }">
                     <ion-label>{{ $t("Promise date") }}</ion-label>
                     <p slot="end"> {{ item.promisedDatetime ? $filters.formatUtcDate(item.promisedDatetime, 'YYYY-MM-DDTHH:mm:ssZ', 'D MMM YYYY') : '-'  }} </p>
                   </ion-item>
-                  <ion-item>
+                  <ion-item :class="{ background : hover }">
                     <ion-label>{{ $t("PO arrival date") }}</ion-label>
                     <!-- TODO: Need to handle this property -->
                     <p slot="end"> {{ item.promiseOrderArrivalDate ? $filters.formatUtcDate(item.promiseOrderArrivalDate, 'YYYY-MM-DDTHH:mm:ssZ', 'D MMM YYYY') : '-' }} </p>
                   </ion-item>
-                  <ion-item>
+                  <ion-item :class="{ background : hover }">
                     <ion-label>{{ $t("Location") }}</ion-label>
                     <!-- TODO: Need to handle this property -->
                     <p slot="end"> {{ item.facilityName ? item.facilityName : '-' }} </p>
                   </ion-item>
                 </div>
                 <div v-else>
-                  <ion-item>
+                  <ion-item :class="{ background : hover }">
                     <ion-label>{{ $t("Shipping method") }}</ion-label>
                     <p slot="end"> {{ item.shipmentMethodTypeId ? getShipmentMethodDesc(item.shipmentMethodTypeId) : '-' }} </p>
                   </ion-item>
-                  <ion-item>
+                  <ion-item :class="{ background : hover }">
                     <ion-label>{{ $t("Shipping from") }}</ion-label>
                     <p slot="end"> {{ item.facilityName ? item.facilityName : "-" }} </p>
                   </ion-item>
-                  <ion-item lines="none">
+                  <ion-item lines="none" :class="{ background : hover }">
                     <ion-label>{{ $t("Location inventory") }}</ion-label>
                     <p slot="end">{{ getProductStock(item.productId) }}</p>
                   </ion-item>
@@ -147,6 +147,7 @@
             </section>
             <hr />
           </div>
+          
           <ion-infinite-scroll @ionInfinite="loadMoreOrders($event)" threshold="100px" :disabled="!isScrollable">
             <ion-infinite-scroll-content loading-spinner="crescent" :loading-text="$t('Loading')"/>
           </ion-infinite-scroll>
@@ -250,10 +251,17 @@ export default defineComponent ({
       orderStatusOptions: [''],
       sort: 'orderDate desc',
       showOrderItems: true,
-      poIds: {} as any
+      poIds: {} as any,
+      hover: false
     }
   },
   methods: {
+    showBackground() {
+      this.hover = true
+    },
+    hideBackground() {
+      this.hover = false
+    },
     async sortOrders(value: string) {
       this.sort = value
       await this.store.dispatch('order/updateSort', this.sort)
@@ -354,6 +362,7 @@ export default defineComponent ({
     const orderPreOrderId = process.env.VUE_APP_PRE_ORDER_IDNT_ID
     const orderBackOrderId = process.env.VUE_APP_BACKORDER_IDNT_ID
     const cusotmerLoyaltyOptions = process.env.VUE_APP_CUST_LOYALTY_OPTIONS
+    const hovering = ref(false)
 
     return {
       close,
@@ -371,7 +380,8 @@ export default defineComponent ({
       syncOutline,
       router,
       store,
-      queryString
+      queryString,
+      hovering
     };
   },
 });
@@ -398,21 +408,24 @@ ion-modal {
 
 main > div:hover {
   cursor: pointer;
-  background: rgb(240, 240, 240);
+  background: var(--background-hover-color, var(--ion-color-light-shade));
 }
 
-ion-item, ion-card{
+.background{
   --background: none;
+}
+
+
+
+ion-item{
+  --background-hover: black;
 }
 
 @media (prefers-color-scheme: dark) {
   main > div:hover {
-    background: rgb(63, 63, 63);
+    background: var(--ion-color-light-tint);
   }
 
-  ion-card {
-    box-shadow: 2px 2px 5px rgb(83, 83, 83);
-  }
 } 
 
 @media (min-width: 991px) {
