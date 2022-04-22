@@ -245,6 +245,7 @@ export default defineComponent ({
   },
   async mounted() {
     this.store.dispatch('util/fetchShipmentMethods')
+    this.store.dispatch('util/getEComStores')
     await this.getOrders();
 
     try {
