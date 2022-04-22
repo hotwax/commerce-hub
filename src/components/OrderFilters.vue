@@ -67,7 +67,7 @@
     <ion-item>
       <ion-label>{{ $t("Product Store") }}</ion-label>
       <ion-select :value="query.productStoreId" @ionChange="updateAppliedFilters($event['detail'].value, 'productStoreId')" interface="popover">
-        <ion-select-option v-for="[id, storeName] in Object.entries(getEComStores)" :key="id" :value="id">{{ storeName }}</ion-select-option>
+        <ion-select-option v-for="store in getEComStores" :key="store.productStoreId" :value="store.productStoreId">{{ store.storeName }}</ion-select-option>
       </ion-select>
     </ion-item>
   </ion-list>

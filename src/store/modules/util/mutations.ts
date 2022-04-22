@@ -10,11 +10,7 @@ const mutations: MutationTree <UtilState> = {
         state.status = payload
     },
     [types.UTIL_ECOM_STORE_UPDATED](state, payload) {
-        if(payload) {
-            payload.map((store: any) => {
-                state.productStore[store.productStoreId] = store.storeName
-            })
-        }
+        state.productStore = payload
     }
 }
 export default mutations;
