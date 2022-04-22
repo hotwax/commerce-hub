@@ -99,7 +99,7 @@ const actions: ActionTree<UserState, RootState> = {
       "fieldList": ["partyId", "partyTypeId", "createdDate", "partyStatusId", "firstName", "lastName", "roleTypeIdTo", "groupName"],
       "noConditionFind": "Y",
     })
-    const userData = Promise.all(resp.data.docs.map( async (user: any) => {
+    const userData = await Promise.all(resp.data.docs.map( async (user: any) => {
       const email = await UserService.getUserEmail({
         "inputFields": {
           "contactMechPurposeTypeId": "PRIMARY_EMAIL",
@@ -114,17 +114,15 @@ const actions: ActionTree<UserState, RootState> = {
         "noConditionFind": "Y"
       });
       console.log("email",email)
-      if(resp.data.docs[0]){
-        const info = {...user, ...email.data.docs[0]}
-        console.log(info)
-        return (info);
+      if( email.status == 200 && email.data.docs){
+        const info = await {...user, ...email.data.docs[0]}
+        return await info;
       }
-      
-      
+      return user;
     }));
     console.log(userData)
 
-    commit(types.USER_LIST_UPDATED, resp.data.docs)
+    commit(types.USER_LIST_UPDATED, userData)
   }
 }
 

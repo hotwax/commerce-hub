@@ -53,7 +53,7 @@
               <ion-label>
                 {{ user.partyTypeId === "PERSON" ? user.firstName : user.groupName}}
                 <p>{{user?.userLoginId}}</p>
-                <p>email</p>
+                <p>{{user.infoString}}</p>
               </ion-label>
             </ion-item>
 
