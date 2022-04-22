@@ -115,6 +115,7 @@ const actions: ActionTree<OrderState, RootState> = {
 
         const group = resp.data.grouped.orderId.groups.length > 0 && resp.data.grouped.orderId.groups[0]
         let itemGroups = [];
+        const items = group.doclist.docs;
 
         const orderItemShipGrpInfoResp = await OrderService.fetchOrderItemShipGrpInformation({
           "inputFields": {
@@ -164,35 +165,73 @@ const actions: ActionTree<OrderState, RootState> = {
             })
             return groups;
           }
-          itemGroups = prepareGroups(group.doclist.docs, orderItemShipGrpList);
+          itemGroups = prepareGroups(items, orderItemShipGrpList);
+        }
+
+        const orderItemShipGrpInvResInfoResp = await OrderService.fetchOrderItemShipGrpInvResInfo({
+          "inputFields": {
+            orderId
+          },
+          "fieldList": ["orderItemSeqId"],
+          "entityName": "OrderItemShipGrpInvRes",
+          "noConditionFind": "Y",
+          "viewSize": 100
+        });
+        console.log("orderItemShipGrpInvResInfoResp", orderItemShipGrpInvResInfoResp);
+        if (orderItemShipGrpInvResInfoResp.status == 200 && !hasError(orderItemShipGrpInvResInfoResp)) {
+          const orderItemShipGrpInvResInfoList = orderItemShipGrpInvResInfoResp.data.docs;
+          items.map((item: any) => {
+            item.reserved = orderItemShipGrpInvResInfoList.some((orderItemShipGrpInvRes: any) => item.orderItemSeqId === orderItemShipGrpInvRes.orderItemSeqId);
+          })
+        }
+
+        console.log("items", items);
+
+
+        const orderPreOrderFacilityId = process.env.VUE_APP_PRE_ORDER_IDNT_ID
+        const orderBackOrderFacilityId = process.env.VUE_APP_BACKORDER_IDNT_ID
+        // Find Preorder or Backorder items
+        const correspondingPoIds = items
+            .filter((item: any) => item.facilityId === orderPreOrderFacilityId || item.facilityId === orderBackOrderFacilityId)
+            .map((item: any) => item.correspondingPoId)
+
+        // Find PO Information if corresponding PO ids found
+        if (correspondingPoIds.length) {
+          const correspondingPoExternalIds = await OrderService.getPOInformationForPOIds({correspondingPoIds});
+          items.map((item: any) => {
+            const order = correspondingPoExternalIds[item.correspondingPoId];
+            item.correspondingPoExternalId = order ? order.externalOrderId : undefined;
+            item.estimatedArrivalDate = order ? order.estimatedDeliveryDate : undefined;
+          })
+
         }
 
         const order: Order = {
-          orderId: group.doclist.docs[0].orderId,
-          orderName: group.doclist.docs[0].orderName,
+          orderId: items[0].orderId,
+          orderName: items[0].orderName,
           customer: {
-            name: group.doclist.docs[0].customerPartyName,
-            emailId: group.doclist.docs[0].customerEmailId,
-            phoneNumber: group.doclist.docs[0].customerPhoneNumber,
-            toName: group.doclist.docs[0].customerPartyName,
-            city: group.doclist.docs[0].shipToCity,
-            state: group.doclist.docs[0].shipToState,
-            zipCode: group.doclist.docs[0].postalCode,
-            country: group.doclist.docs[0].shipToCountry,
-            addressLine1: group.doclist.docs[0].address1,
-            addressLine2: group.doclist.docs[0].address2,
-            loyaltyOptions: getCustomerLoyalty(group.doclist.docs[0].orderNotes, customerLoyaltyOptions)
+            name: items[0].customerPartyName,
+            emailId: items[0].customerEmailId,
+            phoneNumber: items[0].customerPhoneNumber,
+            toName: items[0].customerPartyName,
+            city: items[0].shipToCity,
+            state: items[0].shipToState,
+            zipCode: items[0].postalCode,
+            country: items[0].shipToCountry,
+            addressLine1: items[0].address1,
+            addressLine2: items[0].address2,
+            loyaltyOptions: getCustomerLoyalty(items[0].orderNotes, customerLoyaltyOptions)
           },
           /** An array containing the items purchased in this order */
-          items: group.doclist.docs,
-          statusId: group.doclist.docs[0].orderStatusId,
-          statusDesc: group.doclist.docs[0].orderStatusDesc,
+          items: items,
+          statusId: items[0].orderStatusId,
+          statusDesc: items[0].orderStatusDesc,
           identifications: {
-            'orderName': getIdentification(group.doclist.docs[0]?.orderIdentifications, orderNameIdentificationKey),
-            'orderId': getIdentification(group.doclist.docs[0]?.orderIdentifications, orderIdIdentificationKey),
-            'orderNo': getIdentification(group.doclist.docs[0]?.orderIdentifications, orderNoIdentificationKey),
+            'orderName': getIdentification(items[0]?.orderIdentifications, orderNameIdentificationKey),
+            'orderId': getIdentification(items[0]?.orderIdentifications, orderIdIdentificationKey),
+            'orderNo': getIdentification(items[0]?.orderIdentifications, orderNoIdentificationKey),
           },
-          notes: group.doclist.docs[0].orderNotes,
+          notes: items[0].orderNotes,
           itemGroups
         }
 

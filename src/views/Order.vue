@@ -141,12 +141,13 @@
                   </ion-buttons> -->
                 </ion-list>
               </ion-card>
-              <ion-card>
+
+              <!-- TODO -->
+              <!-- <ion-card>
                 <ion-list>
                   <ion-list-header>{{ $t("Packaging") }}</ion-list-header>
-                  <!-- TODO -->
                 </ion-list>
-              </ion-card>
+              </ion-card> -->
             </div>
           <div class="product" v-for="(item, index) of getGroupItems(group, order.items)" :key="index">
             <div class="product-image desktop-only">
@@ -193,64 +194,17 @@
                 <div class="product-card">
                   <ion-card>
                     <ion-list>
-                      <ion-list-header>{{ $t("Destination") }}</ion-list-header>
-                      <ion-item lines="none">
-                        <ion-label>
-                          {{ item.customerPartyName }}
-                          <p>{{ item.address1 }}</p>
-                          <p>{{ item.address2 }}</p>
-                          <p>{{ item.shipToCity }} {{ item.postalCode && ',' }} {{ item.postalCode }}</p>
-                          <p>{{ item.shipToState }} {{ item.shipToCountry && ',' }} {{ item.shipToCountry }}</p>
-                        </ion-label>
-                      </ion-item>
-                      <!-- TODO: make edit address button functional, also add UI for same -->
-                      <!-- <ion-buttons>
-                        <ion-button color="primary" fill="clear">{{ $t("Edit address") }}</ion-button>
-                      </ion-buttons> -->
-                    </ion-list>
-                  </ion-card>
-                  <ion-card v-if="item.facilityId === orderPreOrderId || item.facilityId === orderBackOrderId">
-                    <ion-list>
-                      <ion-list-header>{{ item.facilityId === orderPreOrderId ? $t("Pre-order") : $t("BackOrder") }}</ion-list-header>
-                      <ion-item>
-                        <ion-label>{{ $t("Purchase order") }}</ion-label>
-                        <ion-chip slot="end">
-                          <!-- TODO: check for this property -->
-                          <ion-label>PO#</ion-label>
-                        </ion-chip>
-                      </ion-item>
-                      <ion-item v-if="item.orderItemStatusId !== 'ORDER_COMPLETED'">
-                        <ion-label>{{ $t("Estimated arrival") }}</ion-label>
-                        <!-- TODO: handle it property again -->
-                        <p slot="end">{{ item.promiseOrderArrivalDate ? $filters.formatUtcDate(item.promiseOrderArrivalDate, 'YYYY-MM-DDTHH:mm:ssZ', 'D MMM YYYY') : '-' }}</p>
-                      </ion-item>
-                      <ion-item v-if="item.orderItemStatusId !== 'ORDER_COMPLETED'">
-                        <ion-label> {{ $t("Promise date") }} </ion-label>
-                        <p slot="end">{{ item.promisedDatetime ? $filters.formatUtcDate(item.promisedDatetime, 'YYYY-MM-DDTHH:mm:ssZ', 'D MMM YYYY') : '-'  }}</p>
-                      </ion-item>
-                      <ion-item v-if="item.orderItemStatusId !== 'ORDER_COMPLETED'">
+                      <ion-list-header>{{ $t("Fulfillment") }}</ion-list-header>
+                      <ion-item v-if="item.orderItemStatusId !== 'ITEM_COMPLETED'">
                         <ion-label> {{ $t("Auto cancel") }} </ion-label>
                         <p slot="end">{{ item.autoCancelDate ? $filters.formatUtcDate(item.autoCancelDate, 'YYYY-MM-DDTHH:mm:ssZ', 'D MMM YYYY') : "-" }}</p>
                       </ion-item>
-                      <ion-item v-if="item.orderItemStatusId === 'ORDER_COMPLETED'">
-                        <ion-label> {{ $t("Received Date") }} </ion-label>
-                        <p slot="end">{{ item.receivedDate ? $filters.formatUtcDate(item.receivedDate, 'YYYY-MM-DDTHH:mm:ssZ', 'D MMM YYYY') : "-" }}</p>
-                      </ion-item>
-                      <!-- TODO: make edit date button functional, also add UI for same -->
-                      <!-- <ion-buttons>
-                        <ion-button color="primary" fill="clear">{{ $t("Edit dates") }}</ion-button>
-                      </ion-buttons> -->
-                    </ion-list>
-                  </ion-card>
-                  <ion-card>
-                    <ion-list>
-                      <ion-list-header>{{ $t("Fulfillment") }}</ion-list-header>
-                      <ion-item>
-                        <ion-label> {{ $t("Shipping method") }} </ion-label>
-                        <p>{{ getShipmentMethod(item.shipmentMethodTypeId) ? getShipmentMethod(item.shipmentMethodTypeId) : "-"}}</p>
+                      <ion-item v-if="item.orderItemStatusId === 'ITEM_APPROVED'">
+                        <ion-label> {{ $t("Inventory reservation") }} </ion-label>
+                        <p>{{ item.reserved ? $t("Reserved") : "-"}}</p>
                       </ion-item>
                       <ion-item>
-                        <ion-label>{{ $t("Shipping from") }}</ion-label>
+                        <ion-label>{{ $t("Broker attempt") }}</ion-label>
                         <p>{{ item.facilityName ? item.facilityName : "-" }}</p>
                       </ion-item>
                       <ion-item lines="none">
@@ -263,6 +217,30 @@
                       </ion-buttons> -->
                     </ion-list>
                   </ion-card>
+                  <ion-card v-if="item.facilityId === orderPreOrderId || item.facilityId === orderBackOrderId">
+                    <ion-list>
+                      <ion-list-header>{{ item.facilityId === orderPreOrderId ? $t("Pre-order") : $t("BackOrder") }}</ion-list-header>
+                      <ion-item>
+                        <ion-label>{{ $t("Purchase order") }}</ion-label>
+                        <ion-chip slot="end">
+                          <ion-label>{{ item.correspondingPoExternalId }}</ion-label>
+                        </ion-chip>
+                      </ion-item>
+                      <ion-item v-if="item.orderItemStatusId !== 'ORDER_COMPLETED'">
+                        <ion-label>{{ $t("Estimated arrival") }}</ion-label>
+                        <p slot="end">{{ item.estimatedArrivalDate ? $filters.formatUtcDate(item.estimatedArrivalDate, 'YYYY-MM-DDTHH:mm:ssZ', 'D MMM YYYY') : '-' }}</p>
+                      </ion-item>
+                      <ion-item v-if="item.orderItemStatusId !== 'ORDER_COMPLETED'">
+                        <ion-label> {{ $t("Promise date") }} </ion-label>
+                        <p slot="end">{{ item.promisedDatetime ? $filters.formatUtcDate(item.promisedDatetime, 'YYYY-MM-DDTHH:mm:ssZ', 'D MMM YYYY') : '-'  }}</p>
+                      </ion-item>
+                      <!-- TODO: make edit date button functional, also add UI for same -->
+                      <!-- <ion-buttons>
+                        <ion-button color="primary" fill="clear">{{ $t("Edit dates") }}</ion-button>
+                      </ion-buttons> -->
+                    </ion-list>
+                  </ion-card>
+                  
                 </div>
               </div>
             </div>
