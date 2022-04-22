@@ -53,10 +53,10 @@
         <section class="scroller">
           <ion-item class="scroller-header" lines="none">
             <ion-label>{{ $t("Stuck orders") }}</ion-label>
-              <ion-button slot="end" fill="outline" size="small" @click.prevent="updateAppliedFilters([{value: 'ORDER_APPROVED', filterName: 'status'}, {value: true, filterName: 'unfillable'}])">View all</ion-button>
+              <ion-button slot="end" fill="outline" size="small" @click="updateAppliedFilters([{value: 'ORDER_APPROVED', filterName: 'status'}, {value: true, filterName: 'unfillable'}])">View all</ion-button>
           </ion-item>
           <div class="scroller-content">
-            <div class="scroller-item" v-for="order in stuckOrders" :key="order" @click.prevent="this.$router.push({ path: `/order/${order.orderId}`})"> 
+            <div class="scroller-item" v-for="order in stuckOrders" :key="order" @click="this.$router.push({ path: `/order/${order.orderId}`})"> 
               <ion-card>
                 <ion-item lines="none">
                   <ion-label>
@@ -96,10 +96,10 @@
         <section class="scroller">
           <ion-item class="scroller-header" lines="none">
             <ion-label>{{ $t("Old expedited orders") }}</ion-label>
-              <ion-button slot="end" fill="outline" size="small" @click.prevent="updateAppliedFilters([{value: '(NEXT_DAY OR SECOND_DAY)', filterName: 'shippingMethod'}])">View all</ion-button>
+              <ion-button slot="end" fill="outline" size="small" @click="updateAppliedFilters([{value: '(NEXT_DAY OR SECOND_DAY)', filterName: 'shippingMethod'}])">View all</ion-button>
           </ion-item>
           <div class="scroller-content">
-            <div class="scroller-item" v-for="order in oldExpeditedOrders" :key="order" @click.prevent="this.$router.push({ path: `/order/${order.orderId}`})"> 
+            <div class="scroller-item" v-for="order in oldExpeditedOrders" :key="order" @click="this.$router.push({ path: `/order/${order.orderId}`})"> 
               <ion-card>
                 <ion-item lines="none">
                   <ion-label>
