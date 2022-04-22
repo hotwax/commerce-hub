@@ -11,8 +11,7 @@ const actions: ActionTree<JobState, RootState> = {
     const cachedJob = JSON.parse(JSON.stringify(state.cached));
 
     if(cachedJob[payload]) {
-      JobService.runServiceNow(cachedJob[payload]);
-      return ;
+      return await JobService.runServiceNow(cachedJob[payload]);
     }
 
     try {
@@ -27,8 +26,8 @@ const actions: ActionTree<JobState, RootState> = {
       if (resp.status === 200 && !hasError(resp) && resp.data.docs) {
         const job = resp.data.docs[0];
         cachedJob[payload] = job;
-        JobService.runServiceNow(cachedJob[payload]);
         commit(types.JOB_CACHED_UPDATED, cachedJob);
+        return await JobService.runServiceNow(cachedJob[payload]);
       } else {
         console.error('No record found for job enum')
       }

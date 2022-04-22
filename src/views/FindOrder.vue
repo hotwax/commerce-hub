@@ -154,6 +154,7 @@ import OrderFilters from '@/components/OrderFilters.vue'
 import { OrderService } from '@/services/OrderService';
 import StatusBadge from '@/components/StatusBadge.vue'
 import OrderItemCard from '@/components/OrderItemCard.vue'
+import emitter from '@/event-bus';
 
 const { Clipboard } = Plugins;
 
@@ -243,7 +244,15 @@ export default defineComponent ({
       await menuController.open();
     },
     async runJob(enumId: string) {
-      this.store.dispatch('job/fetchJobInformation', enumId)
+      const resp = await this.store.dispatch('job/fetchJobInformation', enumId)
+      // added logic to fetch the order after 4s once the service is scheduled successfully
+      if (resp === 'success') {
+        emitter.emit('presentLoader')
+        setTimeout(function (this: any) {
+          emitter.emit('dismissLoader')
+          this.store.dispatch('order/findOrders')
+        }.bind(this), 4000)
+      }
     }
   },
   async mounted() {

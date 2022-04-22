@@ -32,13 +32,14 @@ const runServiceNow = async (job: any): Promise<any> => {
     resp = await scheduleJob({ ...job.runtimeData, ...payload });
     if (resp.status == 200 && !hasError(resp)) {
       console.info('Service scheduled successfully')
+      return 'success'
     } else {
       console.error('Something went wrong while running the job')
     }
   } catch (err) {
     console.error('Something went wrong while running the job', err)
   }
-  return {};
+  return 'error';
 }
 
 const fetchJobInformation = async (payload: any): Promise <any>  => {
