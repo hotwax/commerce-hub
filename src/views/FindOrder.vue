@@ -155,6 +155,7 @@ import { OrderService } from '@/services/OrderService';
 import StatusBadge from '@/components/StatusBadge.vue'
 import OrderItemCard from '@/components/OrderItemCard.vue'
 import emitter from '@/event-bus';
+import { JobService } from '@/services/JobService';
 
 const { Clipboard } = Plugins;
 
@@ -244,7 +245,12 @@ export default defineComponent ({
       await menuController.open();
     },
     async runJob(enumId: string) {
-      const resp = await this.store.dispatch('job/fetchJobInformation', enumId)
+      const job = await this.store.dispatch('job/fetchJobInformation', enumId)
+      if (!job) {
+        console.error('Job information not found')
+        return;
+      }
+      const resp = await JobService.runServiceNow(job);
       // added logic to fetch the order after 4s once the service is scheduled successfully
       if (resp === 'success') {
         emitter.emit('presentLoader')

@@ -1,6 +1,6 @@
 import { hasError } from "@/utils";
 import moment from "moment";
-import api from "../api"
+import api from "@/api"
 
 const runServiceNow = async (job: any): Promise<any> => {
   let resp;
