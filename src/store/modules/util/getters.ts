@@ -8,6 +8,9 @@ const getters: GetterTree <UtilState, RootState> = {
     },
     getStatusDesc: (state) => (statusId: string) => {
         return state.status[statusId]
+    },
+    getEcomStores: (state) => {
+        return state.productStore
     }
 }
 export default getters;

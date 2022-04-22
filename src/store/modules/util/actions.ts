@@ -65,7 +65,36 @@ const actions: ActionTree<UtilState, RootState> = {
       console.error('Something went wrong while fetching status for items and orders')
     }
     return cachedStatus;
-  }
+  },
+
+  async getEComStores({ state, commit }) {
+    let resp;
+
+    if(Object.keys(state.productStore).length > 0) {
+      return;
+    }
+
+    const payload = {
+      "inputFields": {
+        "storeName_op": "not-empty"
+      },
+      "fieldList": ["productStoreId", "storeName"],
+      "entityName": "ProductStore",
+      "distinct": "Y",
+      "noConditionFind": "Y"
+    }
+
+    try{
+      resp = await UtilService.getEComStores(payload);
+      if (resp.status === 200 && resp.data.docs?.length > 0 && !hasError(resp)) {
+        const stores = resp.data.docs
+        stores.push({'productStoreId': '', 'storeName': 'any'})
+        commit(types.UTIL_ECOM_STORE_UPDATED, stores)
+      }
+    } catch(err) {
+      console.error(err)
+    }
+  },
 }
 
 export default actions;
