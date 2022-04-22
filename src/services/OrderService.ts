@@ -55,6 +55,14 @@ const getPOIds = async (payload: any): Promise<any> => {
   })
 }
 
+const fetchOrderItemShipGrpInformation = async (payload: any): Promise<any> => {
+  return api({
+    url: "/performFind",
+    method: "post",
+    data: payload
+  });
+}
+
 const findOrderDetails = async (payload: any): Promise<any> => {
   return api({
     url: "/solr-query",
@@ -97,6 +105,7 @@ const fetchShipmentDetailForOrderItem = async (payload: any): Promise<any> => {
 
 export const OrderService = {
   fetchShipmentDetailForOrderItem,
+  fetchOrderItemShipGrpInformation,
   fetchStatusChange,
   findOrder,
   findOrderDetails,

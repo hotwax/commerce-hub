@@ -104,7 +104,51 @@
             <h1>{{ $t("Products") }}</h1>
           </ion-item>
 
-          <div class="product" v-for="(item, index) of order.items" :key="index">
+          <div v-for="(group, index) of order.itemGroups" :key="index" >
+            <div class="info">
+              <ion-card>
+                <ion-list>
+                  <ion-list-header>{{ $t("Destination") }}</ion-list-header>
+                  <ion-item lines="none">
+                    <ion-label>
+                      {{ group.shippingAddress.toName }}
+                      <p>{{ group.shippingAddress.addressLine1 }}</p>
+                      <p>{{ group.shippingAddress.addressLine2 }}</p>
+                      <p>{{ group.shippingAddress.city }} {{ group.shippingAddress.postalCode && ',' }} {{ group.shippingAddress.postalCode }}</p>
+                      <p>{{ group.shippingAddress.state }} {{ group.shippingAddress.country && ',' }} {{ group.shippingAddress.country }}</p>
+                    </ion-label>
+                  </ion-item>
+                  <!-- TODO: make edit address button functional, also add UI for same -->
+                  <!-- <ion-buttons>
+                    <ion-button color="primary" fill="clear">{{ $t("Edit address") }}</ion-button>
+                  </ion-buttons> -->
+                </ion-list>
+              </ion-card>
+              <ion-card>
+                <ion-list>
+                  <ion-list-header>{{ $t("Fulfillment") }}</ion-list-header>
+                  <ion-item>
+                    <ion-label> {{ $t("Shipping method") }} </ion-label>
+                    <p>{{ getShipmentMethod(group.shippingMethod.id) ? getShipmentMethod(group.shippingMethod.id) : "-"}}</p>
+                  </ion-item>
+                  <ion-item>
+                    <ion-label>{{ $t("Shipping from") }}</ion-label>
+                    <p>{{ group.facility.name ? group.facility.name : "-" }}</p>
+                  </ion-item>
+                  <!-- TODO: make changing location button functional, also add UI for same -->
+                  <!-- <ion-buttons>
+                    <ion-button color="primary" fill="clear">{{ $t("Change fulfillment location") }}</ion-button>
+                  </ion-buttons> -->
+                </ion-list>
+              </ion-card>
+              <ion-card>
+                <ion-list>
+                  <ion-list-header>{{ $t("Packaging") }}</ion-list-header>
+                  <!-- TODO -->
+                </ion-list>
+              </ion-card>
+            </div>
+          <div class="product" v-for="(item, index) of getGroupItems(group, order.items)" :key="index">
             <div class="product-image desktop-only">
               <Image :src="getProduct(item.productId).mainImageUrl" />
               <!-- TODO: handle navigation to product inventory page -->
@@ -223,6 +267,8 @@
               </div>
             </div>
           </div>
+            <hr />
+          </div>
         </section>
       </main>
     </ion-content>
@@ -304,7 +350,10 @@ export default defineComponent({
     },
     changeStatus(orderId: string, ev: CustomEvent) {
       this.store.dispatch('order/updateOrderStatus', {orderId, statusId: ev['detail'].value, 'setItemStatus': 'Y'})
-    }
+    },
+    getGroupItems(group: any, items: any) {
+      return items.filter((item: any) => item.orderItemGroupId === group.orderItemGroupId);
+    },
   },
   mounted() {
     this.orderDetails(this.$route.params.orderId);

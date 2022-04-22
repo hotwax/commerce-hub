@@ -107,12 +107,65 @@ const actions: ActionTree<OrderState, RootState> = {
       resp = await OrderService.findOrderDetails(payload);
 
       if (resp.status == 200 && !hasError(resp)) {
-        const orderName = process.env.VUE_APP_ORD_IDENT_TYPE_NAME
-        const orderId = process.env.VUE_APP_ORD_IDENT_TYPE_ID
-        const orderNo = process.env.VUE_APP_ORD_IDENT_TYPE_NO
+        // TODO Improve environment variable names
+        const orderNameIdentificationKey = process.env.VUE_APP_ORD_IDENT_TYPE_NAME
+        const orderIdIdentificationKey = process.env.VUE_APP_ORD_IDENT_TYPE_ID
+        const orderNoIdentificationKey = process.env.VUE_APP_ORD_IDENT_TYPE_NO
         const customerLoyaltyOptions = process.env.VUE_APP_CUST_LOYALTY_OPTIONS
 
         const group = resp.data.grouped.orderId.groups.length > 0 && resp.data.grouped.orderId.groups[0]
+        let itemGroups = [];
+
+        const orderItemShipGrpInfoResp = await OrderService.fetchOrderItemShipGrpInformation({
+          "inputFields": {
+            orderId
+          },
+          "fieldList": ["shipGroupSeqId", "orderItemSeqId"],
+          "entityName": "OrderItemShipGroupAssoc",
+          "noConditionFind": "Y",
+          "viewSize": 100
+        });
+        if (orderItemShipGrpInfoResp.status == 200 && !hasError(orderItemShipGrpInfoResp)) {
+          const orderItemShipGrpList = orderItemShipGrpInfoResp.data.docs;
+          const prepareGroups = (items: any, orderItemShipGrpList: any) => {
+            const groups:any = [];
+            items.map((item: any) => {
+              const orderItemShipGrp = orderItemShipGrpList.find((orderItemShipGrp: any) => orderItemShipGrp.orderItemSeqId === item.orderItemSeqId);
+              item.orderItemGroupId = orderItemShipGrp.shipGroupSeqId;
+              let group = groups.find((group: any) => {
+                return group.orderItemGroupId === item.orderItemGroupId;
+              })
+              if (!group) {
+                group = {
+                  orderItemGroupId: orderItemShipGrp.shipGroupSeqId,
+                  facility: {
+                    id: item.facilityId,
+                    name: item.facilityName
+                  },
+                  shippingMethod: {
+                    id: item.shipmentMethodTypeId
+                  },
+                  carrier: {
+                    partyId: item.carrierPartyId
+                  },
+                  shippingAddress: {
+                    toName: item.customerPartyName,
+                    addressLine1: item.address1,
+                    addressLine2: item.address2,
+                    city: item.shipToCity,
+                    postalCode: item.postalCode,
+                    state: item.shipToState,
+                    country: item.shipToCountry
+                  }
+                }
+                groups.push(group);
+              }
+  
+            })
+            return groups;
+          }
+          itemGroups = prepareGroups(group.doclist.docs, orderItemShipGrpList);
+        }
 
         const order: Order = {
           orderId: group.doclist.docs[0].orderId,
@@ -133,27 +186,28 @@ const actions: ActionTree<OrderState, RootState> = {
           /** An array containing the items purchased in this order */
           items: group.doclist.docs,
           statusId: group.doclist.docs[0].orderStatusId,
+          statusDesc: group.doclist.docs[0].orderStatusDesc,
           identifications: {
-            'orderName': getIdentification(group.doclist.docs[0]?.orderIdentifications, orderName),
-            'orderId': getIdentification(group.doclist.docs[0]?.orderIdentifications, orderId),
-            'orderNo': getIdentification(group.doclist.docs[0]?.orderIdentifications, orderNo),
+            'orderName': getIdentification(group.doclist.docs[0]?.orderIdentifications, orderNameIdentificationKey),
+            'orderId': getIdentification(group.doclist.docs[0]?.orderIdentifications, orderIdIdentificationKey),
+            'orderNo': getIdentification(group.doclist.docs[0]?.orderIdentifications, orderNoIdentificationKey),
           },
-          notes: group.doclist.docs[0].orderNotes
+          notes: group.doclist.docs[0].orderNotes,
+          itemGroups
         }
 
-        const status = new Set();
+        const statusIds = new Set();
         const orderItems = [] as any;
 
-        status.add(order.statusId);
         order.items?.map((item: any) => {
-          status.add(item.orderItemStatusId)
+          statusIds.add(item.orderItemStatusId)
           orderItems.push(item)
         })
 
         this.dispatch('stock/fetchProductStockForFacility', orderItems)
-
-        const statuses = await this.dispatch('util/fetchStatus', [...status])
-        order['statusDesc'] = statuses[order.statusId]
+ 
+        // TODO Remove this code when the status description is directly available
+        const statuses = await this.dispatch('util/fetchStatus', [...statusIds])
         order.items?.map((item: any) => item['orderItemStatusDesc'] = statuses[item.orderItemStatusId])
 
         const productIds = order.items?.map((item: OrderItem) => item.productId)
