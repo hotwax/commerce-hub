@@ -205,7 +205,7 @@
                       </ion-item>
                       <ion-item>
                         <ion-label>{{ $t("Broker attempt") }}</ion-label>
-                        <p>{{ item.facilityName ? item.facilityName : "-" }}</p>
+                        <p>{{  item.brokeringAttempt ? item.brokeringAttempt : "-" }}</p>
                       </ion-item>
                       <ion-item lines="none">
                         <ion-label>{{ $t("Location Inventory") }}</ion-label>

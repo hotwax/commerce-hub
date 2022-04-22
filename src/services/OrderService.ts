@@ -139,8 +139,18 @@ const getPOInformationForPOIds = async (payload: any): Promise<any> => {
   return orders;
 }
 
+const fetchOrderBrokeringInfo = async (payload: any): Promise<any> => {
+  return api({
+    url: "/performFind",
+    method: "post",
+    data: payload
+  });
+}
+
+
 export const OrderService = {
   fetchShipmentDetailForOrderItem,
+  fetchOrderBrokeringInfo,
   fetchOrderItemShipGrpInformation,
   fetchOrderItemShipGrpInvResInfo,
   fetchStatusChange,

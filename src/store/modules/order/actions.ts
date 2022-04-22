@@ -177,7 +177,6 @@ const actions: ActionTree<OrderState, RootState> = {
           "noConditionFind": "Y",
           "viewSize": 100
         });
-        console.log("orderItemShipGrpInvResInfoResp", orderItemShipGrpInvResInfoResp);
         if (orderItemShipGrpInvResInfoResp.status == 200 && !hasError(orderItemShipGrpInvResInfoResp)) {
           const orderItemShipGrpInvResInfoList = orderItemShipGrpInvResInfoResp.data.docs;
           items.map((item: any) => {
@@ -185,8 +184,22 @@ const actions: ActionTree<OrderState, RootState> = {
           })
         }
 
-        console.log("items", items);
-
+        const orderBrokeringInfoResp = await OrderService.fetchOrderBrokeringInfo({
+          "inputFields": {
+            orderId,
+            // TODO "changeReasonEnumId_op": "empty"
+          },
+          "entityName": "OrderFacilityChange",
+          "noConditionFind": "Y",
+          "viewSize": 20,
+          "fieldList": ["orderItemSeqId"]
+        });
+        if (orderBrokeringInfoResp.status == 200 && !hasError(orderBrokeringInfoResp)) {
+          const orderBrokeringInfoRespInfoList = orderBrokeringInfoResp.data.docs;
+          items.map((item: any) => {
+            item.brokeringAttempt = orderBrokeringInfoRespInfoList.filter((orderBrokeringInfo: any) => item.orderItemSeqId === orderBrokeringInfo.orderItemSeqId).length;
+          })
+        }
 
         const orderPreOrderFacilityId = process.env.VUE_APP_PRE_ORDER_IDNT_ID
         const orderBackOrderFacilityId = process.env.VUE_APP_BACKORDER_IDNT_ID
