@@ -22,7 +22,6 @@ const orderModule: Module<OrderState, RootState> ={
       'shipFromStore': false,
       'preOrder': false,
       'backOrder': false,
-      'unfillable': false,
       'orderCreated': '',
       'promisedDate': '',
       'autoCancelDate': '',

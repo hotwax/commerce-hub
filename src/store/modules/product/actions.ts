@@ -88,7 +88,6 @@ const actions: ActionTree<ProductState, RootState> = {
     productIds = [...productIds]
     if (productIds.length) {
       this.dispatch('product/fetchProducts', { productIds })
-      this.dispatch('stock/addProducts', { productIds })
     }
   },
 

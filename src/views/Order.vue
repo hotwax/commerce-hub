@@ -211,7 +211,7 @@
                       </ion-item>
                       <ion-item lines="none">
                         <ion-label>{{ $t("Location Inventory") }}</ion-label>
-                        <p>{{ getProductStock(item.productId) }}</p>
+                        <p>{{ getProductStockForFacility(item.productId, item.facilityId) }}</p>
                       </ion-item>
                       <!-- TODO: make changing location button functional, also add UI for same -->
                       <!-- <ion-buttons>
@@ -293,7 +293,7 @@ export default defineComponent({
     ...mapGetters({
       order: 'order/getCurrentOrder',
       getProduct: 'product/getProduct',
-      getProductStock: 'stock/getProductStock',
+      getProductStockForFacility: 'stock/getProductStockForFacility',
       getShipmentMethod: 'util/getShipmentMethod',
       validStatusChange: 'order/getOrderValidStatusChange'
     })

@@ -61,10 +61,6 @@ const prepareOrderQuery = (query: any) => {
     typeFilterSelected.push('BACKORDER_PARKING')
   }
 
-  if (query.unfillable) {
-    typeFilterSelected.push('_NA_')
-  }
-
   const typeFilterValues = typeFilterSelected.join(" OR ")
 
   payload.json.filter = payload.json.filter.concat(` AND facilityId: (${typeFilterValues ? typeFilterValues : '*'})`)
