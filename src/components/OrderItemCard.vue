@@ -17,7 +17,7 @@
       </div>
     </ion-item>
     <!-- TODO: Need to handle this property -->
-    <div v-if="isItemPreorderOrBackorder(item)">
+    <div v-if="isItemPreorderOrBackorder(item) && !isItemCompleted(item)">
       <ion-item>
         <ion-label>{{ $t("Promise date") }}</ion-label>
         <p slot="end"> {{ item.promisedDatetime ? $filters.formatUtcDate(item.promisedDatetime, 'YYYY-MM-DDTHH:mm:ssZ', 'D MMM YYYY') : '-'  }} </p>
