@@ -2,7 +2,7 @@
   <ion-page>
     <ion-header :translucent="true">
       <ion-toolbar>
-        <ion-back-button slot="start" default-href="/" />
+        <ion-back-button slot="start" default-href="/find-product-inventory" />
         <ion-title>{{ $t("Product inventory detail") }}</ion-title>
         <ion-buttons slot="end">
           <ion-button fill="clear">
@@ -15,29 +15,27 @@
     <ion-content>
       <main>
         <section class="product">
-          <ion-card class="product-image desktop-only">
-            <Image src="https://cdn.shopify.com/s/files/1/0069/7384/9727/products/test-track.jpg?v=1626255137" />
+          <ion-card class="desktop-only">
+            <Image :src="product.mainImage" />
           </ion-card>
         
           <div class="product-info desktop-only">
-            <ion-label>Parent product name</ion-label>
+            <ion-label>{{ product.productName }}</ion-label>
             <ion-card>
               <ion-card-header>
                 <ion-card-title>{{ $t("General information") }}</ion-card-title>
               </ion-card-header>
               <ion-item>
-                <ion-label>{{ $t("Shopify ID") }}</ion-label>
-                <ion-label slot="end">external ID</ion-label>
-              </ion-item>
-              <ion-item>
                 <ion-label>{{ $t("Internal ID") }}</ion-label>
-                <ion-label slot="end">internal ID</ion-label>
+                <ion-label slot="end">{{ product.productId }}</ion-label>
               </ion-item>
+              <!-- TODO: need to implement this functionality -->
               <ion-item>
                 <ion-label>{{ $t("In stock") }}</ion-label>
                 <ion-label slot="end">QOH</ion-label>
               </ion-item>
-              <ion-item>
+              <!-- TODO: need to implement this functionality -->
+              <ion-item lines="none">
                 <ion-label>{{ $t("On order") }}</ion-label>
                 <ion-label slot="end">ordered</ion-label>
               </ion-item>
@@ -47,11 +45,11 @@
 
         <ion-item class="mobile-only" lines="none">
           <ion-thumbnail>
-            <Image src="https://cdn.shopify.com/s/files/1/0069/7384/9727/products/test-track.jpg?v=1626255137" />
+            <Image :src="product.mainImage" />
           </ion-thumbnail>
           <ion-label>
-            Virtual name
-            <p>Shopify ID</p>
+            {{ product.productName }}
+            <p>{{ product.externalId }}</p>
           </ion-label>
           <ion-chip>
             <ion-label>Shopify logo</ion-label>
@@ -64,7 +62,7 @@
           <div class="variant-info">
             <ion-item class="desktop-only" lines="none">
               <ion-icon slot="start" :icon="shirtOutline" />
-              <ion-label>{{ $t("Variant") }}</ion-label>
+              <h1>{{ $t("Variant") }}</h1>
             </ion-item>
             <ion-list>
               <ion-list-header>{{ $t("Color") }}</ion-list-header>
@@ -72,12 +70,9 @@
                 <ion-chip>
                   <ion-label>All</ion-label>
                 </ion-chip>
-                <ion-chip>
-                  <ion-label>Color 1</ion-label>
-                </ion-chip>
-                <ion-chip>
+                <ion-chip v-for="(feature, index) in $filters.getFeaturesList(product.features, '1/COLOR/')" :key="index">
                   <ion-icon :icon="checkmarkOutline" />
-                  <ion-label>Color 2</ion-label>
+                  <ion-label>{{ feature }}</ion-label>
                 </ion-chip>
               </ion-item>
             </ion-list>
@@ -87,12 +82,9 @@
                 <ion-chip>
                   <ion-label>All</ion-label>
                 </ion-chip>
-                <ion-chip>
-                  <ion-label>Size 1</ion-label>
-                </ion-chip>
-                <ion-chip>
+                <ion-chip v-for="(feature, index) in $filters.getFeaturesList(product.features, '1/SIZE/')" :key="index">
                   <ion-icon :icon="checkmarkOutline" />
-                  <ion-label>Size 2</ion-label>
+                  <ion-label>{{ feature }}</ion-label>
                 </ion-chip>
               </ion-item>
             </ion-list>
@@ -111,7 +103,7 @@
                 <ion-label>{{ $t("UPC") }}</ion-label>
                 <ion-label slot="end">order id</ion-label>
               </ion-item>
-              <ion-item>
+              <ion-item lines="none">
                 <ion-label>{{ $t("Internal ID") }}</ion-label>
                 <ion-label slot="end">internal id</ion-label>
               </ion-item>
@@ -122,7 +114,7 @@
         <section>
           <ion-item lines="none">
             <ion-icon slot="start" :icon="ticketOutline" />
-            <ion-label>Orders</ion-label>
+            <h1>{{ $t("Orders") }}</h1>
           </ion-item>
           
           <div class="orders">
@@ -138,7 +130,7 @@
                 <ion-label>{{ $t("Standard") }}</ion-label>
                 <ion-note slot="end">orders</ion-note>
               </ion-item>
-              <ion-item detail>
+              <ion-item lines="none" detail>
                 <ion-label>{{ $t("Expedited") }}</ion-label>
                 <ion-note slot="end">orders</ion-note>
               </ion-item>
@@ -169,7 +161,7 @@
                 </ion-label>
               </ion-item>
 
-              <ion-item>
+              <ion-item lines="none">
                 <ion-label>
                   <p>{{ $t("Back orders") }}</p>
                 </ion-label>
@@ -641,6 +633,7 @@ import EditQuantityModal from '@/components/EditQuantityModal.vue';
 import LocationPopover from '@/components/LocationPopover.vue';
 import PurchaseOrderPopover from '@/components/PurchaseOrderPopover.vue';
 import FulfillmentSettingsPopover from '@/components/FulfillmentSettingsPopover.vue';
+import { useStore, mapGetters } from 'vuex';
 
 export default defineComponent({
   name: 'ProductInventory',
@@ -670,6 +663,11 @@ export default defineComponent({
     IonToggle,
     IonToolbar,
     Image
+  },
+  computed: {
+    ...mapGetters({
+      product: 'product/getCurrent'
+    })
   },
   methods: {
     segmentChanged(ev: CustomEvent) {
@@ -709,8 +707,12 @@ export default defineComponent({
       return popover.present();
     },
   },
+  mounted() {
+    this.store.dispatch('product/updateCurrent', { productId: this.$route.params.id })
+  },
   setup() {
     const router = useRouter();
+    const store = useStore();
     const segment = ref("locations");
 
     return {
@@ -728,19 +730,39 @@ export default defineComponent({
       syncOutline,
       ticketOutline,
       router,
-      segment
+      segment,
+      store
     }
   }
 });
 </script>
 
 <style scoped>
+section {
+  margin-top: var(--spacer-lg)
+}
 
 .product {
   display: grid;
-  grid-template-columns: 254px auto;
+  grid-template-columns: minmax(254px, auto) 1fr;
+  gap: var(--spacer-xl);
   justify-items: start;
-  align-items: center;
+  margin: 0 0 var(--spacer-base);
+}
+
+.product > ion-card {
+  height: 360px;
+  border-radius: 20px;
+  padding: var(--spacer-base);
+}
+
+img {
+  max-width: unset;
+  height: 100%;
+}
+
+h1 {
+  margin-left: var(--spacer-xs);
 }
 
 .product-info,
@@ -757,9 +779,14 @@ export default defineComponent({
   align-items: center;
 }
 
+.actions {
+  margin: var(--spacer-xl) 0 var(--spacer-base);
+}
+
 /*Height of segment is defined now since their are less list items. Will remove it later */
 .segments {
   height: 400px;
+  margin-top: var(--spacer-2xl);
 }
 
 ion-segment {

@@ -1,6 +1,7 @@
 import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router';
+import './registerServiceWorker'
 import moment from 'moment'
 import "moment-timezone";
 
@@ -70,7 +71,18 @@ app.config.globalProperties.$filters = {
       }
     }
     return customerLoyalty;
-  }
+  },
+  getFeaturesList(featureHierarchy: any, featureKey: string) {
+    let featuresList = []
+    if (featureHierarchy) {
+      featuresList = featureHierarchy.filter((featureItem: any) => featureItem.startsWith(featureKey)).map((feature: any) => {
+        const featureSplit = feature ? feature.split('/') : [];
+        const featureValue = featureSplit[2] ? featureSplit[2] : '';
+        return featureValue;
+      })
+    }
+    return featuresList;
+  },
 }
 
 

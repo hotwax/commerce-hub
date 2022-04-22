@@ -16,7 +16,8 @@ const utilModule: Module<UtilState, RootState> = {
       currentLocationFilterSelected: {
         productStoreId: 'All',
         facilityTypeId: 'All'
-      }
+      },
+      status: {}
     },
     getters,
     actions,

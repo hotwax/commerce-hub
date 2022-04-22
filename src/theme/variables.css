@@ -235,8 +235,8 @@ http://ionicframework.com/docs/theming/ */
   }
 }
 
-/** Spacer variables **/
 body {
+  /** Spacer variables **/
   --spacer-2xs: 0.25rem; /* 4px */
   --spacer-xs: 0.5rem;   /* 8px */
   --spacer-sm: 1rem;     /* 16px */
@@ -245,6 +245,9 @@ body {
   --spacer-xl: 2.5rem;   /* 40px */
   --spacer-2xl: 5rem;    /* 80px */
   --spacer-3xl: 10rem;   /* 160px */
+
+  /** Border variable **/
+  --border-medium: 1px solid var(--ion-color-medium);
 }
 
 .overline {
@@ -272,11 +275,18 @@ body {
 
 .search {
   grid-area: search;
-  margin-bottom: var(--spacer-lg);
 }
 
 .filters {
   grid-area: filters;
+}
+
+.sort {
+  margin: var(--spacer-sm) 0;
+}
+
+.sort > div > :first-child{
+  border-bottom: var(--border-medium);
 }
 
 .section-header {
@@ -335,6 +345,13 @@ body {
   justify-self: start
 }
 
+h1,h2 {
+  font-size: 16px;
+}
+
+ion-item > h1,h2 {
+  margin: 0;
+}
 
 ion-avatar > img ,
 ion-thumbnail > img {
@@ -346,12 +363,16 @@ ion-select {
 }
 
 hr {
-  border-width: 1px;
-  color: var(--ion-color-medium);
+  border-top: var(--border-medium);
 }
 
 ion-list-header > hr {
-  width: 90%;
+  flex: 1;
+  margin-left: var(--spacer-base);
+}
+
+ion-card {
+  border-radius: 8px;
 }
 
 .desktop-only {
@@ -373,25 +394,50 @@ ion-list-header > hr {
 }
 
 @media (min-width: 991px) {
+  h1,h2 {
+    font-size: revert;
+  }
+
   .find {
     grid: "search  main" min-content
           "filters main" 1fr 
           / 375px; 
+    column-gap: var(--spacer-2xl);      
     margin: var(--spacer-lg);                            
   }
   
   .section-header {
-    grid: "info tags metadata" / max-content 1fr minmax(min-content, max-content);
+    grid: "info tags metadata" / 1fr max-content 1fr;
   }
+
+  .filters {
+    margin-top: var(--spacer-lg);
+  }  
 
   .sort {
     display: flex;
-    justify-content: flex-end;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    margin-bottom: var(--spacer-lg);
   }
 
   .sort > ion-item {
-    max-width: 308px;
-    border-left: 1px solid var(--ion-color-medium);
+    flex-grow: 1;
+  }
+
+  .sort > div {
+    display: flex;
+    flex-grow: 2;
+    justify-content: end;
+  }
+
+  .sort > div > ion-item {
+    flex: 0 1 343px;
+    border-left: var(--border-medium);
+  }
+
+  .sort > div > :first-child{
+    border-bottom: unset;
   }
 
   .desktop-only {
@@ -406,15 +452,12 @@ ion-list-header > hr {
     display: unset;
   }  
 
-  .find > main {
-    margin-left: var(--spacer-lg);
+  .product,
+  .products {
+    margin-top: var(--spacer-lg);
   }
 
-  .products > ion-item {
-    margin-bottom: var(--spacer-lg);
-  }
-
-  .main-content {
+  ion-content > main {
     margin: var(--spacer-lg);
   }
 
@@ -451,7 +494,17 @@ ion-list-header > hr {
   
   .timeline {
     grid-area: timeline;
-    border-left: 1px solid var(--ion-color-medium);
+    border-left: var(--border-medium);
+  }
+
+  .product-image {
+    margin: var(--spacer-xs) 0 0 var(--spacer-xs);
+  }
+
+  .product-image > img {
+    border: var(--border-medium);
+    border-radius: 10px;
+    padding: var(--spacer-base);
   }
 }
 

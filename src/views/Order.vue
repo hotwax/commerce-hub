@@ -18,14 +18,11 @@
           <div class="id">
             <ion-item lines="none">
               <ion-icon slot="start" :icon="ticketOutline" />
-              <ion-label>{{ order.orderName ? order.orderName : order.orderId }}</ion-label>
-              <ion-badge :color="orderStatus[order.statusId]?.color ? orderStatus[order.statusId]?.color : 'primary'" slot="end">{{ orderStatus[order.statusId]?.label ? orderStatus[order.statusId]?.label : order.statusId }}</ion-badge>
-              <!-- TODO: implement functionality to change the orderStatus -->
-              <!-- <ion-select :value="status" @ionChange="changeStatus($event)" slot="end">
-                <ion-select-option value="Approved">Approved</ion-select-option>
-                <ion-select-option value="Completed">Completed</ion-select-option>
-                <ion-select-option value="Shipped">Shipped</ion-select-option>
-              </ion-select> -->
+              <h1>{{ order.orderName ? order.orderName : order.orderId }}</h1>
+              <StatusBadge :statusDesc="order.statusDesc || ''" :key="order.statusDesc" slot="end"/>
+              <ion-select v-if="validStatusChange(order.statusId)?.length > 0" @ionChange="changeStatus(order.orderId, $event)" slot="end">
+                <ion-select-option v-for="status in validStatusChange(order.statusId)" :key="status" :value="status">{{ orderStatus[status]?.label }}</ion-select-option>
+              </ion-select>
             </ion-item>
           </div>
 
@@ -33,7 +30,7 @@
           <!-- <div class="timeline">
             <ion-item lines="none">
               <ion-icon slot="start" :icon="timeOutline" class="mobile-only" />
-              <ion-label>{{ $t("Timeline") }}</ion-label>
+              <h2>{{ $t("Timeline") }}</h2>
               <ion-note slot="end">1:07pm 6th Dec 2021</ion-note>
             </ion-item>
 
@@ -53,16 +50,16 @@
             <ion-card>
               <ion-list>
                 <ion-item lines="none">
-                  <ion-label> {{ order.customer?.name }} </ion-label>
+                  <ion-label class="ion-text-wrap"> {{ order.customer?.name }} </ion-label>
                   <!-- TODO: handle this property to display loyalty options -->
                   <ion-chip slot="end" v-if="order.customer?.loyaltyOptions">
                     <ion-icon :icon="ribbon" />
-                    <ion-label>{{ order.customer?.loyaltyOptions }}</ion-label>
+                    <ion-label class="ion-text-wrap">{{ order.customer?.loyaltyOptions }}</ion-label>
                   </ion-chip>
                 </ion-item>
                 <ion-item v-if="order.customer?.emailId">
                   <ion-icon :icon="mailOutline" slot="start" />
-                  <ion-label> {{ order.customer?.emailId }} </ion-label>
+                  <ion-label class="ion-text-wrap"> {{ order.customer?.emailId }} </ion-label>
                 </ion-item>
                 <ion-item v-if="order.customer?.phoneNumber">
                   <ion-icon :icon="callOutline" slot="start" />
@@ -70,7 +67,7 @@
                 </ion-item>
                 <ion-item lines="none" v-if="order.customer?.toName || order.customer?.address1 || order.customer?.address2 || order.customer?.city || order.customer?.country">
                   <ion-icon :icon="cashOutline" slot="start" />
-                  <ion-label>
+                  <ion-label class="ion-text-wrap">
                     {{ order.customer?.toName }}
                     <p>{{ order.customer?.address1 }}</p>
                     <p>{{ order.customer?.address2 }}</p>
@@ -80,19 +77,20 @@
                 </ion-item>
               </ion-list>
             </ion-card>
+
             <ion-card>
               <ion-list>
                 <ion-list-header>{{ $t("Shopify IDs") }}</ion-list-header>
                 <ion-item>
-                  <ion-label> {{ $t("Order Number") }} </ion-label>
+                  <ion-label class="ion-text-wrap"> {{ $t("Order Number") }} </ion-label>
                   <p slot="end">{{ order.identifications?.orderNo ? order.identifications.orderNo : "-" }}</p>
                 </ion-item>
                 <ion-item>
-                  <ion-label> {{ $t("Order ID") }} </ion-label>
+                  <ion-label class="ion-text-wrap"> {{ $t("Order ID") }} </ion-label>
                   <p slot="end">{{ order.identifications?.orderId ? order.identifications.orderId : "-" }}</p>
                 </ion-item>
                 <ion-item lines="none">
-                  <ion-label> {{ $t("Order Name") }} </ion-label>
+                  <ion-label class="ion-text-wrap"> {{ $t("Order Name") }} </ion-label>
                   <p slot="end">{{ order.identifications?.orderName ? order.identifications.orderName : "-" }} </p>
                 </ion-item>
               </ion-list>
@@ -100,11 +98,10 @@
           </div>
         </section>
 
-        <!-- Product section -->
-        <section>
+        <section class="products">
           <ion-item lines="none">
             <ion-icon slot="start" :icon="shirtOutline" />
-            <ion-label>{{ $t("Products") }}</ion-label>
+            <h1>{{ $t("Products") }}</h1>
           </ion-item>
 
           <div class="product" v-for="(item, index) of order.items" :key="index">
@@ -121,17 +118,17 @@
               <hr />
 
               <div class="product-header">
-                  <ion-item lines="none">
-                    <ion-thumbnail slot="start" class="mobile-only">
-                      <Image :src="getProduct(item.productId).mainImageUrl" />
-                    </ion-thumbnail>
-                    <ion-label>
-                      <p> {{ item.brandName }} </p>
-                      {{ item.parentProductName ? item.parentProductName : item.productName }}
-                      <p v-if="$filters.getFeature(getProduct(item.productId).featureHierarchy, '1/COLOR/')">{{ $t("Color") }}: {{ $filters.getFeature(getProduct(item.productId).featureHierarchy, '1/COLOR/') }}</p>
-                      <p v-if="$filters.getFeature(getProduct(item.productId).featureHierarchy, '1/SIZE/')">{{ $t("Size") }}: {{ $filters.getFeature(getProduct(item.productId).featureHierarchy, '1/SIZE/') }}</p>
-                    </ion-label>
-                  </ion-item>
+                <ion-item lines="none">
+                  <ion-thumbnail slot="start" class="mobile-only">
+                    <Image :src="getProduct(item.productId).mainImageUrl" />
+                  </ion-thumbnail>
+                  <ion-label class="ion-text-wrap">
+                    <p> {{ item.brandName }} </p>
+                    {{ item.parentProductName ? item.parentProductName : item.productName }}
+                    <p v-if="$filters.getFeature(getProduct(item.productId).featureHierarchy, '1/COLOR/')">{{ $t("Color") }}: {{ $filters.getFeature(getProduct(item.productId).featureHierarchy, '1/COLOR/') }}</p>
+                    <p v-if="$filters.getFeature(getProduct(item.productId).featureHierarchy, '1/SIZE/')">{{ $t("Size") }}: {{ $filters.getFeature(getProduct(item.productId).featureHierarchy, '1/SIZE/') }}</p>
+                  </ion-label>
+                </ion-item>
 
                 <div class="product-tags desktop-only">
                   <ion-chip v-if="item.internalName">
@@ -141,9 +138,9 @@
                   </ion-chip>
                 </div>
 
-                  <ion-item lines="none">
-                    <ion-badge slot="end" :color="itemStatus[item.orderItemStatusId]?.color ? itemStatus[item.orderItemStatusId]?.color : 'primary'">{{ itemStatus[item.orderItemStatusId]?.label ? itemStatus[item.orderItemStatusId]?.label : item.orderItemStatusId }}</ion-badge>
-                  </ion-item>
+                <ion-item lines="none">
+                  <StatusBadge :statusDesc="item.orderItemStatusDesc || ''" :key="item.orderItemStatusDesc"/>
+                </ion-item>
               </div>
 
               <hr />
@@ -153,7 +150,7 @@
                   <ion-card>
                     <ion-list>
                       <ion-list-header>{{ $t("Destination") }}</ion-list-header>
-                      <ion-item>
+                      <ion-item lines="none">
                         <ion-label>
                           {{ item.customerPartyName }}
                           <p>{{ item.address1 }}</p>
@@ -212,9 +209,9 @@
                         <ion-label>{{ $t("Shipping from") }}</ion-label>
                         <p>{{ item.facilityName ? item.facilityName : "-" }}</p>
                       </ion-item>
-                      <ion-item>
+                      <ion-item lines="none">
                         <ion-label>{{ $t("Location Inventory") }}</ion-label>
-                        <p>{{ getProductStock(item.productId) }}</p>
+                        <p>{{ getProductStockForFacility(item.productId, item.facilityId) }}</p>
                       </ion-item>
                       <!-- TODO: make changing location button functional, also add UI for same -->
                       <!-- <ion-buttons>
@@ -249,7 +246,6 @@ import {
 } from 'ionicons/icons';
 import {
   IonBackButton,
-  IonBadge,
   IonCard,
   IonChip,
   IonContent,
@@ -260,6 +256,8 @@ import {
   IonList,
   IonListHeader,
   IonPage,
+  IonSelect,
+  IonSelectOption,
   IonThumbnail,
   IonTitle,
   IonToolbar
@@ -267,13 +265,13 @@ import {
 import { useStore } from "@/store";
 import { mapGetters } from "vuex";
 import { defineComponent } from "vue";
+import StatusBadge from '@/components/StatusBadge.vue'
 
 export default defineComponent({
   name: 'Order',
   components: {
     Image,
     IonBackButton,
-    IonBadge,
     IonCard,
     IonChip,
     IonContent,
@@ -284,29 +282,28 @@ export default defineComponent({
     IonList,
     IonListHeader,
     IonPage,
+    IonSelect,
+    IonSelectOption,
     IonThumbnail,
     IonTitle,
-    IonToolbar
-  },
-  data() {
-    return {
-      status: "Approved" // default value
-    }
+    IonToolbar,
+    StatusBadge
   },
   computed: {
     ...mapGetters({
       order: 'order/getCurrentOrder',
       getProduct: 'product/getProduct',
-      getProductStock: 'stock/getProductStock',
-      getShipmentMethod: 'util/getShipmentMethod'
+      getProductStockForFacility: 'stock/getProductStockForFacility',
+      getShipmentMethod: 'util/getShipmentMethod',
+      validStatusChange: 'order/getOrderValidStatusChange'
     })
   },
   methods:{
     orderDetails(orderId?: any){
       this.store.dispatch("order/getOrderDetails", orderId);
     },
-    changeStatus(ev: CustomEvent) {
-      this.status = ev['detail'].value
+    changeStatus(orderId: string, ev: CustomEvent) {
+      this.store.dispatch('order/updateOrderStatus', {orderId, statusId: ev['detail'].value, 'setItemStatus': 'Y'})
     }
   },
   mounted() {
@@ -355,12 +352,16 @@ ion-select {
 
 .product-header {
   display: grid;
-  grid-template-columns: max-content 1fr max-content;
+  grid-template-columns: 1fr max-content;
   align-items: center;
 }
 
 .product-tags {
   justify-self: center;
+}
+
+.product-header > :last-child {
+  justify-self: end;
 }
 
 .product-card {
@@ -370,7 +371,6 @@ ion-select {
 }
 
 @media (min-width: 991px) {
-
   .product {
     display: grid;
     grid-template-columns: 250px 1fr;
@@ -378,14 +378,12 @@ ion-select {
     align-items: start;
   }
 
-  .product-image {
-    height: 362px;
-    margin: var(--spacer-xs) 0 0 var(--spacer-xs);
+  .product-header {
+    grid-template-columns: max-content 1fr max-content;
   }
 
-  .product-image > img {
-    border: 1px solid var(--ion-color-medium);
-    border-radius: 10px;
+  .product-image {
+    height: 362px;
   }
 }
 </style>

@@ -8,8 +8,7 @@ const getters: GetterTree<ProductState, RootState> = {
   },
   isScrollable(state) {
     return (
-      state.products.list.length > 0 &&
-      state.products.list.length < state.products.total
+      state.products.list.length > 0 && state.products.list.length < state.products.total
     );
   },
   getCached(state) {
@@ -18,6 +17,12 @@ const getters: GetterTree<ProductState, RootState> = {
   getProduct: (state) => (productId: string) => {
     // Returning empty object so that it doesn't breaks the UI
     return state.cached[productId] ? state.cached[productId] : {};
+  },
+  getProducts(state) {
+    return state.products.list;
+  },
+  getCurrent(state) {
+    return state.current;
   }
 };
 export default getters;

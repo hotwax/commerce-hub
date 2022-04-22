@@ -1,0 +1,6 @@
+---
+title: Removed margin of heading tags inside ion-item
+ticket_id: "#27xjvxy"
+merge_request: 116
+author: Azkya Khan
+type: removed

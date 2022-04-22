@@ -21,7 +21,7 @@ const state: any = {
 }
 
 const persistState = createPersistedState({
-    paths: ['user', 'util.shipmentMethod'],
+    paths: ['user', 'util.shipmentMethod', 'order.validStatusChange'],
     fetchBeforeUse: true
 })
 

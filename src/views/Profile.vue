@@ -52,7 +52,7 @@
           </ion-item>
         </div>
 
-        <ion-button expand="block" color="medium" fill="outline">{{ $t("Logout") }}</ion-button>
+        <ion-button expand="block" color="medium" fill="outline" @click="logout()">{{ $t("Logout") }}</ion-button>
       </main>
     </ion-content>
   </ion-page>
@@ -68,7 +68,6 @@ import {
   IonInput,
   IonItem,
   IonLabel,
-  IonList,
   IonPage,
   IonSelect,
   IonSelectOption,
@@ -77,6 +76,8 @@ import {
 } from '@ionic/vue';
 import { defineComponent } from 'vue';
 import Image from '@/components/Image.vue';
+import { useStore } from 'vuex';
+import { useRouter } from 'vue-router';
 
 export default defineComponent({
   name: 'Profile',
@@ -96,6 +97,22 @@ export default defineComponent({
     IonTitle,
     Image,
   },
+  methods: {
+    logout () {
+      this.store.dispatch('user/logout').then(() => {
+        this.router.push('/login');
+      })
+    }
+  },
+  setup() {
+    const store = useStore();
+    const router = useRouter();
+
+    return {
+      router,
+      store
+    }
+  }
 });
 </script>
 
