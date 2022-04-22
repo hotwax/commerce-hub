@@ -79,6 +79,14 @@ const updateOrderStatus = async (payload: any): Promise<any> => {
   })
 }
 
+const fetchStuckOrders = async (payload: any): Promise<any> => {
+  return api({
+    url: "/solr-query",
+    method: "post",
+    data: payload
+  })
+}
+
 const getPOIdsForSo = async (payload: any): Promise<any> => {
   return api({
     url: "/solr-query",
@@ -95,6 +103,22 @@ const fetchShipmentDetailForOrderItem = async (payload: any): Promise<any> => {
   })
 }
 
+const getOrderFacilityChange = async (payload: any): Promise<any> => {
+  return api({
+    url: "/performFind",
+    method: "post",
+    data: payload
+  });
+}
+
+const fetchOldExpeditedOrders = async (payload: any): Promise<any> => {
+  return api({
+    url: "/solr-query",
+    method: "post",
+    data: payload
+  })
+}
+
 export const OrderService = {
   fetchShipmentDetailForOrderItem,
   fetchStatusChange,
@@ -103,5 +127,8 @@ export const OrderService = {
   getPOIds,
   getPOIdsForSo,
   getShipmentDetailForOrderItem,
-  updateOrderStatus
+  updateOrderStatus,
+  fetchStuckOrders,
+  getOrderFacilityChange,
+  fetchOldExpeditedOrders
 }

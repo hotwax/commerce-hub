@@ -17,6 +17,15 @@ const getters: GetterTree <OrderState, RootState> = {
   },
   getOrderValidStatusChange: (state) => (statusId: string) => {
     return state.validStatusChange[statusId]
+  },
+  getStuckOrders(state) {
+    return state.stuck.orders;
+  },
+  getOrderChangeFacility: (state) => (orderId: any) => {
+    return state.orderFacilityChange[orderId];
+  },
+  getOldExpeditedOrders(state) {
+    return state.oldExpedited.orders;
   }
 }
 export default getters;

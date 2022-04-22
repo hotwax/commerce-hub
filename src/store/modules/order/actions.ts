@@ -236,7 +236,120 @@ const actions: ActionTree<OrderState, RootState> = {
       console.error(err)
       showToast(translate('Something went wrong'))
     }
+  },
+
+  async fetchStuckOrders({commit}){
+    let resp;
+    const payload = {
+      "json": {
+        "params": {
+          "rows": "20",
+          "sort": "orderDate asc"
+        },
+        "query":"(*:*)",
+        "filter": ["docType:ORDER","orderTypeId: SALES_ORDER","facilityId: _NA_","orderStatusId: ORDER_APPROVED" ]
+      }
+    }
+    try {
+      resp = await OrderService.findOrderDetails(payload);
+      if (resp.status === 200 && !hasError(resp)) {
+        const productIds = resp.data.response.docs.map((order: any) => {
+          return order.productId;
+        })
+        const orderIds = resp.data.response.docs.map((order: any) => {
+          return order.orderId;
+        })
+        const viewSize = productIds.length;
+        const viewIndex = 0;
+        const payload = {
+          viewSize,
+          viewIndex,
+          productIds
+        }
+        await this.dispatch('stock/addProducts', payload);
+        await this.dispatch("product/fetchProducts", payload);
+        const orderFacilityChange = await this.dispatch('order/getOrderFacilityChange', orderIds);
+        commit(types.ORDER_STUCK_UPDATED, { orders: resp.data.response.docs, total: resp.data.response.numFound })
+        commit(types.ORDER_FACILITY_CHANGE_UPDATED, orderFacilityChange);
+      }
+    } catch(err) {
+      console.error("error");
+    }
+    
+  },
+  async getOrderFacilityChange({commit}, payload){
+    try {
+      const orderFacilityChangeInformation = {} as any;
+      const resp = await OrderService.getOrderFacilityChange({
+        "inputFields": {
+          "orderId": payload,
+          "orderId_op": "in",
+          "changeReasonEnumId_op": "empty"
+        },
+        "entityName": "OrderFacilityChange",
+        "noConditionFind": "Y",
+        "viewSize": 200,
+        "orderBy": "orderId ASC | changeDatetime ASC",
+        "fieldList": ["orderId", "changeDatetime", "facilityId", "fromFacilityId"]
+      });
+      this.dispatch('util/fetchFacilitiesList');
+      const orderIds = payload
+      orderIds.forEach((orderId: any) => {
+        orderFacilityChangeInformation[orderId] = {
+          count: 0,
+          LastBrokeredFacility: "-"
+        } as any;
+        resp.data.docs.forEach((order: any) => {
+          if(order.orderId == orderId){
+            orderFacilityChangeInformation[orderId].LastBrokeredFacility = this.getters['util/getFacilityName'](order.facilityId).facilityName;
+            orderFacilityChangeInformation[orderId].count += 1;
+          }
+        })
+      })
+      return orderFacilityChangeInformation;
+    } catch (err){
+      console.log(err);
+    }
+  },
+
+  async fetchOldExpeditedOrders({commit}){
+    let resp;
+    try {
+      resp = await OrderService.fetchOldExpeditedOrders({
+        "json": {
+          "params": {
+            "rows": "20",
+            "sort": "orderDate asc"
+          },
+          "query":"(*:*)",
+          "filter": ["docType:ORDER","orderTypeId: SALES_ORDER", "shipmentMethodTypeId: (NEXT_DAY OR SECOND_DAY)"]
+        }
+      });
+      if (resp.status === 200 && !hasError(resp)) {
+        const productIds = resp.data.response.docs.map((order: any) => {
+          return order.productId;
+        })
+        const orderIds = resp.data.response.docs.map((order: any) => {
+          return order.orderId;
+        })
+        const viewSize = productIds.length;
+        const viewIndex = 0;
+        const payload = {
+          viewSize,
+          viewIndex,
+          productIds
+        }
+        await this.dispatch('stock/addProducts', payload);
+        await this.dispatch("product/fetchProducts", payload);
+        const orderFacilityChange = await this.dispatch('order/getOrderFacilityChange', orderIds);
+        commit(types.ORDER_OLD_EXPEDITED_UPDATED, { orders: resp.data.response.docs, total: resp.data.response.numFound });
+        commit(types.ORDER_FACILITY_CHANGE_UPDATED, orderFacilityChange);
+      }
+      
+    } catch (err) {
+      console.error(err);
+    }
   }
-} 
+}
 
 export default actions
