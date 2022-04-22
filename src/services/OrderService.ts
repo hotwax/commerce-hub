@@ -1,9 +1,9 @@
 import { hasError } from "@/utils";
 import api from "../api"
+import store from '@/store'
 
 const getShipmentDetailForOrderItem = async (payload: any) => {
   let resp;
-
   // TODO: implement grouping logic to get the tracking code for order items
   // currently when grouping only getting response for two groups thus used in operator for now
   const params = {
@@ -37,6 +37,45 @@ const getShipmentDetailForOrderItem = async (payload: any) => {
     console.error(err)
   }
   return {};
+}
+
+const getOrderBrokeringInfo = async (payload: any) => {
+  const params = {
+    "inputFields": {
+      "orderId": payload,
+      "orderId_op": "in",
+      "changeReasonEnumId_op": "empty"
+    },
+    "entityName": "OrderFacilityChange",
+    "noConditionFind": "Y",
+    "viewSize": 200,
+    "orderBy": "orderId ASC | changeDatetime ASC",
+    "fieldList": ["orderId", "changeDatetime", "facilityId", "fromFacilityId"]
+  }
+  try {
+    const resp = await fetchOrderBrokering(params);
+    const orderFacilityChangeInformation = {} as any;
+    if(resp.status == 200 && !hasError(resp) && resp.data.count > 0) {
+      const facilitiesList = await store.dispatch('util/fetchFacilitiesList');
+      const orderIds = payload
+      orderIds.forEach((orderId: any) => {
+        orderFacilityChangeInformation[orderId] = {
+          count: 0,
+          lastBrokeredFacility: "-"
+        } as any;
+        resp.data.docs.forEach((order: any) => {
+          if(order.orderId == orderId){
+            const facility = facilitiesList.find((facility: any) => facility.facilityId === order.facilityId )
+            orderFacilityChangeInformation[orderId].lastBrokeredFacility = facility.facilityName;
+            orderFacilityChangeInformation[orderId].count += 1;
+          }
+        })
+      })
+      return orderFacilityChangeInformation;
+    }
+  } catch(err){
+    console.error(err);
+  }
 }
 
 const findOrder = async (payload: any): Promise<any> => {
@@ -103,7 +142,7 @@ const fetchShipmentDetailForOrderItem = async (payload: any): Promise<any> => {
   })
 }
 
-const getOrderFacilityChange = async (payload: any): Promise<any> => {
+const fetchOrderBrokering = async (payload: any): Promise<any> => {
   return api({
     url: "/performFind",
     method: "post",
@@ -119,6 +158,14 @@ const fetchOldExpeditedOrders = async (payload: any): Promise<any> => {
   })
 }
 
+const getOrderFacilityChange = async (payload: any): Promise<any> => {
+  return api({
+    url: "/performFind",
+    method: "post",
+    data: payload
+  });
+}
+
 export const OrderService = {
   fetchShipmentDetailForOrderItem,
   fetchStatusChange,
@@ -129,6 +176,8 @@ export const OrderService = {
   getShipmentDetailForOrderItem,
   updateOrderStatus,
   fetchStuckOrders,
-  getOrderFacilityChange,
-  fetchOldExpeditedOrders
+  fetchOrderBrokering,
+  fetchOldExpeditedOrders,
+  getOrderBrokeringInfo,
+  getOrderFacilityChange
 }

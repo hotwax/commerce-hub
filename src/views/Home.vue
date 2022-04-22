@@ -67,26 +67,25 @@
                 </ion-item>
                 <ion-item lines="full">
                   <ion-thumbnail slot="start">
-                    <Image :src="order.item.mainImageUrl" />
+                    <Image :src="order.item?.mainImageUrl" />
                   </ion-thumbnail>
                   <ion-label>
-                    
-                    <p>{{ order.item.brandName }}</p>
+                    <p>{{ order.item?.brandName }}</p>
                     {{ order.productName }}
-                    <p>{{ $t("Color") }}: {{ $filters.getFeature(order.item.featureHierarchy, '1/COLOR/') }}</p>
-                    <p>{{ $t("Size") }}: {{ $filters.getFeature(order.item.featureHierarchy, '1/SIZE/') }}</p>
+                    <p>{{ $t("Color") }}: {{ $filters.getFeature(order.item?.featureHierarchy, '1/COLOR/') }}</p>
+                    <p>{{ $t("Size") }}: {{ $filters.getFeature(order.item?.featureHierarchy, '1/SIZE/') }}</p>
                   </ion-label>
                   <ion-note slot="end" color="success">{{getProductStock(order.productId)}} {{ $t("in stock") }}</ion-note>
                 </ion-item>
                 <ion-item>
                   <ion-label>{{ $t("Last brokered") }}</ion-label>
                   <!-- TODO Replace 'p' tag with 'ion-label' after upgrading Ionic 5 to Ionic 6 -->
-                  <p slot="end">{{ getOrderChangeFacility(order.orderId)?.LastBrokeredFacility }}</p>
+                  <p slot="end">{{ order.brokering.lastBrokeredFacility }}</p>
                 </ion-item>
                 <ion-item lines="none">
                   <ion-label>{{ $t("Rebrokered") }}</ion-label>
                   <!-- TODO Replace 'p' tag with 'ion-label' after upgrading Ionic 5 to Ionic 6 -->
-                  <p  slot="end">{{ getOrderChangeFacility(order.orderId)?.count }} {{ $t("times") }}</p>
+                  <p  slot="end">{{ order.brokering.count }} {{ $t("times") }}</p>
                 </ion-item>
               </ion-card>
             </div>   
@@ -115,11 +114,11 @@
                 </ion-item>
                 <ion-item lines="full">
                   <ion-thumbnail slot="start">
-                    <Image :src="order.item.mainImageUrl" />
+                    <Image :src="order.item?.mainImageUrl" />
                   </ion-thumbnail>
                   <ion-label>
                     
-                    <p>{{ getProduct(order.productId).brandName }}</p>
+                    <p>{{ order.item.brandName }}</p>
                     {{ order.productName }}
                     <p>{{ $t("Color") }}: {{ $filters.getFeature(order.item.featureHierarchy, '1/COLOR/') }}</p>
                     <p>{{ $t("Size") }}: {{ $filters.getFeature(order.item.featureHierarchy, '1/SIZE/') }}</p>
@@ -129,12 +128,12 @@
                 <ion-item>
                   <ion-label>{{ $t("Last brokered")}}</ion-label>
                   <!-- TODO Replace 'p' tag with 'ion-label' after upgrading Ionic 5 to Ionic 6 -->
-                  <p slot="end">{{ getOrderChangeFacility(order.orderId)?.LastBrokeredFacility }}</p>
+                  <p slot="end">{{ order.brokering.lastBrokeredFacility }}</p>
                 </ion-item>
                 <ion-item>
                   <ion-label>{{ $t("Rebrokered") }}</ion-label>
                   <!-- TODO Replace 'p' tag with 'ion-label' after upgrading Ionic 5 to Ionic 6 -->
-                  <p  slot="end">{{ getOrderChangeFacility(order.orderId)?.count }} {{ $t("times") }}</p>
+                  <p  slot="end">{{ order.brokering.count }} {{ $t("times") }}</p>
                 </ion-item>
               </ion-card>
             </div>   

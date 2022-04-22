@@ -76,6 +76,7 @@ const actions: ActionTree<UtilState, RootState> = {
       });
       if(resp.status === 200 && !hasError(resp)){
         commit(types.UTIL_FACILITIES_LIST_UPDATED, resp.data.docs);
+        return resp.data.docs;
       }
     } catch (err) {
       console.error("error", err);

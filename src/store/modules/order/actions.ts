@@ -253,10 +253,12 @@ const actions: ActionTree<OrderState, RootState> = {
     try {
       resp = await OrderService.findOrderDetails(payload);
       if (resp.status === 200 && !hasError(resp)) {
-        const productIds = resp.data.response.docs.map((order: any) => {
+        const total = resp.data.response.numFound;
+        let orders = resp.data.response.docs;
+        const productIds = orders.map((order: any) => {
           return order.productId;
         })
-        const orderIds = resp.data.response.docs.map((order: any) => {
+        const orderIds = orders.map((order: any) => {
           return order.orderId;
         })
         const viewSize = productIds.length;
@@ -266,54 +268,21 @@ const actions: ActionTree<OrderState, RootState> = {
           viewIndex,
           productIds
         }
+        const orderBrokering = await OrderService.getOrderBrokeringInfo(orderIds);
         await this.dispatch('stock/addProducts', payload);
-        await this.dispatch("product/fetchProducts", payload);
-        resp.data.response.docs.forEach((order: any) => {
-          const product = rootGetters['product/getProduct'](order.productId)
+        const products = await this.dispatch("product/fetchProducts", payload);
+        orders = orders.map( (order: any) => {
+          order = {...order, brokering: { ...orderBrokering[order.orderId] }}
+          const product = products[order.productId]
           order.item = product
+          return order
         })
-        const orderFacilityChange = await this.dispatch('order/getOrderFacilityChange', orderIds);
-        commit(types.ORDER_STUCK_UPDATED, { orders: resp.data.response.docs, total: resp.data.response.numFound })
-        commit(types.ORDER_FACILITY_CHANGE_UPDATED, orderFacilityChange);
+        commit(types.ORDER_STUCK_UPDATED, { orders, total })
       }
     } catch(err) {
       console.error(err);
     }
     
-  },
-  async getOrderFacilityChange({commit}, payload){
-    try {
-      const orderFacilityChangeInformation = {} as any;
-      const resp = await OrderService.getOrderFacilityChange({
-        "inputFields": {
-          "orderId": payload,
-          "orderId_op": "in",
-          "changeReasonEnumId_op": "empty"
-        },
-        "entityName": "OrderFacilityChange",
-        "noConditionFind": "Y",
-        "viewSize": 200,
-        "orderBy": "orderId ASC | changeDatetime ASC",
-        "fieldList": ["orderId", "changeDatetime", "facilityId", "fromFacilityId"]
-      });
-      this.dispatch('util/fetchFacilitiesList');
-      const orderIds = payload
-      orderIds.forEach((orderId: any) => {
-        orderFacilityChangeInformation[orderId] = {
-          count: 0,
-          LastBrokeredFacility: "-"
-        } as any;
-        resp.data.docs.forEach((order: any) => {
-          if(order.orderId == orderId){
-            orderFacilityChangeInformation[orderId].LastBrokeredFacility = this.getters['util/getFacilityName'](order.facilityId).facilityName;
-            orderFacilityChangeInformation[orderId].count += 1;
-          }
-        })
-      })
-      return orderFacilityChangeInformation;
-    } catch (err){
-      console.log(err);
-    }
   },
 
   async fetchOldExpeditedOrders({commit, rootGetters}){
@@ -330,10 +299,12 @@ const actions: ActionTree<OrderState, RootState> = {
         }
       });
       if (resp.status === 200 && !hasError(resp)) {
-        const productIds = resp.data.response.docs.map((order: any) => {
+        let orders = resp.data.response.docs
+        const total = resp.data.response.numFound
+        const productIds = orders.map((order: any) => {
           return order.productId;
         })
-        const orderIds = resp.data.response.docs.map((order: any) => {
+        const orderIds = orders.map((order: any) => {
           return order.orderId;
         })
         const viewSize = productIds.length;
@@ -345,13 +316,16 @@ const actions: ActionTree<OrderState, RootState> = {
         }
         await this.dispatch('stock/addProducts', payload);
         await this.dispatch("product/fetchProducts", payload);
-        resp.data.response.docs.forEach((order: any) => {
-          const product = rootGetters['product/getProduct'](order.productId)
+        const orderBrokering = await OrderService.getOrderBrokeringInfo(orderIds);
+        await this.dispatch('stock/addProducts', payload);
+        const products = await this.dispatch("product/fetchProducts", payload);
+        orders = orders.map( (order: any) => {
+          order = {...order, brokering: { ...orderBrokering[order.orderId] }}
+          const product = products[order.productId]
           order.item = product
+          return order
         })
-        const orderFacilityChange = await this.dispatch('order/getOrderFacilityChange', orderIds);
-        commit(types.ORDER_OLD_EXPEDITED_UPDATED, { orders: resp.data.response.docs, total: resp.data.response.numFound });
-        commit(types.ORDER_FACILITY_CHANGE_UPDATED, orderFacilityChange);
+        commit(types.ORDER_OLD_EXPEDITED_UPDATED, { orders, total });
       }
       
     } catch (err) {
