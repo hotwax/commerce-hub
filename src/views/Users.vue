@@ -47,18 +47,18 @@
         </aside>
 
         <main>
-          <div class="list-item">
+          <div class="list-item" v-for="user in users" :key="user" >
             <ion-item lines="none" @click="() => router.push('/user')">
               <ion-icon :icon="personCircleOutline" slot="start" />
               <ion-label>
-                Fullname
-                <p>username</p>
+                {{ user.partyTypeId === "PERSON" ? user.firstName : user.groupName}}
+                <p>{{user?.userLoginId}}</p>
                 <p>email</p>
               </ion-label>
             </ion-item>
 
             <ion-label>
-              14 Jan 2021
+              {{ getDate(user?.createdDate) }}
               <p>{{ $t("created") }}</p>
             </ion-label>
 
@@ -127,6 +127,8 @@ import {
   personCircleOutline,
   toggleOutline,
 } from 'ionicons/icons';
+import { mapGetters, useStore } from "vuex";
+import moment from 'moment'
 import UserPopover from '@/components/UserPopover.vue';
 import RolesPopover from '@/components/RolesPopover.vue';
 import LocationModal from '@/components/LocationModal.vue';
@@ -157,7 +159,15 @@ export default defineComponent({
     IonTitle,
     RolesPopover
   },
+   computed: {
+    ...mapGetters({
+      users: 'user/getUsersList'
+    })
+  },
   methods: {
+    getDate(date: any){
+      return moment(date).format("D/M/YYYY");
+    },
     async openUserPopover(ev: Event) {
       const popover = await popoverController.create({
         component: UserPopover,
@@ -180,8 +190,13 @@ export default defineComponent({
       return createmodal.present();
     },
   },
+  mounted(){
+    this.store.dispatch('user/getUsersInformation');
+    console.log(this.users)
+  },
   setup() {
     const router = useRouter();
+    const store = useStore();
 
     return {
       addOutline,
@@ -192,6 +207,7 @@ export default defineComponent({
       personCircleOutline,
       toggleOutline,
       router,
+      store
     };
   },
 });

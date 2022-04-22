@@ -87,6 +87,44 @@ const actions: ActionTree<UserState, RootState> = {
   // Set User Instance Url
   setUserInstanceUrl ({ commit }, payload){
     commit(types.USER_INSTANCE_URL_UPDATED, payload)
+  },
+
+  async getUsersInformation ({ commit }) {
+    const resp = await UserService.getUsersInformation({
+      "inputFields": {
+        "roleTypeIdTo": "WAREHOUSE_PICKER",
+        "roleTypeIdTo_op": "equals"
+      },
+      "entityName": "PartyRelationshipAndDetail",
+      "fieldList": ["partyId", "partyTypeId", "createdDate", "partyStatusId", "firstName", "lastName", "roleTypeIdTo", "groupName"],
+      "noConditionFind": "Y",
+    })
+    const userData = Promise.all(resp.data.docs.map( async (user: any) => {
+      const email = await UserService.getUserEmail({
+        "inputFields": {
+          "contactMechPurposeTypeId": "PRIMARY_EMAIL",
+          "contactMechTypeId": "EMAIL_ADDRESS",
+          "partyId": user.partyId,
+          "fromDate": moment().valueOf(),
+          "fromDate_op": "lessThan",
+          "thruDate_op": "is-empty"
+        },
+        "fieldList": ["infoString"],
+        "entityName": "PartyContactDetailByPurpose",
+        "noConditionFind": "Y"
+      });
+      console.log("email",email)
+      if(resp.data.docs[0]){
+        const info = {...user, ...email.data.docs[0]}
+        console.log(info)
+        return (info);
+      }
+      
+      
+    }));
+    console.log(userData)
+
+    commit(types.USER_LIST_UPDATED, resp.data.docs)
   }
 }
 
