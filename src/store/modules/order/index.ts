@@ -10,8 +10,8 @@ const orderModule: Module<OrderState, RootState> ={
   state: {
     list: {
       orders: [],
-      total: 0,
-      items: 0
+      orderCount: 0,
+      itemCount: 0
     },
     poIds: {},
     query: {

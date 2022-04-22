@@ -2,8 +2,8 @@ export default interface ProductState {
   cached: any;
   products: {
     list: any;
-    total: number;
-    variants: number;
+    productCount: number;
+    variantCount: number;
   },
   current: any
 }

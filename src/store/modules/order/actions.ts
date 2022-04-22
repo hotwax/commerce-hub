@@ -39,8 +39,8 @@ const actions: ActionTree<OrderState, RootState> = {
           return order
         })
 
-        const total = resp.data.grouped.orderId.ngroups;
-        const items = resp.data.grouped.orderId.matches;
+        const orderCount = resp.data.grouped.orderId.ngroups;
+        const itemCount = resp.data.grouped.orderId.matches;
 
         const status = new Set();
         orders.map((order: any) => {
@@ -56,7 +56,7 @@ const actions: ActionTree<OrderState, RootState> = {
 
         if (query.json.params.start && query.json.params.start > 0) orders = state.list.orders.concat(orders)
         this.dispatch('product/getProductInformation', { orders });
-        commit(types.ORDER_LIST_UPDATED, { orders, total, items });
+        commit(types.ORDER_LIST_UPDATED, { orders, orderCount, itemCount });
       } else {
         showToast(translate("Something went wrong"));
       }

@@ -7,7 +7,7 @@ const getters: GetterTree <OrderState, RootState> = {
     return state.list
   },
   isScrollable: (state) => {
-    return state.list.orders.length > 0 && state.list.orders.length < state.list.total
+    return state.list.orders.length > 0 && state.list.orders.length < state.list.orderCount
   },
   getOrderQuery: (state) => {
     return state.query
