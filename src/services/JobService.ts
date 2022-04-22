@@ -44,7 +44,7 @@ const runServiceNow = async (job: any): Promise<any> => {
 
 const fetchJobInformation = async (payload: any): Promise <any>  => {
   return api({
-    url: "/findJobs",
+    url: "findJobs",
     method: "post",
     data: payload
   });
