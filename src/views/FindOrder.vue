@@ -254,13 +254,6 @@ export default defineComponent ({
     }
   },
   methods: {
-    getTotalItems(orders: any){
-      const totalItems = orders.reduce((total: number, item: any) => {
-        total = total + item.doclist.docs.length
-        return total
-      }, 0)
-      return totalItems
-    },
     async sortOrders(value: string) {
       this.sort = value
       await this.store.dispatch('order/updateSort', this.sort)
