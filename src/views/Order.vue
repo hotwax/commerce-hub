@@ -51,7 +51,7 @@
               <ion-card-header>
                 <ion-card-title>{{ order.customer?.name }}</ion-card-title>
                 <!-- TODO: handle this property to display loyalty options -->
-                <ion-chip>
+                <ion-chip v-if="order.customer?.loyaltyOptions">
                   <ion-icon :icon="ribbon" />
                   <ion-label class="ion-text-wrap">{{ order.customer?.loyaltyOptions }}</ion-label>
                 </ion-chip>                
