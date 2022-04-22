@@ -7,7 +7,8 @@ export interface Order {
     /** An array containing the groups of items purchased in this order */
     itemGroup?: Array<OrderItemGroup>;
     total?: number;
-    statusId?: String;
+    statusId: string;
+    statusDesc?: string;
     identifications?: any;
     notes?: Array<any>;
 }

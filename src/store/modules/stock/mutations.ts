@@ -10,6 +10,9 @@ const mutations: MutationTree <StockState> = {
     payload.products.forEach((product: any) => {
       state.products[product.productId] = product.atp
     });
+  },
+  [types.STOCK_ADD_PRODUCT_FACILITY_ATP] (state, payload) {
+    state.productsByFacility = payload
   }
 }
 export default mutations;

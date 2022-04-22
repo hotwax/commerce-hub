@@ -285,7 +285,7 @@ body {
   margin: var(--spacer-sm) 0;
 }
 
-.sort > :first-child{
+.sort > div > :first-child{
   border-bottom: var(--border-medium);
 }
 
@@ -349,6 +349,10 @@ h1,h2 {
   font-size: 16px;
 }
 
+ion-item > h1,h2 {
+  margin: 0;
+}
+
 ion-avatar > img ,
 ion-thumbnail > img {
   object-fit: contain;
@@ -363,7 +367,8 @@ hr {
 }
 
 ion-list-header > hr {
-  width: 90%;
+  flex: 1;
+  margin-left: var(--spacer-base);
 }
 
 ion-card {
@@ -402,7 +407,7 @@ ion-card {
   }
   
   .section-header {
-    grid: "info tags metadata" / max-content 1fr minmax(min-content, max-content);
+    grid: "info tags metadata" / 1fr max-content 1fr;
   }
 
   .filters {
@@ -411,16 +416,27 @@ ion-card {
 
   .sort {
     display: flex;
-    justify-content: flex-end;
+    flex-wrap: wrap;
+    justify-content: space-between;
     margin-bottom: var(--spacer-lg);
   }
 
   .sort > ion-item {
-    max-width: 308px;
+    flex-grow: 1;
+  }
+
+  .sort > div {
+    display: flex;
+    flex-grow: 2;
+    justify-content: end;
+  }
+
+  .sort > div > ion-item {
+    flex: 0 1 343px;
     border-left: var(--border-medium);
   }
 
-  .sort > :first-child{
+  .sort > div > :first-child{
     border-bottom: unset;
   }
 

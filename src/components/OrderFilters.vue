@@ -41,10 +41,6 @@
       <ion-label>{{ $t("Back order") }}</ion-label>
       <ion-checkbox :checked="query.backOrder" @ionChange="updateAppliedFilters($event['detail'].checked, 'backOrder')"/>
     </ion-item>
-    <ion-item>
-      <ion-label>{{ $t("Unfillable") }}</ion-label>
-      <ion-checkbox :checked="query.unfillable" @ionChange="updateAppliedFilters($event['detail'].checked, 'unfillable')"/>
-    </ion-item>
   </ion-list>
   <ion-list>
     <ion-list-header>{{ $t("Fulfillment") }}</ion-list-header>

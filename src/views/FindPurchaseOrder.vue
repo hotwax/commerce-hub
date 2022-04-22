@@ -58,18 +58,24 @@
         <main>
           <section class="sort">
             <ion-item lines="none">
-              <ion-icon :icon="documentTextOutline" slot="start" />
-              <ion-label>{{ $t("Show order items") }}</ion-label>
-              <ion-toggle slot="end" checked></ion-toggle>
+              <h2>{{ $t("Results") }}:</h2>
             </ion-item>
 
-            <ion-item lines="none">
-              <ion-icon :icon="swapVerticalOutline" slot="start" />
-              <ion-label>{{ $t("Sort by") }}</ion-label>
-              <ion-select value="any" interface="popover">
-                <ion-select-option value="any">Arrival date</ion-select-option>
-              </ion-select>
-            </ion-item>
+            <div>
+              <ion-item lines="none">
+                <ion-icon :icon="documentTextOutline" slot="start" />
+                <ion-label class="ion-text-wrap">{{ $t("Show order items") }}</ion-label>
+                <ion-toggle slot="end" checked></ion-toggle>
+              </ion-item>
+
+              <ion-item lines="none">
+                <ion-icon :icon="swapVerticalOutline" slot="start" />
+                <ion-label class="ion-text-wrap">{{ $t("Sort by") }}</ion-label>
+                <ion-select value="any" interface="popover">
+                  <ion-select-option value="any">Arrival date</ion-select-option>
+                </ion-select>
+              </ion-item>
+            </div>
           </section>
 
           <hr />
@@ -78,7 +84,7 @@
             <section class="section-header">
               <div class="primary-info">
                 <ion-item lines="none">
-                  <ion-label>
+                  <ion-label class="ion-text-wrap">
                     <p>Product store</p>
                     PO external ID
                     <p>Created date</p>
@@ -112,7 +118,7 @@
                       <ion-thumbnail slot="start">
                         <Image src="https://cdn.shopify.com/s/files/1/0069/7384/9727/products/test-track.jpg?v=1626255137" />
                       </ion-thumbnail>
-                      <ion-label>
+                      <ion-label class="ion-text-wrap">
                         SKU
                         <p>{{ $t("Color") }} : color</p>
                         <p>{{ $t("Size") }}: size</p>
@@ -237,10 +243,6 @@ export default {
 @media (min-width: 991px) {
   .list-item {
     --columns-desktop: 3;
-    grid-template-columns: 1fr max-content 1fr;
-  }
-
-  .section-header {
     grid-template-columns: 1fr max-content 1fr;
   }
 }

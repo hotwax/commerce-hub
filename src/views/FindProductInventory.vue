@@ -122,20 +122,26 @@
         <main>
           <section class="sort">
             <ion-item lines="none">
-              <ion-icon slot="start" :icon="folderOutline" />
-              <ion-label>{{ "Group by" }}</ion-label>
-              <ion-select value="any" interface="popover">
-                <ion-select-option value="any">Partent</ion-select-option>
-              </ion-select>
+              <h2>{{ $t("Results") }}:</h2>
             </ion-item>
 
-            <ion-item lines="none">
-              <ion-icon slot="start" :icon="swapVerticalOutline" />
-              <ion-label>{{ $t("Sort") }}</ion-label>
-              <ion-select value="any" interface="popover">
-                <ion-select-option value="any">{{ $t("Product name") }}</ion-select-option>
-              </ion-select>
-            </ion-item>
+            <div>
+              <ion-item lines="none">
+                <ion-icon slot="start" :icon="folderOutline" />
+                <ion-label class="ion-text-wrap">{{ "Group by" }}</ion-label>
+                <ion-select value="any" interface="popover">
+                  <ion-select-option value="any">Partent</ion-select-option>
+                </ion-select>
+              </ion-item>
+
+              <ion-item lines="none">
+                <ion-icon slot="start" :icon="swapVerticalOutline" />
+                <ion-label class="ion-text-wrap">{{ $t("Sort") }}</ion-label>
+                <ion-select value="any" interface="popover">
+                  <ion-select-option value="any">{{ $t("Product name") }}</ion-select-option>
+                </ion-select>
+              </ion-item>
+            </div>
           </section>
 
           <hr />
@@ -152,7 +158,7 @@
                     <ion-thumbnail slot="start" class="mobile-only">
                       <Image :src="product.mainImageUrl" />
                     </ion-thumbnail>
-                    <ion-label>
+                    <ion-label class="ion-text-wrap">
                       <p>{{ product.brandName }}</p>
                       {{ product.productName }}
                       <p>{{ $t("Color") }}: {{ $filters.getFeaturesList(product.featureHierarchy, '1/COLOR/').join(", ") }}</p>
@@ -182,7 +188,7 @@
                   <div v-for="variant in product.variants" :key="variant.productId" class="list-item">
                     <div>
                       <ion-item lines="none">
-                        <ion-label>
+                        <ion-label class="ion-text-wrap">
                           {{ variant.sku }}
                           <p>{{ $t("Color") }}: {{ $filters.getFeature(variant.featureHierarchy, '1/COLOR/') }}</p>
                           <p>{{ $t("Size") }}: {{ $filters.getFeature(variant.featureHierarchy, '1/SIZE/') }}</p>
@@ -190,12 +196,13 @@
                       </ion-item>
                     </div>
 
-                    <div>
+                    <!-- Commenting this code because we will use external id here later on -->
+                    <!-- <div>
                       <ion-chip>
                         <ion-icon :icon="pricetag" />
                         <ion-label>{{ variant.internalName }}</ion-label>
                       </ion-chip>
-                    </div>
+                    </div> -->
 
                     <!-- Commenting this code because we will be releasing this feature in next release. -->
                     <!-- <div>
@@ -365,10 +372,6 @@ export default defineComponent({
 
   .product-image {
     height: 180px;
-  }
-
-  .section-header {
-    grid-template-columns: 1fr max-content 1fr;
   }
 
   .list-item {
