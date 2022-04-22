@@ -10,7 +10,8 @@ const utilModule: Module<UtilState, RootState> = {
     state: {
       shipmentMethod: {},
       status: {},
-      productStore: []
+      productStore: [],
+      shopifyConfig: {}
     },
     getters,
     actions,

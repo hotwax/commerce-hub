@@ -70,7 +70,7 @@ const actions: ActionTree<UtilState, RootState> = {
   async getEComStores({ state, commit }) {
     let resp;
 
-    if(Object.keys(state.productStore).length > 0) {
+    if(state.productStore.length > 0) {
       return;
     }
 
@@ -93,6 +93,22 @@ const actions: ActionTree<UtilState, RootState> = {
       }
     } catch(err) {
       console.error(err)
+    }
+  },
+
+  async getShopifyConfig({ commit }, payload) {
+    const resp = await UtilService.getShopifyConfig({
+      "inputFields": {
+        "storeName_op": "not-empty",
+        "productStoreId": payload
+      },
+      "entityName": "ShopifyConfig",
+      "noConditionFind": "Y",
+      "fieldList": ["productStoreId", "shopifyConfigId"],
+    })
+
+    if (resp.status === 200 && !hasError(resp)) {
+      commit(types.UTIL_SHOPIFY_CONFIG_UPDATED, resp.data.docs);
     }
   },
 }
