@@ -64,6 +64,12 @@
         <ion-select-option value="WAREHOUSE" >{{ $t('Warehouse') }}</ion-select-option>
       </ion-select>
     </ion-item>
+    <ion-item>
+      <ion-label>{{ $t("Product Store") }}</ion-label>
+      <ion-select :value="query.productStoreId" @ionChange="updateAppliedFilters($event['detail'].value, 'productStoreId')" interface="popover">
+        <ion-select-option v-for="[id, storeName] in Object.entries(getEComStores)" :key="id" :value="id">{{ storeName }}</ion-select-option>
+      </ion-select>
+    </ion-item>
   </ion-list>
 
   <ion-card>
@@ -121,7 +127,8 @@ export default defineComponent({
   computed: {
     ...mapGetters({
       query: 'order/getOrderQuery',
-      getShipmentMethodDesc: 'util/getShipmentMethod'
+      getShipmentMethodDesc: 'util/getShipmentMethod',
+      getEComStores: 'util/getEcomStores'
     })
   },
   methods: {
