@@ -53,7 +53,7 @@
         <section class="scroller">
           <ion-item class="scroller-header" lines="none">
             <ion-label>{{ $t("Stuck orders") }}</ion-label>
-              <ion-button slot="end" fill="outline" size="small" @click="updateAppliedFilters([{value: 'ORDER_APPROVED', filterName: 'status'}, {value: true, filterName: 'unfillable'}])">View all</ion-button>
+              <ion-button slot="end" fill="outline" size="small" @click="updateAppliedFilters([{value: 'ORDER_APPROVED', filterName: 'status'}, {value: true, filterName: 'unfillable'}])">{{ $t("View all") }}</ion-button>
           </ion-item>
           <div class="scroller-content">
             <div class="scroller-item" v-for="order in stuckOrders" :key="order" @click="this.$router.push({ path: `/order/${order.orderId}`})"> 
@@ -76,7 +76,7 @@
                     <p>{{ $t("Color") }}: {{ $filters.getFeature(getProduct(order.productId).featureHierarchy, '1/COLOR/') }}</p>
                     <p>{{ $t("Size") }}: {{ $filters.getFeature(getProduct(order.productId).featureHierarchy, '1/SIZE/') }}</p>
                   </ion-label>
-                  <ion-note slot="end" color="success">{{getProductStock(order.productId)}} in stock</ion-note>
+                  <ion-note slot="end" color="success">{{getProductStock(order.productId)}} {{ $t("in stock") }}</ion-note>
                 </ion-item>
                 <ion-item>
                   <ion-label>{{ $t("Last brokered") }}</ion-label>
@@ -86,7 +86,7 @@
                 <ion-item lines="none">
                   <ion-label>{{ $t("Rebrokered") }}</ion-label>
                   <!-- TODO Replace 'p' tag with 'ion-label' after upgrading Ionic 5 to Ionic 6 -->
-                  <p  slot="end">{{ getOrderChangeFacility(order.orderId)?.count }} times</p>
+                  <p  slot="end">{{ getOrderChangeFacility(order.orderId)?.count }} {{ $t("times") }}</p>
                 </ion-item>
               </ion-card>
             </div>   
@@ -96,7 +96,7 @@
         <section class="scroller">
           <ion-item class="scroller-header" lines="none">
             <ion-label>{{ $t("Old expedited orders") }}</ion-label>
-              <ion-button slot="end" fill="outline" size="small" @click="updateAppliedFilters([{value: '(NEXT_DAY OR SECOND_DAY)', filterName: 'shippingMethod'}])">View all</ion-button>
+              <ion-button slot="end" fill="outline" size="small" @click="updateAppliedFilters([{value: '(NEXT_DAY OR SECOND_DAY)', filterName: 'shippingMethod'}])">{{ $t("View all") }}</ion-button>
           </ion-item>
           <div class="scroller-content">
             <div class="scroller-item" v-for="order in oldExpeditedOrders" :key="order" @click="this.$router.push({ path: `/order/${order.orderId}`})"> 
@@ -124,7 +124,7 @@
                     <p>{{ $t("Color") }}: {{ $filters.getFeature(getProduct(order.productId).featureHierarchy, '1/COLOR/') }}</p>
                     <p>{{ $t("Size") }}: {{ $filters.getFeature(getProduct(order.productId).featureHierarchy, '1/SIZE/') }}</p>
                   </ion-label>
-                  <ion-note slot="end" color="success">{{getProductStock(order.productId)}} in stock</ion-note>
+                  <ion-note slot="end" color="success">{{getProductStock(order.productId)}} {{ $t("in stock") }}</ion-note>
                 </ion-item>
                 <ion-item>
                   <ion-label>{{ $t("Last brokered")}}</ion-label>
@@ -134,7 +134,7 @@
                 <ion-item>
                   <ion-label>{{ $t("Rebrokered") }}</ion-label>
                   <!-- TODO Replace 'p' tag with 'ion-label' after upgrading Ionic 5 to Ionic 6 -->
-                  <p  slot="end">{{ getOrderChangeFacility(order.orderId)?.count }} times</p>
+                  <p  slot="end">{{ getOrderChangeFacility(order.orderId)?.count }} {{ $t("times") }}</p>
                 </ion-item>
               </ion-card>
             </div>   
