@@ -273,8 +273,7 @@ const actions: ActionTree<OrderState, RootState> = {
         const products = await this.dispatch("product/fetchProducts", payload);
         orders = orders.map( (order: any) => {
           order = {...order, brokering: { ...orderBrokering[order.orderId] }}
-          const product = products[order.productId]
-          order.item = product
+          order.item = products[order.productId]
           return order
         })
         commit(types.ORDER_STUCK_UPDATED, { orders, total })
@@ -321,8 +320,7 @@ const actions: ActionTree<OrderState, RootState> = {
         const products = await this.dispatch("product/fetchProducts", payload);
         orders = orders.map( (order: any) => {
           order = {...order, brokering: { ...orderBrokering[order.orderId] }}
-          const product = products[order.productId]
-          order.item = product
+          order.item = products[order.productId]
           return order
         })
         commit(types.ORDER_OLD_EXPEDITED_UPDATED, { orders, total });
