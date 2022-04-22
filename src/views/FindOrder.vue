@@ -6,10 +6,10 @@
         <ion-title>{{ $t("Orders") }}</ion-title>
         <ion-buttons slot="end">
           <!-- TODO: make download csv and sync button functional -->
-          <!-- <ion-button fill="clear">
+          <ion-button fill="clear" @click="runJob('JOB_IMP_ORD')">
             <ion-icon slot="icon-only" :icon="syncOutline" />
           </ion-button>
-          <ion-button fill="clear">
+          <!-- <ion-button fill="clear">
             <ion-icon slot="icon-only" :icon="downloadOutline" />
           </ion-button> -->
           <ion-button fill="clear" class="mobile-only" @click="openOrderFilter()">
@@ -241,6 +241,9 @@ export default defineComponent ({
     },
     async openOrderFilter() {
       await menuController.open();
+    },
+    async runJob(enumId: string) {
+      this.store.dispatch('job/fetchJobInformation', enumId)
     }
   },
   async mounted() {
