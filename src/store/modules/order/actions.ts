@@ -238,7 +238,7 @@ const actions: ActionTree<OrderState, RootState> = {
     }
   },
 
-  async fetchStuckOrders({commit}){
+  async fetchStuckOrders({commit, rootGetters}){
     let resp;
     const payload = {
       "json": {
@@ -268,12 +268,16 @@ const actions: ActionTree<OrderState, RootState> = {
         }
         await this.dispatch('stock/addProducts', payload);
         await this.dispatch("product/fetchProducts", payload);
+        resp.data.response.docs.forEach((order: any) => {
+          const product = rootGetters['product/getProduct'](order.productId)
+          order.item = product
+        })
         const orderFacilityChange = await this.dispatch('order/getOrderFacilityChange', orderIds);
         commit(types.ORDER_STUCK_UPDATED, { orders: resp.data.response.docs, total: resp.data.response.numFound })
         commit(types.ORDER_FACILITY_CHANGE_UPDATED, orderFacilityChange);
       }
     } catch(err) {
-      console.error("error");
+      console.error(err);
     }
     
   },
@@ -312,7 +316,7 @@ const actions: ActionTree<OrderState, RootState> = {
     }
   },
 
-  async fetchOldExpeditedOrders({commit}){
+  async fetchOldExpeditedOrders({commit, rootGetters}){
     let resp;
     try {
       resp = await OrderService.fetchOldExpeditedOrders({
@@ -341,6 +345,10 @@ const actions: ActionTree<OrderState, RootState> = {
         }
         await this.dispatch('stock/addProducts', payload);
         await this.dispatch("product/fetchProducts", payload);
+        resp.data.response.docs.forEach((order: any) => {
+          const product = rootGetters['product/getProduct'](order.productId)
+          order.item = product
+        })
         const orderFacilityChange = await this.dispatch('order/getOrderFacilityChange', orderIds);
         commit(types.ORDER_OLD_EXPEDITED_UPDATED, { orders: resp.data.response.docs, total: resp.data.response.numFound });
         commit(types.ORDER_FACILITY_CHANGE_UPDATED, orderFacilityChange);
