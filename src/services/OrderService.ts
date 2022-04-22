@@ -66,7 +66,7 @@ const getOrderBrokeringInfo = async (payload: any) => {
         resp.data.docs.forEach((order: any) => {
           if(order.orderId == orderId){
             const facility = facilitiesList.find((facility: any) => facility.facilityId === order.facilityId )
-            orderFacilityChangeInformation[orderId].lastBrokeredFacility = facility.facilityName;
+            orderFacilityChangeInformation[orderId].lastBrokeredFacility = facility?.facilityName ? facility?.facilityName : '-';
             orderFacilityChangeInformation[orderId].count += 1;
           }
         })
@@ -76,6 +76,7 @@ const getOrderBrokeringInfo = async (payload: any) => {
   } catch(err){
     console.error(err);
   }
+  return {};
 }
 
 const findOrder = async (payload: any): Promise<any> => {

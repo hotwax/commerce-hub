@@ -238,7 +238,7 @@ const actions: ActionTree<OrderState, RootState> = {
     }
   },
 
-  async fetchStuckOrders({commit, rootGetters}){
+  async fetchStuckOrders({commit}){
     let resp;
     const payload = {
       "json": {
@@ -285,7 +285,7 @@ const actions: ActionTree<OrderState, RootState> = {
     
   },
 
-  async fetchOldExpeditedOrders({commit, rootGetters}){
+  async fetchOldExpeditedOrders({commit}){
     let resp;
     try {
       resp = await OrderService.fetchOldExpeditedOrders({

@@ -117,7 +117,6 @@
                     <Image :src="order.item?.mainImageUrl" />
                   </ion-thumbnail>
                   <ion-label>
-                    
                     <p>{{ order.item.brandName }}</p>
                     {{ order.productName }}
                     <p>{{ $t("Color") }}: {{ $filters.getFeature(order.item.featureHierarchy, '1/COLOR/') }}</p>
