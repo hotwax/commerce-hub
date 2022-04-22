@@ -44,7 +44,7 @@
         <main>
           <section class="sort">
             <ion-item lines="none">
-              <h2>{{ $t("Results") }}: {{ ordersList.total }} {{ $t("orders, ") }} {{ ordersList.items }} {{ $t("items") }} </h2> 
+              <h2>{{ $t("Results") }}: {{ ordersList.orderCount }} {{ $t("orders, ") }} {{ ordersList.itemCount }} {{ $t("items") }} </h2> 
             </ion-item>
 
             <div>
