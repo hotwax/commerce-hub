@@ -21,7 +21,7 @@ const actions: ActionTree<UserState, RootState> = {
         if (resp.data.token) {
             commit(types.USER_TOKEN_CHANGED, { newToken: resp.data.token })
             dispatch('getProfile')
-            dispatch('util/fetchShipmentMethods');
+            this.dispatch('util/fetchShipmentMethods');
             return resp.data;
         } else if (hasError(resp)) {
           showToast(translate('Sorry, your username or password is incorrect. Please try again.'));

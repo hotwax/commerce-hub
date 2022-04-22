@@ -40,34 +40,44 @@ const getShipmentDetailForOrderItem = async (payload: any) => {
 }
 
 const getOrderBrokeringInfo = async (payload: any) => {
+  console.log(payload)
+  const orderIds = payload.map((order: any) => {
+    return order.orderId;
+  })
   const params = {
     "inputFields": {
-      "orderId": payload,
+      "orderId": orderIds,
       "orderId_op": "in",
-      "changeReasonEnumId_op": "empty"
     },
     "entityName": "OrderFacilityChange",
     "noConditionFind": "Y",
     "viewSize": 200,
     "orderBy": "orderId ASC | changeDatetime ASC",
-    "fieldList": ["orderId", "changeDatetime", "facilityId", "fromFacilityId"]
+    "fieldList": ["orderId", "changeDatetime", "facilityId", "fromFacilityId", "orderItemSeqId"]
   }
   try {
     const resp = await fetchOrderBrokering(params);
     const orderFacilityChangeInformation = {} as any;
     if(resp.status == 200 && !hasError(resp) && resp.data.count > 0) {
       const facilitiesList = await store.dispatch('util/fetchFacilitiesList');
-      const orderIds = payload
-      orderIds.forEach((orderId: any) => {
-        orderFacilityChangeInformation[orderId] = {
-          count: 0,
-          lastBrokeredFacility: "-"
+      const orders = payload
+      orders.forEach((order: any) => {
+        if (!orderFacilityChangeInformation[order.orderId]) {
+          orderFacilityChangeInformation[order.orderId] = {}
+        }
+        orderFacilityChangeInformation[order.orderId] = {
+          [order.orderItemSeqId]: {
+            count: 0,
+            lastBrokeredFacility: "-"
+          }
         } as any;
-        resp.data.docs.forEach((order: any) => {
-          if(order.orderId == orderId){
-            const facility = facilitiesList.find((facility: any) => facility.facilityId === order.facilityId )
-            orderFacilityChangeInformation[orderId].lastBrokeredFacility = facility?.facilityName ? facility?.facilityName : '-';
-            orderFacilityChangeInformation[orderId].count += 1;
+        resp.data.docs.forEach((ordersBrokered: any) => {
+          console.log("ordersBrokered", ordersBrokered)
+          if(ordersBrokered.orderId == order.orderId && ordersBrokered.orderItemSeqId == order.orderItemSeqId){
+            const facility = facilitiesList.find((facility: any) => facility.facilityId === ordersBrokered.facilityId )
+            console.log("ordersBrokered", ordersBrokered)
+            orderFacilityChangeInformation[order.orderId][order.orderItemSeqId].lastBrokeredFacility = facility?.facilityName ? facility?.facilityName : '-';
+            orderFacilityChangeInformation[order.orderId][order.orderItemSeqId].count += 1;
           }
         })
       })

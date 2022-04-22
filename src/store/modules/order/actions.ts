@@ -268,11 +268,14 @@ const actions: ActionTree<OrderState, RootState> = {
           viewIndex,
           productIds
         }
-        const orderBrokering = await OrderService.getOrderBrokeringInfo(orderIds);
+        console.log('before brokering')
+        const orderBrokering = await OrderService.getOrderBrokeringInfo(orders);
+        console.log(orderBrokering)
         await this.dispatch('stock/addProducts', payload);
         const products = await this.dispatch("product/fetchProducts", payload);
         orders = orders.map( (order: any) => {
-          order = {...order, brokering: { ...orderBrokering[order.orderId] }}
+          console.log(order)
+          order = {...order, brokering: { ...(orderBrokering[order.orderId] ? orderBrokering[order.orderId][order.orderItemSeqId] : {}) }}
           order.item = products[order.productId]
           return order
         })
@@ -291,10 +294,10 @@ const actions: ActionTree<OrderState, RootState> = {
         "json": {
           "params": {
             "rows": "20",
-            "sort": "orderDate asc"
+            "sort": "orderDate DESC"
           },
           "query":"(*:*)",
-          "filter": ["docType:ORDER","orderTypeId: SALES_ORDER", "shipmentMethodTypeId: (NEXT_DAY OR SECOND_DAY)"]
+          "filter": ["docType:ORDER","orderTypeId: SALES_ORDER AND orderId: NN12039"]
         }
       });
       if (resp.status === 200 && !hasError(resp)) {
@@ -302,9 +305,6 @@ const actions: ActionTree<OrderState, RootState> = {
         const total = resp.data.response.numFound
         const productIds = orders.map((order: any) => {
           return order.productId;
-        })
-        const orderIds = orders.map((order: any) => {
-          return order.orderId;
         })
         const viewSize = productIds.length;
         const viewIndex = 0;
@@ -315,11 +315,12 @@ const actions: ActionTree<OrderState, RootState> = {
         }
         await this.dispatch('stock/addProducts', payload);
         await this.dispatch("product/fetchProducts", payload);
-        const orderBrokering = await OrderService.getOrderBrokeringInfo(orderIds);
+        const orderBrokering = await OrderService.getOrderBrokeringInfo(orders);
+        console.log("orderBrokering", orderBrokering);
         await this.dispatch('stock/addProducts', payload);
         const products = await this.dispatch("product/fetchProducts", payload);
         orders = orders.map( (order: any) => {
-          order = {...order, brokering: { ...orderBrokering[order.orderId] }}
+          order = {...order, brokering: { ...(orderBrokering[order.orderId] ? orderBrokering[order.orderId][order.orderItemSeqId] : {}) }}
           order.item = products[order.productId]
           return order
         })
