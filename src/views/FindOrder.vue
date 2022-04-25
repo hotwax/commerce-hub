@@ -114,7 +114,7 @@
                 </ion-item>
                 <!-- TODO: Need to handle this property -->
                 <div v-if="item.facilityId === orderPreOrderId || item.facilityId === orderBackOrderId">
-                  <ion-item :class="{ backround : hover }">
+                  <ion-item>
                     <ion-label>{{ $t("Promise date") }}</ion-label>
                     <p slot="end"> {{ item.promisedDatetime ? $filters.formatUtcDate(item.promisedDatetime, 'YYYY-MM-DDTHH:mm:ssZ', 'D MMM YYYY') : '-'  }} </p>
                   </ion-item>
@@ -251,7 +251,7 @@ export default defineComponent ({
       orderStatusOptions: [''],
       sort: 'orderDate desc',
       showOrderItems: true,
-      poIds: {} as any,
+      poIds: {} as any
     }
   },
   methods: {
@@ -355,7 +355,6 @@ export default defineComponent ({
     const orderPreOrderId = process.env.VUE_APP_PRE_ORDER_IDNT_ID
     const orderBackOrderId = process.env.VUE_APP_BACKORDER_IDNT_ID
     const cusotmerLoyaltyOptions = process.env.VUE_APP_CUST_LOYALTY_OPTIONS
-    const hovering = ref(false)
 
     return {
       close,
@@ -373,8 +372,7 @@ export default defineComponent ({
       syncOutline,
       router,
       store,
-      queryString,
-      hovering
+      queryString
     };
   },
 });
