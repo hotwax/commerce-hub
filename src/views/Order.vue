@@ -18,7 +18,7 @@
           <div class="id">
             <ion-item lines="none">
               <ion-icon slot="start" :icon="ticketOutline" />
-              <h1><strong>{{ order.orderName ? order.orderName : order.orderId }}</strong></h1>
+              <h1>{{ order.orderName ? order.orderName : order.orderId }}</h1>
               <StatusBadge :statusDesc="order.statusDesc || ''" :key="order.statusDesc" slot="end"/>
               <ion-select v-if="validStatusChange(order.statusId)?.length > 0" @ionChange="changeStatus(order.orderId, $event)" slot="end">
                 <ion-select-option v-for="status in validStatusChange(order.statusId)" :key="status" :value="status">{{ orderStatus[status]?.label }}</ion-select-option>
