@@ -406,7 +406,7 @@ ion-select {
   }
 
   .product-header {
-    grid-template-columns: max-content 1fr max-content;
+    grid-template-columns: 1fr max-content 1fr;
   }
 
   .product-image {
