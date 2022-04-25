@@ -51,7 +51,7 @@
               <ion-card-header>
                 <ion-card-title>{{ order.customer?.name }}</ion-card-title>
                 <!-- TODO: handle this property to display loyalty options -->
-                <ion-chip v-if="order.customer?.loyaltyOptions">
+                <ion-chip v-if="order.customer?.loyaltyOptions" outline>
                   <ion-icon :icon="ribbon" />
                   <ion-label class="ion-text-wrap">{{ order.customer?.loyaltyOptions }}</ion-label>
                 </ion-chip>                
@@ -358,12 +358,6 @@ ion-select::part(text) {
 /* To remove margin between badge and ion-select */
 ion-select {
   margin-inline-start: 0;
-}
-
-ion-card-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
 }
 
 .product-header {
