@@ -6,10 +6,10 @@
         <ion-title>{{ $t("Orders") }}</ion-title>
         <ion-buttons slot="end">
           <!-- TODO: make download csv and sync button functional -->
-          <!-- <ion-button fill="clear">
+          <ion-button fill="clear" @click="runJob('JOB_IMP_ORD')">
             <ion-icon slot="icon-only" :icon="syncOutline" />
           </ion-button>
-          <ion-button fill="clear">
+          <!-- <ion-button fill="clear">
             <ion-icon slot="icon-only" :icon="downloadOutline" />
           </ion-button> -->
           <ion-button fill="clear" class="mobile-only" @click="openOrderFilter()">
@@ -154,6 +154,8 @@ import OrderFilters from '@/components/OrderFilters.vue'
 import { OrderService } from '@/services/OrderService';
 import StatusBadge from '@/components/StatusBadge.vue'
 import OrderItemCard from '@/components/OrderItemCard.vue'
+import emitter from '@/event-bus';
+import { JobService } from '@/services/JobService';
 
 const { Clipboard } = Plugins;
 
@@ -241,6 +243,22 @@ export default defineComponent ({
     },
     async openOrderFilter() {
       await menuController.open();
+    },
+    async runJob(enumId: string) {
+      const job = await this.store.dispatch('job/fetchJobInformation', enumId)
+      if (!job) {
+        console.error('Job information not found')
+        return;
+      }
+      const resp = await JobService.runServiceNow(job);
+      // added logic to fetch the order after 4s once the service is scheduled successfully
+      if (resp === 'success') {
+        emitter.emit('presentLoader')
+        setTimeout(function (this: any) {
+          emitter.emit('dismissLoader')
+          this.store.dispatch('order/findOrders')
+        }.bind(this), 4000)
+      }
     }
   },
   async mounted() {
