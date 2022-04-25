@@ -63,7 +63,7 @@
                     {{ order.customerPartyName }}
                     <p>{{ order.orderId }}</p>
                   </ion-label>
-                  <ion-note slot="end">{{ getAutoCancelDate(order.autoCancelDate) }}</ion-note>
+                  <ion-note v-if="order.autoCancelDate" slot="end">{{ getAutoCancelDate(order.autoCancelDate) }}</ion-note>
                 </ion-item>
                 <ion-item lines="full">
                   <ion-thumbnail slot="start">
@@ -105,7 +105,7 @@
                     {{ order.customerPartyName }}
                     <p>{{ order.orderId }}</p>
                   </ion-label>
-                  <div class="metadata">
+                  <div class="metadata" v-if="order.autoCancelDate">
                     <ion-note slot="end">{{ $t("order placed date")}}</ion-note>
                     <ion-badge slot="end" color="medium">{{ getAutoCancelDate(order.autoCancelDate) }}</ion-badge>
                   </div>

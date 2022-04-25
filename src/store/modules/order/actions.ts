@@ -268,13 +268,10 @@ const actions: ActionTree<OrderState, RootState> = {
           viewIndex,
           productIds
         }
-        console.log('before brokering')
         const orderBrokering = await OrderService.getOrderBrokeringInfo(orders);
-        console.log(orderBrokering)
         await this.dispatch('stock/addProducts', payload);
         const products = await this.dispatch("product/fetchProducts", payload);
         orders = orders.map( (order: any) => {
-          console.log(order)
           order = {...order, brokering: { ...(orderBrokering[order.orderId] ? orderBrokering[order.orderId][order.orderItemSeqId] : {}) }}
           order.item = products[order.productId]
           return order
@@ -316,7 +313,6 @@ const actions: ActionTree<OrderState, RootState> = {
         await this.dispatch('stock/addProducts', payload);
         await this.dispatch("product/fetchProducts", payload);
         const orderBrokering = await OrderService.getOrderBrokeringInfo(orders);
-        console.log("orderBrokering", orderBrokering);
         await this.dispatch('stock/addProducts', payload);
         const products = await this.dispatch("product/fetchProducts", payload);
         orders = orders.map( (order: any) => {

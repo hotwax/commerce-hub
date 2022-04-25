@@ -40,7 +40,6 @@ const getShipmentDetailForOrderItem = async (payload: any) => {
 }
 
 const getOrderBrokeringInfo = async (payload: any) => {
-  console.log(payload)
   const orderIds = payload.map((order: any) => {
     return order.orderId;
   })
@@ -65,21 +64,22 @@ const getOrderBrokeringInfo = async (payload: any) => {
         if (!orderFacilityChangeInformation[order.orderId]) {
           orderFacilityChangeInformation[order.orderId] = {}
         }
-        orderFacilityChangeInformation[order.orderId] = {
-          [order.orderItemSeqId]: {
-            count: 0,
-            lastBrokeredFacility: "-"
-          }
+        orderFacilityChangeInformation[order.orderId][order.orderItemSeqId] = {
+          count: 0,
+          lastBrokeredFacility: "-"
         } as any;
         resp.data.docs.forEach((ordersBrokered: any) => {
-          console.log("ordersBrokered", ordersBrokered)
           if(ordersBrokered.orderId == order.orderId && ordersBrokered.orderItemSeqId == order.orderItemSeqId){
             const facility = facilitiesList.find((facility: any) => facility.facilityId === ordersBrokered.facilityId )
-            console.log("ordersBrokered", ordersBrokered)
-            orderFacilityChangeInformation[order.orderId][order.orderItemSeqId].lastBrokeredFacility = facility?.facilityName ? facility?.facilityName : '-';
+            if(facility.facilityName !== "Not Available" && facility.facilityName){
+              orderFacilityChangeInformation[order.orderId][order.orderItemSeqId].lastBrokeredFacility = facility?.facilityName ? facility?.facilityName : '-';
+            }
             orderFacilityChangeInformation[order.orderId][order.orderItemSeqId].count += 1;
           }
         })
+        if(orderFacilityChangeInformation[order.orderId][order.orderItemSeqId].count>0){
+          orderFacilityChangeInformation[order.orderId][order.orderItemSeqId].count--;
+        }
       })
       return orderFacilityChangeInformation;
     }
