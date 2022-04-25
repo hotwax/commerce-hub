@@ -255,9 +255,10 @@ const actions: ActionTree<OrderState, RootState> = {
       if (resp.status === 200 && !hasError(resp)) {
         const total = resp.data.response.numFound;
         let orders = resp.data.response.docs;
-        const productIds = orders.map((order: any) => {
+        let productIds = orders.map((order: any) => {
           return order.productId;
         })
+        productIds = [...new Set(productIds)]
         const viewSize = productIds.length;
         const viewIndex = 0;
         const payload = {
@@ -278,7 +279,6 @@ const actions: ActionTree<OrderState, RootState> = {
     } catch(err) {
       console.error(err);
     }
-    
   },
 
   async fetchOldExpeditedOrders({commit}){
@@ -297,9 +297,10 @@ const actions: ActionTree<OrderState, RootState> = {
       if (resp.status === 200 && !hasError(resp)) {
         let orders = resp.data.response.docs
         const total = resp.data.response.numFound
-        const productIds = orders.map((order: any) => {
+        let productIds = orders.map((order: any) => {
           return order.productId;
         })
+        productIds = [...new Set(productIds)]
         const viewSize = productIds.length;
         const viewIndex = 0;
         const payload = {
@@ -319,7 +320,6 @@ const actions: ActionTree<OrderState, RootState> = {
         })
         commit(types.ORDER_OLD_EXPEDITED_UPDATED, { orders, total });
       }
-      
     } catch (err) {
       console.error(err);
     }

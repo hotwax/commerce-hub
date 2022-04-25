@@ -71,9 +71,12 @@ const getOrderBrokeringInfo = async (payload: any) => {
         } as any;
         resp.data.docs.forEach((ordersBrokered: any) => {
           if(ordersBrokered.orderId == order.orderId && ordersBrokered.orderItemSeqId == order.orderItemSeqId){
-            const facility = facilitiesList.find((facility: any) => facility.facilityId === ordersBrokered.facilityId )
-            if(facility.facilityName !== "Not Available" && facility.facilityName){
-              orderFacilityChangeInformation[order.orderId][order.orderItemSeqId].lastBrokeredFacility = facility?.facilityName ? facility?.facilityName : '-';
+            let facility;
+            if(facilitiesList){
+              facility = facilitiesList.find((facility: any) => facility.facilityId === ordersBrokered.facilityId )
+              if(facility.facilityName && facility.facilityId !== "_NA_"){
+                orderFacilityChangeInformation[order.orderId][order.orderItemSeqId].lastBrokeredFacility = facility?.facilityName ? facility?.facilityName : '-';
+              }
             }
             orderFacilityChangeInformation[order.orderId][order.orderItemSeqId].count += 1;
           }
