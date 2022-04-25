@@ -69,10 +69,10 @@
           <!-- Order Item Section -->
           <hr />
 
-          <div v-for="(order, index) in orders" :key="index" :order="order" @click="() => router.push(`/order/${order.orderId}`)" @mouseover="showBackground()" @mouseleave="hideBackground()">
+          <div v-for="(order, index) in orders" :key="index" :order="order" @click="() => router.push(`/order/${order.orderId}`)">
             <section class="section-header">
               <div class="primary-info">
-                <ion-item lines="none" :class="{ background : hover }">
+                <ion-item lines="none">
                   <ion-label>
                     {{ order.orderId }}
                     <p> {{ order.customer.name }} </p>
@@ -98,8 +98,8 @@
             </section>
  
             <section class="section-grid" v-if="showOrderItems">
-              <ion-card v-for="(item, index) in order.doclist.docs" :key="index" :item="item" :class="{ background : hover }">
-                <ion-item :class="{ background : hover }">
+              <ion-card v-for="(item, index) in order.doclist.docs" :key="index" :item="item">
+                <ion-item>
                   <ion-thumbnail slot="start">
                     <Image :src="getProduct(item.productId).mainImageUrl" />
                   </ion-thumbnail>
@@ -118,27 +118,27 @@
                     <ion-label>{{ $t("Promise date") }}</ion-label>
                     <p slot="end"> {{ item.promisedDatetime ? $filters.formatUtcDate(item.promisedDatetime, 'YYYY-MM-DDTHH:mm:ssZ', 'D MMM YYYY') : '-'  }} </p>
                   </ion-item>
-                  <ion-item :class="{ background : hover }">
+                  <ion-item>
                     <ion-label>{{ $t("PO arrival date") }}</ion-label>
                     <!-- TODO: Need to handle this property -->
                     <p slot="end"> {{ item.promiseOrderArrivalDate ? $filters.formatUtcDate(item.promiseOrderArrivalDate, 'YYYY-MM-DDTHH:mm:ssZ', 'D MMM YYYY') : '-' }} </p>
                   </ion-item>
-                  <ion-item :class="{ background : hover }">
+                  <ion-item>
                     <ion-label>{{ $t("Location") }}</ion-label>
                     <!-- TODO: Need to handle this property -->
                     <p slot="end"> {{ item.facilityName ? item.facilityName : '-' }} </p>
                   </ion-item>
                 </div>
                 <div v-else>
-                  <ion-item :class="{ background : hover }">
+                  <ion-item>
                     <ion-label>{{ $t("Shipping method") }}</ion-label>
                     <p slot="end"> {{ item.shipmentMethodTypeId ? getShipmentMethodDesc(item.shipmentMethodTypeId) : '-' }} </p>
                   </ion-item>
-                  <ion-item :class="{ background : hover }">
+                  <ion-item>
                     <ion-label>{{ $t("Shipping from") }}</ion-label>
                     <p slot="end"> {{ item.facilityName ? item.facilityName : "-" }} </p>
                   </ion-item>
-                  <ion-item lines="none" :class="{ background : hover }">
+                  <ion-item lines="none">
                     <ion-label>{{ $t("Location inventory") }}</ion-label>
                     <p slot="end">{{ getProductStock(item.productId) }}</p>
                   </ion-item>
@@ -146,7 +146,7 @@
               </ion-card>
             </section>
             <hr />
-          </div>
+          </div>          
           
           <ion-infinite-scroll @ionInfinite="loadMoreOrders($event)" threshold="100px" :disabled="!isScrollable">
             <ion-infinite-scroll-content loading-spinner="crescent" :loading-text="$t('Loading')"/>
@@ -252,16 +252,9 @@ export default defineComponent ({
       sort: 'orderDate desc',
       showOrderItems: true,
       poIds: {} as any,
-      hover: false
     }
   },
   methods: {
-    showBackground() {
-      this.hover = true
-    },
-    hideBackground() {
-      this.hover = false
-    },
     async sortOrders(value: string) {
       this.sort = value
       await this.store.dispatch('order/updateSort', this.sort)
@@ -400,33 +393,15 @@ export default defineComponent ({
   display: block;
 }
 
+main > div{
+  cursor: pointer;
+}
+
 ion-modal {
   --width: 290px;
   --height: 382px;
   --border-radius: 8px;
 }
-
-main > div:hover {
-  cursor: pointer;
-  background: var(--background-hover-color, var(--ion-color-light-shade));
-}
-
-.background{
-  --background: none;
-}
-
-
-
-ion-item{
-  --background-hover: black;
-}
-
-@media (prefers-color-scheme: dark) {
-  main > div:hover {
-    background: var(--ion-color-light-tint);
-  }
-
-} 
 
 @media (min-width: 991px) {
   .main {
