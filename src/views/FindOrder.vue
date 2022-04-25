@@ -96,7 +96,7 @@
                 <StatusBadge :statusDesc="order.orderStatusDesc || ''" :key="order.orderStatusDesc"/>
               </div>
             </section>
- 
+
             <section class="section-grid" v-if="showOrderItems">
               <ion-card v-for="(item, index) in order.doclist.docs" :key="index" :item="item">
                 <ion-item>
