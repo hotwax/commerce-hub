@@ -284,7 +284,7 @@
               <ion-item lines="none">
                 <ion-icon :icon="storefrontOutline" slot="start" />
                 <ion-label>
-                  <p>Retail</p>
+                  <p class="overline">Retail</p>
                   Store 1 name
                   <p>Pickup and shipping</p>
                 </ion-label>
@@ -328,7 +328,7 @@
               <ion-item lines="none">
                 <ion-icon :icon="businessOutline" slot="start" />
                 <ion-label>
-                  <p>Warehouse</p>
+                  <p class="overline">Warehouse</p>
                   Warehouse 1 name
                   <p>Shipping</p>
                 </ion-label>
@@ -492,7 +492,7 @@
               <ion-item lines="none">
                 <ion-icon :icon="storefrontOutline" slot="start" />
                 <ion-label>
-                  <p>Retail</p>
+                  <p class="overline">Retail</p>
                   Brooklyn
                 </ion-label>
               </ion-item>
@@ -535,7 +535,7 @@
               <ion-item lines="none">
                 <ion-icon :icon="businessOutline" slot="start" />
                 <ion-label>
-                  <p>Warehouse</p>
+                  <p class="overline">Warehouse</p>
                   Hoboken
                 </ion-label>
               </ion-item>

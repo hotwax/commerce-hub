@@ -5,7 +5,7 @@
         <Image :src="getProduct(item.productId).mainImageUrl" />
       </ion-thumbnail>
       <ion-label class="ion-text-wrap">
-        <p>{{ getProduct(item.productId)?.brandName }}</p>
+        <p class="overline">{{ getProduct(item.productId)?.brandName }}</p>
         {{ item.parentProductName ? item.parentProductName : item.productName }}
         <!-- TODO: make the attribute displaying logic dynamic -->
         <p v-if="$filters.getFeature(getProduct(item.productId).featureHierarchy, '1/COLOR/')"> {{ $t("Color") }}: {{ $filters.getFeature(getProduct(item.productId).featureHierarchy, '1/COLOR/') }} </p>
