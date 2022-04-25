@@ -40,9 +40,10 @@ const getShipmentDetailForOrderItem = async (payload: any) => {
 }
 
 const getOrderBrokeringInfo = async (payload: any) => {
-  const orderIds = payload.map((order: any) => {
+  let orderIds = payload.map((order: any) => {
     return order.orderId;
   })
+  orderIds = [...new Set(orderIds)]
   const params = {
     "inputFields": {
       "orderId": orderIds,

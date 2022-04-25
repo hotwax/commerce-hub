@@ -258,9 +258,6 @@ const actions: ActionTree<OrderState, RootState> = {
         const productIds = orders.map((order: any) => {
           return order.productId;
         })
-        const orderIds = orders.map((order: any) => {
-          return order.orderId;
-        })
         const viewSize = productIds.length;
         const viewIndex = 0;
         const payload = {
