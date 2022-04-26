@@ -32,6 +32,13 @@ const orderModule: Module<OrderState, RootState> ={
       'queryString': '',
       'sort': 'orderDate desc',
     },
+    poQuery: {
+      'productStoreId': '',
+      'facilityId': '',
+      'queryString': '',
+      'estimatedDeliveryDate': '',
+      'sort': 'orderDate desc',
+    },
     current: {},
     validStatusChange: {}
   },

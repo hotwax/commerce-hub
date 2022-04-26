@@ -344,50 +344,56 @@ const actions: ActionTree<OrderState, RootState> = {
     }
   },
 
-    // Find Purchase Orders
-    async findPurchaseOrders ({ commit }, params) {
-      let resp;
-      const query = preparePurchaseOrderQuery({...params})
-      try {
-        resp = await OrderService.findPurchaseOrder(query)
-        if (resp && resp.status === 200 && !hasError(resp) && resp.data.grouped.orderName.ngroups) {
-          const orders = resp.data.grouped.orderName.groups.map((order: any) => {
-            const orderItem = order.doclist.docs[0]
-            order.orderId = orderItem.orderId
-            order.orderName = orderItem.orderName
-            order.orderNotes = orderItem.orderNotes
-            order.orderDate = orderItem.orderDate
-            order.orderStatusId = orderItem.orderStatusId
-            order.productStoreId = orderItem.productStoreId
-            order.arrivalDate = orderItem.estimatedDeliveryDate
-            order.items = order.doclist.docs
+  // Find Purchase Orders
+  async findPurchaseOrders ({ commit, state }, params) {
+    let resp;
+    const query = preparePurchaseOrderQuery({ ...(state.query), ...params })
+    try {
+      resp = await OrderService.findPurchaseOrder(query)
+      if (resp && resp.status === 200 && !hasError(resp) && resp.data.grouped.orderName.ngroups) {
+        const orders = resp.data.grouped.orderName.groups.map((order: any) => {
+          const orderItem = order.doclist.docs[0]
+          order.orderId = orderItem.orderId
+          order.orderName = orderItem.orderName
+          order.orderNotes = orderItem.orderNotes
+          order.orderDate = orderItem.orderDate
+          order.orderStatusId = orderItem.orderStatusId
+          order.productStoreId = orderItem.productStoreId
+          order.arrivalDate = orderItem.estimatedDeliveryDate
+          order.items = order.doclist.docs
 
-            return order
+          return order
+        })
+
+        let productIds: any = new Set();
+        orders.map((order: any) => {
+          order.items.map((item: any) => {
+            productIds.add(item.productId)
           })
+        })
 
-          let productIds: any = new Set();
-          orders.map((order: any) => {
-            order.items.map((item: any) => {
-              productIds.add(item.productId)
-            })
-          })
+        productIds = [...productIds]
 
-          productIds = [...productIds]
+        await this.dispatch('product/fetchProducts', { productIds })
 
-          await this.dispatch('product/fetchProducts', { productIds })
-
-          const total = resp.data.grouped.orderName.ngroups
-          commit(types.ORDER_PO_LIST_UPDATED, { orders, total })
-          return orders
-        } else {
-          showToast(translate("Something went wrong"));
-        }
-      } catch(error){
-        console.error(error)
+        const total = resp.data.grouped.orderName.ngroups
+        commit(types.ORDER_PO_LIST_UPDATED, { orders, total })
+        return orders
+      } else {
         showToast(translate("Something went wrong"));
       }
-      return {};
-    },
+    } catch(error){
+      console.error(error)
+      showToast(translate("Something went wrong"));
+    }
+    return {};
+  },
+
+  async updateAppliedPoFilters({ commit, dispatch }, payload) {
+    commit(types.ORDER_PO_FILTERS_UPDATED, payload)
+    const resp = await dispatch('findPurchaseOrders')
+    return resp;
+  },
 } 
 
 export default actions
