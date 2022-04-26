@@ -11,8 +11,8 @@
           </ion-button>
           <!-- <ion-button fill="clear">
             <ion-icon slot="icon-only" :icon="downloadOutline" />
-          </ion-button> -->
-          <ion-button fill="clear" class="mobile-only" @click="openOrderFilter()">
+          </ion-button> --> 
+          <ion-button fill="clear" @click="openOrderFilter()" v-show="filterButton">
             <ion-icon slot="icon-only" :icon="filterOutline" />
           </ion-button>
         </ion-buttons>
@@ -38,7 +38,9 @@
         </section>
 
         <aside class="filters desktop-only">
-          <OrderFilters :poIds="poIds" :shippingMethodOptions="shippingMethodOptions" :orderStatusOptions="orderStatusOptions"/>
+          <div class="order-filters">
+            <OrderFilters :poIds="poIds" :shippingMethodOptions="shippingMethodOptions" :orderStatusOptions="orderStatusOptions"/>
+          </div>
         </aside>
 
         <main>
@@ -65,6 +67,8 @@
               </ion-item>
             </div>
           </section>
+
+         
 
           <!-- Order Item Section -->
           <hr />
@@ -203,7 +207,8 @@ export default defineComponent ({
       orderStatusOptions: [''],
       sort: 'orderDate desc',
       showOrderItems: true,
-      poIds: {} as any
+      poIds: {} as any,
+      filterButton: false,
     }
   },
   methods: {
@@ -262,6 +267,19 @@ export default defineComponent ({
     }
   },
   async mounted() {
+    const el = document.querySelector('.order-filters') as Element;
+      const observer = new window.IntersectionObserver(([entry]) => {
+        if (entry.isIntersecting) {
+          this.filterButton = false;
+         return
+        }
+         this.filterButton = true;
+        }, {
+        root: null,
+        threshold: 0.1
+      })
+      observer.observe(el);
+      
     this.store.dispatch('util/fetchShipmentMethods')
     await this.getOrders();
 
