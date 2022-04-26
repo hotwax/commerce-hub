@@ -6,7 +6,7 @@ import * as types from './mutation-types'
 import { getCustomerLoyalty, getIdentification, hasError, showToast } from '@/utils'
 import { translate } from '@/i18n'
 import { Order, OrderItem } from '@/types'
-import { prepareOrderQuery } from '@/utils/solrHelper'
+import { prepareOrderQuery, preparePurchaseOrderQuery } from '@/utils/solrHelper'
 
 const actions: ActionTree<OrderState, RootState> = {
   
@@ -342,7 +342,52 @@ const actions: ActionTree<OrderState, RootState> = {
       console.error(err)
       showToast(translate('Something went wrong'))
     }
-  }
+  },
+
+    // Find Purchase Orders
+    async findPurchaseOrders ({ commit }, params) {
+      let resp;
+      const query = preparePurchaseOrderQuery({...params})
+      try {
+        resp = await OrderService.findPurchaseOrder(query)
+        if (resp && resp.status === 200 && !hasError(resp) && resp.data.grouped.orderName.ngroups) {
+          const orders = resp.data.grouped.orderName.groups.map((order: any) => {
+            const orderItem = order.doclist.docs[0]
+            order.orderId = orderItem.orderId
+            order.orderName = orderItem.orderName
+            order.orderNotes = orderItem.orderNotes
+            order.orderDate = orderItem.orderDate
+            order.orderStatusId = orderItem.orderStatusId
+            order.productStoreId = orderItem.productStoreId
+            order.arrivalDate = orderItem.estimatedDeliveryDate
+            order.items = order.doclist.docs
+
+            return order
+          })
+
+          let productIds: any = new Set();
+          orders.map((order: any) => {
+            order.items.map((item: any) => {
+              productIds.add(item.productId)
+            })
+          })
+
+          productIds = [...productIds]
+
+          await this.dispatch('product/fetchProducts', { productIds })
+
+          const total = resp.data.grouped.orderName.ngroups
+          commit(types.ORDER_PO_LIST_UPDATED, { orders, total })
+          return orders
+        } else {
+          showToast(translate("Something went wrong"));
+        }
+      } catch(error){
+        console.error(error)
+        showToast(translate("Something went wrong"));
+      }
+      return {};
+    },
 } 
 
 export default actions

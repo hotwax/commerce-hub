@@ -12,6 +12,10 @@ const orderModule: Module<OrderState, RootState> ={
       orders: [],
       total: 0
     },
+    poList: {
+      orders: [],
+      total: 0
+    },
     poIds: {},
     query: {
       'status': '',

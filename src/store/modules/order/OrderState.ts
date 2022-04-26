@@ -3,6 +3,10 @@ export default interface OrderState {
     orders: any[],
     total: number
   },
+  poList: {
+    orders: any[],
+    total: number
+  },
   poIds: any,
   query: any,
   current: any,
