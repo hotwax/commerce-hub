@@ -266,17 +266,17 @@ export default defineComponent ({
   },
   async mounted() {
     const el = document.querySelector('.order-filters') as Element;
-      const observer = new window.IntersectionObserver(([entry]) => {
-        if (entry.isIntersecting) {
-          this.filterButton = false;
-         return
-        }
-         this.filterButton = true;
-        }, {
-        root: null,
-        threshold: 0.1
-      })
-      observer.observe(el);
+    const observer = new window.IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) {
+        this.filterButton = false;
+        return
+      }
+        this.filterButton = true;
+      }, {
+      root: null,
+      threshold: 0.1
+    })
+    observer.observe(el);
       
     this.store.dispatch('util/fetchShipmentMethods')
     await this.getOrders();
