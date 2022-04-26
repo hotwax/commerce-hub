@@ -28,6 +28,81 @@ const actions: ActionTree<UtilState, RootState> = {
     }
   },
 
+  // Get enumeration descriptions
+  async getEnumerations({ state, commit }, payload) {
+    const currentEnums = JSON.parse(JSON.stringify(state.enumerations));
+    const enumIdFilter = payload.reduce((enums: any, enumId: any) => {
+      if(!currentEnums[enumId]) {
+        enums.push(enumId);
+      }
+      return enums;
+    }, []);
+
+    if(!enumIdFilter.length) return currentEnums;
+
+    const params = {
+      "inputFields": {
+        "enumId": enumIdFilter,
+        "enumId_op": 'in'
+      },
+      "fieldList": ['enumId', 'description'],
+      "entityName": "Enumeration",
+      "noConditionFind": "Y",
+      "distinct": "Y"
+    }
+    const resp = await UtilService.getEnumerations(params);
+    if (resp.status === 200 && resp.data.docs?.length > 0 && !hasError(resp)) {
+      const enumerations = resp.data.docs;
+      if(resp.data) {
+        enumerations.map((enumeration: any) => {
+          currentEnums[enumeration.enumId] = enumeration
+        });
+      }
+      commit(types.UTIL_ENUMERATIONS_UPDATED, currentEnums);
+    }
+
+    return currentEnums;
+  },
+
+  // Get shopify configIds
+  async getShopifyConfigIds({ state, commit }, payload) {
+    const currentConfigs = JSON.parse(JSON.stringify(state.shopifyConfigs));
+
+    const prdtStoreFilter = payload.reduce((stores: any, storeId: any) => {
+      if(!currentConfigs[storeId]) {
+        stores.push(storeId);
+      }
+      return stores;
+    }, []);
+
+    if(!prdtStoreFilter.length) return currentConfigs;
+
+    const params = {
+      "inputFields": {
+        "productStoreId": prdtStoreFilter,
+        "productStoreId_op": 'in'
+      },
+      "fieldList": ['shopifyConfigId', 'productStoreId'],
+      "entityName": "ShopifyConfig",
+      "noConditionFind": "Y",
+      "distinct": "Y"
+    }
+    
+    const resp = await UtilService.getShopifyConfigIds(params);
+    if (resp.status === 200 && resp.data.docs?.length > 0 && !hasError(resp)) {
+      const shopifyConfigIds = resp.data.docs
+      if(resp.data) {
+        shopifyConfigIds.map((config: any) => {
+          currentConfigs[config.productStoreId] = config
+        });
+      }
+                  
+      commit(types.UTIL_SHOPIFY_CONFIGS_UPDATED, currentConfigs);
+    }
+
+    return currentConfigs
+  },
+
   async fetchStatus({ state, commit }, statusIds) {
     let resp;
 

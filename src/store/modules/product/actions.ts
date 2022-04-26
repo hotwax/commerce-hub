@@ -155,7 +155,7 @@ const actions: ActionTree<ProductState, RootState> = {
   /**
   * Get Product-inventory details
   */
-  async updateCurrent({ commit, state }, { productId }) {
+  async updateCurrent({ commit, state, dispatch }, { productId }) {
     const current = state.current as any
     const products = state.products.list as any
 
@@ -199,6 +199,11 @@ const actions: ActionTree<ProductState, RootState> = {
           mainImage: product.mainImageUrl,
           features: product.featureHierarchy,
           variants: product.variantProductIds
+        }
+        const variantProducts = await dispatch('fetchProducts', { productIds: product.variants })
+        product = {
+          ...product,
+          variants: Object.values(variantProducts)
         }
 
         commit(types.PRODUCT_CURRENT_UPDATED, product)

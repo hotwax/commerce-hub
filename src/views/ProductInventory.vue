@@ -67,11 +67,8 @@
             <ion-list>
               <ion-list-header>{{ $t("Color") }}</ion-list-header>
               <ion-item lines="none">
-                <ion-chip>
-                  <ion-label>All</ion-label>
-                </ion-chip>
-                <ion-chip v-for="(feature, index) in $filters.getFeaturesList(product.features, '1/COLOR/')" :key="index">
-                  <ion-icon :icon="checkmarkOutline" />
+                <ion-chip v-for="(feature, index) in $filters.getFeaturesList(product.features, '1/COLOR/')" :key="index" @click="updateCurrentSelectedFeatures(feature, 'color')">
+                  <ion-icon v-if="currentSelectedFeatures.color === feature" :icon="checkmarkOutline" />
                   <ion-label>{{ feature }}</ion-label>
                 </ion-chip>
               </ion-item>
@@ -79,11 +76,8 @@
             <ion-list>
               <ion-list-header>{{ $t("Size") }}</ion-list-header>
               <ion-item lines="none">
-                <ion-chip>
-                  <ion-label>All</ion-label>
-                </ion-chip>
-                <ion-chip v-for="(feature, index) in $filters.getFeaturesList(product.features, '1/SIZE/')" :key="index">
-                  <ion-icon :icon="checkmarkOutline" />
+                <ion-chip v-for="(feature, index) in $filters.getFeaturesList(product.features, '1/SIZE/')" :key="index" @click="updateCurrentSelectedFeatures(feature, 'size')">
+                  <ion-icon v-if="currentSelectedFeatures.size === feature" :icon="checkmarkOutline" />
                   <ion-label>{{ feature }}</ion-label>
                 </ion-chip>
               </ion-item>
@@ -91,21 +85,17 @@
           </div>
 
           <div class="variant-id desktop-only">
-            <ion-card>
+            <ion-card v-for="(productStore, index) in productStores" :key="index">
               <ion-card-header>
-                <ion-card-title>{{ $t("Shopify IDs") }}</ion-card-title>
+                <ion-card-title>{{ productStore.storeName }}</ion-card-title>
               </ion-card-header>
               <ion-item>
-                <ion-label>{{ $t("SKU") }}</ion-label>
-                <ion-label slot="end">SKU</ion-label>
-              </ion-item>
-              <ion-item>
-                <ion-label>{{ $t("UPC") }}</ion-label>
-                <ion-label slot="end">order id</ion-label>
+                <ion-label>{{ productStore.description }}</ion-label>
+                <ion-label slot="end">{{ productStore?.internalName }}</ion-label>
               </ion-item>
               <ion-item lines="none">
                 <ion-label>{{ $t("Internal ID") }}</ion-label>
-                <ion-label slot="end">internal id</ion-label>
+                <ion-label slot="end">{{ productStore?.shopifyProductId }}</ion-label>
               </ion-item>
             </ion-card>
           </div>
@@ -611,7 +601,7 @@ import {
   modalController,
   popoverController
 } from '@ionic/vue';
-import { defineComponent, ref } from 'vue';
+import { defineComponent, reactive, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import {
   businessOutline,
@@ -634,6 +624,9 @@ import LocationPopover from '@/components/LocationPopover.vue';
 import PurchaseOrderPopover from '@/components/PurchaseOrderPopover.vue';
 import FulfillmentSettingsPopover from '@/components/FulfillmentSettingsPopover.vue';
 import { useStore, mapGetters } from 'vuex';
+import { ProductService } from "@/services/ProductService";
+import { UtilService } from "@/services/UtilService";
+import { hasError } from '@/utils';
 
 export default defineComponent({
   name: 'ProductInventory',
@@ -663,6 +656,11 @@ export default defineComponent({
     IonToggle,
     IonToolbar,
     Image
+  },
+  data() {
+    return {
+      productStores: []
+    }
   },
   computed: {
     ...mapGetters({
@@ -706,19 +704,134 @@ export default defineComponent({
       });
       return popover.present();
     },
+    filterProductFeatures(features: any, featureName: any) {
+      let featuresList = []
+      if (features) {
+        featuresList = features.filter((featureItem: any) => featureItem.startsWith(featureName)).map((feature: any) => {
+          const featureSplit = feature ? feature.split('/') : [];
+          const featureValue = featureSplit[2] ? featureSplit[2] : '';
+          return featureValue;
+        })
+      }
+      return featuresList;
+    },
+    async updateCurrentSelectedFeatures(feature: any, featureName: any) {
+      (this.currentSelectedFeatures as any)[featureName] = feature
+      await this.getShopifyInformations(this.currentSelectedFeatures.color, this.currentSelectedFeatures.size);
+    },
+    async getProductIdentEnumIds(productStoreIds: any) {
+      let resp;
+
+      try{
+        const payload = {
+          "inputFields": {
+            "productStoreId": productStoreIds,
+            "productStoreId_op": 'in',
+            "productIdentifierEnumId_op": 'not-empty'
+          },
+          "fieldList": ['productStoreId', 'productIdentifierEnumId', 'storeName'],
+          "entityName": "ProductStore",
+          "noConditionFind": "Y",
+          "distinct": "Y"
+        }
+        resp = await ProductService.getProductIdentEnumIds(payload);
+        if (resp.status === 200 && resp.data.docs?.length > 0 && !hasError(resp)) {
+          return resp.data.docs;
+        }
+      } catch(error) {
+        console.error(error);
+      }
+      return []
+    },
+    async getShopifyInformations(color: any, size: any) {
+      if(this.product.variants) {
+        const variant = this.product.variants.find((variant: any) => {
+          const variantColor = this.filterProductFeatures(variant.featureHierarchy, '1/COLOR/')
+          const variantSize = this.filterProductFeatures(variant.featureHierarchy, '1/SIZE/')
+
+          if((variantColor.includes(color) && variantSize.includes(size))) return variant
+        })
+
+        if(variant?.productStoreIds) {
+          await this.getProductIdentEnumIds(variant?.productStoreIds).then( async(productIdenEnumIds: any) => {
+            let enumIds: any = new Set();
+            productIdenEnumIds.forEach((productStore: any) => {
+              if (productStore.productIdentifierEnumId) enumIds.add(productStore.productIdentifierEnumId);
+            })
+            enumIds = [...enumIds]
+          
+            if(productIdenEnumIds.length) {
+              await this.store.dispatch('util/getEnumerations', enumIds).then((enums: any) => {
+                this.productStores = productIdenEnumIds.map((productStore: any) => {
+                  return {
+                    ...productStore,
+                    internalName: variant?.internalName,
+                    description: enums[productStore.productIdentifierEnumId]?.description
+                  }
+                })
+              })
+            }
+          });
+
+          const productStoreIds = Object.values(variant?.productStoreIds)
+          await this.store.dispatch('util/getShopifyConfigIds', productStoreIds).then( async (shopifyConfigs: any) => {
+            const configIds = Object.values(shopifyConfigs).map((config: any) => config.shopifyConfigId)
+            const shopifyProducts = await this.getShopifyProductIds({ configIds, productId: variant?.productId });
+
+            this.productStores = (this.productStores as any).map((productStore: any) => {
+              const shopifyProduct = shopifyProducts.find((shopifyProduct: any) => shopifyProduct.shopifyConfigId === shopifyConfigs[productStore.productStoreId].shopifyConfigId)
+              return {
+                ...productStore,
+                ...shopifyProduct
+              }
+            });
+          })          
+        }
+
+        return this.productStores;
+      }
+    },
+    async getShopifyProductIds(payload: any) {
+      const params = {
+        "inputFields": {
+          "productId": payload?.productId,
+          "shopifyConfigId": payload?.configIds,
+          "shopifyConfigId_op": 'in'
+        },
+        "fieldList": ['shopifyProductId', 'shopifyConfigId', 'productId'],
+        "entityName": "ShopifyProduct",
+        "noConditionFind": "Y",
+        "distinct": "Y"
+      }
+
+      const resp = await UtilService.getShopifyProductIds(params);
+      if (resp.status === 200 && resp.data.docs?.length > 0 && !hasError(resp)) {
+        return resp.data.docs
+      } 
+      return []
+    }
   },
   mounted() {
-    this.store.dispatch('product/updateCurrent', { productId: this.$route.params.id })
+    this.store.dispatch('product/updateCurrent', { productId: this.$route.params.id }).then(() => {
+      this.updateCurrentSelectedFeatures(this.filterProductFeatures(this.product.features, '1/COLOR/')[0], 'color');
+      this.updateCurrentSelectedFeatures(this.filterProductFeatures(this.product.features, '1/SIZE/')[0], 'size');
+      this.getShopifyInformations(this.currentSelectedFeatures.color, this.currentSelectedFeatures.size);
+    })
   },
   setup() {
     const router = useRouter();
     const store = useStore();
     const segment = ref("locations");
+    const currentSelectedFeatures = reactive({
+      color: '',
+      size: ''
+    })
 
     return {
       businessOutline,
       calendarOutline,
       checkmarkOutline,
+      currentSelectedFeatures,
       ellipsisVerticalOutline,
       globeOutline,
       listOutline,
