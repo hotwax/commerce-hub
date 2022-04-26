@@ -46,10 +46,10 @@
             <ion-list-header><h3>{{ $t("Date") }}</h3></ion-list-header>
             <ion-item>
               <ion-label>{{ $t("Arrival date") }}</ion-label>
-              <ion-chip>
+              <ion-chip slot="end">
                 <ion-icon :icon="calendarOutline" />
                 <ion-input type="date" />
-                <ion-icon :icon="closeCircle" />
+                <ion-icon :icon="close"/>
               </ion-chip>
             </ion-item>
           </ion-list>
@@ -127,7 +127,7 @@
                     </ion-item>
                   </div>
 
-                  <div>
+                  <div @click.stop="copyToClipboard(getProduct(item.productId).internalName)">
                     <ion-chip outline>
                       <!-- TODO, Update icon -->
                       
@@ -177,7 +177,7 @@ import {
 } from '@ionic/vue';
 import {
   calendarOutline,
-  closeCircle,
+  close,
   documentTextOutline,
   downloadOutline,
   filterOutline,
@@ -188,6 +188,10 @@ import {
 } from 'ionicons/icons';
 import { useRouter } from 'vue-router';
 import { mapGetters, useStore } from 'vuex';
+import { showToast } from '@/utils';
+import { Plugins } from '@capacitor/core';
+
+const { Clipboard } = Plugins;
 
 export default {
   name: 'PurchaseOrder',
@@ -228,7 +232,18 @@ export default {
   },
   async mounted() {
     this.purchaseOrders = await this.store.dispatch('order/findPurchaseOrders')
-    console.log(this.purchaseOrders)
+  },
+  methods: {
+    async copyToClipboard(text) {
+      await Clipboard.write({
+        string: text
+      }).then(() => {
+        showToast(this.$t('Copied', { text }));
+      })
+    },
+    async updateQueryString() {
+      await this.store.dispatch('order/updateAppliedPoFilters', { value: this.queryString, filterName: 'queryString' })
+    },
   },
   setup() {
     const router = useRouter();
@@ -236,7 +251,7 @@ export default {
 
     return {
       calendarOutline,
-      closeCircle,
+      close,
       documentTextOutline,
       downloadOutline,
       filterOutline,

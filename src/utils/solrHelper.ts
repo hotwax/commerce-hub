@@ -101,11 +101,10 @@ const preparePurchaseOrderQuery = (query: any) => {
   const payload = {
     "json": {
       "params": {
-        "sort": `${query.sort}`,
         "rows": viewSize,
         "start": viewSize * viewIndex,
         "group": true,
-        "group.field": "orderId",
+        "group.field": "orderName",
         "group.limit": 10000,
         "group.ngroups": true,
         "q.op": "AND"
