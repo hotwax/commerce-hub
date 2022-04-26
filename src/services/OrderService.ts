@@ -55,6 +55,21 @@ const getPOIds = async (payload: any): Promise<any> => {
   })
 }
 
+const fetchOrderItemShipGrpInformation = async (payload: any): Promise<any> => {
+  return api({
+    url: "/performFind",
+    method: "post",
+    data: payload
+  });
+}
+
+const fetchOrderItemShipGrpInvResInfo = async (payload: any): Promise<any> => {
+  return api({
+    url: "/performFind",
+    method: "post",
+    data: payload
+  });
+}
 const findOrderDetails = async (payload: any): Promise<any> => {
   return api({
     url: "/solr-query",
@@ -94,12 +109,54 @@ const fetchShipmentDetailForOrderItem = async (payload: any): Promise<any> => {
     data: payload
   })
 }
+const getPOInformationForPOIds = async (payload: any): Promise<any> => {
+  const orders: any = {};
+  try {
+    
+      const resp = await OrderService.getPOIds({
+        "json": {
+          "params": {
+            "group": true,
+            "group.field": "orderId",
+            "group.limit": 1,
+          } as any,
+          "query": "*:*",
+          "filter": `docType: ORDER AND orderTypeId: PURCHASE_ORDER AND orderId: (${payload.correspondingPoIds.join(' OR ')})`,
+          "fields": "externalOrderId orderId estimatedDeliveryDate"
+        }
+      });
+      if (resp.status == 200 && !hasError(resp)) {
+        resp.data.grouped.orderId.groups.map((group: any) => {
+          const order = group.doclist.docs.length && group.doclist.docs[0];
+          order && (orders[order.orderId] = order);
+        })
+      } else {
+        console.error('Something went wrong while fetching externalOrderId for po')
+      }
+  } catch(err) {
+    console.error(err)
+  }
+  return orders;
+}
+
+const fetchOrderBrokeringInfo = async (payload: any): Promise<any> => {
+  return api({
+    url: "/performFind",
+    method: "post",
+    data: payload
+  });
+}
+
 
 export const OrderService = {
   fetchShipmentDetailForOrderItem,
+  fetchOrderBrokeringInfo,
+  fetchOrderItemShipGrpInformation,
+  fetchOrderItemShipGrpInvResInfo,
   fetchStatusChange,
   findOrder,
   findOrderDetails,
+  getPOInformationForPOIds,
   getPOIds,
   getPOIdsForSo,
   getShipmentDetailForOrderItem,

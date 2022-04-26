@@ -9,6 +9,7 @@ import productModule from "./modules/product"
 import orderModule from "./modules/order"
 import stockModule from "./modules/stock"
 import utilModule from "./modules/util"
+import jobModule from "./modules/job"
 
 
 // TODO check how to register it from the components only
@@ -21,7 +22,7 @@ const state: any = {
 }
 
 const persistState = createPersistedState({
-    paths: ['user', 'util.shipmentMethod', 'order.validStatusChange'],
+    paths: ['user', 'util.shipmentMethod', 'order.validStatusChange', 'job'],
     fetchBeforeUse: true
 })
 
@@ -37,7 +38,8 @@ const store = createStore<RootState>({
         'order': orderModule,
         'product': productModule,
         'stock': stockModule,
-        'util': utilModule
+        'util': utilModule,
+        'job': jobModule
     },
 })
 
