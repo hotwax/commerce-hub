@@ -273,8 +273,7 @@ export default defineComponent ({
       }
         this.filterButton = true;
       }, {
-      root: null,
-      threshold: 0.1
+      root: null
     })
     observer.observe(el);
       
