@@ -94,4 +94,34 @@ const prepareOrderQuery = (query: any) => {
   return payload
 }
 
-export { prepareOrderQuery }
+const preparePurchaseOrderQuery = (query: any) => {
+  const viewSize = query.viewSize ? query.viewSize : process.env.VUE_APP_VIEW_SIZE;
+  const viewIndex = query.viewIndex ? query.viewIndex : 0;
+
+  const payload = {
+    "json": {
+      "params": {
+        "sort": `${query.sort}`,
+        "rows": viewSize,
+        "start": viewSize * viewIndex,
+        "group": true,
+        "group.field": "orderId",
+        "group.limit": 10000,
+        "group.ngroups": true,
+        "q.op": "AND"
+      } as any,
+      "query": "*:*",
+      "filter": "docType: ORDER AND orderTypeId: PURCHASE_ORDER"
+    }
+  }
+
+  if (query.queryString) {
+    payload.json.params.defType = 'edismax'
+    payload.json.params.qf = 'orderName orderId customerPartyName productId internalName'
+    payload.json.query = `*${query.queryString}*`
+  }
+
+  return payload
+}
+
+export { preparePurchaseOrderQuery, prepareOrderQuery }
