@@ -25,34 +25,7 @@
         </section>
 
         <aside class="filters">
-          <ion-list>
-            <ion-list-header><h3>{{ $t("Location") }}</h3></ion-list-header>
-            <ion-item>
-              <ion-label>{{ $t("Product Store") }}</ion-label>
-              <ion-select value="any" interface="popover">
-                <ion-select-option value="any">Australia</ion-select-option>
-              </ion-select>
-            </ion-item>
-
-            <ion-item>
-              <ion-label>{{ $t("Facility") }}</ion-label>
-              <ion-select value="any" interface="popover">
-                <ion-select-option value="any">California Warehouse</ion-select-option>
-              </ion-select>
-            </ion-item>
-          </ion-list>
-
-          <ion-list>
-            <ion-list-header><h3>{{ $t("Date") }}</h3></ion-list-header>
-            <ion-item>
-              <ion-label>{{ $t("Arrival date") }}</ion-label>
-              <ion-chip slot="end">
-                <ion-icon :icon="calendarOutline" />
-                <ion-input type="date" />
-                <ion-icon :icon="close"/>
-              </ion-chip>
-            </ion-item>
-          </ion-list>
+          <PurchaseOrderFilters />
         </aside>
 
         <main>
@@ -160,7 +133,6 @@ import {
   IonContent,
   IonHeader,
   IonIcon,
-  IonInput,
   IonItem,
   IonLabel,
   IonList,
@@ -190,6 +162,7 @@ import { useRouter } from 'vue-router';
 import { mapGetters, useStore } from 'vuex';
 import { showToast } from '@/utils';
 import { Plugins } from '@capacitor/core';
+import PurchaseOrderFilters from '@/components/PurchaseOrderFilters.vue'
 
 const { Clipboard } = Plugins;
 
@@ -204,7 +177,6 @@ export default {
     IonContent,
     IonHeader,
     IonIcon,
-    IonInput,
     IonItem,
     IonLabel,
     IonList,
@@ -217,7 +189,8 @@ export default {
     IonThumbnail,
     IonToggle,
     IonTitle,
-    IonToolbar
+    IonToolbar,
+    PurchaseOrderFilters
   },
   data() {
     return {

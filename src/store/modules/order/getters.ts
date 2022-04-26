@@ -21,5 +21,8 @@ const getters: GetterTree <OrderState, RootState> = {
   getPurchaseOrders (state) {
     return state.list.orders
   },
+  getPurchaseOrderQuery: (state) => {
+    return state.poQuery
+  },
 }
 export default getters;

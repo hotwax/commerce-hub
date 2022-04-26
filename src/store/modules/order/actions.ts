@@ -347,7 +347,7 @@ const actions: ActionTree<OrderState, RootState> = {
   // Find Purchase Orders
   async findPurchaseOrders ({ commit, state }, params) {
     let resp;
-    const query = preparePurchaseOrderQuery({ ...(state.query), ...params })
+    const query = preparePurchaseOrderQuery({ ...(state.poQuery), ...params })
     try {
       resp = await OrderService.findPurchaseOrder(query)
       if (resp && resp.status === 200 && !hasError(resp) && resp.data.grouped.orderName.ngroups) {

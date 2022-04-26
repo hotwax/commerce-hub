@@ -120,6 +120,13 @@ const preparePurchaseOrderQuery = (query: any) => {
     payload.json.query = `*${query.queryString}*`
   }
 
+  payload.json.filter = payload.json.filter.concat(` AND facilityId: ${query.facilityId ? query.facilityId : '*' }`)
+  payload.json.filter = payload.json.filter.concat(` AND productStoreId: ${query.productStoreId ? query.productStoreId : '*' }`)
+
+  if (query.estimatedDeliveryDate) {
+    payload.json.filter = payload.json.filter.concat(` AND estimatedDeliveryDate: [${query.estimatedDeliveryDate + 'T00:00:00Z'} TO ${query.estimatedDeliveryDate + 'T23:59:59Z'}]`)
+  }
+
   return payload
 }
 
