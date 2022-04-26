@@ -62,10 +62,10 @@
             </ion-item>
 
             <div>
-              <ion-item lines="none">
+              <ion-item lines="none" class="desktop-only">
                 <ion-icon :icon="documentTextOutline" slot="start" />
                 <ion-label class="ion-text-wrap">{{ $t("Show order items") }}</ion-label>
-                <ion-toggle slot="end" checked></ion-toggle>
+                <ion-toggle slot="end" :checked="showOrderItems" @ionChange="() => showOrderItems = !showOrderItems" />
               </ion-item>
 
               <ion-item lines="none">
@@ -80,14 +80,15 @@
 
           <hr />
 
-          <div class="product" @click="() => router.push('/purchase-order')">
+          <div v-for="order in purchaseOrders" :key="order.orderId" class="product" @click="() => router.push('/purchase-order')">
             <section class="section-header">
               <div class="primary-info">
                 <ion-item lines="none">
                   <ion-label class="ion-text-wrap">
-                    <p>Product store</p>
-                    PO external ID
-                    <p>Created date</p>
+                    <!-- TODO: display product store name on the place of id -->
+                    <p>{{ order.productStoreId }}</p>
+                    {{ order.orderName }}
+                    <p>{{ $filters.formatUtcDate(order.orderDate, 'YYYY-MM-DDTHH:mm:ssZ', 'D MMM YYYY') }}</p>
                   </ion-label>
                 </ion-item>
               </div>
@@ -95,33 +96,33 @@
               <div class="tags desktop-only">
                 <ion-chip outline>
                   <ion-icon :icon="calendarOutline" />
-                  <ion-label>Arrival date</ion-label>
+                  <ion-label>{{ $filters.formatUtcDate(order.arrivalDate, 'YYYY-MM-DDTHH:mm:ssZ', 'D MMM YYYY') }}</ion-label>
                 </ion-chip>
               </div>
 
               <div class="metadata">
                 <ion-item lines="none" detail>
-                  <ion-note slot="end">2 {{ $t("variants") }}</ion-note>
+                  <ion-note slot="end">{{ order.items.length }} {{ $t("variants") }}</ion-note>
                 </ion-item>
               </div>
             </section>
 
-            <div class="desktop-only">
+            <div class="desktop-only" v-if="showOrderItems">
               <ion-list>
                 <ion-list-header>
                   {{ $t("Items") }}
                   <hr />
                 </ion-list-header>
-                <div v-for="item in 2" :key="item" class="list-item">
+                <div v-for="(item, index) in order.items" :key="index" class="list-item">
                   <div>
                     <ion-item lines="none">
                       <ion-thumbnail slot="start">
-                        <Image src="https://cdn.shopify.com/s/files/1/0069/7384/9727/products/test-track.jpg?v=1626255137" />
+                        <Image :src="getProduct(item.productId).mainImageUrl" />
                       </ion-thumbnail>
                       <ion-label class="ion-text-wrap">
-                        SKU
-                        <p>{{ $t("Color") }} : color</p>
-                        <p>{{ $t("Size") }}: size</p>
+                        {{ getProduct(item.productId).sku }}
+                        <p v-if="$filters.getFeature(getProduct(item.productId).featureHierarchy, '1/COLOR/')">{{ $t("Color") }}: {{ $filters.getFeature(getProduct(item.productId).featureHierarchy, '1/COLOR/') }}</p>
+                        <p v-if="$filters.getFeature(getProduct(item.productId).featureHierarchy, '1/SIZE/')">{{ $t("Size") }}: {{ $filters.getFeature(getProduct(item.productId).featureHierarchy, '1/SIZE/') }}</p>
                       </ion-label>
                     </ion-item>
                   </div>
@@ -129,19 +130,20 @@
                   <div>
                     <ion-chip outline>
                       <!-- TODO, Update icon -->
+                      
                       <ion-icon :icon="pricetag" />
-                      <ion-label>Shopify ID</ion-label>
+                      <ion-label>{{ getProduct(item.productId).internalName }}</ion-label>
                     </ion-chip>
                   </div>
 
                   <div class="items-metadata">
-                    <ion-note>ATP</ion-note>
-                    <ion-note>Ordered</ion-note>
+                    <ion-note>{{ item.availableToPromise }} {{ 'ATP' }}</ion-note>
+                    <ion-note>{{ item.quantity }} {{ 'ordered' }}</ion-note>
                   </div>
                 </div>
-                <hr />
               </ion-list>
             </div>
+            <hr />
           </div>
         </main>
       </div>
@@ -149,7 +151,7 @@
   </ion-page>
 </template>
 <script>
-import Image from '../components/Image.vue';
+import Image from '@/components/Image.vue';
 import {
   IonBackButton,
   IonButton,
@@ -185,6 +187,7 @@ import {
   syncOutline
 } from 'ionicons/icons';
 import { useRouter } from 'vue-router';
+import { mapGetters, useStore } from 'vuex';
 
 export default {
   name: 'PurchaseOrder',
@@ -212,8 +215,24 @@ export default {
     IonTitle,
     IonToolbar
   },
+  data() {
+    return {
+      showOrderItems: true,
+      purchaseOrders: {}
+    }
+  },
+  computed: {
+    ...mapGetters({
+      getProduct: 'product/getProduct',
+    })
+  },
+  async mounted() {
+    this.purchaseOrders = await this.store.dispatch('order/findPurchaseOrders')
+    console.log(this.purchaseOrders)
+  },
   setup() {
     const router = useRouter();
+    const store = useStore();
 
     return {
       calendarOutline,
@@ -223,6 +242,7 @@ export default {
       filterOutline,
       folderOutline,
       pricetag,
+      store,
       swapVerticalOutline,
       syncOutline,
       router
