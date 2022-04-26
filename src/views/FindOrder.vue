@@ -11,7 +11,7 @@
           </ion-button>
           <!-- <ion-button fill="clear">
             <ion-icon slot="icon-only" :icon="downloadOutline" />
-          </ion-button> --> 
+          </ion-button> -->
           <ion-button fill="clear" @click="openOrderFilter()" v-show="filterButton">
             <ion-icon slot="icon-only" :icon="filterOutline" />
           </ion-button>
@@ -67,8 +67,6 @@
               </ion-item>
             </div>
           </section>
-
-         
 
           <!-- Order Item Section -->
           <hr />
