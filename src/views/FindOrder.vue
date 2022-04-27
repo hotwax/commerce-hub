@@ -6,10 +6,10 @@
         <ion-title>{{ $t("Orders") }}</ion-title>
         <ion-buttons slot="end">
           <!-- TODO: make download csv and sync button functional -->
-          <!-- <ion-button fill="clear">
+          <ion-button fill="clear" @click="runJob('JOB_IMP_ORD')">
             <ion-icon slot="icon-only" :icon="syncOutline" />
           </ion-button>
-          <ion-button fill="clear">
+          <!-- <ion-button fill="clear">
             <ion-icon slot="icon-only" :icon="downloadOutline" />
           </ion-button> -->
           <ion-button fill="clear" class="mobile-only" @click="openOrderFilter()">
@@ -103,52 +103,7 @@
             </section>
 
             <section class="section-grid" v-if="showOrderItems">
-              <ion-card v-for="(item, index) in order.doclist.docs" :key="index" :item="item">
-                <ion-item>
-                  <ion-thumbnail slot="start">
-                    <Image :src="getProduct(item.productId).mainImageUrl" />
-                  </ion-thumbnail>
-                  <ion-label>
-                    <p>{{ getProduct(item.productId)?.brandName }}</p>
-                    {{ item.parentProductName ? item.parentProductName : item.productName }}
-                    <!-- TODO: make the attribute displaying logic dynamic -->
-                    <p v-if="$filters.getFeature(getProduct(item.productId).featureHierarchy, '1/COLOR/')"> {{ $t("Color") }}: {{ $filters.getFeature(getProduct(item.productId).featureHierarchy, '1/COLOR/') }} </p>
-                    <p v-if="$filters.getFeature(getProduct(item.productId).featureHierarchy, '1/SIZE/')"> {{ $t("Size") }}: {{ $filters.getFeature(getProduct(item.productId).featureHierarchy, '1/SIZE/') }} </p>
-                  </ion-label>
-                  <StatusBadge :statusDesc="item.orderItemStatusDesc || ''" :key="item.orderItemStatusDesc"/>
-                </ion-item>
-                <!-- TODO: Need to handle this property -->
-                <div v-if="item.facilityId === orderPreOrderId || item.facilityId === orderBackOrderId">
-                  <ion-item>
-                    <ion-label>{{ $t("Promise date") }}</ion-label>
-                    <p slot="end"> {{ item.promisedDatetime ? $filters.formatUtcDate(item.promisedDatetime, 'YYYY-MM-DDTHH:mm:ssZ', 'D MMM YYYY') : '-'  }} </p>
-                  </ion-item>
-                  <ion-item>
-                    <ion-label>{{ $t("PO arrival date") }}</ion-label>
-                    <!-- TODO: Need to handle this property -->
-                    <p slot="end"> {{ item.promiseOrderArrivalDate ? $filters.formatUtcDate(item.promiseOrderArrivalDate, 'YYYY-MM-DDTHH:mm:ssZ', 'D MMM YYYY') : '-' }} </p>
-                  </ion-item>
-                  <ion-item>
-                    <ion-label>{{ $t("Location") }}</ion-label>
-                    <!-- TODO: Need to handle this property -->
-                    <p slot="end"> {{ item.facilityName ? item.facilityName : '-' }} </p>
-                  </ion-item>
-                </div>
-                <div v-else>
-                  <ion-item>
-                    <ion-label>{{ $t("Shipping method") }}</ion-label>
-                    <p slot="end"> {{ item.shipmentMethodTypeId ? getShipmentMethodDesc(item.shipmentMethodTypeId) : '-' }} </p>
-                  </ion-item>
-                  <ion-item>
-                    <ion-label>{{ $t("Shipping from") }}</ion-label>
-                    <p slot="end"> {{ item.facilityName ? item.facilityName : "-" }} </p>
-                  </ion-item>
-                  <ion-item lines="none">
-                    <ion-label>{{ $t("Location inventory") }}</ion-label>
-                    <p slot="end">{{ getProductStock(item.productId) }}</p>
-                  </ion-item>
-                </div>
-              </ion-card>
+              <OrderItemCard v-for="(item, index) in order.doclist.docs" :key="index" :item="item" />
             </section>
             <hr />
           </div>
@@ -166,7 +121,6 @@ import {
   IonBackButton,
   IonButtons,
   IonButton,
-  IonCard,
   IonChip,
   IonContent,
   IonHeader,
@@ -181,7 +135,6 @@ import {
   IonSearchbar,
   IonSelect,
   IonSelectOption,
-  IonThumbnail,
   IonTitle,
   IonToggle,
   IonToolbar,
@@ -201,22 +154,22 @@ import { defineComponent, ref } from "vue";
 import { mapGetters, useStore } from "vuex";
 import { hasError, showToast } from '@/utils'
 import { Plugins } from '@capacitor/core';
-import Image from '@/components/Image.vue';
 import { useRouter } from 'vue-router';
 import OrderFilters from '@/components/OrderFilters.vue'
 import { OrderService } from '@/services/OrderService';
 import StatusBadge from '@/components/StatusBadge.vue'
+import OrderItemCard from '@/components/OrderItemCard.vue'
+import emitter from '@/event-bus';
+import { JobService } from '@/services/JobService';
 
 const { Clipboard } = Plugins;
 
 export default defineComponent ({
   name: 'Order',
   components: {
-    Image,
     IonBackButton,
     IonButtons,
     IonButton,
-    IonCard,
     IonChip,
     IonContent,
     IonHeader,
@@ -231,11 +184,11 @@ export default defineComponent ({
     IonSelect,
     IonSelectOption,
     IonSearchbar,
-    IonThumbnail,
     IonTitle,
     IonToggle,
     IonToolbar,
     OrderFilters,
+    OrderItemCard,
     StatusBadge
   },
   computed: {
@@ -298,6 +251,22 @@ export default defineComponent ({
     },
     async openOrderFilter() {
       await menuController.open();
+    },
+    async runJob(enumId: string) {
+      const job = await this.store.dispatch('job/fetchJobInformation', enumId)
+      if (!job) {
+        console.error('Job information not found')
+        return;
+      }
+      const resp = await JobService.runServiceNow(job);
+      // added logic to fetch the order after 4s once the service is scheduled successfully
+      if (resp === 'success') {
+        emitter.emit('presentLoader')
+        setTimeout(function (this: any) {
+          emitter.emit('dismissLoader')
+          this.store.dispatch('order/findOrders')
+        }.bind(this), 4000)
+      }
     }
   },
   async mounted() {
@@ -359,8 +328,6 @@ export default defineComponent ({
     const queryString = ref();
     const orderStatus = JSON.parse(process.env.VUE_APP_ORDER_STATUS)
     const itemStatus = JSON.parse(process.env.VUE_APP_ITEM_STATUS)
-    const orderPreOrderId = process.env.VUE_APP_PRE_ORDER_IDNT_ID
-    const orderBackOrderId = process.env.VUE_APP_BACKORDER_IDNT_ID
     const cusotmerLoyaltyOptions = process.env.VUE_APP_CUST_LOYALTY_OPTIONS
 
     return {
@@ -372,8 +339,6 @@ export default defineComponent ({
       itemStatus,
       pricetag,
       orderStatus,
-      orderBackOrderId,
-      orderPreOrderId,
       ribbon,
       swapVerticalOutline,
       syncOutline,
@@ -399,6 +364,10 @@ ion-menu {
 
 .metadata > ion-note {
   display: block;
+}
+
+main > div{
+  cursor: pointer;
 }
 
 ion-modal {

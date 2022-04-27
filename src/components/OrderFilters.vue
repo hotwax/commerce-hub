@@ -1,6 +1,6 @@
 <template>
   <ion-list>
-    <ion-list-header>{{ $t("Date") }}</ion-list-header>
+    <ion-list-header><h3>{{ $t("Date") }}</h3></ion-list-header>
     <ion-item>
       <ion-label>{{ $t("Order created") }}</ion-label>
       <ion-chip id="open-order-created-date-modal" slot="end">
@@ -24,7 +24,7 @@
     </ion-item>
   </ion-list>
   <ion-list>
-    <ion-list-header>{{ $t("Type") }}</ion-list-header>
+    <ion-list-header><h3>{{ $t("Type") }}</h3></ion-list-header>
     <ion-item>
       <ion-label>{{ $t("Store pickup") }}</ion-label>
       <ion-checkbox :checked="query.storePickup" @ionChange="updateAppliedFilters($event['detail'].checked, 'storePickup')"/>
@@ -41,13 +41,9 @@
       <ion-label>{{ $t("Back order") }}</ion-label>
       <ion-checkbox :checked="query.backOrder" @ionChange="updateAppliedFilters($event['detail'].checked, 'backOrder')"/>
     </ion-item>
-    <ion-item>
-      <ion-label>{{ $t("Unfillable") }}</ion-label>
-      <ion-checkbox :checked="query.unfillable" @ionChange="updateAppliedFilters($event['detail'].checked, 'unfillable')"/>
-    </ion-item>
   </ion-list>
   <ion-list>
-    <ion-list-header>{{ $t("Fulfillment") }}</ion-list-header>
+    <ion-list-header><h3>{{ $t("Fulfillment") }}</h3></ion-list-header>
     <ion-item>
       <ion-label>{{ $t("Status") }}</ion-label>
       <ion-select :value="query.status" @ionChange="updateAppliedFilters($event['detail'].value, 'status')" interface="popover">
