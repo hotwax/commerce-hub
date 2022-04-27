@@ -44,7 +44,7 @@
         </section>
 
         <ion-item class="mobile-only" lines="none">
-          <ion-thumbnail>
+          <ion-thumbnail slot="start">
             <Image :src="product.mainImage" />
           </ion-thumbnail>
           <ion-label>
