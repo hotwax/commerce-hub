@@ -23,7 +23,7 @@
       <ion-header>
         <ion-toolbar>
           <ion-buttons slot="start">
-            <ion-button @click="closeFilters">
+            <ion-button @click="closeMenu">
               <ion-icon :icon="closeOutline" slot="icon-only" />
             </ion-button>
           </ion-buttons>
@@ -212,7 +212,7 @@ export default defineComponent ({
     }
   },
   methods: {
-    async closeFilters() {
+    async closeMenu() {
       await menuController.close();
     },
     async sortOrders(value: string) {
