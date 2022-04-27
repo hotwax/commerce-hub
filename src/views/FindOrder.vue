@@ -355,6 +355,10 @@ export default defineComponent ({
   display: block;
 }
 
+main > div{
+  cursor: pointer;
+}
+
 ion-modal {
   --width: 290px;
   --height: 382px;
