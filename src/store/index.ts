@@ -22,7 +22,7 @@ const state: any = {
 }
 
 const persistState = createPersistedState({
-    paths: ['user', 'util', 'order.validStatusChange', 'job'],
+    paths: ['user', 'util.shipmentMethod', 'order.validStatusChange', 'job'],
     fetchBeforeUse: true
 })
 

@@ -9,6 +9,14 @@ const utilModule: Module<UtilState, RootState> = {
     namespaced: true,
     state: {
       shipmentMethod: {},
+      facilityLocations: {
+        list: [],
+        total: 0
+      },
+      currentLocationFilterSelected: {
+        productStoreId: 'All',
+        facilityTypeId: 'All'
+      },
       status: {}
     },
     getters,
