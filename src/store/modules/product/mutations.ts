@@ -19,6 +19,9 @@ const mutations: MutationTree <ProductState> = {
   },
   [types.PRODUCT_CURRENT_UPDATED](state, payload) {
     state.current = payload
+  },
+  [types.PRODUCT_FILTERS_CURRENT_UPDATED](state, payload) {
+    state.currentProductFilterSelected[payload.filterName] = payload.value;
   }
 }
 export default mutations;

@@ -11,112 +11,32 @@
           <ion-button>
             <ion-icon :icon="downloadOutline" slot="icon-only" />
           </ion-button>
-          <ion-button fill="clear" class="mobile-only">
+          <ion-button fill="clear" class="mobile-only" @click="openProductFilterMenu()">
             <ion-icon slot="icon-only" :icon="filterOutline" />
           </ion-button>
         </ion-buttons>
       </ion-toolbar>
     </ion-header>
 
-    <ion-content>
+    <ion-menu content-id="content" type="overlay" side="end">
+      <ion-header>
+        <ion-toolbar>
+          <ion-title>{{ $t('Filters') }}</ion-title>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content>
+        <ProductFilters :categories="categories" :colors="colors" :sizes="sizes" :tags="tags" />
+      </ion-content>
+    </ion-menu>
+
+    <ion-content id="content">
       <div class="find">
         <section class="search">
-          <ion-searchbar />
+          <ion-searchbar v-model="queryString" @keyup.enter="queryString = $event.target.value; updateQueryString()" />
         </section>
 
         <aside class="filters desktop-only">
-          <ion-list>
-            <ion-list-header><h3>{{ $t("Catalog") }}</h3></ion-list-header>
-            <ion-item>
-              <ion-label>{{ $t("Categories") }}</ion-label>
-              <ion-select value="any" interface="popover">
-                <ion-select-option value="any">all</ion-select-option>
-              </ion-select>
-            </ion-item>
-
-            <ion-card>
-              <ion-card-header>
-                <ion-card-title>{{ $t("Purchase date") }}</ion-card-title>
-              </ion-card-header>
-              <ion-card-content>
-                <ion-chip>
-                  <ion-label>PO #</ion-label>
-                </ion-chip>
-                <ion-chip>
-                  <ion-label>PO #</ion-label>
-                </ion-chip>
-              </ion-card-content>
-            </ion-card>
-
-            <ion-item>
-              <ion-label>{{ $t("Size") }}</ion-label>
-              <ion-select value="any" interface="popover">
-                <ion-select-option value="any">all</ion-select-option>
-              </ion-select>
-            </ion-item>
-            <ion-item>
-              <ion-label>{{ $t("Color") }}</ion-label>
-              <ion-select value="any" interface="popover">
-                <ion-select-option value="any">all</ion-select-option>
-              </ion-select>
-            </ion-item>
-
-            <ion-card>
-              <ion-card-header>
-                <ion-card-title>{{ $t("Purchase date") }}</ion-card-title>
-              </ion-card-header>
-              <ion-card-content>
-                <ion-chip>
-                  <ion-label>PO #</ion-label>
-                </ion-chip>
-                <ion-chip>
-                  <ion-label>PO #</ion-label>
-                </ion-chip>
-              </ion-card-content>
-            </ion-card>
-          </ion-list>
-
-          <ion-list>
-            <ion-list-header><h3>{{ $t("Order") }}</h3></ion-list-header>
-            <ion-item>
-              <ion-label>{{ $t("order created") }}</ion-label>
-              <ion-checkbox />
-            </ion-item>
-            <ion-item>
-              <ion-label>{{ $t("order created") }}</ion-label>
-              <ion-checkbox />
-            </ion-item>
-
-            <ion-card>
-              <ion-card-header>
-                <ion-card-title>{{ $t("Purchase date") }}</ion-card-title>
-              </ion-card-header>
-              <ion-card-content>
-                <ion-chip>
-                  <ion-label>PO #</ion-label>
-                </ion-chip>
-                <ion-chip>
-                  <ion-label>PO #</ion-label>
-                </ion-chip>
-              </ion-card-content>
-            </ion-card>
-          </ion-list>
-
-          <ion-list>
-            <ion-list-header><h3>{{ $t("Location") }}</h3></ion-list-header>
-            <ion-item>
-              <ion-label>{{ $t("Product Store") }}</ion-label>
-              <ion-select value="any" interface="popover">
-                <ion-select-option value="any">Australia</ion-select-option>
-              </ion-select>
-            </ion-item>
-            <ion-item>
-              <ion-label>{{ $t("Facility") }}</ion-label>
-              <ion-select value="any" interface="popover">
-                <ion-select-option value="any">California Warehouse</ion-select-option>
-              </ion-select>
-            </ion-item>
-          </ion-list>
+          <ProductFilters :categories="categories" :colors="colors" :sizes="sizes" :tags="tags" />
         </aside>
 
         <main>
@@ -231,11 +151,6 @@ import {
   IonBackButton,
   IonButton,
   IonButtons,
-  IonCard,
-  IonCardContent,
-  IonCardHeader,
-  IonCardTitle,
-  IonCheckbox,
   IonChip,
   IonContent,
   IonHeader,
@@ -246,6 +161,7 @@ import {
   IonLabel,
   IonList,
   IonListHeader,
+  IonMenu,
   IonNote,
   IonPage,
   IonSearchbar,
@@ -253,7 +169,8 @@ import {
   IonSelectOption,
   IonThumbnail,
   IonTitle,
-  IonToolbar
+  IonToolbar,
+  menuController
 } from '@ionic/vue';
 import {
   downloadOutline,
@@ -266,6 +183,9 @@ import {
 import { defineComponent } from 'vue';
 import { mapGetters, useStore } from "vuex";
 import { useRouter } from "vue-router";
+import ProductFilters from "@/components/ProductFilters.vue"
+import { ProductService } from "@/services/ProductService";
+import { hasError } from '@/utils';
 
 export default defineComponent({
   name: 'ProductInventory',
@@ -274,11 +194,6 @@ export default defineComponent({
     IonBackButton,
     IonButton,
     IonButtons,
-    IonCard,
-    IonCardContent,
-    IonCardHeader,
-    IonCardTitle,
-    IonCheckbox,
     IonChip,
     IonContent,
     IonHeader,
@@ -290,13 +205,24 @@ export default defineComponent({
     IonList,
     IonListHeader,
     IonNote,
+    IonMenu,
     IonPage,
     IonSearchbar,
     IonSelect,
     IonSelectOption,
     IonThumbnail,
     IonTitle,
-    IonToolbar
+    IonToolbar,
+    ProductFilters
+  },
+  data() {
+    return {
+      queryString: '',
+      categories: [{ categoryName: 'All', productCategoryId: 'All' }],
+      colors: [{ productFeatureTypeId: 'All', productFeatureId: 'All', description: 'All' }],
+      sizes: [{ productFeatureTypeId: 'All', productFeatureId: 'All', description: 'All' }],
+      tags: []
+    }
   },
   computed: {
     ...mapGetters({
@@ -309,30 +235,16 @@ export default defineComponent({
   },
   methods: {
     async getProducts(vSize?: any, vIndex?: any) {
-      const viewSize = vSize ? vSize : process.env.VUE_APP_VIEW_SIZE;
-      const viewIndex = vIndex ? vIndex : 0;
-
-      const payload = {
-        "json": {
-          "params": {
-            "rows": viewSize,
-            "start": viewIndex * viewSize,
-            "group": true,
-            "group.field": "groupId",
-            "group.limit": 10000,
-            "group.ngroups": true,
-          } as any,
-          "query": "*:*",
-          "filter": "docType: PRODUCT"
-        }
-      }
-      this.store.dispatch("product/getProducts", payload);
+      await this.store.dispatch('product/getProducts');
+    },
+    async updateQueryString() {
+      await this.store.dispatch('product/updateProductFilters', { value: this.queryString, filterName: 'queryString' })
     },
     async loadMoreProducts(event: any){
-      this.getProducts(
-        undefined,
-        Math.ceil(this.products.length / process.env.VUE_APP_VIEW_SIZE).toString()
-      ).then(() => {
+      const viewSize = process.env.VUE_APP_VIEW_SIZE;
+      const viewIndex = Math.ceil(this.products.length / process.env.VUE_APP_VIEW_SIZE).toString()
+
+      await this.store.dispatch('product/getProducts', { viewSize, viewIndex }).then(() => {
         event.target.complete();
       })
     },
@@ -340,10 +252,81 @@ export default defineComponent({
       await this.store.dispatch('product/updateCurrent', { productId: product?.productId }).then(() => {
         this.router.push(`/product-inventory/${product.productId}`)
       })
+    },
+    async getCategories() {
+      const payload = {
+        "inputFields": {
+          "parentProductCategoryId": "NN_CATALOG_CAT"
+        },
+        viewSize: 50,
+        "fieldList": ["categoryName", "productCategoryId"],
+        "entityName": "ProductCategoryAndRollup",
+        "distinct": "Y",
+        "noConditionFind": "Y",
+      }
+      let resp;
+
+      try{
+        resp = await ProductService.getCategories(payload);
+        if (resp.status === 200 && resp.data.docs?.length > 0 && !hasError(resp)) {
+          this.categories = this.categories.concat(resp.data.docs);
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    },
+    async getFeatures() {
+      const payload = {
+        "inputFields": {
+          "productFeatureTypeId": ['COLOR', 'SIZE'],
+          "productFeatureTypeId_op": 'in'
+        },
+        "viewSize": 50,
+        "fieldList": ['productFeatureId', 'description', 'productFeatureTypeId'],
+        "entityName": "ProductFeature",
+        "distinct": "Y",
+        "noConditionFind": "Y"
+      }
+      let resp;
+
+      try {
+        resp = await ProductService.getFeatures(payload);
+        if (resp.status === 200 && resp.data.docs?.length > 0 && !hasError(resp)) {
+          this.colors = this.colors.concat(resp.data.docs.filter((feature: any) => feature.productFeatureTypeId === 'COLOR'));
+          this.sizes = this.sizes.concat(resp.data.docs.filter((feature: any) => feature.productFeatureTypeId === 'SIZE'));
+        }
+      } catch(error) {
+        console.error(error);
+      }
+    },
+    async getTags() {
+      const payload = {
+        "viewSize": 50,
+        "fieldList": ["keyword", "keywordTypeId"],
+        "entityName": "ProductKeyword",
+        "distinct": "Y",
+        "noConditionFind": "Y"
+      }
+      let resp;
+
+      try {
+        resp = await ProductService.getTags(payload);
+        if (resp.status === 200 && resp.data.docs?.length > 0 && !hasError(resp)) {
+          this.tags = resp.data.docs
+        }
+      } catch(error) {
+        console.error(error);
+      }
+    },
+    async openProductFilterMenu() {
+      await menuController.open();
     }
   },
   mounted() {
     this.getProducts();
+    this.getCategories();
+    this.getFeatures();
+    this.getTags();
   },
   setup() {
     const router = useRouter();

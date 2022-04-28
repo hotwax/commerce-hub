@@ -6,6 +6,7 @@ import * as types from './mutation-types'
 import { hasError, showToast } from '@/utils'
 import { translate } from '@/i18n'
 import emitter from '@/event-bus'
+import { prepareProductQuery } from "@/utils/solrHelper"
 
 
 const actions: ActionTree<ProductState, RootState> = {
@@ -97,9 +98,10 @@ const actions: ActionTree<ProductState, RootState> = {
   */
   async getProducts({ commit, state }, payload) {
     let resp;
+    const query = prepareProductQuery({ ...(state.currentProductFilterSelected), ...payload })
 
     try {
-      resp = await ProductService.getProducts(payload);
+      resp = await ProductService.getProducts(query);
 
       if (resp.status === 200 && resp.data.grouped.groupId?.ngroups > 0 && !hasError(resp)) {
         let products = resp.data.grouped.groupId?.groups;
@@ -140,13 +142,15 @@ const actions: ActionTree<ProductState, RootState> = {
         // }, [])
         // this.dispatch("stock/addProducts", { variantIds });
         
-        if(payload.json.params.start && payload.json.params.start > 0) products = state.products.list.concat(products);
+        if(query?.json.params.start && query?.json.params.start > 0) products = state.products.list.concat(products);
         commit(types.PRODUCT_LIST_UPDATED, { products, totalProductsCount });
       } else {
         showToast(translate("Products not found"));
+        commit(types.PRODUCT_LIST_UPDATED, { products: [], totalProductsCount: 0 });
       }
     } catch (error) {
       console.error(error);
+      commit(types.PRODUCT_LIST_UPDATED, { products: [], totalProductsCount: 0 });
       showToast(translate("Something went wrong"));
     }
     return resp;
@@ -209,6 +213,11 @@ const actions: ActionTree<ProductState, RootState> = {
       console.error(err);
       showToast(translate("Something went wrong"));
     }
+    return resp;
+  },
+  async updateProductFilters({ commit, dispatch, state }, payload) {
+    commit(types.PRODUCT_FILTERS_CURRENT_UPDATED, payload);
+    const resp = await dispatch('getProducts');
     return resp;
   }
 }

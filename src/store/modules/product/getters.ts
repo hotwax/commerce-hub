@@ -23,6 +23,9 @@ const getters: GetterTree<ProductState, RootState> = {
   },
   getCurrent(state) {
     return state.current;
+  },
+  getcurrentProductFilters(state) {
+    return state.currentProductFilterSelected;
   }
 };
 export default getters;
