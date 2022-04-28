@@ -29,8 +29,18 @@ const orderModule: Module<OrderState, RootState> ={
       'sort': 'orderDate desc',
     },
     current: {},
-    validStatusChange: {}
+    validStatusChange: {},
+    stuck: {
+      orders: [],
+      total: 0,
+    },
+    oldExpedited: {
+      orders: [],
+      total: 0,
+    },
+    orderFacilityChange: {}
   },
+  
   getters,
   actions,
   mutations,  

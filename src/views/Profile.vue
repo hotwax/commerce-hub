@@ -74,9 +74,9 @@ import {
   IonToolbar,
   IonTitle,
 } from '@ionic/vue';
+import { useStore } from 'vuex';
 import { defineComponent } from 'vue';
 import Image from '@/components/Image.vue';
-import { useStore } from 'vuex';
 import { useRouter } from 'vue-router';
 
 export default defineComponent({

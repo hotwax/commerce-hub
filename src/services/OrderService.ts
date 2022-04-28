@@ -1,9 +1,9 @@
 import { hasError } from "@/utils";
 import api from "../api"
+import store from '@/store'
 
 const getShipmentDetailForOrderItem = async (payload: any) => {
   let resp;
-
   // TODO: implement grouping logic to get the tracking code for order items
   // currently when grouping only getting response for two groups thus used in operator for now
   const params = {
@@ -35,6 +35,60 @@ const getShipmentDetailForOrderItem = async (payload: any) => {
     }
   } catch(err) {
     console.error(err)
+  }
+  return {};
+}
+
+const getOrderBrokeringInfo = async (payload: any) => {
+  let orderIds = payload.map((order: any) => {
+    return order.orderId;
+  })
+  orderIds = [...new Set(orderIds)]
+  const params = {
+    "inputFields": {
+      "orderId": orderIds,
+      "orderId_op": "in",
+    },
+    "entityName": "OrderFacilityChange",
+    "noConditionFind": "Y",
+    "viewSize": 200,
+    "orderBy": "orderId ASC | changeDatetime ASC",
+    "fieldList": ["orderId", "changeDatetime", "facilityId", "fromFacilityId", "orderItemSeqId"]
+  }
+  try {
+    const resp = await fetchOrderBrokering(params);
+    const orderFacilityChangeInformation = {} as any;
+    if(resp.status == 200 && !hasError(resp) && resp.data.count > 0) {
+      const facilitiesList = await store.dispatch('util/fetchFacilitiesList');
+      const orders = payload
+      orders.forEach((order: any) => {
+        if (!orderFacilityChangeInformation[order.orderId]) {
+          orderFacilityChangeInformation[order.orderId] = {}
+        }
+        orderFacilityChangeInformation[order.orderId][order.orderItemSeqId] = {
+          count: 0,
+          lastBrokeredFacility: "-"
+        } as any;
+        resp.data.docs.forEach((ordersBrokered: any) => {
+          if(ordersBrokered.orderId == order.orderId && ordersBrokered.orderItemSeqId == order.orderItemSeqId){
+            let facility;
+            if(facilitiesList){
+              facility = facilitiesList.find((facility: any) => facility.facilityId === ordersBrokered.facilityId )
+              if(facility.facilityName && facility.facilityId !== "_NA_"){
+                orderFacilityChangeInformation[order.orderId][order.orderItemSeqId].lastBrokeredFacility = facility?.facilityName ? facility?.facilityName : '-';
+              }
+            }
+            orderFacilityChangeInformation[order.orderId][order.orderItemSeqId].count += 1;
+          }
+        })
+        if(orderFacilityChangeInformation[order.orderId][order.orderItemSeqId].count>0){
+          orderFacilityChangeInformation[order.orderId][order.orderItemSeqId].count--;
+        }
+      })
+      return orderFacilityChangeInformation;
+    }
+  } catch(err){
+    console.error(err);
   }
   return {};
 }
@@ -94,6 +148,14 @@ const updateOrderStatus = async (payload: any): Promise<any> => {
   })
 }
 
+const fetchStuckOrders = async (payload: any): Promise<any> => {
+  return api({
+    url: "/solr-query",
+    method: "post",
+    data: payload
+  })
+}
+
 const getPOIdsForSo = async (payload: any): Promise<any> => {
   return api({
     url: "/solr-query",
@@ -148,6 +210,30 @@ const fetchOrderBrokeringInfo = async (payload: any): Promise<any> => {
 }
 
 
+const fetchOrderBrokering = async (payload: any): Promise<any> => {
+  return api({
+    url: "/performFind",
+    method: "post",
+    data: payload
+  });
+}
+
+const fetchOldExpeditedOrders = async (payload: any): Promise<any> => {
+  return api({
+    url: "/solr-query",
+    method: "post",
+    data: payload
+  })
+}
+
+const getOrderFacilityChange = async (payload: any): Promise<any> => {
+  return api({
+    url: "/performFind",
+    method: "post",
+    data: payload
+  });
+}
+
 export const OrderService = {
   fetchShipmentDetailForOrderItem,
   fetchOrderBrokeringInfo,
@@ -160,5 +246,10 @@ export const OrderService = {
   getPOIds,
   getPOIdsForSo,
   getShipmentDetailForOrderItem,
-  updateOrderStatus
+  updateOrderStatus,
+  fetchStuckOrders,
+  fetchOrderBrokering,
+  fetchOldExpeditedOrders,
+  getOrderBrokeringInfo,
+  getOrderFacilityChange
 }
