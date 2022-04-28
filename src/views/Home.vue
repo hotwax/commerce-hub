@@ -50,7 +50,7 @@
           </section>
         </nav>
 
-        <section class="scroller">
+        <section class="scroller" v-if="stuckOrders.length">
           <ion-item class="scroller-header" lines="none">
             <ion-label>{{ $t("Stuck orders") }}</ion-label>
               <ion-button slot="end" fill="outline" size="small" @click="updateAppliedFilters([{value: 'ORDER_APPROVED', filterName: 'status'}, {value: true, filterName: 'unfillable'}])">{{ $t("View all") }}</ion-button>
@@ -92,7 +92,7 @@
           </div>
         </section>
 
-        <section class="scroller">
+        <section class="scroller" v-if="oldExpeditedOrders.length">
           <ion-item class="scroller-header" lines="none">
             <ion-label>{{ $t("Old expedited orders") }}</ion-label>
               <ion-button slot="end" fill="outline" size="small" @click="updateAppliedFilters([{value: '(NEXT_DAY OR SECOND_DAY)', filterName: 'shippingMethod'}])">{{ $t("View all") }}</ion-button>
