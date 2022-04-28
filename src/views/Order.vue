@@ -200,10 +200,9 @@
                 <div class="product-card">
                   <ion-card>
                     <ion-card-header>
-                      <ion-card-title>{{ $t("Destination") }}</ion-card-title>
+                      <ion-card-title>{{ $t("Fulfillment") }}</ion-card-title>
                     </ion-card-header>
                     <ion-list>
-                      <ion-list-header>{{ $t("Fulfillment") }}</ion-list-header>
                       <ion-item v-if="item.orderItemStatusId !== 'ITEM_COMPLETED'">
                         <ion-label> {{ $t("Auto cancel") }} </ion-label>
                         <p slot="end">{{ item.autoCancelDate ? $filters.formatUtcDate(item.autoCancelDate, 'YYYY-MM-DDTHH:mm:ssZ', 'D MMM YYYY') : "-" }}</p>
@@ -248,29 +247,6 @@
                       <!-- TODO: make edit date button functional, also add UI for same -->
                       <!-- <ion-buttons>
                         <ion-button color="primary" fill="clear">{{ $t("Edit dates") }}</ion-button>
-                      </ion-buttons> -->
-                    </ion-list>
-                  </ion-card>
-                  <ion-card>
-                    <ion-card-header>
-                      <ion-card-title>{{ $t("Fulfillment") }}</ion-card-title>
-                    </ion-card-header>
-                    <ion-list>
-                      <ion-item>
-                        <ion-label> {{ $t("Shipping method") }} </ion-label>
-                        <p>{{ getShipmentMethod(item.shipmentMethodTypeId) ? getShipmentMethod(item.shipmentMethodTypeId) : "-"}}</p>
-                      </ion-item>
-                      <ion-item>
-                        <ion-label>{{ $t("Shipping from") }}</ion-label>
-                        <p>{{ item.facilityName ? item.facilityName : "-" }}</p>
-                      </ion-item>
-                      <ion-item lines="none">
-                        <ion-label>{{ $t("Location Inventory") }}</ion-label>
-                        <p>{{ getProductStockForFacility(item.productId, item.facilityId) }}</p>
-                      </ion-item>
-                      <!-- TODO: make changing location button functional, also add UI for same -->
-                      <!-- <ion-buttons>
-                        <ion-button color="primary" fill="clear">{{ $t("Change fulfillment location") }}</ion-button>
                       </ion-buttons> -->
                     </ion-list>
                   </ion-card>
