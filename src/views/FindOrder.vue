@@ -79,7 +79,7 @@
               <div class="primary-info">
                 <ion-item lines="none">
                   <ion-label>
-                    {{ order.orderId }}
+                    <strong>{{ order.orderId }}</strong>
                     <p> {{ order.customer.name }} </p>
                   </ion-label>
                 </ion-item>
