@@ -76,7 +76,7 @@
                     <p v-if="$filters.getFeature(order.item?.featureHierarchy, '1/COLOR/')">{{ $t("Color") }}: {{ $filters.getFeature(order.item?.featureHierarchy, '1/COLOR/') }}</p>
                     <p v-if="$filters.getFeature(order.item?.featureHierarchy, '1/SIZE/')">{{ $t("Size") }}: {{ $filters.getFeature(order.item?.featureHierarchy, '1/SIZE/') }}</p>
                   </ion-label>
-                  <ion-note slot="end" color="success">{{getProductStock(order.productId)}} {{ $t("in stock") }}</ion-note>
+                  <ion-note slot="end" color="success">{{ getProductStock(order.productId)}} {{ $t("in stock") }}</ion-note>
                 </ion-item>
                 <ion-item>
                   <ion-label>{{ $t("Last brokered") }}</ion-label>

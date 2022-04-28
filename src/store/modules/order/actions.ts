@@ -350,7 +350,7 @@ const actions: ActionTree<OrderState, RootState> = {
       "json": {
         "params": {
           "rows": "20",
-          "sort": "orderDate asc"
+          "sort": "orderDate ASC"
         },
         "query":"(*:*)",
         "filter": ["docType:ORDER","orderTypeId: SALES_ORDER","facilityId: _NA_","orderStatusId: ORDER_APPROVED" ]
@@ -361,25 +361,28 @@ const actions: ActionTree<OrderState, RootState> = {
       if (resp.status === 200 && !hasError(resp)) {
         const total = resp.data.response.numFound;
         let orders = resp.data.response.docs;
-        let productIds = orders.map((order: any) => {
-          return order.productId;
-        })
-        productIds = [...new Set(productIds)]
-        const viewSize = productIds.length;
-        const viewIndex = 0;
-        const payload = {
-          viewSize,
-          viewIndex,
-          productIds
+
+        if (orders.length) {
+          let productIds = orders.map((order: any) => {
+            return order.productId;
+          })
+          productIds = [...new Set(productIds)]
+          const viewSize = productIds.length;
+          const viewIndex = 0;
+          const payload = {
+            viewSize,
+            viewIndex,
+            productIds
+          }
+          const orderBrokering = await OrderService.getOrderBrokeringInfo(orders);
+          this.dispatch('stock/addProducts', payload);
+          const products = await this.dispatch("product/fetchProducts", payload);
+          orders = orders.map( (order: any) => {
+            order = {...order, brokering: { ...(orderBrokering[order.orderId] ? orderBrokering[order.orderId][order.orderItemSeqId] : {}) }}
+            order.item = products[order.productId]
+            return order
+          })
         }
-        const orderBrokering = await OrderService.getOrderBrokeringInfo(orders);
-        await this.dispatch('stock/addProducts', payload);
-        const products = await this.dispatch("product/fetchProducts", payload);
-        orders = orders.map( (order: any) => {
-          order = {...order, brokering: { ...(orderBrokering[order.orderId] ? orderBrokering[order.orderId][order.orderItemSeqId] : {}) }}
-          order.item = products[order.productId]
-          return order
-        })
         commit(types.ORDER_STUCK_UPDATED, { orders, total })
       }
     } catch(err) {
@@ -390,6 +393,7 @@ const actions: ActionTree<OrderState, RootState> = {
   async fetchOldExpeditedOrders({commit}){
     let resp;
     try {
+      // TODO Verify conditions
       resp = await OrderService.fetchOldExpeditedOrders({
         "json": {
           "params": {
@@ -397,33 +401,35 @@ const actions: ActionTree<OrderState, RootState> = {
             "sort": "orderDate DESC"
           },
           "query":"(*:*)",
-          "filter": ["docType:ORDER","orderTypeId: SALES_ORDER AND orderId: NN12039"]
+          "filter": ["docType:ORDER","orderTypeId: SALES_ORDER","-shipmentMethodTypeId: STANDARD", "-shipmentMethodTypeId: STOREPICKUP","orderStatusId: ORDER_APPROVED"]
         }
       });
       if (resp.status === 200 && !hasError(resp)) {
         let orders = resp.data.response.docs
         const total = resp.data.response.numFound
-        let productIds = orders.map((order: any) => {
-          return order.productId;
-        })
-        productIds = [...new Set(productIds)]
-        const viewSize = productIds.length;
-        const viewIndex = 0;
-        const payload = {
-          viewSize,
-          viewIndex,
-          productIds
+        if (orders.length) {
+          let productIds = orders.map((order: any) => {
+            return order.productId;
+          })
+          productIds = [...new Set(productIds)]
+          const viewSize = productIds.length;
+          const viewIndex = 0;
+          const payload = {
+            viewSize,
+            viewIndex,
+            productIds
+          }
+          const orderBrokering = await OrderService.getOrderBrokeringInfo(orders);
+          if (productIds.length) {
+            this.dispatch('stock/addProducts', payload);
+            const products = await this.dispatch("product/fetchProducts", payload);
+            orders = orders.map( (order: any) => {
+              order = {...order, brokering: { ...(orderBrokering[order.orderId] ? orderBrokering[order.orderId][order.orderItemSeqId] : {}) }}
+              order.item = products[order.productId]
+              return order
+            })
+          }
         }
-        await this.dispatch('stock/addProducts', payload);
-        await this.dispatch("product/fetchProducts", payload);
-        const orderBrokering = await OrderService.getOrderBrokeringInfo(orders);
-        await this.dispatch('stock/addProducts', payload);
-        const products = await this.dispatch("product/fetchProducts", payload);
-        orders = orders.map( (order: any) => {
-          order = {...order, brokering: { ...(orderBrokering[order.orderId] ? orderBrokering[order.orderId][order.orderItemSeqId] : {}) }}
-          order.item = products[order.productId]
-          return order
-        })
         commit(types.ORDER_OLD_EXPEDITED_UPDATED, { orders, total });
       }
     } catch (err) {

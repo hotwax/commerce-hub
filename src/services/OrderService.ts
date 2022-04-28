@@ -39,8 +39,8 @@ const getShipmentDetailForOrderItem = async (payload: any) => {
   return {};
 }
 
-const getOrderBrokeringInfo = async (payload: any) => {
-  let orderIds = payload.map((order: any) => {
+const getOrderBrokeringInfo = async (orders: any) => {
+  let orderIds = orders.map((order: any) => {
     return order.orderId;
   })
   orderIds = [...new Set(orderIds)]
@@ -60,14 +60,13 @@ const getOrderBrokeringInfo = async (payload: any) => {
     const orderFacilityChangeInformation = {} as any;
     if(resp.status == 200 && !hasError(resp) && resp.data.count > 0) {
       const facilitiesList = await store.dispatch('util/fetchFacilitiesList');
-      const orders = payload
       orders.forEach((order: any) => {
         if (!orderFacilityChangeInformation[order.orderId]) {
           orderFacilityChangeInformation[order.orderId] = {}
         }
         orderFacilityChangeInformation[order.orderId][order.orderItemSeqId] = {
           count: 0,
-          lastBrokeredFacility: "-"
+          lastBrokeredFacility: ""
         } as any;
         resp.data.docs.forEach((ordersBrokered: any) => {
           if(ordersBrokered.orderId == order.orderId && ordersBrokered.orderItemSeqId == order.orderItemSeqId){
