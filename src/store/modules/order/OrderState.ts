@@ -5,7 +5,10 @@ export default interface OrderState {
   },
   poList: {
     orders: any[],
-    total: number
+    count: {
+      order: number,
+      item: number
+    }
   },
   poIds: any,
   query: any,

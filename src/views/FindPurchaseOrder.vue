@@ -31,7 +31,7 @@
         <main>
           <section class="sort">
             <ion-item lines="none">
-              <h2>{{ $t("Results") }}:</h2>
+              <h2>{{ $t("Results") }}: {{ count.order }} {{ $t("orders")}}, {{ count.item }} {{ $t("items") }}</h2>
             </ion-item>
 
             <div>
@@ -118,6 +118,9 @@
             </div>
             <hr />
           </div>
+          <ion-infinite-scroll @ionInfinite="loadMoreOrders($event)" threshold="100px" :disabled="!isScrollable">
+            <ion-infinite-scroll-content loading-spinner="crescent" :loading-text="$t('Loading')"/>
+          </ion-infinite-scroll>
         </main>
       </div>
     </ion-content>
@@ -133,6 +136,8 @@ import {
   IonContent,
   IonHeader,
   IonIcon,
+  IonInfiniteScroll,
+  IonInfiniteScrollContent,
   IonItem,
   IonLabel,
   IonList,
@@ -177,6 +182,8 @@ export default {
     IonContent,
     IonHeader,
     IonIcon,
+    IonInfiniteScroll,
+    IonInfiniteScrollContent,
     IonItem,
     IonLabel,
     IonList,
@@ -201,6 +208,8 @@ export default {
   computed: {
     ...mapGetters({
       getProduct: 'product/getProduct',
+      count: 'order/getPurchaseOrderCount',
+      isScrollable: 'order/isPurchaseOrderScrollable'
     })
   },
   async mounted() {
@@ -216,6 +225,15 @@ export default {
     },
     async updateQueryString() {
       await this.store.dispatch('order/updateAppliedPoFilters', { value: this.queryString, filterName: 'queryString' })
+    },
+    async loadMoreOrders(event) {
+      await this.store.dispatch('order/findPurchaseOrders', {
+        viewSize: undefined,
+        viewIndex: Math.ceil(this.purchaseOrders.length / process.env.VUE_APP_VIEW_SIZE).toString()
+      }).then((resp) => {
+        this.purchaseOrders = resp;
+        event.target.complete();
+      })
     },
   },
   setup() {

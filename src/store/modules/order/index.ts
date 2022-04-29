@@ -14,7 +14,10 @@ const orderModule: Module<OrderState, RootState> ={
     },
     poList: {
       orders: [],
-      total: 0
+      count: {
+        order: 0,
+        item: 0
+      }
     },
     poIds: {},
     query: {

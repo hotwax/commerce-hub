@@ -351,7 +351,7 @@ const actions: ActionTree<OrderState, RootState> = {
     try {
       resp = await OrderService.findPurchaseOrder(query)
       if (resp && resp.status === 200 && !hasError(resp) && resp.data.grouped.orderName.ngroups) {
-        const orders = resp.data.grouped.orderName.groups.map((order: any) => {
+        let orders = resp.data.grouped.orderName.groups.map((order: any) => {
           const orderItem = order.doclist.docs[0]
           order.orderId = orderItem.orderId
           order.orderName = orderItem.orderName
@@ -376,8 +376,11 @@ const actions: ActionTree<OrderState, RootState> = {
 
         await this.dispatch('product/fetchProducts', { productIds })
 
-        const total = resp.data.grouped.orderName.ngroups
-        commit(types.ORDER_PO_LIST_UPDATED, { orders, total })
+        const ordersCount = resp.data.grouped.orderName.ngroups
+        const itemsCount = resp.data.grouped.orderName.matches
+        orders = state.poList.orders.concat(orders)
+        commit(types.ORDER_PO_LIST_UPDATED, { orders, ordersCount, itemsCount })
+
         return orders
       } else {
         showToast(translate("Something went wrong"));
@@ -386,7 +389,7 @@ const actions: ActionTree<OrderState, RootState> = {
       console.error(error)
       showToast(translate("Something went wrong"));
     }
-    return {};
+    return resp;
   },
 
   async updateAppliedPoFilters({ commit, dispatch }, payload) {

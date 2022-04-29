@@ -24,7 +24,8 @@ const mutations: MutationTree <OrderState> = {
   },
   [types.ORDER_PO_LIST_UPDATED] (state, payload) {
     state.poList.orders = payload.orders
-    state.poList.total = payload.total
+    state.poList.count.order = payload.ordersCount
+    state.poList.count.item = payload.itemsCount
   },
   [types.ORDER_PO_FILTERS_UPDATED] (state, payload) {
     state.poQuery[payload.filterName] = payload.value
