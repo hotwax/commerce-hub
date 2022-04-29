@@ -1,6 +1,7 @@
 import { hasError } from "@/utils";
 import api from "../api"
 import store from '@/store'
+import moment from 'moment'
 
 const getShipmentDetailForOrderItem = async (payload: any) => {
   let resp;
@@ -57,33 +58,34 @@ const getOrderBrokeringInfo = async (orders: any) => {
   }
   try {
     const resp = await fetchOrderBrokering(params);
-    const orderFacilityChangeInformation = {} as any;
     if(resp.status == 200 && !hasError(resp) && resp.data.count > 0) {
-      const facilitiesList = await store.dispatch('util/fetchFacilitiesList');
-      orders.forEach((order: any) => {
+      const facilities = await store.dispatch('util/fetchFacilities');
+      const ordersFacilityChangeList = resp.data.docs;
+      const orderFacilityChangeInformation = orders.reduce((orderFacilityChangeInformation: any, order: any) => {
         if (!orderFacilityChangeInformation[order.orderId]) {
           orderFacilityChangeInformation[order.orderId] = {}
         }
-        orderFacilityChangeInformation[order.orderId][order.orderItemSeqId] = {
-          count: 0,
-          lastBrokeredFacility: ""
-        } as any;
-        resp.data.docs.forEach((ordersBrokered: any) => {
-          if(ordersBrokered.orderId == order.orderId && ordersBrokered.orderItemSeqId == order.orderItemSeqId){
-            let facility;
-            if(facilitiesList){
-              facility = facilitiesList.find((facility: any) => facility.facilityId === ordersBrokered.facilityId )
-              if(facility.facilityName && facility.facilityId !== "_NA_"){
-                orderFacilityChangeInformation[order.orderId][order.orderItemSeqId].lastBrokeredFacility = facility?.facilityName ? facility?.facilityName : '-';
-              }
-            }
-            orderFacilityChangeInformation[order.orderId][order.orderItemSeqId].count += 1;
-          }
+        const orderItemFacilityChangeList = ordersFacilityChangeList.filter((ordersFacilityChange: any) => {
+          return ordersFacilityChange.orderId === order.orderId && ordersFacilityChange.orderItemSeqId === order.orderItemSeqId
         })
-        if(orderFacilityChangeInformation[order.orderId][order.orderItemSeqId].count>0){
-          orderFacilityChangeInformation[order.orderId][order.orderItemSeqId].count--;
-        }
-      })
+
+        const orderBrokeringInfo = orderItemFacilityChangeList.reduce((orderBrokeringInfo: any, ordersBrokered: any) => {
+          const facility = facilities[ordersBrokered.facilityId]
+          const diff = moment.utc(ordersBrokered.changeDatetime).diff(moment.utc(orderBrokeringInfo.lastBrokeredDateTime))
+          // if current facility change time is recent than the current set one, update
+          if(facility && facility.facilityId !== "_NA_" && diff){
+            orderBrokeringInfo.lastBrokeredFacility = facility;
+            orderBrokeringInfo.lastBrokeredDateTime = ordersBrokered.changeDatetime;
+          }
+          return orderBrokeringInfo;
+        }, {
+          count: orderItemFacilityChangeList.length > 0 ? orderItemFacilityChangeList.length - 1 : 0, // We have excluded initial NA assignment
+          lastBrokeredFacility: {},
+          lastBrokeredDateTime: 0
+        })
+        orderFacilityChangeInformation[order.orderId][order.orderItemSeqId] = orderBrokeringInfo;
+        return orderFacilityChangeInformation;
+      }, {})
       return orderFacilityChangeInformation;
     }
   } catch(err){

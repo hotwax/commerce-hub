@@ -81,7 +81,7 @@
                 <ion-item>
                   <ion-label>{{ $t("Last brokered") }}</ion-label>
                   <!-- TODO Replace 'p' tag with 'ion-label' after upgrading Ionic 5 to Ionic 6 -->
-                  <p slot="end">{{ order.brokering.lastBrokeredFacility ? order.brokering.lastBrokeredFacility : '-' }}</p>
+                  <p slot="end">{{ order.brokering.lastBrokeredFacility && order.brokering.lastBrokeredFacility.facilityName ? order.brokering.lastBrokeredFacility.facilityName : '-'  }}</p>
                 </ion-item>
                 <ion-item lines="none">
                   <ion-label>{{ $t("Rebrokered") }}</ion-label>
@@ -129,7 +129,7 @@
                 <ion-item>
                   <ion-label>{{ $t("Last brokered")}}</ion-label>
                   <!-- TODO Replace 'p' tag with 'ion-label' after upgrading Ionic 5 to Ionic 6 -->
-                  <p slot="end">{{ order.brokering.lastBrokeredFacility ? order.brokering.lastBrokeredFacility : '-' }}</p>
+                  <p slot="end">{{ order.brokering.lastBrokeredFacility && order.brokering.lastBrokeredFacility.facilityName ? order.brokering.lastBrokeredFacility.facilityName : '-' }}</p>
                 </ion-item>
                 <ion-item>
                   <ion-label>{{ $t("Rebrokered") }}</ion-label>
