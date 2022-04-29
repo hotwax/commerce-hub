@@ -66,7 +66,10 @@ const actions: ActionTree<UtilState, RootState> = {
     }
     return cachedStatus;
   },  
-  async fetchFacilitiesList({ commit }) {
+  async fetchFacilities({ state, commit }) {
+    if (Object.keys(state.facilities).length === 0) {
+      return state.facilities;
+    }
     try {
       const resp = await UtilService.getFacilities({
         "entityName": "Facility",
@@ -75,12 +78,17 @@ const actions: ActionTree<UtilState, RootState> = {
         "fieldList": ["facilityId", "facilityName"],
       });
       if(resp.status === 200 && !hasError(resp)){
-        commit(types.UTIL_FACILITIES_LIST_UPDATED, resp.data.docs);
-        return resp.data.docs;
+        const facilities = resp.data.docs.reduce((facilities: any, facility: any) => {
+          facilities[facility.facilityId] = facility;
+          return facilities;
+        }, {})
+        commit(types.UTIL_FACILITY_LIST_UPDATED, facilities);
+        return facilities;
       }
     } catch (err) {
       console.error("error", err);
     }
+    return {};
   }
 }
 

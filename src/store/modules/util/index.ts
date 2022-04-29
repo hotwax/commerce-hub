@@ -10,7 +10,7 @@ const utilModule: Module<UtilState, RootState> = {
     state: {
       shipmentMethod: {},
       status: {},
-      facilityList: []
+      facilities: []
     },
     getters,
     actions,
