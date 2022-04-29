@@ -21,7 +21,7 @@
     <ion-content>
       <div class="find">
         <section class="search">
-          <ion-searchbar :placeholder="$t('Search purchase orders and products')" />
+          <ion-searchbar v-model="queryString" @keyup.enter="queryString = $event.target.value; updateQueryString()" :placeholder="$t('Search purchase orders and products')" />
         </section>
 
         <aside class="filters">
@@ -202,18 +202,20 @@ export default {
   data() {
     return {
       showOrderItems: true,
-      purchaseOrders: {}
+      queryString: ''
     }
   },
   computed: {
     ...mapGetters({
       getProduct: 'product/getProduct',
       count: 'order/getPurchaseOrderCount',
-      isScrollable: 'order/isPurchaseOrderScrollable'
+      isScrollable: 'order/isPurchaseOrderScrollable',
+      purchaseOrders: 'order/getPurchaseOrders'
     })
   },
   async mounted() {
-    this.purchaseOrders = await this.store.dispatch('order/findPurchaseOrders')
+    await this.store.dispatch('order/findPurchaseOrders')
+    this.store.dispatch('util/fetchFacility')
   },
   methods: {
     async copyToClipboard(text) {
@@ -230,8 +232,7 @@ export default {
       await this.store.dispatch('order/findPurchaseOrders', {
         viewSize: undefined,
         viewIndex: Math.ceil(this.purchaseOrders.length / process.env.VUE_APP_VIEW_SIZE).toString()
-      }).then((resp) => {
-        this.purchaseOrders = resp;
+      }).then(() => {
         event.target.complete();
       })
     },

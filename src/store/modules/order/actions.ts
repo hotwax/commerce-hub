@@ -378,15 +378,16 @@ const actions: ActionTree<OrderState, RootState> = {
 
         const ordersCount = resp.data.grouped.orderName.ngroups
         const itemsCount = resp.data.grouped.orderName.matches
-        orders = state.poList.orders.concat(orders)
+        if (params?.viewIndex && params.viewIndex > 0) orders = state.poList.orders.concat(orders)
         commit(types.ORDER_PO_LIST_UPDATED, { orders, ordersCount, itemsCount })
-
         return orders
       } else {
+        commit(types.ORDER_PO_LIST_UPDATED, { orders: {}, ordersCount: 0, itemsCount: 0 })
         showToast(translate("Something went wrong"));
       }
     } catch(error){
       console.error(error)
+      commit(types.ORDER_PO_LIST_UPDATED, { orders: {}, ordersCount: 0, itemsCount: 0 })
       showToast(translate("Something went wrong"));
     }
     return resp;
