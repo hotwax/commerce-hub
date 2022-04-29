@@ -3,20 +3,16 @@ import getters from './getters'
 import mutations from './mutations'
 import { Module } from 'vuex'
 import RootState from '@/store/RootState'
-import UtilState from './UtilState'
+import JobState from './JobState'
 
-const utilModule: Module<UtilState, RootState> = {
+const jobModule: Module<JobState, RootState> = {
     namespaced: true,
     state: {
-      shipmentMethod: {},
-      status: {},
-      facilityList: [],
-      productStore: [],
-      shopifyConfig: {}
+      cached: {}
     },
     getters,
     actions,
     mutations,
 }
 
-export default utilModule;
+export default jobModule;

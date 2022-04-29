@@ -27,6 +27,7 @@ const orderModule: Module<OrderState, RootState> ={
       'selectedPoIds': [] as Array<string>,
       'queryString': '',
       'sort': 'orderDate desc',
+      'productStoreId': ''
     },
     current: {},
     validStatusChange: {},

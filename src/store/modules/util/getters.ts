@@ -11,6 +11,9 @@ const getters: GetterTree <UtilState, RootState> = {
     },
     getFacilityName: (state) => (facilityId: any) => {
         return state.facilityList.find((facility: any) => facility.facilityId === facilityId)
+    },    
+    getEcomStores: (state) => {
+        return state.productStore
     }
 }
 export default getters;

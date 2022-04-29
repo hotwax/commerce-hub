@@ -6,10 +6,20 @@
         <ion-title>{{ $t("Orders") }}</ion-title>
         <ion-buttons slot="end">
           <!-- TODO: make download csv and sync button functional -->
-          <!-- <ion-button fill="clear">
+          <ion-button id="product-store-popover" fill="clear">
             <ion-icon slot="icon-only" :icon="syncOutline" />
           </ion-button>
-          <ion-button fill="clear">
+          <ion-popover trigger="product-store-popover" :dismiss-on-select="true">
+            <ion-content>
+              <ion-list>
+                <ion-list-header>{{ $t('Product Store') }}</ion-list-header>
+                <div v-for="store in eComStores" :key="store.productStoreId">
+                  <ion-item v-if="store.productStoreId" @click="runJob('JOB_IMP_ORD', store.productStoreId)" button>{{ store.storeName }}</ion-item>
+                </div>
+              </ion-list>
+            </ion-content>
+          </ion-popover>
+          <!-- <ion-button fill="clear">
             <ion-icon slot="icon-only" :icon="downloadOutline" />
           </ion-button> -->
           <ion-button fill="clear" class="mobile-only" @click="openOrderFilter()">
@@ -22,6 +32,11 @@
     <ion-menu content-id="content" type="overlay" side="end">
       <ion-header>
         <ion-toolbar>
+          <ion-buttons slot="start">
+            <ion-button @click="closeMenu">
+              <ion-icon :icon="closeOutline" slot="icon-only" />
+            </ion-button>
+          </ion-buttons>
           <ion-title>{{ $t("Filters")}}</ion-title>
         </ion-toolbar>
       </ion-header>
@@ -74,7 +89,7 @@
               <div class="primary-info">
                 <ion-item lines="none">
                   <ion-label>
-                    {{ order.orderId }}
+                    <strong>{{ order.orderId }}</strong>
                     <p> {{ order.customer.name }} </p>
                   </ion-label>
                 </ion-item>
@@ -124,9 +139,12 @@ import {
   IonInfiniteScrollContent,
   IonItem,
   IonLabel,
+  IonList,
+  IonListHeader,
   IonMenu,
   IonNote,
   IonPage,
+  IonPopover,
   IonSearchbar,
   IonSelect,
   IonSelectOption,
@@ -136,14 +154,14 @@ import {
   menuController
 } from '@ionic/vue';
 import {
+  closeOutline,
   documentTextOutline,
   downloadOutline,
   filterOutline,
   pricetag,
   ribbon,
   swapVerticalOutline,
-  syncOutline,
-  close,
+  syncOutline
 } from 'ionicons/icons';
 import { defineComponent, ref } from "vue";
 import { mapGetters, useStore } from "vuex";
@@ -154,6 +172,8 @@ import OrderFilters from '@/components/OrderFilters.vue'
 import { OrderService } from '@/services/OrderService';
 import StatusBadge from '@/components/StatusBadge.vue'
 import OrderItemCard from '@/components/OrderItemCard.vue'
+import emitter from '@/event-bus';
+import { JobService } from '@/services/JobService';
 
 const { Clipboard } = Plugins;
 
@@ -171,9 +191,12 @@ export default defineComponent ({
     IonInfiniteScrollContent,
     IonItem,
     IonLabel,
+    IonList,
+    IonListHeader,
     IonMenu,
     IonNote,
     IonPage,
+    IonPopover,
     IonSelect,
     IonSelectOption,
     IonSearchbar,
@@ -192,7 +215,8 @@ export default defineComponent ({
       getProductStock: 'stock/getProductStock',
       isScrollable: 'order/isScrollable',
       query: 'order/getOrderQuery',
-      getShipmentMethodDesc: 'util/getShipmentMethod'
+      getShipmentMethodDesc: 'util/getShipmentMethod',
+      eComStores: 'util/getEcomStores'
     })
   },
   data() {
@@ -205,6 +229,9 @@ export default defineComponent ({
     }
   },
   methods: {
+    async closeMenu() {
+      await menuController.close();
+    },
     async sortOrders(value: string) {
       this.sort = value
       await this.store.dispatch('order/updateSort', this.sort)
@@ -241,10 +268,29 @@ export default defineComponent ({
     },
     async openOrderFilter() {
       await menuController.open();
+    },
+    async runJob(enumId: string, productStoreId: string) {
+
+      const job = await this.store.dispatch('job/fetchJobInformation', enumId)
+      if (!job) {
+        console.error('Job information not found')
+        return;
+      }
+      job.productStoreId = productStoreId;
+      const resp = await JobService.runServiceNow(job);
+      // added logic to fetch the order after 4s once the service is scheduled successfully
+      if (resp === 'success') {
+        emitter.emit('presentLoader')
+        setTimeout(function (this: any) {
+          emitter.emit('dismissLoader')
+          this.store.dispatch('order/findOrders')
+        }.bind(this), 4000)
+      }
     }
   },
   async mounted() {
     this.store.dispatch('util/fetchShipmentMethods')
+    this.store.dispatch('util/getEComStores')
     await this.getOrders();
 
     try {
@@ -305,7 +351,7 @@ export default defineComponent ({
     const cusotmerLoyaltyOptions = process.env.VUE_APP_CUST_LOYALTY_OPTIONS
 
     return {
-      close,
+      closeOutline,
       cusotmerLoyaltyOptions,
       documentTextOutline,
       downloadOutline,
@@ -325,6 +371,9 @@ export default defineComponent ({
 </script>
 
 <style scoped>
+ion-menu {
+  --width: 100%;
+}
 .section-header{
   margin: 0 var(--spacer-xs);
 }
@@ -337,6 +386,10 @@ export default defineComponent ({
   display: block;
 }
 
+main > div{
+  cursor: pointer;
+}
+
 ion-modal {
   --width: 290px;
   --height: 382px;
@@ -344,6 +397,10 @@ ion-modal {
 }
 
 @media (min-width: 991px) {
+  ion-menu {
+    --width: 375px;
+  }
+
   .main {
     margin-left: var(--spacer-xl);
   }

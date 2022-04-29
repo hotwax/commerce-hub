@@ -5,7 +5,7 @@ export interface Order {
     /** An array containing the items purchased in this order */
     items?: Array<OrderItem>;
     /** An array containing the groups of items purchased in this order */
-    itemGroup?: Array<OrderItemGroup>;
+    itemGroups?: Array<OrderItemGroup>;
     total?: number;
     statusId: string;
     statusDesc?: string;
@@ -28,4 +28,5 @@ export interface OrderItemGroup {
     shippingMethod?: any;
     carrier?: any;
     identifications?: Array<any>;
+    facility?: any;
 }

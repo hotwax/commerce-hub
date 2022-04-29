@@ -85,7 +85,7 @@
               <div class="primary-info">
                 <ion-item lines="none">
                   <ion-label class="ion-text-wrap">
-                    <p>Product store</p>
+                    <p class="overline">Product store</p>
                     PO external ID
                     <p>Created date</p>
                   </ion-label>
