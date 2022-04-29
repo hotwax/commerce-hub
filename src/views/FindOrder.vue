@@ -6,9 +6,19 @@
         <ion-title>{{ $t("Orders") }}</ion-title>
         <ion-buttons slot="end">
           <!-- TODO: make download csv and sync button functional -->
-          <ion-button fill="clear" @click="runJob('JOB_IMP_ORD')">
+          <ion-button id="product-store-popover" fill="clear">
             <ion-icon slot="icon-only" :icon="syncOutline" />
           </ion-button>
+          <ion-popover trigger="product-store-popover" :dismiss-on-select="true">
+            <ion-content>
+              <ion-list>
+                <ion-list-header>{{ $t('Product Store') }}</ion-list-header>
+                <div v-for="store in eComStores" :key="store.productStoreId">
+                  <ion-item v-if="store.productStoreId" @click="runJob('JOB_IMP_ORD', store.productStoreId)" button>{{ store.storeName }}</ion-item>
+                </div>
+              </ion-list>
+            </ion-content>
+          </ion-popover>
           <!-- <ion-button fill="clear">
             <ion-icon slot="icon-only" :icon="downloadOutline" />
           </ion-button> -->
@@ -129,9 +139,12 @@ import {
   IonInfiniteScrollContent,
   IonItem,
   IonLabel,
+  IonList,
+  IonListHeader,
   IonMenu,
   IonNote,
   IonPage,
+  IonPopover,
   IonSearchbar,
   IonSelect,
   IonSelectOption,
@@ -178,9 +191,12 @@ export default defineComponent ({
     IonInfiniteScrollContent,
     IonItem,
     IonLabel,
+    IonList,
+    IonListHeader,
     IonMenu,
     IonNote,
     IonPage,
+    IonPopover,
     IonSelect,
     IonSelectOption,
     IonSearchbar,
@@ -199,7 +215,8 @@ export default defineComponent ({
       getProductStock: 'stock/getProductStock',
       isScrollable: 'order/isScrollable',
       query: 'order/getOrderQuery',
-      getShipmentMethodDesc: 'util/getShipmentMethod'
+      getShipmentMethodDesc: 'util/getShipmentMethod',
+      eComStores: 'util/getEcomStores'
     })
   },
   data() {
@@ -252,12 +269,14 @@ export default defineComponent ({
     async openOrderFilter() {
       await menuController.open();
     },
-    async runJob(enumId: string) {
+    async runJob(enumId: string, productStoreId: string) {
+
       const job = await this.store.dispatch('job/fetchJobInformation', enumId)
       if (!job) {
         console.error('Job information not found')
         return;
       }
+      job.productStoreId = productStoreId;
       const resp = await JobService.runServiceNow(job);
       // added logic to fetch the order after 4s once the service is scheduled successfully
       if (resp === 'success') {
@@ -271,6 +290,7 @@ export default defineComponent ({
   },
   async mounted() {
     this.store.dispatch('util/fetchShipmentMethods')
+    this.store.dispatch('util/getEComStores')
     await this.getOrders();
 
     try {

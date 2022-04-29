@@ -73,6 +73,8 @@ const prepareOrderQuery = (query: any) => {
 
   payload.json.filter = payload.json.filter.concat(` AND shipmentMethodTypeId: ${query.shippingMethod ? query.shippingMethod : '*' }`)
 
+  payload.json.filter = payload.json.filter.concat(` AND productStoreId: ${query.productStoreId ? query.productStoreId : '*' }`)
+
   // TODO: improve logic to pass the date in the solr-query payload
   if (query.orderCreated) {
     payload.json.filter = payload.json.filter.concat(` AND orderDate: [${query.orderCreated + 'T00:00:00Z'} TO ${query.orderCreated + 'T23:59:59Z'}]`)

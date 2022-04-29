@@ -1,31 +1,35 @@
 import { hasError } from "@/utils";
 import moment from "moment";
 import api from "@/api"
+import store from "@/store";
 
 const runServiceNow = async (job: any): Promise<any> => {
   let resp;
+
+  let shopifyConfigId = store.state.util.shopifyConfig[job.productStoreId]
+
+  if (!shopifyConfigId) {
+    shopifyConfigId = await store.dispatch('util/getShopifyConfig', job.productStoreId).then((res) => res?.shopifyConfigId ? res?.shopifyConfigId : '')
+  }
 
   const payload = {
     'JOB_NAME': job.jobName,
     'SERVICE_NAME': job.serviceName,
     'SERVICE_COUNT': '0',
     'jobFields': {
-      // TODO: for now we are sending empty product store id but need to get the product store id
-      'productStoreId': '',
+      'productStoreId': job.productStoreId,
       'systemJobEnumId': job.systemJobEnumId,
       'tempExprId': job.tempExprId,
       'parentJobId': job.parentJobId,
       'recurrenceTimeZone': moment.tz.guess()
     },
-    // TODO: for now we are sending empty shopifyConfig id but need to get the shopifyConfig id
-    'shopifyConfigId': '',
+    'shopifyConfigId': shopifyConfigId,
     'statusId': "SERVICE_PENDING",
     'systemJobEnumId': job.systemJobEnumId
   } as any
 
   // checking if the runtimeData has productStoreId, and if present then adding it on root level
-  // TODO: for now we are sending empty product store id but need to get the product store id
-  job?.runtimeData?.productStoreId?.length >= 0 && (payload['productStoreId'] = '')
+  job?.runtimeData?.productStoreId?.length >= 0 && (payload['productStoreId'] = job.productStoreId)
   job?.priority && (payload['SERVICE_PRIORITY'] = job.priority.toString())
 
   try {
