@@ -12,8 +12,8 @@
           <ion-popover trigger="product-store-popover" :dismiss-on-select="true">
             <ion-content>
               <ion-list>
-                <ion-list-header>{{ $t('Product Store Id') }}</ion-list-header>
-                <div v-for="store in getEcomStores" :key="store.productStoreId">
+                <ion-list-header>{{ $t('Product Store') }}</ion-list-header>
+                <div v-for="store in eComStores" :key="store.productStoreId">
                   <ion-item v-if="store.productStoreId" @click="runJob('JOB_IMP_ORD', store.productStoreId)" button>{{ store.storeName }}</ion-item>
                 </div>
               </ion-list>
@@ -211,7 +211,7 @@ export default defineComponent ({
       isScrollable: 'order/isScrollable',
       query: 'order/getOrderQuery',
       getShipmentMethodDesc: 'util/getShipmentMethod',
-      getEcomStores: 'util/getEcomStores'
+      eComStores: 'util/getEcomStores'
     })
   },
   data() {

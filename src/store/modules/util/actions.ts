@@ -99,7 +99,6 @@ const actions: ActionTree<UtilState, RootState> = {
   async getShopifyConfig({ commit }, payload) {
     const resp = await UtilService.getShopifyConfig({
       "inputFields": {
-        "storeName_op": "not-empty",
         "productStoreId": payload
       },
       "entityName": "ShopifyConfig",
