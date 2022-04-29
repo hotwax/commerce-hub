@@ -12,6 +12,13 @@ const orderModule: Module<OrderState, RootState> ={
       orders: [],
       total: 0
     },
+    poList: {
+      orders: [],
+      count: {
+        order: 0,
+        item: 0
+      }
+    },
     poIds: {},
     query: {
       'status': '',
@@ -26,6 +33,13 @@ const orderModule: Module<OrderState, RootState> ={
       'autoCancelDate': '',
       'selectedPoIds': [] as Array<string>,
       'queryString': '',
+      'sort': 'orderDate desc',
+    },
+    poQuery: {
+      'productStoreId': '',
+      'facilityId': '',
+      'queryString': '',
+      'estimatedDeliveryDate': '',
       'sort': 'orderDate desc',
     },
     current: {},

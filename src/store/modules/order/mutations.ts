@@ -21,6 +21,14 @@ const mutations: MutationTree <OrderState> = {
   },
   [types.ORDER_VALID_STATUS_CHANGE_UPDATED] (state, payload) {
     state.validStatusChange = payload
-  }
+  },
+  [types.ORDER_PO_LIST_UPDATED] (state, payload) {
+    state.poList.orders = payload.orders
+    state.poList.count.order = payload.ordersCount
+    state.poList.count.item = payload.itemsCount
+  },
+  [types.ORDER_PO_FILTERS_UPDATED] (state, payload) {
+    state.poQuery[payload.filterName] = payload.value
+  },
 }
 export default mutations;

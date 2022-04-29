@@ -65,6 +65,26 @@ const actions: ActionTree<UtilState, RootState> = {
       console.error('Something went wrong while fetching status for items and orders')
     }
     return cachedStatus;
+  },
+
+  async fetchFacility({ commit }) {
+    let resp;
+    try {
+      resp = await UtilService.fetchFacility({
+        "entityName": "ProductStoreAndFacility",
+        "distinct": "Y",
+        "noConditionFind": "Y",
+        "fieldList": ["facilityId", "facilityName"],
+        "viewSize": 50
+      })
+      if (resp.status == 200 && resp.data.count && !hasError(resp)) {
+        const facilities = resp.data.docs
+        facilities.push({'facilityId': '', 'facilityName': 'any'})
+        commit(types.UTIL_FACILITY_UPDATED, facilities)
+      }
+    } catch (err) {
+      console.error(err)
+    }
   }
 }
 

@@ -17,6 +17,18 @@ const getters: GetterTree <OrderState, RootState> = {
   },
   getOrderValidStatusChange: (state) => (statusId: string) => {
     return state.validStatusChange[statusId]
-  }
+  },
+  getPurchaseOrders (state) {
+    return state.poList.orders
+  },
+  getPurchaseOrderQuery: (state) => {
+    return state.poQuery
+  },
+  getPurchaseOrderCount: (state) => {
+    return state.poList.count
+  },
+  isPurchaseOrderScrollable: (state) => {
+    return state.poList.orders.length > 0 && state.list.orders.length < state.poList.count.order
+  },
 }
 export default getters;

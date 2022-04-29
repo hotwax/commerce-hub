@@ -47,6 +47,14 @@ const findOrder = async (payload: any): Promise<any> => {
   });
 }
 
+const findPurchaseOrder = async (payload: any): Promise<any> => {
+  return api({
+    url: "/solr-query",
+    method: "post",
+    data: payload
+  });
+}
+
 const getPOIds = async (payload: any): Promise<any> => {
   return api({
     url: "/solr-query",
@@ -156,6 +164,7 @@ export const OrderService = {
   fetchStatusChange,
   findOrder,
   findOrderDetails,
+  findPurchaseOrder,
   getPOInformationForPOIds,
   getPOIds,
   getPOIdsForSo,

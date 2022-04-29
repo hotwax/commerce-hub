@@ -6,7 +6,7 @@ import * as types from './mutation-types'
 import { getCustomerLoyalty, getIdentification, hasError, showToast } from '@/utils'
 import { translate } from '@/i18n'
 import { Order, OrderItem } from '@/types'
-import { prepareOrderQuery } from '@/utils/solrHelper'
+import { prepareOrderQuery, preparePurchaseOrderQuery } from '@/utils/solrHelper'
 
 const actions: ActionTree<OrderState, RootState> = {
   
@@ -342,7 +342,62 @@ const actions: ActionTree<OrderState, RootState> = {
       console.error(err)
       showToast(translate('Something went wrong'))
     }
-  }
+  },
+
+  // Find Purchase Orders
+  async findPurchaseOrders ({ commit, state }, params) {
+    let resp;
+    const query = preparePurchaseOrderQuery({ ...(state.poQuery), ...params })
+    try {
+      resp = await OrderService.findPurchaseOrder(query)
+      if (resp && resp.status === 200 && !hasError(resp) && resp.data.grouped.orderName.ngroups) {
+        let orders = resp.data.grouped.orderName.groups.map((order: any) => {
+          const orderItem = order.doclist.docs[0]
+          order.orderId = orderItem.orderId
+          order.orderName = orderItem.orderName
+          order.orderNotes = orderItem.orderNotes
+          order.orderDate = orderItem.orderDate
+          order.orderStatusId = orderItem.orderStatusId
+          order.productStoreId = orderItem.productStoreId
+          order.arrivalDate = orderItem.estimatedDeliveryDate
+          order.items = order.doclist.docs
+
+          return order
+        })
+
+        let productIds: any = new Set();
+        orders.map((order: any) => {
+          order.items.map((item: any) => {
+            productIds.add(item.productId)
+          })
+        })
+
+        productIds = [...productIds]
+
+        await this.dispatch('product/fetchProducts', { productIds })
+
+        const ordersCount = resp.data.grouped.orderName.ngroups
+        const itemsCount = resp.data.grouped.orderName.matches
+        if (params?.viewIndex && params.viewIndex > 0) orders = state.poList.orders.concat(orders)
+        commit(types.ORDER_PO_LIST_UPDATED, { orders, ordersCount, itemsCount })
+        return orders
+      } else {
+        commit(types.ORDER_PO_LIST_UPDATED, { orders: {}, ordersCount: 0, itemsCount: 0 })
+        showToast(translate("Something went wrong"));
+      }
+    } catch(error){
+      console.error(error)
+      commit(types.ORDER_PO_LIST_UPDATED, { orders: {}, ordersCount: 0, itemsCount: 0 })
+      showToast(translate("Something went wrong"));
+    }
+    return resp;
+  },
+
+  async updateAppliedPoFilters({ commit, dispatch }, payload) {
+    commit(types.ORDER_PO_FILTERS_UPDATED, payload)
+    const resp = await dispatch('findPurchaseOrders')
+    return resp;
+  },
 } 
 
 export default actions

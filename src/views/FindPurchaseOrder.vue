@@ -21,51 +21,24 @@
     <ion-content>
       <div class="find">
         <section class="search">
-          <ion-searchbar :placeholder="$t('Search purchase orders and products')" />
+          <ion-searchbar v-model="queryString" @keyup.enter="queryString = $event.target.value; updateQueryString()" :placeholder="$t('Search purchase orders and products')" />
         </section>
 
         <aside class="filters">
-          <ion-list>
-            <ion-list-header><h3>{{ $t("Location") }}</h3></ion-list-header>
-            <ion-item>
-              <ion-label>{{ $t("Product Store") }}</ion-label>
-              <ion-select value="any" interface="popover">
-                <ion-select-option value="any">Australia</ion-select-option>
-              </ion-select>
-            </ion-item>
-
-            <ion-item>
-              <ion-label>{{ $t("Facility") }}</ion-label>
-              <ion-select value="any" interface="popover">
-                <ion-select-option value="any">California Warehouse</ion-select-option>
-              </ion-select>
-            </ion-item>
-          </ion-list>
-
-          <ion-list>
-            <ion-list-header><h3>{{ $t("Date") }}</h3></ion-list-header>
-            <ion-item>
-              <ion-label>{{ $t("Arrival date") }}</ion-label>
-              <ion-chip>
-                <ion-icon :icon="calendarOutline" />
-                <ion-input type="date" />
-                <ion-icon :icon="closeCircle" />
-              </ion-chip>
-            </ion-item>
-          </ion-list>
+          <PurchaseOrderFilters />
         </aside>
 
         <main>
           <section class="sort">
             <ion-item lines="none">
-              <h2>{{ $t("Results") }}:</h2>
+              <h2>{{ $t("Results") }}: {{ count.order }} {{ $t("orders")}}, {{ count.item }} {{ $t("items") }}</h2>
             </ion-item>
 
             <div>
-              <ion-item lines="none">
+              <ion-item lines="none" class="desktop-only">
                 <ion-icon :icon="documentTextOutline" slot="start" />
                 <ion-label class="ion-text-wrap">{{ $t("Show order items") }}</ion-label>
-                <ion-toggle slot="end" checked></ion-toggle>
+                <ion-toggle slot="end" :checked="showOrderItems" @ionChange="() => showOrderItems = !showOrderItems" />
               </ion-item>
 
               <ion-item lines="none">
@@ -80,14 +53,15 @@
 
           <hr />
 
-          <div class="product" @click="() => router.push('/purchase-order')">
+          <div v-for="order in purchaseOrders" :key="order.orderId" class="product" @click="() => router.push('/purchase-order')">
             <section class="section-header">
               <div class="primary-info">
                 <ion-item lines="none">
                   <ion-label class="ion-text-wrap">
-                    <p class="overline">Product store</p>
-                    PO external ID
-                    <p>Created date</p>
+                    <!-- TODO: display product store name on the place of id -->
+                    <p class="overline">{{ order.productStoreId }}</p>
+                    {{ order.orderName }}
+                    <p>{{ $filters.formatUtcDate(order.orderDate, 'YYYY-MM-DDTHH:mm:ssZ', 'D MMM YYYY') }}</p>
                   </ion-label>
                 </ion-item>
               </div>
@@ -95,61 +69,65 @@
               <div class="tags desktop-only">
                 <ion-chip outline>
                   <ion-icon :icon="calendarOutline" />
-                  <ion-label>Arrival date</ion-label>
+                  <ion-label>{{ $filters.formatUtcDate(order.arrivalDate, 'YYYY-MM-DDTHH:mm:ssZ', 'D MMM YYYY') }}</ion-label>
                 </ion-chip>
               </div>
 
               <div class="metadata">
                 <ion-item lines="none" detail>
-                  <ion-note slot="end">2 {{ $t("variants") }}</ion-note>
+                  <ion-note slot="end">{{ order.items.length }} {{ $t("variants") }}</ion-note>
                 </ion-item>
               </div>
             </section>
 
-            <div class="desktop-only">
+            <div class="desktop-only" v-if="showOrderItems">
               <ion-list>
                 <ion-list-header>
                   {{ $t("Items") }}
                   <hr />
                 </ion-list-header>
-                <div v-for="item in 2" :key="item" class="list-item">
+                <div v-for="(item, index) in order.items" :key="index" class="list-item">
                   <div>
                     <ion-item lines="none">
                       <ion-thumbnail slot="start">
-                        <Image src="https://cdn.shopify.com/s/files/1/0069/7384/9727/products/test-track.jpg?v=1626255137" />
+                        <Image :src="getProduct(item.productId).mainImageUrl" />
                       </ion-thumbnail>
                       <ion-label class="ion-text-wrap">
-                        SKU
-                        <p>{{ $t("Color") }} : color</p>
-                        <p>{{ $t("Size") }}: size</p>
+                        {{ getProduct(item.productId).sku }}
+                        <p v-if="$filters.getFeature(getProduct(item.productId).featureHierarchy, '1/COLOR/')">{{ $t("Color") }}: {{ $filters.getFeature(getProduct(item.productId).featureHierarchy, '1/COLOR/') }}</p>
+                        <p v-if="$filters.getFeature(getProduct(item.productId).featureHierarchy, '1/SIZE/')">{{ $t("Size") }}: {{ $filters.getFeature(getProduct(item.productId).featureHierarchy, '1/SIZE/') }}</p>
                       </ion-label>
                     </ion-item>
                   </div>
 
-                  <div>
+                  <div @click.stop="copyToClipboard(getProduct(item.productId).internalName)">
                     <ion-chip outline>
                       <!-- TODO, Update icon -->
+                      
                       <ion-icon :icon="pricetag" />
-                      <ion-label>Shopify ID</ion-label>
+                      <ion-label>{{ getProduct(item.productId).internalName }}</ion-label>
                     </ion-chip>
                   </div>
 
                   <div class="items-metadata">
-                    <ion-note>ATP</ion-note>
-                    <ion-note>Ordered</ion-note>
+                    <ion-note>{{ item.availableToPromise }} {{ 'ATP' }}</ion-note>
+                    <ion-note>{{ item.quantity }} {{ 'ordered' }}</ion-note>
                   </div>
                 </div>
-                <hr />
               </ion-list>
             </div>
+            <hr />
           </div>
+          <ion-infinite-scroll @ionInfinite="loadMoreOrders($event)" threshold="100px" :disabled="!isScrollable">
+            <ion-infinite-scroll-content loading-spinner="crescent" :loading-text="$t('Loading')"/>
+          </ion-infinite-scroll>
         </main>
       </div>
     </ion-content>
   </ion-page>
 </template>
 <script>
-import Image from '../components/Image.vue';
+import Image from '@/components/Image.vue';
 import {
   IonBackButton,
   IonButton,
@@ -158,7 +136,8 @@ import {
   IonContent,
   IonHeader,
   IonIcon,
-  IonInput,
+  IonInfiniteScroll,
+  IonInfiniteScrollContent,
   IonItem,
   IonLabel,
   IonList,
@@ -175,7 +154,7 @@ import {
 } from '@ionic/vue';
 import {
   calendarOutline,
-  closeCircle,
+  close,
   documentTextOutline,
   downloadOutline,
   filterOutline,
@@ -185,6 +164,12 @@ import {
   syncOutline
 } from 'ionicons/icons';
 import { useRouter } from 'vue-router';
+import { mapGetters, useStore } from 'vuex';
+import { showToast } from '@/utils';
+import { Plugins } from '@capacitor/core';
+import PurchaseOrderFilters from '@/components/PurchaseOrderFilters.vue'
+
+const { Clipboard } = Plugins;
 
 export default {
   name: 'PurchaseOrder',
@@ -197,7 +182,8 @@ export default {
     IonContent,
     IonHeader,
     IonIcon,
-    IonInput,
+    IonInfiniteScroll,
+    IonInfiniteScrollContent,
     IonItem,
     IonLabel,
     IonList,
@@ -210,19 +196,60 @@ export default {
     IonThumbnail,
     IonToggle,
     IonTitle,
-    IonToolbar
+    IonToolbar,
+    PurchaseOrderFilters
+  },
+  data() {
+    return {
+      showOrderItems: true,
+      queryString: ''
+    }
+  },
+  computed: {
+    ...mapGetters({
+      getProduct: 'product/getProduct',
+      count: 'order/getPurchaseOrderCount',
+      isScrollable: 'order/isPurchaseOrderScrollable',
+      purchaseOrders: 'order/getPurchaseOrders'
+    })
+  },
+  async mounted() {
+    await this.store.dispatch('order/findPurchaseOrders')
+    this.store.dispatch('util/fetchFacility')
+  },
+  methods: {
+    async copyToClipboard(text) {
+      await Clipboard.write({
+        string: text
+      }).then(() => {
+        showToast(this.$t('Copied', { text }));
+      })
+    },
+    async updateQueryString() {
+      await this.store.dispatch('order/updateAppliedPoFilters', { value: this.queryString, filterName: 'queryString' })
+    },
+    async loadMoreOrders(event) {
+      await this.store.dispatch('order/findPurchaseOrders', {
+        viewSize: undefined,
+        viewIndex: Math.ceil(this.purchaseOrders.length / process.env.VUE_APP_VIEW_SIZE).toString()
+      }).then(() => {
+        event.target.complete();
+      })
+    },
   },
   setup() {
     const router = useRouter();
+    const store = useStore();
 
     return {
       calendarOutline,
-      closeCircle,
+      close,
       documentTextOutline,
       downloadOutline,
       filterOutline,
       folderOutline,
       pricetag,
+      store,
       swapVerticalOutline,
       syncOutline,
       router
