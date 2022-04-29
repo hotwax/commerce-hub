@@ -59,7 +59,7 @@
                 <ion-item lines="none">
                   <ion-label class="ion-text-wrap">
                     <!-- TODO: display product store name on the place of id -->
-                    <p>{{ order.productStoreId }}</p>
+                    <p class="overline">{{ order.productStoreId }}</p>
                     {{ order.orderName }}
                     <p>{{ $filters.formatUtcDate(order.orderDate, 'YYYY-MM-DDTHH:mm:ssZ', 'D MMM YYYY') }}</p>
                   </ion-label>
