@@ -401,7 +401,7 @@ const actions: ActionTree<OrderState, RootState> = {
             "sort": "orderDate DESC"
           },
           "query":"(*:*)",
-          "filter": ["docType:ORDER","orderTypeId: SALES_ORDER","-shipmentMethodTypeId: STANDARD", "-shipmentMethodTypeId: STOREPICKUP","orderStatusId: ORDER_APPROVED"]
+          "filter": ["docType:ORDER","orderTypeId: SALES_ORDER","-shipmentMethodTypeId: STANDARD", "-shipmentMethodTypeId: STOREPICKUP","-orderStatusId: ORDER_CANCELLED","-orderStatusId: ORDER_REJECTED","-orderStatusId: ORDER_COMPLETED"]
         }
       });
       if (resp.status === 200 && !hasError(resp)) {
