@@ -3,4 +3,5 @@ export default interface RootState {
     product: any;
     order: any;
     stock: any;
+    util: any;
 }
