@@ -342,7 +342,100 @@ const actions: ActionTree<OrderState, RootState> = {
       console.error(err)
       showToast(translate('Something went wrong'))
     }
+  },
+
+  async fetchStuckOrders({commit}){
+    let resp;
+    const payload = {
+      "json": {
+        "params": {
+          "rows": "20",
+          "sort": "orderDate ASC"
+        },
+        "query":"(*:*)",
+        "filter": ["docType:ORDER","orderTypeId: SALES_ORDER","facilityId: _NA_","orderStatusId: ORDER_APPROVED" ]
+      }
+    }
+    try {
+      resp = await OrderService.findOrderDetails(payload);
+      if (resp.status === 200 && !hasError(resp)) {
+        const total = resp.data.response.numFound;
+        let orders = resp.data.response.docs;
+
+        if (orders.length) {
+          let productIds = orders.map((order: any) => {
+            return order.productId;
+          })
+          productIds = [...new Set(productIds)]
+          const viewSize = productIds.length;
+          const viewIndex = 0;
+          const payload = {
+            viewSize,
+            viewIndex,
+            productIds
+          }
+          const orderBrokering = await OrderService.getOrderBrokeringInfo(orders);
+          this.dispatch('stock/addProducts', payload);
+          const products = await this.dispatch("product/fetchProducts", payload);
+          orders = orders.map( (order: any) => {
+            order = {...order, brokering: { ...(orderBrokering[order.orderId] ? orderBrokering[order.orderId][order.orderItemSeqId] : {}) }}
+            order.item = products[order.productId]
+            return order
+          })
+        }
+        commit(types.ORDER_STUCK_UPDATED, { orders, total })
+      }
+    } catch(err) {
+      console.error(err);
+    }
+  },
+
+  async fetchOldExpeditedOrders({commit}){
+    let resp;
+    try {
+      // TODO Verify conditions
+      resp = await OrderService.fetchOldExpeditedOrders({
+        "json": {
+          "params": {
+            "rows": "20",
+            "sort": "orderDate DESC"
+          },
+          "query":"(*:*)",
+          "filter": ["docType:ORDER","orderTypeId: SALES_ORDER","-shipmentMethodTypeId: STANDARD", "-shipmentMethodTypeId: STOREPICKUP","-orderStatusId: ORDER_CANCELLED","-orderStatusId: ORDER_REJECTED","-orderStatusId: ORDER_COMPLETED"]
+        }
+      });
+      if (resp.status === 200 && !hasError(resp)) {
+        let orders = resp.data.response.docs
+        const total = resp.data.response.numFound
+        if (orders.length) {
+          let productIds = orders.map((order: any) => {
+            return order.productId;
+          })
+          productIds = [...new Set(productIds)]
+          const viewSize = productIds.length;
+          const viewIndex = 0;
+          const payload = {
+            viewSize,
+            viewIndex,
+            productIds
+          }
+          const orderBrokering = await OrderService.getOrderBrokeringInfo(orders);
+          if (productIds.length) {
+            this.dispatch('stock/addProducts', payload);
+            const products = await this.dispatch("product/fetchProducts", payload);
+            orders = orders.map( (order: any) => {
+              order = {...order, brokering: { ...(orderBrokering[order.orderId] ? orderBrokering[order.orderId][order.orderItemSeqId] : {}) }}
+              order.item = products[order.productId]
+              return order
+            })
+          }
+        }
+        commit(types.ORDER_OLD_EXPEDITED_UPDATED, { orders, total });
+      }
+    } catch (err) {
+      console.error(err);
+    }
   }
-} 
+}
 
 export default actions

@@ -65,6 +65,30 @@ const actions: ActionTree<UtilState, RootState> = {
       console.error('Something went wrong while fetching status for items and orders')
     }
     return cachedStatus;
+  },  
+  async fetchFacilities({ state, commit }) {
+    if (Object.keys(state.facilities).length === 0) {
+      return state.facilities;
+    }
+    try {
+      const resp = await UtilService.getFacilities({
+        "entityName": "Facility",
+        "noConditionFind": "Y",
+        "viewSize": 50,
+        "fieldList": ["facilityId", "facilityName"],
+      });
+      if(resp.status === 200 && !hasError(resp)){
+        const facilities = resp.data.docs.reduce((facilities: any, facility: any) => {
+          facilities[facility.facilityId] = facility;
+          return facilities;
+        }, {})
+        commit(types.UTIL_FACILITY_LIST_UPDATED, facilities);
+        return facilities;
+      }
+    } catch (err) {
+      console.error("error", err);
+    }
+    return {};
   },
 
   async getEComStores({ state, commit }) {

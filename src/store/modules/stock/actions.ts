@@ -16,53 +16,29 @@ const actions: ActionTree<StockState, RootState> = {
       commit(types.STOCK_ADD_PRODUCT, { productId, stock: resp.data.docs })
     }
   },
-
-  /**
-   * Add stocks of list of products
-   */
   async addProducts({ commit }, { productIds }) {
-    // There is a limitation at API level to handle only 100 records
-    // but as we will always fetch data for the fetched records which will be as per the viewSize
-    // assuming that the value will never be 100 to show
-    const resp: any = await StockService.checkInventory({
-      "filters": {
-        "productId": productIds,
-        "productId_op": "in",
-        "facilityId": this.state.user.currentFacility.facilityId
-      },
-      "fieldsToSelect": ["productId", "atp"],
-      "viewSize": productIds.length
-    });
-    if (resp.status === 200 && !hasError(resp)) {
-      // Handled empty response in case of failed query
-      if (resp.data) commit(types.STOCK_ADD_PRODUCTS, { products: resp.data.docs })
+    const products: any = {};
+    try {
+      const resp = await Promise.all(productIds.map((productId: any) => {
+        return StockService.checkInventory({
+          "filters": {
+            "productId": productId
+          },
+          "fieldsToSelect": ["productId", "atp"],
+          "viewSize": 1
+        })
+      }))
+
+      resp.map((response: any) => {
+        if (response.status == 200 && !hasError(response) && response.data.count > 0) {
+          const data = response.data.docs[0];
+          products[data.productId] = data.atp
+        }
+      })
+      commit(types.STOCK_PRODUCTS_UPDATED, products)
+    } catch (err) {
+      console.error('Something went wrong while fetching stock for products')
     }
-    
-   /**
-    * Commenting this code because we will be releasing this feature in next release.
-    */
-   
-    // Implemented this loop to check productInventory and find product ATP
-    // because we were only getting maximum 100 records at a time.
-
-    // const count = variantIds.length / 100;
-
-    // for(let i = 0; i < count; i++) {
-    //   const resp: any = await StockService.checkInventory({
-    //     "filters": {
-    //       "productId": variantIds.splice(0, 100),
-    //       "productId_op": "in",
-    //       "facilityId": this.state.user.currentFacility.facilityId
-    //     },
-    //     "fieldsToSelect": ["productId", "atp"],
-    //     "viewSize": 100
-    //   });
-    //   if (resp.status === 200 && !hasError(resp)) {
-
-    //     // Handled empty response in case of failed query
-    //     if (resp.data) commit(types.STOCK_ADD_PRODUCTS, { products: resp.data.docs })
-    //   }
-    // }
   },
 
   async fetchProductStockForFacility({ state, commit }, items) {

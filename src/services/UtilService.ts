@@ -16,6 +16,13 @@ const fetchStatus = async (payload: any): Promise<any> => {
   })
 }
 
+const getFacilities = async (payload: any): Promise<any> => {
+  return api({
+    url: "/performFind",
+    method: "post",
+    data: payload
+  })
+}
 const getShopifyConfig = async (payload: any): Promise <any>  => {
   return api({
     url: "performFind",
@@ -35,6 +42,7 @@ const getEComStores = async (payload: any): Promise<any> => {
 export const UtilService = {
   getEComStores,
   getShipmentMethods,
-  getShopifyConfig,
-  fetchStatus
+  fetchStatus,
+  getFacilities,
+  getShopifyConfig
 }
