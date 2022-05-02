@@ -16,6 +16,7 @@ import Users from '@/views/Users.vue'
 import User from '@/views/User.vue'
 import Locations from '@/views/Locations.vue'
 import Profile from '@/views/Profile.vue'
+import Timeline from '@/views/Timeline.vue'
 import store from '@/store'
 
 const authGuard = (to: any, from: any, next: any) => {
@@ -125,6 +126,12 @@ const routes: Array<RouteRecordRaw> = [
     path: "/profile",
     name: "Profile",
     component: Profile,
+    beforeEnter: authGuard
+  },
+  {
+    path: "/timeline",
+    name: "Timeline",
+    component: Timeline,
     beforeEnter: authGuard
   }
 ]

@@ -27,24 +27,19 @@
           </div>
 
           <!-- TODO: Update timeline to display the orderCreatedDate, orderCompletedDate, brokeredDate and entryDate -->
-          <!-- <div class="timeline">
-            <ion-item lines="none">
-              <ion-icon slot="start" :icon="timeOutline" class="mobile-only" />
+          <div class="timeline">
+            <ion-item lines="none" class="desktop-only">
+              <h2>{{ $t("Timeline") }}</h2>
+              <ion-note slot="end">1:07pm 6th Dec 2021</ion-note>
+            </ion-item>
+            <ion-item lines="none" @click="() => router.push('/timeline')" detail class="mobile-only">
+              <ion-icon slot="start" :icon="timeOutline" />
               <h2>{{ $t("Timeline") }}</h2>
               <ion-note slot="end">1:07pm 6th Dec 2021</ion-note>
             </ion-item>
 
-            <ion-list class="desktop-only">
-              <ion-item v-for="item in 2" :key="item">
-                <ion-icon :icon="ticketOutline" slot="start" />
-                <ion-label>
-                  <p>+10 minutes</p>
-                  Imported from Shopify
-                </ion-label>
-                <ion-icon slot="end" :icon="informationCircleOutline" />
-              </ion-item>
-            </ion-list>
-          </div> -->
+            <TimelineDetail class="desktop-only" />
+          </div>
 
           <div class="info">
             <ion-card>
@@ -289,7 +284,9 @@ import {
 import { useStore } from "@/store";
 import { mapGetters } from "vuex";
 import { defineComponent } from "vue";
+import { useRouter } from 'vue-router';
 import StatusBadge from '@/components/StatusBadge.vue'
+import TimelineDetail from '@/components/TimelineDetail.vue'
 
 export default defineComponent({
   name: 'Order',
@@ -311,7 +308,8 @@ export default defineComponent({
     IonThumbnail,
     IonTitle,
     IonToolbar,
-    StatusBadge
+    StatusBadge,
+    TimelineDetail
   },
   computed: {
     ...mapGetters({
@@ -338,6 +336,7 @@ export default defineComponent({
   },
   setup() {
     const store = useStore();
+    const router = useRouter();
     const orderStatus = JSON.parse(process.env.VUE_APP_ORDER_STATUS)
     const itemStatus = JSON.parse(process.env.VUE_APP_ITEM_STATUS)
     const orderPreOrderId = process.env.VUE_APP_PRE_ORDER_IDNT_ID
@@ -356,6 +355,7 @@ export default defineComponent({
       orderStatus,
       pricetag,
       ribbon,
+      router,
       shirtOutline,
       store,
       syncOutline,
