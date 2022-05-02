@@ -45,10 +45,9 @@
           </ion-item>
           <ion-item lines="none">
             <ion-label>{{ $t("Time zone") }}</ion-label>
-            <ion-select value="n">
-              <ion-select-option value="n">New York</ion-select-option>
-              <ion-select-option value="t">Texas</ion-select-option>
-            </ion-select>
+            <ion-icon :icon="timeOutline" slot="start"/>
+            <ion-label> {{ userProfile && userProfile.userTimeZone ? userProfile.userTimeZone : '-' }} </ion-label>
+            <ion-button @click="changeTimeZone()" slot="end" fill="outline" color="dark">{{ $t("Change") }}</ion-button>
           </ion-item>
         </div>
 
@@ -65,20 +64,21 @@ import {
   IonButton,
   IonContent,
   IonHeader,
+  IonIcon,
   IonInput,
   IonItem,
   IonLabel,
   IonPage,
-  IonSelect,
-  IonSelectOption,
   IonToolbar,
   IonTitle,
+  modalController
 } from '@ionic/vue';
-import { useStore } from 'vuex';
+import { mapGetters,useStore } from 'vuex';
 import { defineComponent } from 'vue';
+import {timeOutline} from 'ionicons/icons'
 import Image from '@/components/Image.vue';
 import { useRouter } from 'vue-router';
-
+import TimeZoneModal from '@/views/TimezoneModal.vue';
 export default defineComponent({
   name: 'Profile',
   components: {
@@ -87,17 +87,27 @@ export default defineComponent({
     IonButton,
     IonContent,
     IonHeader,
+    IonIcon,
     IonInput,
     IonItem,
     IonLabel,
     IonPage,
-    IonSelect,
-    IonSelectOption,
     IonToolbar,
     IonTitle,
     Image,
   },
+  computed: {
+    ...mapGetters({
+      userProfile: 'user/getUserProfile',
+    })
+  },
   methods: {
+    async changeTimeZone() {
+      const timeZoneModal = await modalController.create({
+        component: TimeZoneModal,
+      });
+      return timeZoneModal.present();
+    },
     logout () {
       this.store.dispatch('user/logout').then(() => {
         this.router.push('/login');
@@ -110,7 +120,8 @@ export default defineComponent({
 
     return {
       router,
-      store
+      store,
+      timeOutline
     }
   }
 });
