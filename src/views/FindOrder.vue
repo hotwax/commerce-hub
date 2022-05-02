@@ -22,7 +22,7 @@
           <!-- <ion-button fill="clear">
             <ion-icon slot="icon-only" :icon="downloadOutline" />
           </ion-button> -->
-          <ion-button fill="clear" class="mobile-only" @click="openOrderFilter()">
+          <ion-button fill="clear" @click="openOrderFilter()" v-show="showFilterButton">
             <ion-icon slot="icon-only" :icon="filterOutline" />
           </ion-button>
         </ion-buttons>
@@ -53,7 +53,9 @@
         </section>
 
         <aside class="filters desktop-only">
-          <OrderFilters :poIds="poIds" :shippingMethodOptions="shippingMethodOptions" :orderStatusOptions="orderStatusOptions"/>
+          <div class="order-filters">
+            <OrderFilters :poIds="poIds" :shippingMethodOptions="shippingMethodOptions" :orderStatusOptions="orderStatusOptions"/>
+          </div>
         </aside>
 
         <main>
@@ -225,10 +227,21 @@ export default defineComponent ({
       orderStatusOptions: [''],
       sort: 'orderDate desc',
       showOrderItems: true,
-      poIds: {} as any
+      poIds: {} as any,
+      showFilterButton: false,
     }
   },
   methods: {
+    showFilters(){
+      const el = document.querySelector('.order-filters') as Element;
+      const observer = new window.IntersectionObserver(([entry]) => {
+        this.showFilterButton = !entry.isIntersecting;
+      }, {
+        root: null
+      })
+      observer.observe(el);
+    },
+
     async closeMenu() {
       await menuController.close();
     },
@@ -289,6 +302,8 @@ export default defineComponent ({
     }
   },
   async mounted() {
+    this.showFilters();
+     
     this.store.dispatch('util/fetchShipmentMethods')
     this.store.dispatch('util/getEComStores')
     await this.getOrders();
