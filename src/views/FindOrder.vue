@@ -59,7 +59,7 @@
         <main>
           <section class="sort">
             <ion-item lines="none">
-              <h2>{{ $t("Results") }}:</h2> 
+              <h2>{{ $t("Results") }}: {{ ordersList.orderCount }} {{ $t("orders, ") }} {{ ordersList.itemCount }} {{ $t("items") }} </h2> 
             </ion-item>
 
             <div>
@@ -84,7 +84,7 @@
           <!-- Order Item Section -->
           <hr />
 
-          <div v-for="(order, index) in orders" :key="index" :order="order" @click="() => router.push(`/order/${order.orderId}`)">
+          <div v-for="(order, index) in ordersList.orders" :key="index" :order="order" @click="() => router.push(`/order/${order.orderId}`)">
             <section class="section-header">
               <div class="primary-info">
                 <ion-item lines="none">
@@ -209,7 +209,7 @@ export default defineComponent ({
   },
   computed: {
     ...mapGetters({
-      orders: 'order/getOrders',
+      ordersList: 'order/getOrders',
       getProduct: 'product/getProduct',
       currentFacilityId: 'user/getCurrentFacility',
       getProductStock: 'stock/getProductStock',
@@ -257,7 +257,7 @@ export default defineComponent ({
     async loadMoreOrders(event: any) {
       await this.store.dispatch('order/findOrders', {
         viewSize: undefined,
-        viewIndex: Math.ceil(this.orders.length / process.env.VUE_APP_VIEW_SIZE).toString()
+        viewIndex: Math.ceil(this.ordersList.orders.length / process.env.VUE_APP_VIEW_SIZE).toString()
       }).then((resp) => {
         if (resp.status == 200 && resp.data.facets) {
           this.orderStatusOptions = this.orderStatusOptions.length > 1 || resp.data.facets?.orderStatusIdFacet?.buckets.length < this.orderStatusOptions.length ? this.orderStatusOptions : this.orderStatusOptions.concat(resp.data.facets?.orderStatusIdFacet?.buckets.map((status: any) => status.val))
@@ -341,6 +341,8 @@ export default defineComponent ({
     } catch(err) {
       console.error(err)
     }
+
+    
   },
   setup() {
     const router = useRouter();

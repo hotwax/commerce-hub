@@ -1,7 +1,8 @@
 export default interface OrderState {
   list: {
     orders: any[],
-    total: number
+    orderCount: number,
+    itemCount: number
   },
   poIds: any,
   query: any,
