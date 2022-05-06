@@ -1,15 +1,15 @@
 <template>
   <ion-header>
-     <ion-toolbar>
-        <ion-buttons slot="start">
+    <ion-toolbar>
+      <ion-buttons slot="start">
         <ion-button @click="closeModal"> 
           <ion-icon :icon="close" />
         </ion-button>
       </ion-buttons>
-     <ion-title>{{ $t("Select time zone") }}</ion-title>
+      <ion-title>{{ $t("Select time zone") }}</ion-title>
     </ion-toolbar>
     <ion-toolbar>
-        <ion-searchbar @ionFocus="selectSearchBarText($event)" :placeholder="$t('Search time zones')"  v-model="queryString" @ionInput="findTimeZone()" />
+      <ion-searchbar @ionFocus="selectSearchBarText($event)" :placeholder="$t('Search time zones')"  v-model="queryString" @ionInput="findTimeZone()" />
     </ion-toolbar>
   </ion-header>
   <ion-content class="ion-padding">
@@ -22,7 +22,7 @@
     <div v-else>
       <ion-list>
         <ion-radio-group value="rd" v-model="timeZoneId">
-          <ion-item  v-bind:key="timeZone.id" v-for="timeZone in filteredTimeZones">
+          <ion-item  :key="timeZone.id" v-for="timeZone in filteredTimeZones">
             <ion-label>{{ timeZone.label }} ({{ timeZone.id }})</ion-label>
             <ion-radio :value="timeZone.id" slot="start"></ion-radio>
           </ion-item>
@@ -119,7 +119,7 @@ export default defineComponent({
       UserService.getAvailableTimeZones().then((resp: any) => {
         if (resp.status === 200 && !hasError(resp)) {
           this.timeZones = resp.data.filter((timeZone: any) => {
-              return moment.tz.zone(timeZone.id);
+            return moment.tz.zone(timeZone.id);
           });
           this.findTimeZone();
         }
@@ -131,11 +131,9 @@ export default defineComponent({
       });
     },
     async setUserTimeZone() {
-      return this.store
-        .dispatch("user/setUserTimeZone", {
+      return this.store.dispatch("user/setUserTimeZone", {
           tzId: this.timeZoneId,
-        })
-        .then(() => {
+        }).then(() => {
           this.closeModal();
         });
     },
