@@ -117,7 +117,7 @@ export default defineComponent({
     },
     async getAvailableTimeZones() {
       UserService.getAvailableTimeZones().then((resp: any) => {
-        if (resp.status === 200 && !hasError(resp)) {
+        if (resp.status === 200 && resp.data?.length > 0 && !hasError(resp)) {
           this.timeZones = resp.data.filter((timeZone: any) => {
             return moment.tz.zone(timeZone.id);
           });
