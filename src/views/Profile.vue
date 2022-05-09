@@ -75,10 +75,11 @@ import {
 } from '@ionic/vue';
 import { mapGetters,useStore } from 'vuex';
 import { defineComponent } from 'vue';
-import {timeOutline} from 'ionicons/icons'
+import { timeOutline } from 'ionicons/icons'
 import Image from '@/components/Image.vue';
 import { useRouter } from 'vue-router';
 import TimeZoneModal from '@/views/TimezoneModal.vue';
+
 export default defineComponent({
   name: 'Profile',
   components: {
