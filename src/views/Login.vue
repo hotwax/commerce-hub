@@ -7,7 +7,7 @@
 
           <ion-item lines="full" v-if="!baseURL">
             <ion-label position="fixed">{{ $t("OMS") }}</ion-label>
-            <ion-input name="" v-model="instanceUrl" id="instanceUrl" type="text" required />
+            <ion-input name="instanceUrl" v-model="instanceUrl" id="instanceUrl" type="text" required />
           </ion-item>
           <ion-item lines="full">
             <ion-label position="fixed">{{ $t("Username") }}</ion-label>
