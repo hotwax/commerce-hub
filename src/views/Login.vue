@@ -7,7 +7,7 @@
 
           <ion-item lines="full" v-if="!baseURL">
             <ion-label position="fixed">{{ $t("OMS") }}</ion-label>
-            <ion-input name="instanceUrl" v-model="instanceUrl" id="instanceUrl" type="text" required />
+            <ion-input name="" v-model="instanceUrl" id="instanceUrl" type="text" required />
           </ion-item>
           <ion-item lines="full">
             <ion-label position="fixed">{{ $t("Username") }}</ion-label>
@@ -70,7 +70,7 @@ export default defineComponent({
   },
   methods: {
     login: function () {
-     if(!this.baseURL) this.store.dispatch("user/setUserInstanceUrl", this.instanceUrl.trim())
+      if(!this.baseURL) this.store.dispatch("user/setUserInstanceUrl", this.instanceUrl.trim())
       
       const { username, password } = this;
       this.store.dispatch("user/login", { username: username.trim(), password }).then((data: any) => {
