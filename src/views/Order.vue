@@ -48,15 +48,15 @@
 
           <div class="info">
             <ion-card>
+              <ion-card-header>
+                <ion-card-title>{{ order.customer?.name }}</ion-card-title>
+                <!-- TODO: handle this property to display loyalty options -->
+                <ion-chip v-if="order.customer?.loyaltyOptions" outline>
+                  <ion-icon :icon="ribbon" />
+                  <ion-label class="ion-text-wrap">{{ order.customer?.loyaltyOptions }}</ion-label>
+                </ion-chip>                
+              </ion-card-header>
               <ion-list>
-                <ion-item lines="none">
-                  <ion-label class="ion-text-wrap"> {{ order.customer?.name }} </ion-label>
-                  <!-- TODO: handle this property to display loyalty options -->
-                  <ion-chip slot="end" v-if="order.customer?.loyaltyOptions">
-                    <ion-icon :icon="ribbon" />
-                    <ion-label class="ion-text-wrap">{{ order.customer?.loyaltyOptions }}</ion-label>
-                  </ion-chip>
-                </ion-item>
                 <ion-item v-if="order.customer?.emailId">
                   <ion-icon :icon="mailOutline" slot="start" />
                   <ion-label class="ion-text-wrap"> {{ order.customer?.emailId }} </ion-label>
@@ -79,8 +79,10 @@
             </ion-card>
 
             <ion-card>
+              <ion-card-header>
+                <ion-card-title>{{ $t("Shopify IDs") }}</ion-card-title>
+              </ion-card-header>
               <ion-list>
-                <ion-list-header>{{ $t("Shopify IDs") }}</ion-list-header>
                 <ion-item>
                   <ion-label class="ion-text-wrap"> {{ $t("Order Number") }} </ion-label>
                   <p slot="end">{{ order.identifications?.orderNo ? order.identifications.orderNo : "-" }}</p>
@@ -107,8 +109,10 @@
           <div v-for="(group, index) of order.itemGroups" :key="index" >
             <div class="info">
               <ion-card>
+                <ion-card-header>
+                  <ion-card-title>{{ $t("Destination") }}</ion-card-title>
+                </ion-card-header>  
                 <ion-list>
-                  <ion-list-header>{{ $t("Destination") }}</ion-list-header>
                   <ion-item lines="none">
                     <ion-label>
                       {{ group.shippingAddress.toName }}
@@ -125,8 +129,10 @@
                 </ion-list>
               </ion-card>
               <ion-card>
-                <ion-list>
-                  <ion-list-header>{{ $t("Fulfillment") }}</ion-list-header>
+                <ion-card-header>
+                  <ion-card-title>{{ $t("Fulfillment") }}</ion-card-title>
+                </ion-card-header>
+                <ion-list>  
                   <ion-item>
                     <ion-label> {{ $t("Shipping method") }} </ion-label>
                     <p>{{ getShipmentMethod(group.shippingMethod.id) ? getShipmentMethod(group.shippingMethod.id) : "-"}}</p>
@@ -193,8 +199,10 @@
               <div class="desktop-only">
                 <div class="product-card">
                   <ion-card>
+                    <ion-card-header>
+                      <ion-card-title>{{ $t("Fulfillment") }}</ion-card-title>
+                    </ion-card-header>
                     <ion-list>
-                      <ion-list-header>{{ $t("Fulfillment") }}</ion-list-header>
                       <ion-item v-if="item.orderItemStatusId !== 'ITEM_COMPLETED'">
                         <ion-label> {{ $t("Auto cancel") }} </ion-label>
                         <p slot="end">{{ item.autoCancelDate ? $filters.formatUtcDate(item.autoCancelDate, 'YYYY-MM-DDTHH:mm:ssZ', 'D MMM YYYY') : "-" }}</p>
@@ -218,8 +226,10 @@
                     </ion-list>
                   </ion-card>
                   <ion-card v-if="item.facilityId === orderPreOrderId || item.facilityId === orderBackOrderId">
+                    <ion-card-header>
+                      <ion-card-title>{{ item.facilityId === orderPreOrderId ? $t("Pre-order") : $t("BackOrder") }}</ion-card-title>
+                    </ion-card-header>
                     <ion-list>
-                      <ion-list-header>{{ item.facilityId === orderPreOrderId ? $t("Pre-order") : $t("BackOrder") }}</ion-list-header>
                       <ion-item>
                         <ion-label>{{ $t("Purchase order") }}</ion-label>
                         <ion-chip slot="end">
@@ -240,7 +250,6 @@
                       </ion-buttons> -->
                     </ion-list>
                   </ion-card>
-                  
                 </div>
               </div>
             </div>
@@ -271,6 +280,8 @@ import {
 import {
   IonBackButton,
   IonCard,
+  IonCardHeader,
+  IonCardTitle,
   IonChip,
   IonContent,
   IonHeader,
@@ -278,7 +289,6 @@ import {
   IonItem,
   IonLabel,
   IonList,
-  IonListHeader,
   IonPage,
   IonSelect,
   IonSelectOption,
@@ -297,6 +307,8 @@ export default defineComponent({
     Image,
     IonBackButton,
     IonCard,
+    IonCardHeader,
+    IonCardTitle,
     IonChip,
     IonContent,
     IonHeader,
@@ -304,7 +316,6 @@ export default defineComponent({
     IonItem,
     IonLabel,
     IonList,
-    IonListHeader,
     IonPage,
     IonSelect,
     IonSelectOption,
