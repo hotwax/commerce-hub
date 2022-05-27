@@ -44,7 +44,7 @@
         </section>
 
         <ion-item class="mobile-only" lines="none">
-          <ion-thumbnail>
+          <ion-thumbnail slot="start">
             <Image :src="product.mainImage" />
           </ion-thumbnail>
           <ion-label>
@@ -198,7 +198,7 @@
               <ion-icon :icon="calendarOutline" />
               <ion-label>{{ $t("Purchase orders") }}</ion-label>
             </ion-segment-button>
-            <ion-segment-button value="fulfillment" layout="icon-start">
+            <ion-segment-button value="fulfillment" class="desktop-only" layout="icon-start">
               <ion-icon :icon="sendOutline" />
               <ion-label>{{ $t("Fulfillment") }}</ion-label>
             </ion-segment-button>
@@ -281,10 +281,10 @@
             <hr />
 
             <div class="list-item">
-              <ion-item lines="none">
+              <ion-item lines="none" @click="() => router.push('/location-details')">
                 <ion-icon :icon="storefrontOutline" slot="start" />
                 <ion-label>
-                  <p>Retail</p>
+                  <p class="overline">Retail</p>
                   Store 1 name
                   <p>Pickup and shipping</p>
                 </ion-label>
@@ -328,7 +328,7 @@
               <ion-item lines="none">
                 <ion-icon :icon="businessOutline" slot="start" />
                 <ion-label>
-                  <p>Warehouse</p>
+                  <p class="overline">Warehouse</p>
                   Warehouse 1 name
                   <p>Shipping</p>
                 </ion-label>
@@ -492,7 +492,7 @@
               <ion-item lines="none">
                 <ion-icon :icon="storefrontOutline" slot="start" />
                 <ion-label>
-                  <p>Retail</p>
+                  <p class="overline">Retail</p>
                   Brooklyn
                 </ion-label>
               </ion-item>
@@ -535,7 +535,7 @@
               <ion-item lines="none">
                 <ion-icon :icon="businessOutline" slot="start" />
                 <ion-label>
-                  <p>Warehouse</p>
+                  <p class="overline">Warehouse</p>
                   Hoboken
                 </ion-label>
               </ion-item>

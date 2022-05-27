@@ -61,10 +61,6 @@ const prepareOrderQuery = (query: any) => {
     typeFilterSelected.push('BACKORDER_PARKING')
   }
 
-  if (query.unfillable) {
-    typeFilterSelected.push('_NA_')
-  }
-
   const typeFilterValues = typeFilterSelected.join(" OR ")
 
   payload.json.filter = payload.json.filter.concat(` AND facilityId: (${typeFilterValues ? typeFilterValues : '*'})`)
@@ -76,6 +72,8 @@ const prepareOrderQuery = (query: any) => {
   payload.json.filter = payload.json.filter.concat(` AND orderStatusId: ${query.status ? query.status : '*'}`)
 
   payload.json.filter = payload.json.filter.concat(` AND shipmentMethodTypeId: ${query.shippingMethod ? query.shippingMethod : '*' }`)
+
+  payload.json.filter = payload.json.filter.concat(` AND productStoreId: ${query.productStoreId ? query.productStoreId : '*' }`)
 
   // TODO: improve logic to pass the date in the solr-query payload
   if (query.orderCreated) {

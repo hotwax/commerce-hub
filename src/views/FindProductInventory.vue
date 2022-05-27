@@ -122,7 +122,7 @@
         <main>
           <section class="sort">
             <ion-item lines="none">
-              <h2>{{ $t("Results") }}:</h2>
+              <h2>{{ $t("Results") }}: {{ products.productCount }} {{ $t("virtual, ") }} {{ products.variantCount }} {{ $t("variants") }}</h2>
             </ion-item>
 
             <div>
@@ -146,7 +146,7 @@
 
           <hr />
 
-          <div class="product" v-for="product in products" :key="product.productId" @click="viewProduct(product)">
+          <div class="product" v-for="product in products.list" :key="product.productId" @click="viewProduct(product)">
             <div class="desktop-only">
               <Image :src="product.mainImageUrl" />
             </div>

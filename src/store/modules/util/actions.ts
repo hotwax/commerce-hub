@@ -65,7 +65,76 @@ const actions: ActionTree<UtilState, RootState> = {
       console.error('Something went wrong while fetching status for items and orders')
     }
     return cachedStatus;
-  }
+  },  
+  async fetchFacilities({ state, commit }) {
+    if (Object.keys(state.facilities).length === 0) {
+      return state.facilities;
+    }
+    try {
+      const resp = await UtilService.getFacilities({
+        "entityName": "Facility",
+        "noConditionFind": "Y",
+        "viewSize": 50,
+        "fieldList": ["facilityId", "facilityName"],
+      });
+      if(resp.status === 200 && !hasError(resp)){
+        const facilities = resp.data.docs.reduce((facilities: any, facility: any) => {
+          facilities[facility.facilityId] = facility;
+          return facilities;
+        }, {})
+        commit(types.UTIL_FACILITY_LIST_UPDATED, facilities);
+        return facilities;
+      }
+    } catch (err) {
+      console.error("error", err);
+    }
+    return {};
+  },
+
+  async getEComStores({ state, commit }) {
+    let resp;
+
+    if(state.productStore.length > 0) {
+      return;
+    }
+
+    const payload = {
+      "inputFields": {
+        "storeName_op": "not-empty"
+      },
+      "fieldList": ["productStoreId", "storeName"],
+      "entityName": "ProductStore",
+      "distinct": "Y",
+      "noConditionFind": "Y"
+    }
+
+    try{
+      resp = await UtilService.getEComStores(payload);
+      if (resp.status === 200 && resp.data.docs?.length > 0 && !hasError(resp)) {
+        const stores = resp.data.docs
+        stores.push({'productStoreId': '', 'storeName': 'any'})
+        commit(types.UTIL_ECOM_STORE_UPDATED, stores)
+      }
+    } catch(err) {
+      console.error(err)
+    }
+  },
+
+  async getShopifyConfig({ commit }, payload) {
+    const resp = await UtilService.getShopifyConfig({
+      "inputFields": {
+        "productStoreId": payload
+      },
+      "entityName": "ShopifyConfig",
+      "noConditionFind": "Y",
+      "fieldList": ["productStoreId", "shopifyConfigId"],
+    })
+
+    if (resp.status === 200 && !hasError(resp)) {
+      commit(types.UTIL_SHOPIFY_CONFIG_UPDATED, resp.data.docs);
+      return resp.data.docs[0];
+    }
+  },
 }
 
 export default actions;

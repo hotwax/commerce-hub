@@ -6,13 +6,23 @@
         <ion-title>{{ $t("Orders") }}</ion-title>
         <ion-buttons slot="end">
           <!-- TODO: make download csv and sync button functional -->
-          <!-- <ion-button fill="clear">
+          <ion-button id="product-store-popover" fill="clear">
             <ion-icon slot="icon-only" :icon="syncOutline" />
           </ion-button>
-          <ion-button fill="clear">
+          <ion-popover trigger="product-store-popover" :dismiss-on-select="true">
+            <ion-content>
+              <ion-list>
+                <ion-list-header>{{ $t('Product Store') }}</ion-list-header>
+                <div v-for="store in eComStores" :key="store.productStoreId">
+                  <ion-item v-if="store.productStoreId" @click="runJob('JOB_IMP_ORD', store.productStoreId)" button>{{ store.storeName }}</ion-item>
+                </div>
+              </ion-list>
+            </ion-content>
+          </ion-popover>
+          <!-- <ion-button fill="clear">
             <ion-icon slot="icon-only" :icon="downloadOutline" />
           </ion-button> -->
-          <ion-button fill="clear" class="mobile-only" @click="openOrderFilter()">
+          <ion-button fill="clear" @click="openOrderFilter()" v-show="showFilterButton">
             <ion-icon slot="icon-only" :icon="filterOutline" />
           </ion-button>
         </ion-buttons>
@@ -22,6 +32,11 @@
     <ion-menu content-id="content" type="overlay" side="end">
       <ion-header>
         <ion-toolbar>
+          <ion-buttons slot="start">
+            <ion-button @click="closeMenu">
+              <ion-icon :icon="closeOutline" slot="icon-only" />
+            </ion-button>
+          </ion-buttons>
           <ion-title>{{ $t("Filters")}}</ion-title>
         </ion-toolbar>
       </ion-header>
@@ -38,13 +53,15 @@
         </section>
 
         <aside class="filters desktop-only">
-          <OrderFilters :poIds="poIds" :shippingMethodOptions="shippingMethodOptions" :orderStatusOptions="orderStatusOptions"/>
+          <div class="order-filters">
+            <OrderFilters :poIds="poIds" :shippingMethodOptions="shippingMethodOptions" :orderStatusOptions="orderStatusOptions"/>
+          </div>
         </aside>
 
         <main>
           <section class="sort">
             <ion-item lines="none">
-              <h2>{{ $t("Results") }}:</h2> 
+              <h2>{{ $t("Results") }}: {{ ordersList.orderCount }} {{ $t("orders, ") }} {{ ordersList.itemCount }} {{ $t("items") }} </h2> 
             </ion-item>
 
             <div>
@@ -69,12 +86,12 @@
           <!-- Order Item Section -->
           <hr />
 
-          <div v-for="(order, index) in orders" :key="index" :order="order" @click="() => router.push(`/order/${order.orderId}`)">
+          <div v-for="(order, index) in ordersList.orders" :key="index" :order="order" @click="() => router.push(`/order/${order.orderId}`)">
             <section class="section-header">
               <div class="primary-info">
                 <ion-item lines="none">
                   <ion-label>
-                    {{ order.orderId }}
+                    <strong>{{ order.orderId }}</strong>
                     <p> {{ order.customer.name }} </p>
                   </ion-label>
                 </ion-item>
@@ -98,52 +115,7 @@
             </section>
 
             <section class="section-grid" v-if="showOrderItems">
-              <ion-card v-for="(item, index) in order.doclist.docs" :key="index" :item="item">
-                <ion-item>
-                  <ion-thumbnail slot="start">
-                    <Image :src="getProduct(item.productId).mainImageUrl" />
-                  </ion-thumbnail>
-                  <ion-label class="ion-text-wrap">
-                    <p>{{ getProduct(item.productId)?.brandName }}</p>
-                    {{ item.parentProductName ? item.parentProductName : item.productName }}
-                    <!-- TODO: make the attribute displaying logic dynamic -->
-                    <p v-if="$filters.getFeature(getProduct(item.productId).featureHierarchy, '1/COLOR/')"> {{ $t("Color") }}: {{ $filters.getFeature(getProduct(item.productId).featureHierarchy, '1/COLOR/') }} </p>
-                    <p v-if="$filters.getFeature(getProduct(item.productId).featureHierarchy, '1/SIZE/')"> {{ $t("Size") }}: {{ $filters.getFeature(getProduct(item.productId).featureHierarchy, '1/SIZE/') }} </p>
-                  </ion-label>
-                  <StatusBadge :statusDesc="item.orderItemStatusDesc || ''" :key="item.orderItemStatusDesc"/>
-                </ion-item>
-                <!-- TODO: Need to handle this property -->
-                <div v-if="item.facilityId === orderPreOrderId || item.facilityId === orderBackOrderId">
-                  <ion-item>
-                    <ion-label>{{ $t("Promise date") }}</ion-label>
-                    <p slot="end"> {{ item.promisedDatetime ? $filters.formatUtcDate(item.promisedDatetime, 'YYYY-MM-DDTHH:mm:ssZ', 'D MMM YYYY') : '-'  }} </p>
-                  </ion-item>
-                  <ion-item>
-                    <ion-label>{{ $t("PO arrival date") }}</ion-label>
-                    <!-- TODO: Need to handle this property -->
-                    <p slot="end"> {{ item.promiseOrderArrivalDate ? $filters.formatUtcDate(item.promiseOrderArrivalDate, 'YYYY-MM-DDTHH:mm:ssZ', 'D MMM YYYY') : '-' }} </p>
-                  </ion-item>
-                  <ion-item>
-                    <ion-label>{{ $t("Location") }}</ion-label>
-                    <!-- TODO: Need to handle this property -->
-                    <p slot="end"> {{ item.facilityName ? item.facilityName : '-' }} </p>
-                  </ion-item>
-                </div>
-                <div v-else>
-                  <ion-item>
-                    <ion-label>{{ $t("Shipping method") }}</ion-label>
-                    <p slot="end"> {{ item.shipmentMethodTypeId ? getShipmentMethodDesc(item.shipmentMethodTypeId) : '-' }} </p>
-                  </ion-item>
-                  <ion-item>
-                    <ion-label>{{ $t("Shipping from") }}</ion-label>
-                    <p slot="end"> {{ item.facilityName ? item.facilityName : "-" }} </p>
-                  </ion-item>
-                  <ion-item lines="none">
-                    <ion-label>{{ $t("Location inventory") }}</ion-label>
-                    <p slot="end">{{ getProductStock(item.productId) }}</p>
-                  </ion-item>
-                </div>
-              </ion-card>
+              <OrderItemCard v-for="(item, index) in order.doclist.docs" :key="index" :item="item" />
             </section>
             <hr />
           </div>
@@ -161,7 +133,6 @@ import {
   IonBackButton,
   IonButtons,
   IonButton,
-  IonCard,
   IonChip,
   IonContent,
   IonHeader,
@@ -170,48 +141,50 @@ import {
   IonInfiniteScrollContent,
   IonItem,
   IonLabel,
+  IonList,
+  IonListHeader,
   IonMenu,
   IonNote,
   IonPage,
+  IonPopover,
   IonSearchbar,
   IonSelect,
   IonSelectOption,
-  IonThumbnail,
   IonTitle,
   IonToggle,
   IonToolbar,
   menuController
 } from '@ionic/vue';
 import {
+  closeOutline,
   documentTextOutline,
   downloadOutline,
   filterOutline,
   pricetag,
   ribbon,
   swapVerticalOutline,
-  syncOutline,
-  close,
+  syncOutline
 } from 'ionicons/icons';
 import { defineComponent, ref } from "vue";
 import { mapGetters, useStore } from "vuex";
 import { hasError, showToast } from '@/utils'
 import { Plugins } from '@capacitor/core';
-import Image from '@/components/Image.vue';
 import { useRouter } from 'vue-router';
 import OrderFilters from '@/components/OrderFilters.vue'
 import { OrderService } from '@/services/OrderService';
 import StatusBadge from '@/components/StatusBadge.vue'
+import OrderItemCard from '@/components/OrderItemCard.vue'
+import emitter from '@/event-bus';
+import { JobService } from '@/services/JobService';
 
 const { Clipboard } = Plugins;
 
 export default defineComponent ({
   name: 'Order',
   components: {
-    Image,
     IonBackButton,
     IonButtons,
     IonButton,
-    IonCard,
     IonChip,
     IonContent,
     IonHeader,
@@ -220,28 +193,32 @@ export default defineComponent ({
     IonInfiniteScrollContent,
     IonItem,
     IonLabel,
+    IonList,
+    IonListHeader,
     IonMenu,
     IonNote,
     IonPage,
+    IonPopover,
     IonSelect,
     IonSelectOption,
     IonSearchbar,
-    IonThumbnail,
     IonTitle,
     IonToggle,
     IonToolbar,
     OrderFilters,
+    OrderItemCard,
     StatusBadge
   },
   computed: {
     ...mapGetters({
-      orders: 'order/getOrders',
+      ordersList: 'order/getOrders',
       getProduct: 'product/getProduct',
       currentFacilityId: 'user/getCurrentFacility',
       getProductStock: 'stock/getProductStock',
       isScrollable: 'order/isScrollable',
       query: 'order/getOrderQuery',
-      getShipmentMethodDesc: 'util/getShipmentMethod'
+      getShipmentMethodDesc: 'util/getShipmentMethod',
+      eComStores: 'util/getEcomStores'
     })
   },
   data() {
@@ -250,10 +227,24 @@ export default defineComponent ({
       orderStatusOptions: [''],
       sort: 'orderDate desc',
       showOrderItems: true,
-      poIds: {} as any
+      poIds: {} as any,
+      showFilterButton: false,
     }
   },
   methods: {
+    showFilters(){
+      const el = document.querySelector('.order-filters') as Element;
+      const observer = new window.IntersectionObserver(([entry]) => {
+        this.showFilterButton = !entry.isIntersecting;
+      }, {
+        root: null
+      })
+      observer.observe(el);
+    },
+
+    async closeMenu() {
+      await menuController.close();
+    },
     async sortOrders(value: string) {
       this.sort = value
       await this.store.dispatch('order/updateSort', this.sort)
@@ -279,7 +270,7 @@ export default defineComponent ({
     async loadMoreOrders(event: any) {
       await this.store.dispatch('order/findOrders', {
         viewSize: undefined,
-        viewIndex: Math.ceil(this.orders.length / process.env.VUE_APP_VIEW_SIZE).toString()
+        viewIndex: Math.ceil(this.ordersList.orders.length / process.env.VUE_APP_VIEW_SIZE).toString()
       }).then((resp) => {
         if (resp.status == 200 && resp.data.facets) {
           this.orderStatusOptions = this.orderStatusOptions.length > 1 || resp.data.facets?.orderStatusIdFacet?.buckets.length < this.orderStatusOptions.length ? this.orderStatusOptions : this.orderStatusOptions.concat(resp.data.facets?.orderStatusIdFacet?.buckets.map((status: any) => status.val))
@@ -290,10 +281,31 @@ export default defineComponent ({
     },
     async openOrderFilter() {
       await menuController.open();
+    },
+    async runJob(enumId: string, productStoreId: string) {
+
+      const job = await this.store.dispatch('job/fetchJobInformation', enumId)
+      if (!job) {
+        console.error('Job information not found')
+        return;
+      }
+      job.productStoreId = productStoreId;
+      const resp = await JobService.runServiceNow(job);
+      // added logic to fetch the order after 4s once the service is scheduled successfully
+      if (resp === 'success') {
+        emitter.emit('presentLoader')
+        setTimeout(function (this: any) {
+          emitter.emit('dismissLoader')
+          this.store.dispatch('order/findOrders')
+        }.bind(this), 4000)
+      }
     }
   },
   async mounted() {
+    this.showFilters();
+     
     this.store.dispatch('util/fetchShipmentMethods')
+    this.store.dispatch('util/getEComStores')
     await this.getOrders();
 
     try {
@@ -344,6 +356,8 @@ export default defineComponent ({
     } catch(err) {
       console.error(err)
     }
+
+    
   },
   setup() {
     const router = useRouter();
@@ -351,12 +365,10 @@ export default defineComponent ({
     const queryString = ref();
     const orderStatus = JSON.parse(process.env.VUE_APP_ORDER_STATUS)
     const itemStatus = JSON.parse(process.env.VUE_APP_ITEM_STATUS)
-    const orderPreOrderId = process.env.VUE_APP_PRE_ORDER_IDNT_ID
-    const orderBackOrderId = process.env.VUE_APP_BACKORDER_IDNT_ID
     const cusotmerLoyaltyOptions = process.env.VUE_APP_CUST_LOYALTY_OPTIONS
 
     return {
-      close,
+      closeOutline,
       cusotmerLoyaltyOptions,
       documentTextOutline,
       downloadOutline,
@@ -364,8 +376,6 @@ export default defineComponent ({
       itemStatus,
       pricetag,
       orderStatus,
-      orderBackOrderId,
-      orderPreOrderId,
       ribbon,
       swapVerticalOutline,
       syncOutline,
@@ -378,6 +388,9 @@ export default defineComponent ({
 </script>
 
 <style scoped>
+ion-menu {
+  --width: 100%;
+}
 .section-header{
   margin: 0 var(--spacer-xs);
 }
@@ -390,6 +403,10 @@ export default defineComponent ({
   display: block;
 }
 
+main > div{
+  cursor: pointer;
+}
+
 ion-modal {
   --width: 290px;
   --height: 382px;
@@ -397,6 +414,10 @@ ion-modal {
 }
 
 @media (min-width: 991px) {
+  ion-menu {
+    --width: 375px;
+  }
+
   .main {
     margin-left: var(--spacer-xl);
   }

@@ -4,10 +4,10 @@ import RootState from '../../RootState'
 
 const getters: GetterTree <OrderState, RootState> = {
   getOrders (state) {
-    return state.list.orders
+    return state.list
   },
   isScrollable: (state) => {
-    return state.list.orders.length > 0 && state.list.orders.length < state.list.total
+    return state.list.orders.length > 0 && state.list.orders.length < state.list.orderCount
   },
   getOrderQuery: (state) => {
     return state.query
@@ -17,6 +17,15 @@ const getters: GetterTree <OrderState, RootState> = {
   },
   getOrderValidStatusChange: (state) => (statusId: string) => {
     return state.validStatusChange[statusId]
+  },
+  getStuckOrders(state) {
+    return state.stuck.orders;
+  },
+  getOrderChangeFacility: (state) => (orderId: any) => {
+    return state.orderFacilityChange[orderId];
+  },
+  getOldExpeditedOrders(state) {
+    return state.oldExpedited.orders;
   }
 }
 export default getters;

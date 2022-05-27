@@ -10,7 +10,8 @@ const orderModule: Module<OrderState, RootState> ={
   state: {
     list: {
       orders: [],
-      total: 0
+      orderCount: 0,
+      itemCount: 0
     },
     poIds: {},
     query: {
@@ -21,17 +22,27 @@ const orderModule: Module<OrderState, RootState> ={
       'shipFromStore': false,
       'preOrder': false,
       'backOrder': false,
-      'unfillable': false,
       'orderCreated': '',
       'promisedDate': '',
       'autoCancelDate': '',
       'selectedPoIds': [] as Array<string>,
       'queryString': '',
       'sort': 'orderDate desc',
+      'productStoreId': ''
     },
     current: {},
-    validStatusChange: {}
+    validStatusChange: {},
+    stuck: {
+      orders: [],
+      total: 0,
+    },
+    oldExpedited: {
+      orders: [],
+      total: 0,
+    },
+    orderFacilityChange: {}
   },
+  
   getters,
   actions,
   mutations,  
