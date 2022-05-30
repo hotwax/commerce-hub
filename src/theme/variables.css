@@ -375,6 +375,12 @@ ion-card {
   border-radius: 8px;
 }
 
+ion-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
 .desktop-only {
   display: none;
 }
