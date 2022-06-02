@@ -62,7 +62,7 @@ export default defineComponent({
   unmounted() {
     emitter.off('presentLoader', this.presentLoader);
     emitter.off('dismissLoader', this.dismissLoader);
-    emitter.off('unauthorized', this.unauthorized);
+    emitter.off(events.UNAUTHORIZED, this.unauthorized);
     updateToken('')
     updateInstanceUrl('')
   },
