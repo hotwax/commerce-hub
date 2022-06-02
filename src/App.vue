@@ -9,7 +9,10 @@ import { IonApp, IonRouterOutlet } from '@ionic/vue';
 import { defineComponent } from 'vue';
 import { loadingController } from '@ionic/vue';
 import emitter from "@/event-bus"
-
+import store from './store';
+import router from './router';
+import { updateToken, updateInstanceUrl } from '@hotwax/oms-api/api';
+import { events } from '@hotwax/oms-api/types'
 
 export default defineComponent({
   name: 'App',
@@ -39,6 +42,10 @@ export default defineComponent({
         this.loader.dismiss();
         this.loader = null as any;
       }
+    },
+    unauthorized() {
+      store.dispatch("user/logout");
+      router.push('/login')
     }
   },
   async mounted() {
@@ -50,10 +57,14 @@ export default defineComponent({
       });
     emitter.on('presentLoader', this.presentLoader);
     emitter.on('dismissLoader', this.dismissLoader);
+    emitter.on(events.UNAUTHORIZED, this.unauthorized);
   },
   unmounted() {
     emitter.off('presentLoader', this.presentLoader);
     emitter.off('dismissLoader', this.dismissLoader);
+    emitter.off('unauthorized', this.unauthorized);
+    updateToken('')
+    updateInstanceUrl('')
   },
 });
 </script>
