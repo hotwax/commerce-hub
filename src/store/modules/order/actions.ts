@@ -7,6 +7,7 @@ import { getCustomerLoyalty, getIdentification, hasError, showToast } from '@/ut
 import { translate } from '@/i18n'
 import { Order, OrderItem } from '@/types'
 import { prepareOrderQuery } from '@/utils/solrHelper'
+import { getOrderDetails, updateOrderStatus } from '@hotwax/oms-api'
 
 const actions: ActionTree<OrderState, RootState> = {
   
@@ -104,6 +105,8 @@ const actions: ActionTree<OrderState, RootState> = {
     }
 
     try {
+      // Added to test the order details
+      console.log(getOrderDetails(orderId))
       resp = await OrderService.findOrderDetails(payload);
 
       if (resp.status == 200 && !hasError(resp)) {
@@ -331,8 +334,8 @@ const actions: ActionTree<OrderState, RootState> = {
   async updateOrderStatus({ dispatch }, payload) {
     let resp;
     try {
-      resp = await OrderService.updateOrderStatus(payload);
-      if (resp.status == 200 && !hasError(resp)) {
+      resp = await updateOrderStatus(payload);
+      if (resp) {
         dispatch('getOrderDetails', payload.orderId)
       } else {
         console.error('Unable to update order status')
