@@ -3,10 +3,11 @@ import { ActionTree } from 'vuex'
 import RootState from '@/store/RootState'
 import OrderState from './OrderState'
 import * as types from './mutation-types'
-import { getCustomerLoyalty, getIdentification, hasError, showToast } from '@/utils'
+import { hasError, showToast } from '@/utils'
 import { translate } from '@/i18n'
-import { Order, OrderItem } from '@/types'
+import { Order, OrderItem, OrderPart, Response } from '@hotwax/oms-api/src/types'
 import { prepareOrderQuery } from '@/utils/solrHelper'
+import { getOrderDetails } from '@hotwax/oms-api/src/order/index'
 
 const actions: ActionTree<OrderState, RootState> = {
   
@@ -87,182 +88,87 @@ const actions: ActionTree<OrderState, RootState> = {
     }
     return resp;
   },
-  async getOrderDetails({ commit }, orderId) {
-    let resp;
-
-    const payload = {
-      "json": {
-        "params": {
-          "group": true,
-          "group.field": "orderId",
-          "group.limit": 10000,
-          "q.op": "AND"
-        } as any,
-        "query": "*:*",
-        "filter": `docType: ORDER AND orderTypeId: SALES_ORDER AND orderId: ${orderId}`
-      }
-    }
+  async getOrderDetails({ commit }, orderId): Promise<Order | Response> {
+    let resp: any;
 
     try {
-      resp = await OrderService.findOrderDetails(payload);
+      resp = await getOrderDetails(orderId)
 
-      if (resp.status == 200 && !hasError(resp)) {
+      if (resp.code != 'error') {
         // TODO Improve environment variable names
-        const orderNameIdentificationKey = process.env.VUE_APP_ORD_IDENT_TYPE_NAME
-        const orderIdIdentificationKey = process.env.VUE_APP_ORD_IDENT_TYPE_ID
-        const orderNoIdentificationKey = process.env.VUE_APP_ORD_IDENT_TYPE_NO
-        const customerLoyaltyOptions = process.env.VUE_APP_CUST_LOYALTY_OPTIONS
+        // const orderNameIdentificationKey = process.env.VUE_APP_ORD_IDENT_TYPE_NAME
+        // const orderIdIdentificationKey = process.env.VUE_APP_ORD_IDENT_TYPE_ID
+        // const orderNoIdentificationKey = process.env.VUE_APP_ORD_IDENT_TYPE_NO
+        // const customerLoyaltyOptions = process.env.VUE_APP_CUST_LOYALTY_OPTIONS
 
-        const group = resp.data.grouped.orderId.groups.length > 0 && resp.data.grouped.orderId.groups[0]
-        let itemGroups = [];
-        const items = group.doclist.docs;
+        const items: Array<OrderItem> = [];
+        resp.parts.map((part: OrderPart) => part.items?.map((item: OrderItem) => items.push(item)))
 
-        const orderItemShipGrpInfoResp = await OrderService.fetchOrderItemShipGrpInformation({
-          "inputFields": {
-            orderId
-          },
-          "fieldList": ["shipGroupSeqId", "orderItemSeqId"],
-          "entityName": "OrderItemShipGroupAssoc",
-          "noConditionFind": "Y",
-          "viewSize": 100
-        });
-        if (orderItemShipGrpInfoResp.status == 200 && !hasError(orderItemShipGrpInfoResp)) {
-          const orderItemShipGrpList = orderItemShipGrpInfoResp.data.docs;
-          const prepareGroups = (items: any, orderItemShipGrpList: any) => {
-            const groups:any = [];
-            items.map((item: any) => {
-              const orderItemShipGrp = orderItemShipGrpList.find((orderItemShipGrp: any) => orderItemShipGrp.orderItemSeqId === item.orderItemSeqId);
-              item.orderItemGroupId = orderItemShipGrp.shipGroupSeqId;
-              let group = groups.find((group: any) => {
-                return group.orderItemGroupId === item.orderItemGroupId;
-              })
-              if (!group) {
-                group = {
-                  orderItemGroupId: orderItemShipGrp.shipGroupSeqId,
-                  facility: {
-                    id: item.facilityId,
-                    name: item.facilityName
-                  },
-                  shippingMethod: {
-                    id: item.shipmentMethodTypeId
-                  },
-                  carrier: {
-                    partyId: item.carrierPartyId
-                  },
-                  shippingAddress: {
-                    toName: item.customerPartyName,
-                    addressLine1: item.address1,
-                    addressLine2: item.address2,
-                    city: item.shipToCity,
-                    postalCode: item.postalCode,
-                    state: item.shipToState,
-                    country: item.shipToCountry
-                  }
-                }
-                groups.push(group);
-              }
-  
-            })
-            return groups;
-          }
-          itemGroups = prepareGroups(items, orderItemShipGrpList);
-        }
+        // TODO: commented code as need to figure out how we will he storing this information in the
+        // moqui schema
 
-        const orderItemShipGrpInvResInfoResp = await OrderService.fetchOrderItemShipGrpInvResInfo({
-          "inputFields": {
-            orderId
-          },
-          "fieldList": ["orderItemSeqId"],
-          "entityName": "OrderItemShipGrpInvRes",
-          "noConditionFind": "Y",
-          "viewSize": 100
-        });
-        if (orderItemShipGrpInvResInfoResp.status == 200 && !hasError(orderItemShipGrpInvResInfoResp)) {
-          const orderItemShipGrpInvResInfoList = orderItemShipGrpInvResInfoResp.data.docs;
-          items.map((item: any) => {
-            item.reserved = orderItemShipGrpInvResInfoList.some((orderItemShipGrpInvRes: any) => item.orderItemSeqId === orderItemShipGrpInvRes.orderItemSeqId);
-          })
-        }
+        // const orderItemShipGrpInvResInfoResp = await OrderService.fetchOrderItemShipGrpInvResInfo({
+        //   "inputFields": {
+        //     orderId
+        //   },
+        //   "fieldList": ["orderItemSeqId"],
+        //   "entityName": "OrderItemShipGrpInvRes",
+        //   "noConditionFind": "Y",
+        //   "viewSize": 100
+        // });
+        // if (orderItemShipGrpInvResInfoResp.status == 200 && !hasError(orderItemShipGrpInvResInfoResp)) {
+        //   const orderItemShipGrpInvResInfoList = orderItemShipGrpInvResInfoResp.data.docs;
+        //   items.map((item: any) => {
+        //     item.reserved = orderItemShipGrpInvResInfoList.some((orderItemShipGrpInvRes: any) => item.orderItemSeqId === orderItemShipGrpInvRes.orderItemSeqId);
+        //   })
+        // }
 
-        const orderBrokeringInfoResp = await OrderService.fetchOrderBrokeringInfo({
-          "inputFields": {
-            orderId,
-            // TODO "changeReasonEnumId_op": "empty"
-          },
-          "entityName": "OrderFacilityChange",
-          "noConditionFind": "Y",
-          "viewSize": 20,
-          "fieldList": ["orderItemSeqId"]
-        });
-        if (orderBrokeringInfoResp.status == 200 && !hasError(orderBrokeringInfoResp)) {
-          const orderBrokeringInfoRespInfoList = orderBrokeringInfoResp.data.docs;
-          items.map((item: any) => {
-            item.brokeringAttempt = orderBrokeringInfoRespInfoList.filter((orderBrokeringInfo: any) => item.orderItemSeqId === orderBrokeringInfo.orderItemSeqId).length;
-          })
-        }
+        // const orderBrokeringInfoResp = await OrderService.fetchOrderBrokeringInfo({
+        //   "inputFields": {
+        //     orderId,
+        //     // TODO "changeReasonEnumId_op": "empty"
+        //   },
+        //   "entityName": "OrderFacilityChange",
+        //   "noConditionFind": "Y",
+        //   "viewSize": 20,
+        //   "fieldList": ["orderItemSeqId"]
+        // });
+        // if (orderBrokeringInfoResp.status == 200 && !hasError(orderBrokeringInfoResp)) {
+        //   const orderBrokeringInfoRespInfoList = orderBrokeringInfoResp.data.docs;
+        //   items.map((item: any) => {
+        //     item.brokeringAttempt = orderBrokeringInfoRespInfoList.filter((orderBrokeringInfo: any) => item.orderItemSeqId === orderBrokeringInfo.orderItemSeqId).length;
+        //   })
+        // }
 
-        const orderPreOrderFacilityId = process.env.VUE_APP_PRE_ORDER_IDNT_ID
-        const orderBackOrderFacilityId = process.env.VUE_APP_BACKORDER_IDNT_ID
-        // Find Preorder or Backorder items
-        const correspondingPoIds = items
-            .filter((item: any) => item.facilityId === orderPreOrderFacilityId || item.facilityId === orderBackOrderFacilityId)
-            .map((item: any) => item.correspondingPoId)
+        // const orderPreOrderFacilityId = process.env.VUE_APP_PRE_ORDER_IDNT_ID
+        // const orderBackOrderFacilityId = process.env.VUE_APP_BACKORDER_IDNT_ID
+        // Find Preorder or Backorder parts
+        // const correspondingPoIds = resp.parts
+        //     .filter((part: OrderPart) => part.facilityId === orderPreOrderFacilityId || part.facilityId === orderBackOrderFacilityId)
+        //     .map((item: any) => item.correspondingPoId)
 
         // Find PO Information if corresponding PO ids found
-        if (correspondingPoIds.length) {
-          const correspondingPoExternalIds = await OrderService.getPOInformationForPOIds({correspondingPoIds});
-          items.map((item: any) => {
-            const order = correspondingPoExternalIds[item.correspondingPoId];
-            item.correspondingPoExternalId = order ? order.externalOrderId : undefined;
-            item.estimatedArrivalDate = order ? order.estimatedDeliveryDate : undefined;
+        // if (correspondingPoIds.length) {
+        //   const correspondingPoExternalIds = await OrderService.getPOInformationForPOIds({correspondingPoIds});
+        //   items.map((item: any) => {
+        //     const order = correspondingPoExternalIds[item.correspondingPoId];
+        //     item.correspondingPoExternalId = order ? order.externalOrderId : undefined;
+        //     item.estimatedArrivalDate = order ? order.estimatedDeliveryDate : undefined;
+        //   })
+
+        // }  
+
+        const order: Order = resp
+        const orderItems = [] as OrderItem[];
+
+        order.parts?.map((part: OrderPart | any) => {
+          part.items.map((item: OrderItem) => {
+            orderItems.push(item)
           })
-
-        }
-
-        const order: Order = {
-          orderId: items[0].orderId,
-          orderName: items[0].orderName,
-          customer: {
-            name: items[0].customerPartyName,
-            emailId: items[0].customerEmailId,
-            phoneNumber: items[0].customerPhoneNumber,
-            toName: items[0].customerPartyName,
-            city: items[0].shipToCity,
-            state: items[0].shipToState,
-            zipCode: items[0].postalCode,
-            country: items[0].shipToCountry,
-            addressLine1: items[0].address1,
-            addressLine2: items[0].address2,
-            loyaltyOptions: getCustomerLoyalty(items[0].orderNotes, customerLoyaltyOptions)
-          },
-          /** An array containing the items purchased in this order */
-          items: items,
-          statusId: items[0].orderStatusId,
-          statusDesc: items[0].orderStatusDesc,
-          identifications: {
-            'orderName': getIdentification(items[0]?.orderIdentifications, orderNameIdentificationKey),
-            'orderId': getIdentification(items[0]?.orderIdentifications, orderIdIdentificationKey),
-            'orderNo': getIdentification(items[0]?.orderIdentifications, orderNoIdentificationKey),
-          },
-          notes: items[0].orderNotes,
-          itemGroups
-        }
-
-        const statusIds = new Set();
-        const orderItems = [] as any;
-
-        order.items?.map((item: any) => {
-          statusIds.add(item.orderItemStatusId)
-          orderItems.push(item)
         })
 
-        this.dispatch('stock/fetchProductStockForFacility', orderItems)
- 
-        // TODO Remove this code when the status description is directly available
-        const statuses = await this.dispatch('util/fetchStatus', [...statusIds])
-        order.items?.map((item: any) => item['orderItemStatusDesc'] = statuses[item.orderItemStatusId])
-
-        const productIds = order.items?.map((item: OrderItem) => item.productId)
+        this.dispatch('stock/fetchProductStockForFacility', order.parts)
+        const productIds = orderItems.map((item: OrderItem) => item.productId)
 
         commit(types.ORDER_CURRENT_UPDATED, { order })
         this.dispatch('product/fetchProducts', { productIds });
