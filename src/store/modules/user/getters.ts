@@ -20,6 +20,9 @@ const getters: GetterTree <UserState, RootState> = {
     },
     getInstanceUrl (state) {
         return state.instanceUrl;
+    },
+    getUsersList (state) {
+        return state.users;
     }
 }
 export default getters;
