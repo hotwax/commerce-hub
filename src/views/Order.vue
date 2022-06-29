@@ -19,7 +19,7 @@
             <ion-item lines="none">
               <ion-icon slot="start" :icon="ticketOutline" />
               <h1>{{ order.orderName ? order.orderName : order.orderId }}</h1>
-              <StatusBadge :statusDesc="order.statusDesc || ''" :key="order.statusDesc" slot="end"/>
+              <StatusBadge :statusDesc="order.status?.description || ''" :key="order.status?.description" slot="end"/>
               <ion-select v-if="validStatusChange(order.statusId)?.length > 0" @ionChange="changeStatus(order.orderId, $event)" slot="end">
                 <ion-select-option v-for="status in validStatusChange(order.statusId)" :key="status" :value="status">{{ orderStatus[status]?.label }}</ion-select-option>
               </ion-select>
@@ -89,11 +89,11 @@
                 </ion-item>
                 <ion-item>
                   <ion-label class="ion-text-wrap"> {{ $t("Order ID") }} </ion-label>
-                  <p slot="end">{{ order.identifications?.orderId ? order.identifications.orderId : "-" }}</p>
+                  <p slot="end">{{ order.externalId ? order.externalId : "-" }}</p>
                 </ion-item>
                 <ion-item lines="none">
                   <ion-label class="ion-text-wrap"> {{ $t("Order Name") }} </ion-label>
-                  <p slot="end">{{ order.identifications?.orderName ? order.identifications.orderName : "-" }} </p>
+                  <p slot="end">{{ order.orderName ? order.orderName : "-" }} </p>
                 </ion-item>
               </ion-list>
             </ion-card>
@@ -106,7 +106,7 @@
             <h1>{{ $t("Products") }}</h1>
           </ion-item>
 
-          <div v-for="(group, index) of order.itemGroups" :key="index" >
+          <div v-for="(part, index) of order.parts" :key="index" >
             <div class="info">
               <ion-card>
                 <ion-card-header>
@@ -115,11 +115,11 @@
                 <ion-list>
                   <ion-item lines="none">
                     <ion-label>
-                      {{ group.shippingAddress.toName }}
-                      <p>{{ group.shippingAddress.addressLine1 }}</p>
-                      <p>{{ group.shippingAddress.addressLine2 }}</p>
-                      <p>{{ group.shippingAddress.city }} {{ group.shippingAddress.postalCode && ',' }} {{ group.shippingAddress.postalCode }}</p>
-                      <p>{{ group.shippingAddress.state }} {{ group.shippingAddress.country && ',' }} {{ group.shippingAddress.country }}</p>
+                      {{ part.postal.postalAddress.toName }}
+                      <p>{{ part.postal.postalAddress.addressLine1 }}</p>
+                      <p>{{ part.postal.postalAddress.addressLine2 }}</p>
+                      <p>{{ part.postal.postalAddress.city }} {{ part.postal.postalAddress.postalCode && ',' }} {{ part.postal.postalAddress.postalCode }}</p>
+                      <p>{{ part.postal.postalAddress.stateProvinceGeo.geoName }} {{ part.postal.postalAddress.countryGeo.geoName && ',' }} {{ part.postal.postalAddress.countryGeo.geoName }}</p>
                     </ion-label>
                   </ion-item>
                   <!-- TODO: make edit address button functional, also add UI for same -->
@@ -135,11 +135,11 @@
                 <ion-list>  
                   <ion-item>
                     <ion-label> {{ $t("Shipping method") }} </ion-label>
-                    <p>{{ getShipmentMethod(group.shippingMethod.id) ? getShipmentMethod(group.shippingMethod.id) : "-"}}</p>
+                    <p>{{ getShipmentMethod(part.shipmentMethodEnumId) ? getShipmentMethod(part.shipmentMethodEnumId) : "-"}}</p>
                   </ion-item>
                   <ion-item>
                     <ion-label>{{ $t("Shipping from") }}</ion-label>
-                    <p>{{ group.facility.name ? group.facility.name : "-" }}</p>
+                    <p>{{ part.facility.facilityName ? part.facility.facilityName : "-" }}</p>
                   </ion-item>
                   <!-- TODO: make changing location button functional, also add UI for same -->
                   <!-- <ion-buttons>
@@ -155,7 +155,7 @@
                 </ion-list>
               </ion-card> -->
             </div>
-          <div class="product" v-for="(item, index) of getGroupItems(group, order.items)" :key="index">
+          <div class="product" v-for="(item, index) of part.items" :key="index">
             <div class="product-image desktop-only">
               <Image :src="getProduct(item.productId).mainImageUrl" />
               <!-- TODO: handle navigation to product inventory page -->
@@ -175,22 +175,23 @@
                   </ion-thumbnail>
                   <ion-label class="ion-text-wrap">
                     <p> {{ item.brandName }} </p>
-                    {{ item.parentProductName ? item.parentProductName : item.productName }}
+                    {{ getProduct(item.productId).parentProductName ? getProduct(item.productId).parentProductName : getProduct(item.productId).productName }}
                     <p v-if="$filters.getFeature(getProduct(item.productId).featureHierarchy, '1/COLOR/')">{{ $t("Color") }}: {{ $filters.getFeature(getProduct(item.productId).featureHierarchy, '1/COLOR/') }}</p>
                     <p v-if="$filters.getFeature(getProduct(item.productId).featureHierarchy, '1/SIZE/')">{{ $t("Size") }}: {{ $filters.getFeature(getProduct(item.productId).featureHierarchy, '1/SIZE/') }}</p>
                   </ion-label>
                 </ion-item>
 
                 <div class="product-tags desktop-only">
-                  <ion-chip v-if="item.internalName">
+                  <ion-chip v-if="item.product.pseudoId">
                     <!-- TODO update shopify icon later -->
                     <ion-icon :icon="pricetag" />
-                    <ion-label>{{ item.internalName }}</ion-label>
+                    <ion-label>{{ item.product.pseudoId }}</ion-label>
                   </ion-chip>
                 </div>
 
                 <ion-item lines="none">
-                  <StatusBadge :statusDesc="item.orderItemStatusDesc || ''" :key="item.orderItemStatusDesc"/>
+                  <!-- TODO: currently used part status to display item status but need to handle this correctly -->
+                  <StatusBadge :statusDesc="part.status?.description || ''" :key="part.status?.description"/>
                 </ion-item>
               </div>
 
@@ -203,11 +204,11 @@
                       <ion-card-title>{{ $t("Fulfillment") }}</ion-card-title>
                     </ion-card-header>
                     <ion-list>
-                      <ion-item v-if="item.orderItemStatusId !== 'ITEM_COMPLETED'">
+                      <ion-item v-if="part.statusId !== 'ITEM_COMPLETED'">
                         <ion-label> {{ $t("Auto cancel") }} </ion-label>
-                        <p slot="end">{{ item.autoCancelDate ? $filters.formatUtcDate(item.autoCancelDate, 'YYYY-MM-DDTHH:mm:ssZ', 'D MMM YYYY') : "-" }}</p>
+                        <p slot="end">{{ part.autoCancelDate ? $filters.formatUtcDate(part.autoCancelDate, 'YYYY-MM-DDTHH:mm:ssZ', 'D MMM YYYY') : "-" }}</p>
                       </ion-item>
-                      <ion-item v-if="item.orderItemStatusId === 'ITEM_APPROVED'">
+                      <ion-item v-if="part.statusId === 'ITEM_APPROVED'">
                         <ion-label> {{ $t("Inventory reservation") }} </ion-label>
                         <p>{{ item.reserved ? $t("Reserved") : "-"}}</p>
                       </ion-item>
@@ -217,7 +218,7 @@
                       </ion-item>
                       <ion-item lines="none">
                         <ion-label>{{ $t("Location Inventory") }}</ion-label>
-                        <p>{{ getProductStockForFacility(item.productId, item.facilityId) }}</p>
+                        <p>{{ getProductStockForFacility(item.productId, part.facilityId) }}</p>
                       </ion-item>
                       <!-- TODO: make changing location button functional, also add UI for same -->
                       <!-- <ion-buttons>
@@ -225,9 +226,9 @@
                       </ion-buttons> -->
                     </ion-list>
                   </ion-card>
-                  <ion-card v-if="item.facilityId === orderPreOrderId || item.facilityId === orderBackOrderId">
+                  <ion-card v-if="part.facilityId === orderPreOrderId || part.facilityId === orderBackOrderId">
                     <ion-card-header>
-                      <ion-card-title>{{ item.facilityId === orderPreOrderId ? $t("Pre-order") : $t("BackOrder") }}</ion-card-title>
+                      <ion-card-title>{{ part.facilityId === orderPreOrderId ? $t("Pre-order") : $t("BackOrder") }}</ion-card-title>
                     </ion-card-header>
                     <ion-list>
                       <ion-item>

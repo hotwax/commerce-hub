@@ -41,13 +41,17 @@ const actions: ActionTree<StockState, RootState> = {
     }
   },
 
-  async fetchProductStockForFacility({ state, commit }, items) {
+  async fetchProductStockForFacility({ state, commit }, parts) {
     const cachedProductAtp = JSON.parse(JSON.stringify(state.productsByFacility));
-    const products = items.map((item: any) => {
-      if(!cachedProductAtp[item.facilityId] || !cachedProductAtp[item.facilityId][item.productId]) {
-        return item
-      }
-    }).filter((item: any) => item)
+    let products: any;
+    parts.map((part: any) => {
+      products = part.items?.map((item: any) => {
+        if(!cachedProductAtp[part.facilityId] || !cachedProductAtp[part.facilityId][item.productId]) {
+          item.facilityId = part.facilityId
+          return item
+        }
+      }).filter((item: any) => item)
+    })
 
     try {
       const resp = await Promise.all(products.map((product: any) => {
