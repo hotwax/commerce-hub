@@ -1,7 +1,7 @@
 import { hasError } from "@/utils";
 import api from "../api"
 import store from '@/store'
-import moment from 'moment'
+import { DateTime } from 'luxon'
 
 const getShipmentDetailForOrderItem = async (payload: any) => {
   let resp;
@@ -71,7 +71,7 @@ const getOrderBrokeringInfo = async (orders: any) => {
 
         const orderBrokeringInfo = orderItemFacilityChangeList.reduce((orderBrokeringInfo: any, ordersBrokered: any) => {
           const facility = facilities[ordersBrokered.facilityId]
-          const diff = moment.utc(ordersBrokered.changeDatetime).diff(moment.utc(orderBrokeringInfo.lastBrokeredDateTime))
+          const diff = DateTime.utc(ordersBrokered.changeDatetime).diff(DateTime.utc(orderBrokeringInfo.lastBrokeredDateTime))
           // if current facility change time is recent than the current set one, update
           if(facility && facility.facilityId !== "_NA_" && diff){
             orderBrokeringInfo.lastBrokeredFacility = facility;

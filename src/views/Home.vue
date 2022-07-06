@@ -108,7 +108,7 @@
                   </ion-label>
                   <div class="metadata" v-if="order.autoCancelDate">
                     <ion-note slot="end">{{ $t("order placed date")}}</ion-note>
-                    <ion-badge slot="end" color="medium">{{ getAutoCancelDate(order.autoCancelDate) }}</ion-badge>
+                    <ion-badge slot="end" color="medium">{{ timeFromNow(order.autoCancelDate) }}</ion-badge>
                   </div>
                   
                   
@@ -153,7 +153,7 @@ import { ticketOutline, shirtOutline, sendOutline, calendarOutline, settingsOutl
 import Logo from '@/components/Logo.vue';
 import { mapGetters, useStore } from 'vuex';
 import Image from "@/components/Image.vue";
-import moment from 'moment'
+import { DateTime } from 'luxon'
 
 export default defineComponent({
   name: 'Home',
@@ -182,8 +182,9 @@ export default defineComponent({
     })
   },
   methods: {
-    getAutoCancelDate(cancelDate: any){
-     return moment(cancelDate, "MM-DD-YYYY").fromNow();
+    timeFromNow (time: any) {
+      const timeDiff = DateTime.utc(time).diff(DateTime.local());
+      return DateTime.local().plus(timeDiff).toRelative();
     },
     async updateAppliedFilters(filters: any) {
       filters.forEach(async (filter: any) => {

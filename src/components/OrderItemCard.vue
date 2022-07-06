@@ -54,7 +54,7 @@
       <div v-if="isItemInBrokeringQueue(item)">
         <ion-item>
           <ion-label>{{ $t("Auto cancel") }}</ion-label>
-          <p slot="end">{{ item.autoCancelDate ? moment.utc(item.autoCancelDate).fromNow() : '-' }}</p>
+          <p slot="end">{{ item.autoCancelDate ? timeFromNow(item.autoCancelDate) : '-' }}</p>
         </ion-item>
         <ion-item lines="none">
           <ion-label>{{ $t("Parking") }}</ion-label>
@@ -86,7 +86,7 @@ import {
 import { mapGetters } from "vuex";
 import Image from '@/components/Image.vue'
 import StatusBadge from '@/components/StatusBadge.vue'
-import * as moment from "moment-timezone";
+import { DateTime } from 'luxon';
 
 export default defineComponent({
   name: "OrderItemCard",
@@ -107,6 +107,10 @@ export default defineComponent({
   },
   props: ["item"],
   methods: {
+    timeFromNow (time: any) {
+      const timeDiff = DateTime.utc(time).diff(DateTime.local());
+      return DateTime.local().plus(timeDiff).toRelative();
+    },
     isItemPreorderOrBackorder(item: any) {
       return item.facilityId === this.orderPreOrderFacilityId || item.facilityId === this.orderBackOrderFacilityId
     },
@@ -125,7 +129,6 @@ export default defineComponent({
     const orderBackOrderFacilityId = process.env.VUE_APP_BACKORDER_IDNT_ID
 
     return {
-      moment,
       orderPreOrderFacilityId,
       orderBackOrderFacilityId
     }

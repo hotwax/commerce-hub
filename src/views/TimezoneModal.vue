@@ -24,7 +24,7 @@
         <ion-radio-group value="rd" v-model="timeZoneId">
           <ion-item  :key="timeZone.id" v-for="timeZone in filteredTimeZones">
             <ion-label>{{ timeZone.label }} ({{ timeZone.id }})</ion-label>
-            <ion-radio :value="timeZone.id" slot="start"></ion-radio>
+            <ion-radio :value="timeZone.id" slot="start" />
           </ion-item>
         </ion-radio-group>
       </ion-list>
@@ -63,7 +63,7 @@ import { close, save } from "ionicons/icons";
 import { useStore } from "@/store";
 import { UserService } from "@/services/UserService";
 import { hasError } from "@/utils";
-import moment from "moment";
+import { DateTime } from 'luxon';
 export default defineComponent({
   name: "TimeZoneModal",
   data() {
@@ -119,7 +119,7 @@ export default defineComponent({
       UserService.getAvailableTimeZones().then((resp: any) => {
         if (resp.status === 200 && resp.data?.length > 0 && !hasError(resp)) {
           this.timeZones = resp.data.filter((timeZone: any) => {
-            return moment.tz.zone(timeZone.id);
+            return DateTime.local().setZone(timeZone.id).isValid;
           });
           this.findTimeZone();
         }

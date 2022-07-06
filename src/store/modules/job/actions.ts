@@ -2,7 +2,6 @@ import { ActionTree } from 'vuex'
 import RootState from '@/store/RootState'
 import * as types from './mutation-types'
 import { hasError } from '@/utils'
-import "moment-timezone";
 import JobState from './JobState'
 import { JobService } from '@/services/JobService'
 

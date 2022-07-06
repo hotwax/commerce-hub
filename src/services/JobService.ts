@@ -1,5 +1,5 @@
 import { hasError } from "@/utils";
-import moment from "moment";
+import { DateTime } from "luxon";
 import api from "@/api"
 import store from "@/store";
 
@@ -21,7 +21,7 @@ const runServiceNow = async (job: any): Promise<any> => {
       'systemJobEnumId': job.systemJobEnumId,
       'tempExprId': job.tempExprId,
       'parentJobId': job.parentJobId,
-      'recurrenceTimeZone': moment.tz.guess()
+      'recurrenceTimeZone': DateTime.local().zoneName
     },
     'shopifyConfigId': shopifyConfigId,
     'statusId': "SERVICE_PENDING",
