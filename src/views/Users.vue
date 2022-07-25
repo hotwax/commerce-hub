@@ -22,7 +22,7 @@
           <ion-list>
             <ion-item lines="none">
               <ion-icon :icon="globeOutline" slot="start" />
-              <ion-label>{{ $t("Shop") }}</ion-label>
+              <ion-label>{{ $t("eCom Store") }}</ion-label>
               <ion-select value="a">
                 <ion-select-option value="a">Product store</ion-select-option>
                 <ion-select-option value="b">Product store</ion-select-option>
