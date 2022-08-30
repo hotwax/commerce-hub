@@ -20,7 +20,7 @@
           </ion-item>
           <ion-item lines="full">
             <ion-label>{{ $t("OMS") }}</ion-label>
-            <ion-label slot="end">{{ instanceUrl }}</ion-label>
+            <ion-label slot="end">{{ baseURL ? baseURL : instanceUrl }}</ion-label>
           </ion-item>
           <ion-button fill="clear" @click="() => router.push('/profile')">{{ $t("Details") }}</ion-button>
         </ion-card>
@@ -117,6 +117,11 @@ export default defineComponent({
     IonPage,
     IonTitle,
     IonToolbar
+  },
+  data() {
+    return {
+      baseURL: process.env.VUE_APP_BASE_URL
+    };
   },
   computed: {
     ...mapGetters({

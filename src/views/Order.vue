@@ -294,12 +294,14 @@ import {
   IonSelectOption,
   IonThumbnail,
   IonTitle,
-  IonToolbar
+  IonToolbar,
+  modalController,
 } from '@ionic/vue';
 import { useStore } from "@/store";
 import { mapGetters } from "vuex";
 import { defineComponent } from "vue";
 import StatusBadge from '@/components/StatusBadge.vue'
+import FulfillmentLocationModal from '@/components/FulfillmentLocationModal.vue'
 
 export default defineComponent({
   name: 'Order',
@@ -339,6 +341,12 @@ export default defineComponent({
     },
     changeStatus(orderId: string, ev: CustomEvent) {
       this.store.dispatch('order/updateOrderStatus', {orderId, statusId: ev['detail'].value, 'setItemStatus': 'Y'})
+    },
+    async updateFulfillmentLocation() {
+      const updateModal = await modalController.create({
+        component: FulfillmentLocationModal,
+      });
+      return updateModal.present();
     },
     getGroupItems(group: any, items: any) {
       return items.filter((item: any) => item.orderItemGroupId === group.orderItemGroupId);
