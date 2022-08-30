@@ -183,7 +183,7 @@ export default defineComponent({
   },
   methods: {
     timeFromNow (date: any) {
-      const timeDiff = DateTime.fromFormat(date, "MM-DD-YYYY").diff(DateTime.local());
+      const timeDiff = DateTime.fromFormat(date, "MM-dd-yyyy").diff(DateTime.local());
       return DateTime.local().plus(timeDiff).toRelative();
     },
     async updateAppliedFilters(filters: any) {
