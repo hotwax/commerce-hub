@@ -17,7 +17,7 @@
           "dev-commerce-hub"
         ],
         "uat": [
-          "uat-commerce-hub"
+          "commerce-hub-uat"
         ]
       }
     }
