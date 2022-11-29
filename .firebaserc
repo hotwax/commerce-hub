@@ -6,15 +6,18 @@
   "targets": {
     "digital-commerce-71eb8": {
       "hosting": {
-        "commerce-hub": [
+        "prod": [
           "commerce-hub"
         ]
       }
     },
     "hotwax-digital-commerce": {
       "hosting": {
-        "commerce-hub-dev": [
+        "dev": [
           "dev-commerce-hub"
+        ],
+        "uat": [
+          "commerce-hub-uat"
         ]
       }
     }
