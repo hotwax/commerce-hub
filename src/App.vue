@@ -9,7 +9,8 @@ import { IonApp, IonRouterOutlet } from '@ionic/vue';
 import { defineComponent } from 'vue';
 import { loadingController } from '@ionic/vue';
 import emitter from "@/event-bus"
-
+import { init, resetConfig } from "@hotwax/oms-api"
+import { mapGetters } from 'vuex';
 
 export default defineComponent({
   name: 'App',
@@ -19,7 +20,8 @@ export default defineComponent({
   },
   data() {
     return {
-      loader: null as any
+      loader: null as any,
+      maxAge: process.env.VUE_APP_CACHE_MAX_AGE ? parseInt(process.env.VUE_APP_CACHE_MAX_AGE) : 0
     }
   },
   methods: {
@@ -50,10 +52,19 @@ export default defineComponent({
       });
     emitter.on('presentLoader', this.presentLoader);
     emitter.on('dismissLoader', this.dismissLoader);
+
+    init(this.userToken, this.instanceUrl, this.maxAge)
   },
   unmounted() {
     emitter.off('presentLoader', this.presentLoader);
     emitter.off('dismissLoader', this.dismissLoader);
+    resetConfig();
+  },
+  computed: {
+    ...mapGetters({
+      userToken: 'user/getUserToken',
+      instanceUrl: 'user/getInstanceUrl'
+    })
   },
 });
 </script>
