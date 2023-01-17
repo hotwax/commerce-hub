@@ -2,7 +2,7 @@ import { ActionTree } from 'vuex'
 import RootState from '@/store/RootState'
 import StockState from './StockState'
 import * as types from './mutation-types'
-import { fetchProductsStockAtFacility, Response, Stock } from '@hotwax/oms-api'
+import { fetchProductsStockAtFacility, Response, Stock } from '@/adapter'
 
 const actions: ActionTree<StockState, RootState> = {
   async addProducts({ commit }, { productIds }) {
@@ -30,7 +30,7 @@ const actions: ActionTree<StockState, RootState> = {
       resp.map((response: any) => {
         const responseStatus = response.status
         if (responseStatus === 'fulfilled') {
-          const res = response.value[0]
+          const res = response.value[0] // using 0th index as the resolved promise value is containing an array of stock response having a single value
           if (!cachedProductAtp[res.facilityId]) {
             cachedProductAtp[res.facilityId] = {}
           }

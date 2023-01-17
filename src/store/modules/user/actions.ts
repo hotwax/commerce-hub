@@ -8,7 +8,7 @@ import { translate } from '@/i18n'
 import moment from 'moment';
 import emitter from '@/event-bus'
 import "moment-timezone";
-import { resetConfig, updateInstanceUrl, updateToken } from '@hotwax/oms-api'
+import { resetConfig, updateInstanceUrl, updateToken } from '@/adapter'
 
 const actions: ActionTree<UserState, RootState> = {
 

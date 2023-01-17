@@ -1,7 +1,7 @@
 import { MutationTree } from 'vuex'
 import StockState from './StockState'
 import * as types from './mutation-types'
-import { Stock } from '@hotwax/oms-api'
+import { Stock } from '@/adapter'
 
 const mutations: MutationTree <StockState> = {
   [types.STOCK_ADD_PRODUCT] (state, payload) {

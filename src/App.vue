@@ -9,7 +9,7 @@ import { IonApp, IonRouterOutlet } from '@ionic/vue';
 import { defineComponent } from 'vue';
 import { loadingController } from '@ionic/vue';
 import emitter from "@/event-bus"
-import { init, resetConfig } from "@hotwax/oms-api"
+import { init, resetConfig } from "@/adapter"
 import { mapGetters } from 'vuex';
 
 export default defineComponent({
