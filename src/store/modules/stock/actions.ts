@@ -4,40 +4,16 @@ import RootState from '@/store/RootState'
 import StockState from './StockState'
 import * as types from './mutation-types'
 import { hasError } from '@/utils'
+import { fetchProductsStockAtFacility, isError, Response, Stock } from '@hotwax/oms-api'
 
 const actions: ActionTree<StockState, RootState> = {
-
-  /**
-   * Add stocks of specific product
-   */
-  async addProduct  ( { commit }, { productId }) {
-    const resp: any = await StockService.checkInventory({ productId });
-    if (resp.status === 200) {
-      commit(types.STOCK_ADD_PRODUCT, { productId, stock: resp.data.docs })
-    }
-  },
   async addProducts({ commit }, { productIds }) {
-    const products: any = {};
     try {
-      const resp = await Promise.all(productIds.map((productId: any) => {
-        return StockService.checkInventory({
-          "filters": {
-            "productId": productId
-          },
-          "fieldsToSelect": ["productId", "atp"],
-          "viewSize": 1
-        })
-      }))
+      const resp = await fetchProductsStockAtFacility(productIds) as Array<Stock> | Response
 
-      resp.map((response: any) => {
-        if (response.status == 200 && !hasError(response) && response.data.count > 0) {
-          const data = response.data.docs[0];
-          products[data.productId] = data.atp
-        }
-      })
-      commit(types.STOCK_PRODUCTS_UPDATED, products)
-    } catch (err) {
-      console.error('Something went wrong while fetching stock for products')
+      commit(types.STOCK_ADD_PRODUCTS, resp)
+    } catch (err: Response) {
+      console.error(err.message)
     }
   },
 
@@ -50,24 +26,17 @@ const actions: ActionTree<StockState, RootState> = {
     }).filter((item: any) => item)
 
     try {
-      const resp = await Promise.all(products.map((product: any) => {
-        return StockService.checkInventory({
-          "filters": {
-            "productId": product.productId,
-            "facilityId": product.facilityId
-          },
-          "fieldsToSelect": ["productId", "atp", "facilityId"],
-          "viewSize": 100
-        })
-      }))
+      // TODO: add support for using oms-api package specific method for fetching multiple products on multiple facilities
+      const resp = await Promise.allSettled(products.map((product: any) => fetchProductsStockAtFacility([product.productId], product.facilityId)))
 
       resp.map((response: any) => {
-        if (response.status == 200 && !hasError(response) && response.data.count > 0) {
-          const data = response.data.docs[0];
-          if (!cachedProductAtp[data.facilityId]) {
-            cachedProductAtp[data.facilityId] = {}
+        const responseStatus = response.status
+        if (responseStatus === 'fulfilled') {
+          const res = response.value[0]
+          if (!cachedProductAtp[res.facilityId]) {
+            cachedProductAtp[res.facilityId] = {}
           }
-          cachedProductAtp[data.facilityId][data.productId] = data.atp
+          cachedProductAtp[res.facilityId][res.productId] = res.availableToPromiseTotal
           commit(types.STOCK_ADD_PRODUCT_FACILITY_ATP, cachedProductAtp)
         }
       })
