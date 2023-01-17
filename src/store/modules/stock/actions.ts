@@ -1,10 +1,8 @@
-import { StockService } from '@/services/StockService'
 import { ActionTree } from 'vuex'
 import RootState from '@/store/RootState'
 import StockState from './StockState'
 import * as types from './mutation-types'
-import { hasError } from '@/utils'
-import { fetchProductsStockAtFacility, isError, Response, Stock } from '@hotwax/oms-api'
+import { fetchProductsStockAtFacility, Response, Stock } from '@hotwax/oms-api'
 
 const actions: ActionTree<StockState, RootState> = {
   async addProducts({ commit }, { productIds }) {
